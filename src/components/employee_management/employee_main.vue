@@ -37,7 +37,7 @@
         </div>
       </aside>
     </div>
-    <main class="ant-layout-content">
+    <main class="ant-layout-content" >
       <!--视图显示-->
       <router-view/>
     </main>

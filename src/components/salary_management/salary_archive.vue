@@ -109,7 +109,8 @@ export default {
   data() {
     return {
       //工资表
-      wagesheet:'/salary/wagesheet',
+      // wagesheet:'/salary/wagesheet',
+      wagesheet:'/salary/selectwagetable',
       tableData: [
         {
           date: '2016-05-03',

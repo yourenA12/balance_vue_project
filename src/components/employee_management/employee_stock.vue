@@ -11,8 +11,10 @@
       </el-input>
     </el-row>
 
-    <br/>
-    <el-table :data="tableData" stripe style="width: 100%">
+    <div style="width:100px;height:30px;margin-top:40px;"></div>
+    <el-table :data="tableData"  style="width: 100%"
+              :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+              :cell-style="{textAlign: 'center'}">
       <el-table-column prop="name" label="姓名" width="180" />
       <el-table-column prop="depart" label="部门" width="180" />
       <el-table-column prop="post" label="职位" width="180" />

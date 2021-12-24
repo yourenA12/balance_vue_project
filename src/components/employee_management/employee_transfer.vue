@@ -67,17 +67,26 @@
 
         </div>
         <div style="width:100%;height: 100px;position: relative  ">
-          <button @click="changesadd=!changesadd" type="button" class="ant-btn ant-btn-primary" style="position: absolute;left:20px;top:40px;">
-            <i aria-label="图标: plus" class="anticon anticon-plus">
-              <svg viewBox="64 64 896 896" focusable="false" class="" data-icon="plus" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path>
-                <path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path>
-              </svg></i>
-            <span>新增</span>
-          </button>
+<!--          <button @click="changesadd=!changesadd" type="button" class="ant-btn ant-btn-primary" style="position: absolute;left:20px;top:40px;">-->
+<!--            <i aria-label="图标: plus" class="anticon anticon-plus">-->
+<!--              <svg viewBox="64 64 896 896" focusable="false" class="" data-icon="plus" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path>-->
+<!--                <path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path>-->
+<!--              </svg></i>-->
+<!--            <span>新增</span>-->
+<!--          </button>-->
+
+           <el-button @click="changesadd=!changesadd" size="small" type="primary" plain style="width:80px;position: absolute;top:30px;left:30px">
+          <el-icon><i-plus/></el-icon>
+          新增
+        </el-button>
+
+
+
 
           <!--搜索输入框-->
           <el-row style="width: 200px;position: absolute;left:1090px;top:30px;">
-            <el-input v-model="seek" placeholder="搜索">
+            <el-input size="small"
+                      v-model="seek" placeholder="搜索">
               <template #suffix @click="become = true">
                 <el-icon class="el-input__icon"><i-search /></el-icon>
               </template>
@@ -87,7 +96,10 @@
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="tableData" stripe style="width: 100%">
+          <el-table :data="tableData" stripe style="width: 100%"
+                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}"
+          >
             <el-table-column prop="name" label="姓名" width="180" />
             <el-table-column prop="type" label="异动类型" width="180" />
             <el-table-column prop="ydept" label="原部门" width="180" />
@@ -205,7 +217,7 @@ export default defineComponent({
         transferpost: ''
       },
       rules: {
-        takedate: [
+        tableData: [
           {
             required: true,
             message: '请选择生效日期',
@@ -289,7 +301,7 @@ export default defineComponent({
 
 
 <style scoped>
-@import url("../../css/navigation.css");
+/*@import url("../../css/navigation.css");*/
 /deep/.mainContent .sub-Content__primary {
   padding: 12px 24px;
   background: #fff;
@@ -313,6 +325,16 @@ export default defineComponent({
   border-radius: 3px;
   background: white;
   position: relative;
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 20px;
+  font-style: normal;
+  color: #5aaaff;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 

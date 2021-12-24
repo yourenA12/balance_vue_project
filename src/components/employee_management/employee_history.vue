@@ -17,8 +17,11 @@
 				<!-- 表格内容部分 -->
 				<div class="sub-Content__primary">
 					
-					 <el-table :data="tableData" stripe style="width: 100%">
-                        <el-table-column prop="name" label="姓名" width="120" />
+					 <el-table :data="tableData" stripe style="width: 100%"
+                     :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                     :cell-style="{textAlign: 'center'}"
+           >
+                        <el-table-column prop="name" fixed label="姓名" width="120" />
                         <el-table-column prop="depart" label="部门" width="150" />
                         <el-table-column prop="post" label="职位" width="150" />
                         <el-table-column prop="workxz" label="工作性质" width="150" />
