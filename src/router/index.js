@@ -115,6 +115,11 @@ const routes = [
                                         path: '/employee/message/employee_roster/business',
                                         component: modules[`${'../components/employee_management/employee_work.vue'}`],
                                     },
+                                    //奖罚记录
+                                    {
+                                        path: '/employee/message/employee_roster/record',
+                                        component: modules[`${'../components/employee_management/employee_reward.vue'}`],
+                                    },
                                 ]
                             },
                             //办理离职

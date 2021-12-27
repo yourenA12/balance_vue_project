@@ -4,7 +4,7 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
         <span></span>
-        <div style="margin-top: 20px">
+        <div style="position: relative;top:35px">
           <router-link :to="{path:this.insertattendanceplan,query:{path: this.$route.query.path,name:'新增'}}">
             <button type="button" class="ant-btn ant-btn-primary">
               <i aria-label="图标: plus" class="anticon anticon-plus">
@@ -15,9 +15,9 @@
             </button>
           </router-link>
         </div>
-        <div style="margin-top:-32px;">
+        <div style="width: 97%;margin: auto">
           <!--搜索输入框-->
-          <el-row style="width:140px;float:right;">
+          <el-row style="width:200px;float:right;">
             <el-input v-model="seek" placeholder="方案名称">
               <template #suffix>
                 <el-icon class="el-input__icon"><i-search/></el-icon>
@@ -27,8 +27,11 @@
         </div>
 
         <!-- 表格内容部分 -->
-        <div class="sub-Content__primary" style="margin-top: 50px">
-          <el-table :data="tableData" stripe style="width: 100%">
+        <div class="sub-Content__primary" style="margin-top: 70px">
+          <el-table :data="tableData"
+                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}"
+                    style="width: 97%;margin: auto;">
             <el-table-column prop="name" label="方案名称" width="180" />
             <el-table-column prop="name" label="核算规则" width="180" />
             <el-table-column prop="name" label="适用对象" width="180" />

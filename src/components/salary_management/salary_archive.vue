@@ -5,7 +5,7 @@
           <el-tabs type="card" @tab-click="handleClick">
 
             <!--月份选择框·-->
-            <div style="display: inline-block;margin-left: 840px;">
+            <div style="display: inline-block;margin-left: 840px;margin-top:20px">
               <div class="demo-date-picker">
                 <div class="container">
                   <div class="block">

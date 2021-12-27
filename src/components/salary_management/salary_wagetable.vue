@@ -18,44 +18,85 @@
           </div>
           <div style="width:100%;margin-top: 50px;" class="icon-p">
             <div style="width:95%;margin: auto;">
-              <el-row>
-                <el-col :span="4">
-                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">
-                    <p>29</p>
-                    <p>全部</p>
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card shadow="hover" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">
-                    <p>29</p>
-                    <p>正式员工</p>
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card shadow="never" style="background-color: rgb(57, 146, 193);font-size:14px;color: white">
-                    <p>22</p>
-                    <p>试用员工</p>
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card shadow="always" style="background-color: rgb(233, 143, 39);font-size:14px;color: white">
-                    <p>22</p>
-                    <p>本月新入职</p>
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">
-                    <p>22</p>
-                    <p>本月调薪</p>
-                  </el-card>
-                </el-col>
-                <el-col :span="4">
-                  <el-card shadow="always" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">
-                    <p>22</p>
-                    <p>本月离职</p>
-                  </el-card>
-                </el-col>
-              </el-row>
+<!--              <el-row>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">-->
+<!--                    <p>29</p>-->
+<!--                    <p>全部</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="hover" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">-->
+<!--                    <p>29</p>-->
+<!--                    <p>正式员工</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="never" style="background-color: rgb(57, 146, 193);font-size:14px;color: white">-->
+<!--                    <p>22</p>-->
+<!--                    <p>试用员工</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="always" style="background-color: rgb(233, 143, 39);font-size:14px;color: white">-->
+<!--                    <p>22</p>-->
+<!--                    <p>本月新入职</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">-->
+<!--                    <p>22</p>-->
+<!--                    <p>本月调薪</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--                <el-col :span="4">-->
+<!--                  <el-card shadow="always" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">-->
+<!--                    <p>22</p>-->
+<!--                    <p>本月离职</p>-->
+<!--                  </el-card>-->
+<!--                </el-col>-->
+<!--              </el-row>-->
+              <div class="staff_div_5">
+
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe614;</i>
+                <div class="staff_div_5_text">
+                  <span>全部</span><br/><span>2</span>
+                </div>
+              </div>
+
+              <div class="staff_div_5 div_5_margin">
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60b;</i>
+                <div class="staff_div_5_text">
+                  <span>正式员工</span><br/><span>2</span>
+                </div>
+              </div>
+
+              <div class="staff_div_5 div_5_margin">
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60c;</i>
+                <div class="staff_div_5_text">
+                  <span>实习员工</span><br/><span>2</span>
+                </div>
+              </div>
+
+              <div class="staff_div_5 div_5_margin">
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>
+                <div class="staff_div_5_text">
+                  <span>本月新入职</span><br/><span>2</span>
+                </div>
+              </div>
+
+              <div class="staff_div_5 div_5_margin">
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
+                <div class="staff_div_5_text">
+                  <span>本月离职</span><br/><span>2</span>
+                </div>
+              </div>
+              <div class="staff_div_5 div_5_margin">
+                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
+                <div class="staff_div_5_text">
+                  <span>本月转正</span><br/><span>2</span>
+                </div>
+              </div>
             </div>
 
             <div style="width:95%;height:100px;margin: auto;background: #42b983;">
@@ -216,6 +257,37 @@ export default {
 /deep/ .demo-pagination-block {
   float: right;
   margin: 20px;
+}
+
+.staff_div_5 {
+  width: 204px;
+  height: 80px;
+  border: 1px solid #f0f0f0;
+  display: inline-block;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+
+
+}
+
+.div_5_margin {
+
+  margin-left: 5px;
+}
+
+.staff_div_5_text {
+  width: 80px;
+  height: 50px;
+  /*background: #5cbdaa;*/
+  display: inline-block;
+  position: absolute;
+  left: 105px;
+  top: 20px;
+  text-align: right;
+  font-weight: bold;
+  color: #085fc3;
+
 }
 
 </style>

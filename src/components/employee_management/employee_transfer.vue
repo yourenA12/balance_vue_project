@@ -57,8 +57,8 @@
                 </div>
 
                 <div style="width:25%;height: 50px;margin: auto;margin-top: 20px;">
-                  <el-button @click="RestForm(),changesadd=!changesadd" style="width: 60px;">取消</el-button>
-                  <el-button  type="primary" style="width: 60px;" @click="submitForm('ruleForm')">提交</el-button>
+                  <el-button @click="RestForm(),changesadd=!changesadd" style="width: 80px;">取消</el-button>
+                  <el-button  type="primary" style="width: 80px;" @click="submitForm('ruleForm')">提交</el-button>
                 </div>
 
               </el-form>
@@ -67,14 +67,6 @@
 
         </div>
         <div style="width:100%;height: 100px;position: relative  ">
-<!--          <button @click="changesadd=!changesadd" type="button" class="ant-btn ant-btn-primary" style="position: absolute;left:20px;top:40px;">-->
-<!--            <i aria-label="图标: plus" class="anticon anticon-plus">-->
-<!--              <svg viewBox="64 64 896 896" focusable="false" class="" data-icon="plus" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path>-->
-<!--                <path d="M176 474h672q8 0 8 8v60q0 8-8 8H176q-8 0-8-8v-60q0-8 8-8z"></path>-->
-<!--              </svg></i>-->
-<!--            <span>新增</span>-->
-<!--          </button>-->
-
            <el-button @click="changesadd=!changesadd" size="small" type="primary" plain style="width:80px;position: absolute;top:30px;left:30px">
           <el-icon><i-plus/></el-icon>
           新增
@@ -94,19 +86,40 @@
           </el-row>
         </div>
 
+<!--        &lt;!&ndash; 表格内容部分 &ndash;&gt;-->
+<!--        <div class="sub-Content__primary">-->
+<!--          <el-table :data="tableData" stripe style="width: 100%"-->
+<!--                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"-->
+<!--                    :cell-style="{textAlign: 'center'}"-->
+<!--          >-->
+<!--            <el-table-column prop="name" label="姓名" width="180" />-->
+<!--            <el-table-column prop="type" label="异动类型" width="180" />-->
+<!--            <el-table-column prop="ydept" label="原部门" width="180" />-->
+<!--            <el-table-column prop="bdhdept" label="变动后部门" width="180" />-->
+<!--            <el-table-column prop="ypost" label="原职位" width="180" />-->
+<!--            <el-table-column prop="bdhpost" label="变动后职位" width="180" />-->
+<!--            <el-table-column prop="date" label="生效时间" width="180" />-->
+<!--          </el-table>-->
+<!--        </div>-->
+
+
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="tableData" stripe style="width: 100%"
+          <el-table :data="tableData"
                     :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
-                    :cell-style="{textAlign: 'center'}"
-          >
-            <el-table-column prop="name" label="姓名" width="180" />
-            <el-table-column prop="type" label="异动类型" width="180" />
-            <el-table-column prop="ydept" label="原部门" width="180" />
-            <el-table-column prop="bdhdept" label="变动后部门" width="180" />
-            <el-table-column prop="ypost" label="原职位" width="180" />
-            <el-table-column prop="bdhpost" label="变动后职位" width="180" />
+                    :cell-style="{textAlign: 'center'}">
+            <el-table-column prop="date" label="姓名" width="180"/>
+            <el-table-column prop="name" label="异动类型" width="180"/>
+            <el-table-column prop="name" label="原部门" width="180"/>
+            <el-table-column prop="name" label="变动后部门" width="180"/>
+            <el-table-column prop="name" label="原职位" width="180"/>
+            <el-table-column prop="name" label="变动后职位" width="180"/>
             <el-table-column prop="date" label="生效时间" width="180" />
+            <el-table-column fixed="right" label="操作">
+              <template #default>
+                <el-button type="text" size="small" @click="become = true">办理转正</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
@@ -174,8 +187,8 @@
           </el-table>
 
           <div style="margin-top: 30px;margin-left:280px">
-            <el-button @click="become=false" style="width: 60px;">取消</el-button>
-            <el-button type="primary" style="width: 60px;">确定</el-button></div>
+            <el-button @click="become=false" style="width: 80px;">取消</el-button>
+            <el-button type="primary" style="width: 80px;">确定</el-button></div>
 
         </el-dialog>
       </div>

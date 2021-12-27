@@ -45,8 +45,14 @@
             <router-view></router-view>
           </el-tab-pane>
 
+          <el-tab-pane label="奖罚记录">
+            <template #label>
+              <router-link :to="{path:this.record,query:{path: this.$route.query.path}}" style="text-decoration: none">&nbsp;&nbsp;&nbsp;奖罚记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</router-link>
+            </template>
 
-          <el-tab-pane label="奖罚记录&nbsp;&nbsp;&nbsp;&nbsp;">角色管理</el-tab-pane>
+            <router-view></router-view>
+          </el-tab-pane>
+
         </el-tabs>
 
         </div>
@@ -61,7 +67,8 @@ export default {
   data() {
     return {
       book: '/employee/message/employee_roster/book',
-      business: '/employee/message/employee_roster/business'
+      business: '/employee/message/employee_roster/business',
+      record:'/employee/message/employee_roster/record'
     }
   },
   methods: {
