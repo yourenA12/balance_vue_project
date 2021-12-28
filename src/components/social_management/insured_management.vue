@@ -148,8 +148,8 @@
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="emps_table" stripe style="width: 100%"
-                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+          <el-table :data="emps_table" style="width: 100%"
+                    :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}"
           >
             <!-- 多选框 -->
@@ -281,6 +281,11 @@ export default {
 </script>
 
 <style scoped>
+
+/*表格*/
+.sub-Content__primary{
+  margin-top:20px
+}
 
 /* 表单验证 */
 ::v-deep .el-form-item__error {
