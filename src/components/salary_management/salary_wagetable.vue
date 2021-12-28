@@ -18,44 +18,7 @@
           </div>
           <div style="width:100%;margin-top: 50px;" class="icon-p">
             <div style="width:95%;margin: auto;">
-<!--              <el-row>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">-->
-<!--                    <p>29</p>-->
-<!--                    <p>全部</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="hover" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">-->
-<!--                    <p>29</p>-->
-<!--                    <p>正式员工</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="never" style="background-color: rgb(57, 146, 193);font-size:14px;color: white">-->
-<!--                    <p>22</p>-->
-<!--                    <p>试用员工</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="always" style="background-color: rgb(233, 143, 39);font-size:14px;color: white">-->
-<!--                    <p>22</p>-->
-<!--                    <p>本月新入职</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="always" style="background-color: rgb(35, 102, 167);font-size:14px;color: white">-->
-<!--                    <p>22</p>-->
-<!--                    <p>本月调薪</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--                <el-col :span="4">-->
-<!--                  <el-card shadow="always" style="background-color: rgb(73, 167, 130);font-size:14px;color: white">-->
-<!--                    <p>22</p>-->
-<!--                    <p>本月离职</p>-->
-<!--                  </el-card>-->
-<!--                </el-col>-->
-<!--              </el-row>-->
+
               <div class="staff_div_5">
 
                 <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe614;</i>

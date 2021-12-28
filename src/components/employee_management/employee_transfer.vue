@@ -77,7 +77,7 @@
 
           <!--搜索输入框-->
           <el-row style="width: 200px;position: absolute;left:1090px;top:30px;">
-            <el-input size="small"
+            <el-input
                       v-model="seek" placeholder="搜索">
               <template #suffix @click="become = true">
                 <el-icon class="el-input__icon"><i-search /></el-icon>
