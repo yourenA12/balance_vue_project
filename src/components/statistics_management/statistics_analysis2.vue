@@ -3,11 +3,19 @@
     <div class="" style="width: 850px;height: 49px; float: right;">
       <span class="demonstration" style="position: relative;top: -1px;">时间范围：</span>
 
-      <el-date-picker v-model="value1" type="daterange" range-separator="到"
-                      start-placeholder="开始时间" end-placeholder="结束时间" style="position: relative;top: 0px;">
+      <el-date-picker
+          v-model="value2"
+          type="monthrange"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start month"
+          end-placeholder="End month"
+          :shortcuts="shortcuts"
+
+      >
       </el-date-picker>
-      <span class="demonstration" style="position: relative;top: -1px;left: 3px;">组织范围：</span>
-      <el-select v-model="valuee" placeholder="请选择">
+      <span class="demonstration" style="position: relative;top: -1px;left: 120px;">组织范围：</span>
+      <el-select v-model="valuee" placeholder="请选择" style="left: 120px;">
         <el-option
             v-for="item in optionss"
             :key="item.valuee"
@@ -17,7 +25,7 @@
         >
         </el-option>
       </el-select>
-      <el-button type="primary" style="position: relative;top: -2px;">搜索</el-button>
+      <el-button type="primary" style="position: relative;top: -1px;left: 130px;">搜索</el-button>
     </div>
 
   </div>
@@ -236,103 +244,267 @@ export default {
 
     /* <!-- 每月参保人数 --> */
 
+    // optiony1 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar:"柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['参保人数', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '人数(人)',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '参保人数',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+    //     ],barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40],
+    //       itemStyle: {
+    //         normal: {
+    //           color: "#FFFF66", //折线点的颜色
+    //           lineStyle: {
+    //             color: "#FFFF66" //折线的颜色
+    //           }
+    //         }
+    //       },
+    //     }
+    //   ]
+    // };
     optiony1 = {
       title: {
-        text: '每月参保人数'
+        text: '每月参保人数',
+        subtext: 'Fake Data'
       },
       tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar:"柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
+        trigger: 'axis'
       },
       legend: {
-        data: ['参保人数', '增长率']
+        data: ['Rainfall', 'Evaporation']
       },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '人数(人)',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
         }
       },
+      calculable: true,
+      xAxis: [
         {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
+          type: 'category',
+          // prettier-ignore
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Rainfall',
+          type: 'bar',
+          data: [
+            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+          ],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
           }
         },
-
-      ],
-      series: [{
-        name: '参保人数',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-        ],barWidth:'25%',
-      },
-
         {
-          name: '增长率',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40],
-          itemStyle: {
-            normal: {
-              color: "#FFFF66", //折线点的颜色
-              lineStyle: {
-                color: "#FFFF66" //折线的颜色
-              }
-            }
+          name: 'Evaporation',
+          type: 'bar',
+          data: [
+            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+          ],
+          markPoint: {
+            data: [
+              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+            ]
           },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
         }
       ]
     };
     /* 每月缴纳保险总额 */
+    // optiony2 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar:"柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['保险总额', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '元',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '保险总额',
+    //     type: 'bar',
+    //     data: [
+    //       200, 149, 27.0, 23.2, 225.6, 276.7, 135.6
+    //     ],barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40],
+    //       itemStyle: {
+    //         normal: {
+    //           color: "#FFFF66", //折线点的颜色
+    //           lineStyle: {
+    //             color: "#FFFF66" //折线的颜色
+    //           }
+    //         }
+    //       },
+    //     }
+    //   ]
+    // };
     optiony2 = {
       title: {
         text: '每月缴纳保险总额'
@@ -341,95 +513,198 @@ export default {
         trigger: 'axis',
         axisPointer: {
           type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar:"柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
+          label: {
+            backgroundColor: '#6a7985'
           }
         }
       },
       legend: {
-        data: ['保险总额', '增长率']
+        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
       },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '元',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
+      toolbox: {
+        feature: {
+          saveAsImage: {}
         }
       },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
         {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        }
       ],
-      series: [{
-        name: '保险总额',
-        type: 'bar',
-        data: [
-          200, 149, 27.0, 23.2, 225.6, 276.7, 135.6
-        ],barWidth:'25%',
-      },
-
+      yAxis: [
         {
-          name: '增长率',
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Email',
           type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40],
-          itemStyle: {
-            normal: {
-              color: "#FFFF66", //折线点的颜色
-              lineStyle: {
-                color: "#FFFF66" //折线的颜色
-              }
-            }
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
           },
+          data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+          name: 'Union Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+          name: 'Video Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+          name: 'Direct',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+          name: 'Search Engine',
+          type: 'line',
+          stack: 'Total',
+          label: {
+            show: true,
+            position: 'top'
+          },
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [820, 932, 901, 934, 1290, 1330, 1320]
         }
       ]
     };
     /* 每月社保缴纳总额 */
+    // optiony3 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar:"柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['公司社保总额', '个人社保总额', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '元',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 元'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '公司社保总额',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+    //     ]
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40],
+    //       itemStyle: {
+    //         normal: {
+    //           color: "#FFFF66", //折线点的颜色
+    //           lineStyle: {
+    //             color: "#FFFF66" //折线的颜色
+    //           }
+    //         }
+    //       },
+    //     },
+    //     {
+    //       name: '个人社保总额',
+    //       type: 'bar',
+    //       data: [
+    //         2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+    //       ]
+    //     },
+    //   ]
+    // };
     optiony3 = {
       title: {
         text: '每月社保缴纳总额'
@@ -438,99 +713,92 @@ export default {
         trigger: 'axis',
         axisPointer: {
           type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar:"柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
+          label: {
+            backgroundColor: '#6a7985'
           }
         }
       },
       legend: {
-        data: ['公司社保总额', '个人社保总额', '增长率']
+        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
       },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '元',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 元'
+      toolbox: {
+        feature: {
+          saveAsImage: {}
         }
       },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
         {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        }
       ],
-      series: [{
-        name: '公司社保总额',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-        ]
-      },
-
+      yAxis: [
         {
-          name: '增长率',
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Email',
           type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40],
-          itemStyle: {
-            normal: {
-              color: "#FFFF66", //折线点的颜色
-              lineStyle: {
-                color: "#FFFF66" //折线的颜色
-              }
-            }
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
           },
+          data: [120, 132, 101, 134, 90, 230, 210]
         },
         {
-          name: '个人社保总额',
-          type: 'bar',
-          data: [
-            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-          ]
+          name: 'Union Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [220, 182, 191, 234, 290, 330, 310]
         },
+        {
+          name: 'Video Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+          name: 'Direct',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+          name: 'Search Engine',
+          type: 'line',
+          stack: 'Total',
+          label: {
+            show: true,
+            position: 'top'
+          },
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [820, 932, 901, 934, 1290, 1330, 1320]
+        }
       ]
     };
     /* 每月公积金缴纳总额 */

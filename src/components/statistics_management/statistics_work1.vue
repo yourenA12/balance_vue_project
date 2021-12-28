@@ -6,18 +6,18 @@
       <el-date-picker v-model="value1" type="daterange" range-separator="到"
                       start-placeholder="开始时间" end-placeholder="结束时间" style="position: relative;top: 0px;">
       </el-date-picker>
-      <span class="demonstration" style="position: relative;top: -1px;left: 3px;">组织范围：</span>
-      <el-select v-model="valuee" placeholder="请选择">
+      <span class="demonstration" style="position: relative;top: -1px;left: 100px;">组织范围：</span>
+      <el-select v-model="valuee" placeholder="请选择" style="left: 100px;">
         <el-option
             v-for="item in optionss"
             :key="item.valuee"
             :label="item.labell"
             :value="item.valuee"
-            style="position: relative;top: -1px;"
+            style="position: relative;top: -1px;left: 110px;"
         >
         </el-option>
       </el-select>
-      <el-button type="primary" style="position: relative;top: -2px;">搜索</el-button>
+      <el-button type="primary" style="position: relative;top: -1px; left: 110px;">搜索</el-button>
     </div>
 
   </div>
@@ -283,374 +283,712 @@ export default {
     var option5;
 
     /* <!--  每日请假人数 --> */
+    // option = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar:"柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['请假人数', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '人数(人)',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '请假人数',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
+    //     ],
+    //     barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40]
+    //     }
+    //   ]
+    // };
     option = {
       title: {
-        text: '每日请假人数'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar:"柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
-      },
-      legend: {
-        data: ['请假人数', '增长率']
-      },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '人数(人)',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
-        }
-      },
-        {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
-      ],
-      series: [{
-        name: '请假人数',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
-        ],
-        barWidth:'25%',
-      },
-
-        {
-          name: '增长率',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40]
-        }
-      ]
-    };
-    /* <!-- 每日出差人数 --> */
-    option1 = {
-      title: {
-        text: '每日出差人数'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar: "柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
-      },
-      legend: {
-        data: ['出差人数', '增长率']
-      },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '人数(人)',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
-        }
-      },
-        {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
-      ],
-      series: [{
-        name: '出差人数',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6,
-        ],
-        barWidth:'25%',
-      },
-
-        {
-          name: '增长率',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40]
-        }
-      ]
-    };
-    /* 	 <!-- 员工出勤率 --> */
-    option2 = {
-      title: {
-        text: '员工出勤率'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar: "柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
-      },
-      legend: {
-        data: ['出勤人数', '增长率']
-      },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '人数(人)',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
-        }
-      },
-        {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
-      ],
-      series: [{
-        name: '出勤人数',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
-        ], barWidth:'25%',
-      },
-
-        {
-          name: '增长率',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40]
-        }
-      ]
-    };
-    /*  <!--  员工缺勤率 --> */
-    option3 = {
-      title: {
-        text: '员工缺勤率'
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: {
-            show: true,
-            readOnly: false,
-            title:"数据视图"
-          },
-          magicType: {
-            show: true,
-            type: ['line', 'bar'],
-            title:{
-              line:"折线图",
-              bar: "柱状图",
-            }
-          },
-          restore: {
-            show: true,
-            title:"还原"
-          },
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
-      },
-      legend: {
-        data: ['缺勤人数', '增长率']
-      },
-      xAxis: [{
-        type: 'category',
-        data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-          '2021-12-03'
-        ],
-        axisPointer: {
-          type: 'shadow'
-        }
-      }],
-      yAxis: [{
-        type: 'value',
-        name: '人数(人)',
-        min: 0,
-        max: 250,
-        interval: 50,
-        axisLabel: {
-          formatter: '{value} 人'
-        }
-      },
-        {
-          type: 'value',
-          name: '增长律（%）',
-          min: 0,
-          max: 100,
-          interval: 10,
-          axisLabel: {
-            formatter: '{value} %'
-          }
-        },
-
-      ],
-      series: [{
-        name: '缺勤人数',
-        type: 'bar',
-        data: [
-          2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
-        ], barWidth:'25%',
-      },
-
-        {
-          name: '增长率',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [10, 20, 30, 40, 50, 30, 40]
-        }
-      ]
-    };
-
-    /* <!-- 	每日员工异常人数	 --> */
-    option5 = {
-      title: {
-        text: '每月员工异动人数'
+        text: '每日请假人数',
+        subtext: 'Fake Data'
       },
       tooltip: {
         trigger: 'axis'
       },
       legend: {
-        data: ['迟到', '早退', '未打卡(未签到或未签退)']
+        data: ['Rainfall', 'Evaporation']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          // prettier-ignore
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Rainfall',
+          type: 'bar',
+          data: [
+            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+          ],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        },
+        {
+          name: 'Evaporation',
+          type: 'bar',
+          data: [
+            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+          ],
+          markPoint: {
+            data: [
+              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        }
+      ]
+    };
+    /* <!-- 每日出差人数 --> */
+    // option1 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar: "柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['出差人数', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '人数(人)',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '出差人数',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6,
+    //     ],
+    //     barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40]
+    //     }
+    //   ]
+    // };
+    option1 = {
+      title: {
+        text: '每日出差人数',
+        subtext: 'Fake Data'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Rainfall', 'Evaporation']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          // prettier-ignore
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Rainfall',
+          type: 'bar',
+          data: [
+            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+          ],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        },
+        {
+          name: 'Evaporation',
+          type: 'bar',
+          data: [
+            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+          ],
+          markPoint: {
+            data: [
+              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        }
+      ]
+    };
+    /* 	 <!-- 员工出勤率 --> */
+    // option2 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar: "柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['出勤人数', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '人数(人)',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '出勤人数',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
+    //     ], barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40]
+    //     }
+    //   ]
+    // };
+    option2 = {
+      title: {
+        text: '员工出勤率',
+        subtext: 'Fake Data'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Rainfall', 'Evaporation']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          // prettier-ignore
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Rainfall',
+          type: 'bar',
+          data: [
+            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+          ],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        },
+        {
+          name: 'Evaporation',
+          type: 'bar',
+          data: [
+            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+          ],
+          markPoint: {
+            data: [
+              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        }
+      ]
+    };
+    /*  <!--  员工缺勤率 --> */
+    // option3 = {
+    //   title: {
+    //     text: '员工缺勤率'
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //       type: 'cross',
+    //       crossStyle: {
+    //         color: '#999'
+    //       }
+    //     }
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       dataView: {
+    //         show: true,
+    //         readOnly: false,
+    //         title:"数据视图"
+    //       },
+    //       magicType: {
+    //         show: true,
+    //         type: ['line', 'bar'],
+    //         title:{
+    //           line:"折线图",
+    //           bar: "柱状图",
+    //         }
+    //       },
+    //       restore: {
+    //         show: true,
+    //         title:"还原"
+    //       },
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     data: ['缺勤人数', '增长率']
+    //   },
+    //   xAxis: [{
+    //     type: 'category',
+    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
+    //       '2021-12-03'
+    //     ],
+    //     axisPointer: {
+    //       type: 'shadow'
+    //     }
+    //   }],
+    //   yAxis: [{
+    //     type: 'value',
+    //     name: '人数(人)',
+    //     min: 0,
+    //     max: 250,
+    //     interval: 50,
+    //     axisLabel: {
+    //       formatter: '{value} 人'
+    //     }
+    //   },
+    //     {
+    //       type: 'value',
+    //       name: '增长律（%）',
+    //       min: 0,
+    //       max: 100,
+    //       interval: 10,
+    //       axisLabel: {
+    //         formatter: '{value} %'
+    //       }
+    //     },
+    //
+    //   ],
+    //   series: [{
+    //     name: '缺勤人数',
+    //     type: 'bar',
+    //     data: [
+    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
+    //     ], barWidth:'25%',
+    //   },
+    //
+    //     {
+    //       name: '增长率',
+    //       type: 'line',
+    //       yAxisIndex: 1,
+    //       data: [10, 20, 30, 40, 50, 30, 40]
+    //     }
+    //   ]
+    // };
+    option3 = {
+      title: {
+        text: '员工缺勤率',
+        subtext: 'Fake Data'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Rainfall', 'Evaporation']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          // prettier-ignore
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Rainfall',
+          type: 'bar',
+          data: [
+            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+          ],
+          markPoint: {
+            data: [
+              { type: 'max', name: 'Max' },
+              { type: 'min', name: 'Min' }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        },
+        {
+          name: 'Evaporation',
+          type: 'bar',
+          data: [
+            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+          ],
+          markPoint: {
+            data: [
+              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+            ]
+          },
+          markLine: {
+            data: [{ type: 'average', name: 'Avg' }]
+          }
+        }
+      ]
+    };
+
+    /* <!-- 	每日员工异常人数	 --> */
+    // option5 = {
+    //   title: {
+    //     text: ''
+    //   },
+    //   tooltip: {
+    //     trigger: 'axis'
+    //   },
+    //   legend: {
+    //     data: ['迟到', '早退', '未打卡(未签到或未签退)']
+    //   },
+    //   grid: {
+    //     left: '3%',
+    //     right: '4%',
+    //     bottom: '3%',
+    //     containLabel: true
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //
+    //       saveAsImage: {
+    //         show: true,
+    //         title:"保存"
+    //       }
+    //     }
+    //   },
+    //   xAxis: {
+    //     type: 'category',
+    //     boundaryGap: false,
+    //     data: []
+    //   },
+    //   yAxis: {
+    //     type: 'value'
+    //   },
+    //   series: [{
+    //     name: '迟到',
+    //     type: 'line',
+    //     stack: 'Total',
+    //     data: [120, 132, 101, 134, 90, 230, 210]
+    //   },
+    //
+    //
+    //     {
+    //       name: '早退',
+    //       type: 'line',
+    //       stack: 'Total',
+    //       data: [320, 332, 301, 334, 390, 330, 320]
+    //     },
+    //     {
+    //       name: '未打卡(未签到或未签退)',
+    //       type: 'line',
+    //       stack: 'Total',
+    //       data: [820, 932, 901, 934, 1290, 1330, 1320]
+    //     }
+    //   ]
+    // };
+    option5 = {
+      title: {
+        text: '每月员工异动人数'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      },
+      legend: {
+        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
       },
       grid: {
         left: '3%',
@@ -658,47 +996,75 @@ export default {
         bottom: '3%',
         containLabel: true
       },
-      toolbox: {
-        feature: {
-
-          saveAsImage: {
-            show: true,
-            title:"保存"
-          }
-        }
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: []
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [{
-        name: '迟到',
-        type: 'line',
-        stack: 'Total',
-        data: [120, 132, 101, 134, 90, 230, 210]
-      },
-
-
+      xAxis: [
         {
-          name: '早退',
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: 'Email',
           type: 'line',
           stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+          name: 'Union Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+          name: 'Video Ads',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+          name: 'Direct',
+          type: 'line',
+          stack: 'Total',
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
           data: [320, 332, 301, 334, 390, 330, 320]
         },
         {
-          name: '未打卡(未签到或未签退)',
+          name: 'Search Engine',
           type: 'line',
           stack: 'Total',
+          label: {
+            show: true,
+            position: 'top'
+          },
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
           data: [820, 932, 901, 934, 1290, 1330, 1320]
         }
       ]
     };
-
-
     option && myChart.setOption(option);
     option1 && myChart1.setOption(option1);
     option2 && myChart2.setOption(option2);
