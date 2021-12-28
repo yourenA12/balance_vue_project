@@ -7,7 +7,7 @@
         <div class="mt-20 ml-20 mr-20">
           <!-- 新增参保方案按钮 -->
           <router-link :to="{path:this.path,query:{path:this.$route.query.path,name:'新增'}}">
-            <el-button size="small" type="primary"> +新增</el-button>
+            <el-button style="width:75px" size="mini" type="primary" plain> +新增</el-button>
           </router-link>
 
           <!-- 下拉选择器 -->
@@ -31,7 +31,9 @@
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="scheme_table" stripe style="width: 100%">
+          <el-table :data="scheme_table"  style="width: 100%;margin-top: 20px"
+                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}">
             <el-table-column prop="scheme_id" label="方案编号"/>
             <el-table-column prop="scheme_name" label="方案名称"/>
             <el-table-column prop="insured_number" label="参保人数"/>

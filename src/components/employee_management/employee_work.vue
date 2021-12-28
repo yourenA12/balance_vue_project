@@ -11,8 +11,11 @@
       </el-input>
     </el-row>
 </div>
+  <div style="width:100px;height:30px;margin-top:40px;"></div>
 <div>
-  <el-table :data="tableData" stripe style="width: 100%">
+  <el-table :data="tableData"  style="width: 100%"
+            :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+            :cell-style="{textAlign: 'center'}">
     <el-table-column prop="date" label="姓名" width="180" />
     <el-table-column prop="name" label="开始时间" width="180" />
     <el-table-column prop="name" label="结束时间" width="180" />

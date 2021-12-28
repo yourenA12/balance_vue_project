@@ -133,7 +133,7 @@
 
           <br/>
           <!-- 新增社保缴纳项目 -->
-          <el-button @click="add_social()" size="small" type="primary">+添加缴纳项目</el-button>
+          <el-button @click="add_social()" size="small" type="primary" plain>+添加缴纳项目</el-button>
         </div>
         <!-- 标题 -->
         <div class="big-title">&nbsp;&nbsp;&nbsp;公积金方案设置</div>
@@ -236,7 +236,7 @@
           </el-table>
           <br/>
           <!-- 新增公积金缴纳项目 -->
-          <el-button @click="add_accumulation()" size="small" type="primary">+添加缴纳项目</el-button>
+          <el-button @click="add_accumulation()" size="small" type="primary" plain>+添加缴纳项目</el-button>
         </div>
 
         <!-- 标题 -->

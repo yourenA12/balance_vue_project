@@ -1,9 +1,9 @@
 <template>
 
 <!-- 参保记录 -->
-  <div>
+  <div style="margin-top: 10px">
     <!-- 表格按钮部分 -->
-    <div class="mt-20 ml-20 mr-20">
+    <div class="mt-20 ml-20 mr-20" style="margin-bottom: 10px">
       <!-- 导出按钮 -->
       <el-button size="small"><i class="iconfont">&#xe6a2;</i>导出</el-button>
 
@@ -17,7 +17,10 @@
 
     <!-- 表格内容部分 -->
     <div class="sub-Content__primary">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%"
+                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                :cell-style="{textAlign: 'center'}"
+      >
         <el-table-column prop="date" label="计薪月份" />
         <el-table-column prop="name" label="参保方案" />
         <el-table-column prop="address" label="社保缴纳月份" />
