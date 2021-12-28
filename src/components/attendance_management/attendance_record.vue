@@ -12,7 +12,7 @@
           </el-select>
         </template>
         <template #append>
-          <el-button>02
+          <el-button>
             <el-icon style="font-size: 16px">
               <i-search/>
             </el-icon>
@@ -20,20 +20,17 @@
         </template>
       </el-input>
 
-      <el-button type="primary" style="margin-left: 700px;">
-        <el-icon style="font-size: 16px">
-          <i-upload/>
-        </el-icon>
+      <!--导出导入-->
+      <el-button type="warning" plain size="small" style="margin-left: 700px">
+        <i class="iconfont">&#xe643;</i>
         导出
       </el-button>
 
-      <el-button type="primary">
-        <el-icon style="font-size: 16px">
-          <i-folder-opened/>
-        </el-icon>
+      <el-button type="success" plain size="small">
+        <i class="iconfont">&#xe645;</i>
         导入
       </el-button>
-      <el-button type="primary"> 历史归档</el-button>
+      <el-button type="info" plain size="small"> 历史归档</el-button>
     </div>
     <div class="select">
       <span style="margin-top:2px">部门：</span>
@@ -55,7 +52,9 @@
   </div>
   <!--表格-->
   <div class="bottom">
-    <el-table :data="tableData" stripe border style="width: 100%;" height="297">
+    <el-table :data="tableData" stripe border style="width: 100%;" height="297"
+              :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+              :cell-style="{textAlign: 'center'}">
       <el-table-column prop="A" fixed label="序号" width="60"/>
       <el-table-column prop="B" fixed label="名称" width="100"/>
       <el-table-column prop="C" fixed label="部门" width="100"/>
@@ -183,16 +182,11 @@ export default {
 <style scoped>
 .head {
   margin-top: 7px;
-  border: 1px solid #e9e9e9;
   margin-left: 20px;
   margin-right: 5px;
   margin-bottom: 10px;
 }
 
-.head:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
-}
 
 .head-right {
   margin-top: 10px;
@@ -201,31 +195,36 @@ export default {
 .select {
   margin-left: 15px;
   margin-top: 10px;
+  color: #000000;
 }
 
 .selects {
   margin-left: 15px;
   margin-top: 10px;
   margin-bottom: 10px;
+  color: #000000;
 }
 
 .bottom {
   margin-top: 27px;
-  border: 1px solid #e9e9e9;
   margin-left: 20px;
   margin-right: 5px;
   margin-bottom: 10px;
   padding: 1%;
 }
 
-.bottom:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
-}
+
 
 .demo-pagination-block {
   margin-left: 800px;
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* Project id 3056280 */
+  src: url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff2?t=1640334127364') format('woff2'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff?t=1640334127364') format('woff'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.ttf?t=1640334127364') format('truetype');
 }
 </style>

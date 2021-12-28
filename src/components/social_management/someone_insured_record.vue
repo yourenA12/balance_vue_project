@@ -17,8 +17,8 @@
 
     <!-- 表格内容部分 -->
     <div class="sub-Content__primary">
-      <el-table :data="tableData" stripe style="width: 100%"
-                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+      <el-table :data="tableData" style="width: 100%"
+                :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
         <el-table-column prop="date" label="计薪月份" />
