@@ -16,12 +16,12 @@
   <el-table :data="tableData"  style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}">
-    <el-table-column prop="date" label="姓名" width="180" />
-    <el-table-column prop="name" label="开始时间" width="180" />
-    <el-table-column prop="name" label="结束时间" width="180" />
-    <el-table-column prop="name" label="任职公司" width="180" />
-    <el-table-column prop="name" label="职位" width="180" />
-    <el-table-column prop="name" label="离职原因" width="180" />
+    <el-table-column prop="date" label="姓名" width="210" />
+    <el-table-column prop="name" label="开始时间" width="210" />
+    <el-table-column prop="name" label="结束时间" width="210" />
+    <el-table-column prop="name" label="任职公司" width="210" />
+    <el-table-column prop="name" label="职位" width="210" />
+<!--    <el-table-column prop="name" label="离职原因" width="180" />-->
     <el-table-column fixed="right" label="操作">
     <template #default>
       <router-link :to="{path:this.information,query:{path: this.$route.query.path}}">

@@ -60,15 +60,16 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
 
-        <el-table-column fixed prop="date" label="姓名" width="150"/>
-        <el-table-column prop="name" label="工号" width="150"/>
-        <el-table-column prop="state" label="所属公司/中心" width="150"/>
+        <el-table-column fixed prop="name" label="姓名" width="150"/>
+        <el-table-column prop="date" label="出生日期" width="150"/>
         <el-table-column prop="city" label="部门" width="150"/>
         <el-table-column prop="state" label="职位" width="150"/>
         <el-table-column prop="state" label="手机" width="150"/>
         <el-table-column prop="state" label="状态" width="150"/>
         <el-table-column prop="date" label="入职日期" sortable width="150">
         </el-table-column>
+        <el-table-column prop="state" label="转正日期" width="150"/>
+        <el-table-column prop="state" label="工龄" width="150"/>
         <el-table-column fixed="right" label="操作" width="150">
           <template #default>
             <router-link :to="{path:this.staffedit,query:{path: this.$route.query.path}}">

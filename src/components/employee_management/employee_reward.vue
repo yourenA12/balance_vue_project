@@ -1,4 +1,4 @@
-<!--查看工资表 -->
+<!--奖罚记录-->
 <template>
 <!--  <div class="saas-main-content">-->
 <!--    <div class="j-card j-card-bordered mainContent">-->
