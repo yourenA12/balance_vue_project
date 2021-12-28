@@ -1,74 +1,59 @@
-<!--查看工资表导航 -->
+<!--查看固定工资导航栏-->
 <template>
-
   <div class="saas-main-content">
+
     <div class="j-card j-card-bordered mainContent">
-      <div class="j-card-body">
-        <span></span>
-        <div>
-  <el-tabs v-model="wagetable" @tab-click="handleClick">
+      <div class="j-card-body " >
 
-    <el-tab-pane name="wages">
+        <!--         菜单 -->
 
-      <template #label>
-        <div style="width: 100px; text-align: center;">  <router-link :to="{path:this.selectwagetable,query:{path: this.$route.query.path}}">工资表</router-link></div>
-      </template>
+        <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+          <el-tab-pane label="固定工资">
+            <template #label>
+              <router-link :to="{path:this.fixedsalary,query:{path: this.$route.query.path}}" style="text-decoration: none">固定工资&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</router-link>
+            </template>
+            <router-view></router-view>
 
-      <router-view></router-view>
+          </el-tab-pane>
+          <el-tab-pane label="调薪查询">
+            <template #label>
+              <router-link :to="{path:this.raise,query:{path: this.$route.query.path}}" style="text-decoration: none">&nbsp;&nbsp;&nbsp;调薪查询&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</router-link>
+            </template>
 
+            <router-view></router-view>
+          </el-tab-pane>
 
-    </el-tab-pane>
-  </el-tabs>
-        </div>
+        </el-tabs>
+
       </div>
     </div>
   </div>
+
   &nbsp;
 </template>
-<script lang="ts">
+
+<script>
 export default {
   data() {
     return {
-      //查看工资表
-      selectwagetable:'/salary/selectwagetable',
-      wagetable: 'wages',
+      fixedsalary: '/salary/fixedsalary',
+      raise: '/salary/raise',
+
     }
   },
+
+
 }
 </script>
+
+
 <style scoped>
 @import url("../../css/navigation.css");
-/deep/.cell {
-  padding-left: 10px;
-  text-align: center;
-  color: black;
-}
 
-
-
-
-
-
-/deep/ .el-tabs__item {
-  padding: 0px 10px;
-  padding-left: 36px;
-  height: 40px;
-  box-sizing: border-box;
-  line-height: 40px;
-  display: inline-block;
-  list-style: none;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--el-text-color-primary);
-  position: relative;
-}
-/deep/.el-tabs__nav {
-  white-space: nowrap;
-  position: relative;
-  transition: transform var(--el-transition-duration);
-  float: left;
-  z-index: calc(var(--el-index-normal) + 1);
-  margin-left: 0px;
+/deep/ .mainContent .sub-Content__primary {
+  padding: 12px 24px;
+  background: #fff;
+  border-radius: 4px;
 }
 
 </style>

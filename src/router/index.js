@@ -473,16 +473,34 @@ const routes = [
                             // },
                         // ]
                     },
-                    //固定工资方案
+                    //固定工资方案导航栏
+                    // {
+                    //     path: '/salary/regular',
+                    //     component: modules[`${'../components/salary_management/salary_fixedsalary.vue'}`]
+                    // },
                     {
-                        path: '/salary/regular',
-                        component: modules[`${'../components/salary_management/salary_fixedsalary.vue'}`]
+                        path: '/salary/fixed_navigation',
+                        component: modules[`${'../components/salary_management/salary_checkwage.vue'}`],
+                        redirect: "/salary/fixedsalary",
+                        children: [
+                            //固定工资
+                            {
+                                path: '/salary/fixedsalary',
+                                component: modules[`${'../components/salary_management/salary_fixedsalary.vue'}`]
+                            },
+                            //调薪查询
+                            {
+                                path: '/salary/raise',
+                                component: modules[`${'../components/salary_management/salary_raisequery.vue'}`]
+                            }
+                        ]
                     },
                     //加班工资方案
                     {
                         path: '/salary/callbackpay',
                         component: modules[`${'../components/salary_management/salary_workovertimeplan.vue'}`]
                     },
+
                     //新增编辑加班工资方案
                     {
                         path: '/salary/insertcallbackpay',
