@@ -38,7 +38,8 @@
                     :data="tableData"
                     style="width: 1275px; margin: auto"
                     size="mini"
-                    height="250">
+                    height="250"  :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}">
                   <el-table-column fixed prop="dept" label="部门" width="120" />
                   <el-table-column prop="number" label="人数" width="120" />
                   <el-table-column prop="state" label="固定工资" width="120" />
@@ -52,14 +53,7 @@
                   <el-table-column prop="state" label="公司缴社保" width="120" />
                   <el-table-column prop="city" label="公司缴公积金" width="120" />
                   <el-table-column prop="address" label="公司缴纳" width="120" />
-<!--                  <el-table-column fixed="right" label="Operations" width="120">-->
-<!--                    <template #default>-->
-<!--                      <el-button type="text" size="small" @click="handleClick"-->
-<!--                      >Detail</el-button-->
-<!--                      >-->
-<!--                      <el-button type="text" size="small">Edit</el-button>-->
-<!--                    </template>-->
-<!--                  </el-table-column>-->
+
                 </el-table>
 
               </div>
