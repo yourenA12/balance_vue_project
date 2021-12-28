@@ -102,8 +102,8 @@ const routes = [
                         children: [
                             {//员工花名册
                                 path: '/employee/message/employee_roster',
-                                redirect: "/employee/message/employee_roster/book",
                                 component: modules[`${'../components/employee_management/employee_staff_one.vue'}`],
+                                redirect: '/employee/message/employee_roster/book',
                                 children: [
                                     //花名册
                                     {
@@ -114,6 +114,11 @@ const routes = [
                                     {
                                         path: '/employee/message/employee_roster/business',
                                         component: modules[`${'../components/employee_management/employee_work.vue'}`],
+                                    },
+                                    //奖罚记录
+                                    {
+                                        path: '/employee/message/employee_roster/record',
+                                        component: modules[`${'../components/employee_management/employee_reward.vue'}`],
                                     },
                                 ]
                             },
@@ -455,18 +460,18 @@ const routes = [
                             },
                         ]
                     },
-                    //工资表导航
+                    //工资表详细数据
                     {
-                        path: '/salary/wagesheet',
-                        component: modules[`${'../components/salary_management/salary_checkwage.vue'}`],
-                        redirect: "/salary/selectwagetable",
-                        children: [
+                        // path: '/salary/wagesheet',
+                        // component: modules[`${'../components/salary_management/salary_checkwage.vue'}`],
+                        // redirect: "/salary/selectwagetable",
+                        // children: [
                             //查看工资表
-                            {
+                            // {
                                 path: '/salary/selectwagetable',
                                 component: modules[`${'../components/salary_management/salary_wagetable.vue'}`]
-                            },
-                        ]
+                            // },
+                        // ]
                     },
                     //固定工资方案
                     {

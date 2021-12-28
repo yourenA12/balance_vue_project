@@ -20,7 +20,7 @@
                     class="demo-ruleForm"
                 >
                   <el-form-item label="方案名称：" prop="schemename" style="width:370px">
-                    <el-input v-model="ruleForm.schemename"></el-input>
+                    <el-input v-model="ruleForm.schemename" style="width: 207px"></el-input>
                   </el-form-item>
 
 
