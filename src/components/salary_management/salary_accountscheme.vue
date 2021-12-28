@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       //固定工资
-      regular: '/salary/regular',
+      regular: '/salary/fixed_navigation',
       //加班工资
       callbackpay: '/salary/callbackpay',
       //考勤扣款

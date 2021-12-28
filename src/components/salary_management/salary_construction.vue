@@ -14,62 +14,69 @@
         </el-select>
       </el-form-item>
       </el-form><br>
-      <p class="font_size_p">2.根据您企业薪酬制度，选择需要的薪酬类别（勾选则表示系统需核算）</p>
+<!--      <p class="font_size_p">2.根据您企业薪酬制度，选择需要的薪酬类别（勾选则表示系统需核算）</p>-->
 
-      <br>
+<!--      <br>-->
 
-      <el-checkbox-group v-model="checkList" >
-        <el-tooltip class="item" effect="dark" content="固定员工核算基础数据,不可更改" placement="top-start">
-          <el-icon :size="16" style="margin-left: 20px;">
-            <i-question-filled />
-          </el-icon>
+<!--      <el-checkbox-group v-model="checkList" >-->
+<!--        <el-tooltip class="item" effect="dark" content="固定员工核算基础数据,不可更改" placement="top-start">-->
+<!--          <el-icon :size="16" style="margin-left: 20px;">-->
+<!--            <i-question-filled />-->
+<!--          </el-icon>-->
 
-        </el-tooltip>
-        <el-checkbox label="固定工资" disabled  style=" margin-left: 20px;"/>
-        <el-checkbox label="加班工资" disabled style=" margin-left: 20px;"/>
-        <el-checkbox label="考勤扣款" style=" margin-left: 20px;"/>
-        <el-checkbox label="社保" style=" margin-left: 20px;"/>
-        <el-checkbox label="公积金" style=" margin-left: 20px;"/>
-      </el-checkbox-group>
+<!--        </el-tooltip>-->
+<!--        <el-checkbox label="固定工资" disabled  style=" margin-left: 20px;"/>-->
+<!--        <el-checkbox label="加班工资" disabled style=" margin-left: 20px;"/>-->
+<!--        <el-checkbox label="考勤扣款" style=" margin-left: 20px;"/>-->
+<!--        <el-checkbox label="社保" style=" margin-left: 20px;"/>-->
+<!--        <el-checkbox label="公积金" style=" margin-left: 20px;"/>-->
+<!--      </el-checkbox-group>-->
     </div>
     <br />
     <div class="">
 
-      <span class="font_size_p">3、设置各薪酬类别下面的薪资项目（开启后在工资表中显示该项目）</span>
+      <span class="font_size_p">2、设置各薪酬类别下面的薪资项目（开启后在工资表中显示该项目）</span>
 
       <br>
       <br>
       <div class="">
         <el-collapse v-model="activeNames" @change="handleChange">
 
-<!--          <el-collapse-item name="2">-->
-<!--            <template #title >-->
+
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">固定工资</h3>
-              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.regular,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-<!--            </template>-->
-<!--          </el-collapse-item>-->
+              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案  <router-link :to="{path:this.regular,query:{path: this.$route.query.path}}">去设置</router-link> </span>
           </div>
           <br />
 
 
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">加班工资</h3>
-              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.callbackpay,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+              <span class="span_1_zhe" >【加项】针对员工工作日、休息日、节假日加班工资，可设置加班工资方案  <router-link :to="{path:this.callbackpay,query:{path: this.$route.query.path}}">去设置</router-link> </span>
           </div>
           <br />
 
 
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">考勤扣款</h3>
-              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.attendanceplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+              <span class="span_1_zhe" >【减项】该部分工资，系统根据考勤扣款方案自动核算数据，可针对每项设置扣款方案  <router-link :to="{path:this.attendanceplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
           </div>
 
           <br/>
 
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">出差工资</h3>
-              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+              <span class="span_1_zhe" >【加项】针对员工出差，可设置出差方案 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+          </div>
+          <br/>
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+            <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">社保</h3>
+            <span class="span_1_zhe" style="margin-left:155px">【减项】针对员工社保缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+          </div>
+          <br/>
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+            <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">公积金</h3>
+            <span class="span_1_zhe" style="margin-left:140px">【减项】针对员工公积金缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
           </div>
 
         </el-collapse>
@@ -90,7 +97,7 @@ export default defineComponent({
   data() {
     return {
       //固定工资
-      regular:'/salary/regular',
+      regular:'/salary/fixed_navigation',
       //加班工资
       callbackpay:'/salary/callbackpay',
       //考勤扣款
@@ -159,7 +166,7 @@ export default defineComponent({
 
 /deep/.span_1_zhe {
   color: rgb(153, 153, 153);
-  margin-left: 180px;
+  margin-left: 120px;
   display: inline-block;
 }
 
