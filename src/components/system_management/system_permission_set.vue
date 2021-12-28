@@ -51,7 +51,7 @@
                          @click="this.insertMenu=true,this.boxName='新增菜单',this.ruleForm.previousMenu='主类目'">
                 新增
               </el-button>
-              <el-button type="info" @click="handle">
+              <el-button type="info" @click="handle" plain>
                 展开/折叠
               </el-button>
               <div class="top-search" @click="menuShow==true?menuShow=false:menuShow=true">
