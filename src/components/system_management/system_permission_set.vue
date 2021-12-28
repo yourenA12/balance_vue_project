@@ -1,4 +1,4 @@
-<!--角色设置界面-->
+<!--权限设置界面-->
 <template>
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
