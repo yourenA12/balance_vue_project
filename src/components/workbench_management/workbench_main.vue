@@ -13,7 +13,7 @@
             </div>
             <!-- 欢迎语句 -->
             <div class="text_left_crld" style="display: inline-block;">
-              <p>欢迎你：臭傻逼，祝你工作顺利<br>
+              <p>欢迎你：XXX，祝你工作顺利<br>
                 <span class="font_xu">公司的 | 超级大 | boss</span></p>
             </div>
           </div>

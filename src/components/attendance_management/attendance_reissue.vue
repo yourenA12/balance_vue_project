@@ -3,19 +3,8 @@
   <!-- 补打卡页面-->
   <div class="w">
     <div class="head">
-      <el-button size="medium">
-        <el-icon style="font-size: 18px">
-          <i-upload/>
-        </el-icon>
-        导出
-      </el-button>
-      <el-button size="medium">
-        <el-icon style="font-size: 18px">
-          <i-folder-opened/>
-        </el-icon>
-        导入
-      </el-button>
-      <!--选择开始时间和结束时间-->
+      <!--选择开始日期和结束日期-->
+      <b style="font-size: 18px;margin-left:10px;margin-right: 10px">补打卡时间</b>
       <el-date-picker
           v-model="value1"
           type="daterange"
@@ -26,11 +15,11 @@
           wdaWD
           aW
           :shortcuts="shortcuts"
-          style="margin-left: 340px"
       >
       </el-date-picker>
-      <!--全部部门-->
-      <el-select size="small" v-model="value" clearable placeholder="全部部门" style="margin-left: 25px">
+      <!--    全部部门-->
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">全部部门</b>
+      <el-select size="small" v-model="value" clearable placeholder="选择部门" >
         <el-option
             v-for="item in options"
             :key="item.value"
@@ -40,17 +29,34 @@
         </el-option>
       </el-select>
       <!--搜索框-->
-      <el-input size="small" v-model="input" placeholder="搜索" style="width:150px;margin-left: 25px">
-        <template #suffix>
-          <el-icon style="margin-top:9px;margin-right:10px">
-            <i-search/>
-          </el-icon>
-        </template>
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员/部名称</b>
+      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
       </el-input>
 
+      <!--查询按钮-->
+      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
+        <el-icon><i-search />
+
+        </el-icon>
+      </el-button>
+    </div>
+
+    <div class="head-export">
+      <!--导出导入-->
+      <el-button type="warning" plain size="small" @click="derive()">
+        <i class="iconfont">&#xe643;</i>
+        导出
+      </el-button>
+
+      <el-button type="success" plain size="small">
+        <i class="iconfont">&#xe645;</i>
+        导入
+      </el-button>
     </div>
     <div class="y">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%"
+                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                :cell-style="{textAlign: 'center'}">
         <el-table-column prop="applyfor" label="申请名称"/>
         <el-table-column prop="type" label="补打卡类型"/>
         <el-table-column prop="hour" label="补打卡时间"/>
@@ -66,7 +72,9 @@
                 @confirm="through1()"
             >
               <template #reference>
-                <el-button type="text" size="small" style="color:darkorange">删除</el-button>
+                <el-button type="text" size="small" style="color:darkorange">
+                  <el-icon><i-delete /></el-icon> 删除
+                </el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -185,22 +193,12 @@ table * {
   text-align: center;
 }
 
-.w {
-  margin-top: 20px;
-  border: 1px solid #e9e9e9;
-}
-
-.w:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-  border-color: transparent;
-}
 
 .y {
   margin-top: 20px;
 }
 
 .head {
-  margin-left: 2%;
   margin-top: 2%;
 }
 
@@ -209,6 +207,16 @@ table * {
   margin-top: 20px;
   margin-bottom: 30px;
 }
+.head-export{
+  margin-top: 20px;
+  margin-left: 20px;
+}
 
+@font-face {
+  font-family: 'iconfont';  /* Project id 3056280 */
+  src: url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff2?t=1640334127364') format('woff2'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff?t=1640334127364') format('woff'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.ttf?t=1640334127364') format('truetype');
+}
 </style>
 

@@ -88,7 +88,9 @@
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table size="small" :data="tableData" stripe style="width: 100%">
+          <el-table size="small" :data="tableData" style="width: 100%"
+                    :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}">
             <!-- 多选框 -->
             <el-table-column type="selection" width="55" />
             <el-table-column prop="date" label="编号" />
@@ -210,6 +212,12 @@ export default {
 </script>
 
 <style scoped>
+
+/*表格*/
+.sub-Content__primary{
+  margin-top: 20px;
+}
+
 /* 月统计金额下的div下的span */
 .month_sum div span {
   margin: 35px;

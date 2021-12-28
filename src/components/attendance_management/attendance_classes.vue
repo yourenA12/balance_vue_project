@@ -37,13 +37,18 @@
         >
         </el-time-picker>
       </el-form-item>
+
+      <el-form-item prop="xz" label="班次状态：" style="margin-left: 20px">
+      <el-radio v-model="radio1" label="1">启用</el-radio>
+      <el-radio v-model="radio1" label="2">禁用</el-radio>
+      </el-form-item>
+
+
       <el-form-item>
         <div class="u">
           <router-link to="/attendance/check">
             <el-button>
-              <el-icon>
-                <i-circle-close/>
-              </el-icon>
+              <el-icon><i-close-bold /></el-icon>
               <span>取消</span>
             </el-button>
           </router-link>
@@ -62,13 +67,16 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue'
 export default {
   data() {
     return {
+      radio1: ref('1'),
       fo: {
         name: "",
         value1: "",
         value2: "",
+        xz:"",
       },
       rules: {
         name: [
@@ -84,9 +92,11 @@ export default {
             message: "请选择工作时间",
             trigger: "blur",
           }
-        ]
+        ],
+
       },
     };
+
   },
   methods: {
     submitForm(formName) {
@@ -122,4 +132,5 @@ export default {
 .u {
   margin-left: 40%;
 }
+
 </style>

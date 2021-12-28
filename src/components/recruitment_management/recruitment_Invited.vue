@@ -12,9 +12,7 @@
 
 
           <!--筛选框-->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt" @click="icons =! icons">
-            <span>筛选</span>
-          </button>
+
           <!--搜索框-->
           <div style="float: right;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -34,57 +32,12 @@
       <!--
         筛选框
       -->
-      <div class="icon-s" v-show="icons">
 
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues1" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select v-model="formInline.vlues2" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues3" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues4" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="" size="mini">确定</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="" size="mini">重置</el-button>
-          </el-form-item>
-
-          <el-form-item>
-            <span style="cursor: pointer" @click="icons =! icons"> 收起 <i class="iconfont">&#xe76e;</i></span>
-          </el-form-item>
-
-        </el-form>
-
-
-      </div>
     </div>
     <br/>
     <!-- 表格数据 -->
     <div class="ant-table-wrapper j_statistics_layout">
-      <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+      <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
         <el-table-column fixed="left"  align="center" type="selection" width="80" />
         <el-table-column fixed="left" prop="name" label="姓名" width="150">
           <template #default="scope">
