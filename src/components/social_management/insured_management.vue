@@ -116,7 +116,7 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 提交按钮 -->
-          <el-button size="small" type="primary">提交</el-button>
+          <el-button style="width:75px" size="small" type="primary" plain>提交 </el-button>
 
           <!-- 搜索框 -->
           <el-input v-model="search" size="small" class="resume-operation" placeholder="搜索">
@@ -148,7 +148,10 @@
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="emps_table" stripe style="width: 100%">
+          <el-table :data="emps_table" style="width: 100%"
+                    :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+                    :cell-style="{textAlign: 'center'}"
+          >
             <!-- 多选框 -->
             <el-table-column type="selection" width="55"/>
             <el-table-column prop="id" label="编号"/>
@@ -278,6 +281,11 @@ export default {
 </script>
 
 <style scoped>
+
+/*表格*/
+.sub-Content__primary{
+  margin-top:20px
+}
 
 /* 表单验证 */
 ::v-deep .el-form-item__error {

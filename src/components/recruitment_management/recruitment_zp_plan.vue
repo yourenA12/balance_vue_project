@@ -8,53 +8,57 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 新增招聘计划按钮 -->
-          <a style="margin-top: 4px;">
+
+          <a style="margin-top: 50px;">
             <router-link :to="{path:this.one,query:{path:this.$route.query.path,name:'新增'}}">
-              <button type="button" class="ant-btn ant-btn-primary">
-                <span>新增招聘计划</span>
-              </button>
+
+              <el-button size="small" type="primary"  plain style="position: absolute;">
+                <el-icon><i-plus/></el-icon>
+                新增
+              </el-button>
+
             </router-link>
           </a>
+
           <!-- 批量导入按钮 -->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-            <span>批量导入</span>
-          </button>
+
+          <el-button  size="small" type="warning" plain style="position: absolute;left: 100px;">
+            <el-icon><i-download /></el-icon>
+            批量导入
+          </el-button>
+<!--          <button style="position: absolute;left: 100px; color: #ffba00;-->
+<!--                  background: #fff8e6;-->
+<!--                  border-color: #ffe399;-->
+
+<!--               "-->
+<!--                  type="button" class="ant-btn abt"-->
+<!--                 >-->
+<!--            <el-icon><i-download /></el-icon>-->
+<!--            <span></span>-->
+<!--          </button>-->
 
           <!-- 下拉选择器 -->
           <div class="resume-operation">
-            <el-select v-model="value1" clearable placeholder="招聘职位">
-              <el-option
-                  v-for="item in options1"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-            &nbsp;&nbsp;&nbsp;
-            <el-select v-model="value2" clearable placeholder="招聘状态">
-              <el-option
-                  v-for="item in options2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
+
             <!--搜索输入框-->
             &nbsp;&nbsp;&nbsp;
-            <el-input style="width: 200px;" v-model="input" placeholder="招聘计划名称" clearable/>
+            <el-input style="width: 200px;border-radius: 30%;" v-model="input" placeholder="状态 \ 部门名称 \ 招聘计划" clearable/>
             <!--搜索按钮-->
             &nbsp;&nbsp;&nbsp;
-            <el-button style="background-color: #085fc3; color: white;" size="small">Custom</el-button>
-          </div>
+            <el-button style="background-color: #ffffff;border-radius: 30%;" size="small">
+              <el-icon><i-search />
 
+              </el-icon>
+            </el-button>
+          </div>
+          </div>
 
         </div>
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+          <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
+<!--          <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">-->
             <el-table-column prop="ID" label="序号" width="150"/>
             <el-table-column label="招聘计划名称" width="200">
               <template #default="scope">
@@ -75,7 +79,7 @@
                   &nbsp;
                   <el-popconfirm title="是否确定关闭?" @confirm="confirmgb()" @cancel="cancelgb()">
                     <template #reference>
-                      <el-button type="text" size="small">关闭</el-button>
+                      <el-button type="text" size="small" >关闭</el-button>
                     </template>
                   </el-popconfirm>
 
@@ -85,7 +89,7 @@
 
                   <el-popconfirm title="是否确认删除该招聘计划?" @confirm="confirmsc()" @cancel="cancelsc()">
                     <template #reference>
-                       <el-button type="text" size="small">删除</el-button>
+                       <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
                     </template>
                   </el-popconfirm>
 
@@ -109,14 +113,13 @@
             background
             @size-change="sele"
             @current-change="sele"
-            prev-text="上一页"
-            next-text="下一页"
+
         >
         </el-pagination>
       </div>
     </div>
 
-  </div>
+
 </template>
 
 <script>
@@ -267,6 +270,7 @@ export default {
 
 .mr-20 {
   margin-right: 20px;
+  position: relative;
 }
 
 .ml-20 {
@@ -278,7 +282,7 @@ export default {
 }
 
 a {
-  color: #085fc3;
+  color: #6ba1e0;
   background-color: transparent;
 }
 
@@ -287,7 +291,7 @@ a, area, button, [role="button"], input:not([type="range"]), label, select, summ
 }
 
 a {
-  color: #366cb3;
+  color: #72b3c4;
   text-decoration: none;
   background-color: transparent;
   outline: none;

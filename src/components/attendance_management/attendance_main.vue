@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import menuUtil from '../../components/util/menu_util.vue'
+import menuUtil from '../../../../balance_vue_project - 副本 (2)/src/components/util/menu_util.vue'
 export default {
   components: {
     menuUtil,
@@ -131,8 +131,8 @@ export default {
 </script>
 
 <style type="text/css" scoped>
-@import url("../../css/navigation.css");
-@import url("../../css/zpdaohang.css");
+@import url("../../../../balance_vue_project - 副本 (2)/src/css/navigation.css");
+@import url("../../../../balance_vue_project - 副本 (2)/src/css/zpdaohang.css");
 
 /deep/ .el-sub-menu .el-sub-menu__icon-arrow {
   position: relative !important;

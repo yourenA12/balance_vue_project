@@ -1,4 +1,4 @@
-<!--角色设置界面-->
+<!--权限设置界面-->
 <template>
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
@@ -47,23 +47,11 @@
               </div>
             </div>
             <div class="j-set-top-bottom">
-              <el-button type="primary"
+              <el-button type="primary" plain
                          @click="this.insertMenu=true,this.boxName='新增菜单',this.ruleForm.previousMenu='主类目'">
-                <svg t="1639015562660" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="5342" width="17" height="17">
-                  <path
-                      d="M792.2 491.3H532.8V231.9c0-11.3-9.2-20.5-20.5-20.5s-20.5 9.2-20.5 20.5v259.4H232.4c-11.3 0-20.5 9.2-20.5 20.5s9.2 20.5 20.5 20.5h259.4v259.4c0 11.3 9.2 20.5 20.5 20.5s20.5-9.2 20.5-20.5V532.3h259.4c11.3 0 20.5-9.2 20.5-20.5-0.1-11.3-9.2-20.5-20.5-20.5z"
-                      fill="#fdfdfd" p-id="5343"></path>
-                </svg>
                 新增
               </el-button>
-              <el-button type="info" @click="handle">
-                <svg t="1639016365538" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" p-id="17305" width="17" height="17">
-                  <path
-                      d="M618.666667 157.866667l179.2 179.2-29.866667 29.866666-149.333333-149.333333v669.866667h-42.666667V115.2l42.666667 42.666667z m-213.333334 682.666666l-179.2-179.2 29.866667-29.866666 149.333333 149.333333V115.2h42.666667v763.733333l-42.666667-38.4z"
-                      fill="#fdfdfd" p-id="17306"></path>
-                </svg>
+              <el-button type="info" @click="handle" plain>
                 展开/折叠
               </el-button>
               <div class="top-search" @click="menuShow==true?menuShow=false:menuShow=true">

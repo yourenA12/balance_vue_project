@@ -4,36 +4,64 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body ">
         <div class="j-tabs">
-          <ul>
-            <li @click="liback(1)">
-              <div v-bind:class="{active:isActive1}">
-                <router-link :to="{path:this.daiInterview,query:{path:this.$route.query.path}}">
-                  <span v-bind:class="{sactive:isActive1}">面试中 (99)</span>
-                </router-link>
-              </div>
-            </li>
+          <el-tabs type="border-card">
+          <el-tab-pane>
+            <template #label>
+              <router-link :to="{path:this.daiInterview,query:{path:this.$route.query.path}}">
+                <span v-bind:class="{sactive:isActive1}">面试中 (99)</span>
+              </router-link>
+            </template>
+            <router-view/>
+          </el-tab-pane>
 
-            <li @click="liback(3)">
-              <div v-bind:class="{active:isActive3}">
-                <router-link :to="{path:this.daiSecondInterview,query:{path:this.$route.query.path}}">
-                  <span v-bind:class="{sactive:isActive3}">复试中 (99)</span>
-                </router-link>
-              </div>
-            </li>
+            <el-tab-pane>
+            <template #label>
+              <router-link :to="{path:this.daiSecondInterview,query:{path:this.$route.query.path}}">
+                <span v-bind:class="{sactive:isActive3}">复试中 (99)</span>
+              </router-link>
+            </template>
+            <router-view/>
+            </el-tab-pane>
 
-            <li @click="liback(2)">
-              <div v-bind:class="{active:isActive2}">
-                <router-link :to="{path:this.interviewPass,query:{path:this.$route.query.path}}">
-                  <span v-bind:class="{sactive:isActive2}">面试通过 (99)</span>
-                </router-link>
-              </div>
-            </li>
+            <el-tab-pane>
+            <template #label>
+              <router-link :to="{path:this.interviewPass,query:{path:this.$route.query.path}}">
+                <span v-bind:class="{sactive:isActive2}">面试通过 (99)</span>
+              </router-link>
+            </template>
+            <router-view/>
+            </el-tab-pane>
+          </el-tabs>
+<!--          <ul>-->
+<!--            <li @click="liback(1)">-->
+<!--              <div v-bind:class="{active:isActive1}">-->
+<!--                <router-link :to="{path:this.daiInterview,query:{path:this.$route.query.path}}">-->
+<!--                  <span v-bind:class="{sactive:isActive1}">面试中 (99)</span>-->
+<!--                </router-link>-->
+<!--              </div>-->
+<!--            </li>-->
 
-          </ul>
+<!--            <li @click="liback(3)">-->
+<!--              <div v-bind:class="{active:isActive3}">-->
+<!--                <router-link :to="{path:this.daiSecondInterview,query:{path:this.$route.query.path}}">-->
+<!--                  <span v-bind:class="{sactive:isActive3}">复试中 (99)</span>-->
+<!--                </router-link>-->
+<!--              </div>-->
+<!--            </li>-->
+
+<!--            <li @click="liback(2)">-->
+<!--              <div v-bind:class="{active:isActive2}">-->
+<!--                <router-link :to="{path:this.interviewPass,query:{path:this.$route.query.path}}">-->
+<!--                  <span v-bind:class="{sactive:isActive2}">面试通过 (99)</span>-->
+<!--                </router-link>-->
+<!--              </div>-->
+<!--            </li>-->
+
+<!--          </ul>-->
         </div>
-        <div>
-          <router-view/>
-        </div>
+<!--        <div>-->
+<!--          <router-view/>-->
+<!--        </div>-->
 
 
       </div>
