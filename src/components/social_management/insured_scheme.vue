@@ -32,7 +32,7 @@
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
           <el-table :data="scheme_table"  style="width: 100%;margin-top: 20px"
-                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                    :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
             <el-table-column prop="scheme_id" label="方案编号"/>
             <el-table-column prop="scheme_name" label="方案名称"/>
