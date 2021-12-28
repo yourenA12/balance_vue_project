@@ -4,31 +4,33 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body ">
         <div class="j-tabs">
-          <ul>
 
-            <li @click="liback(1)">
-              <div v-bind:class="{active:isActive1}">
+          <el-tabs type="border-card">
+            <el-tab-pane>
+              <template #label>
                 <router-link :to="{path:this.one,query:{path:this.$route.query.path}}">
                   <span v-bind:class="{sactive:isActive1}">候选人 (99)</span>
                 </router-link>
-              </div>
-            </li>
+              </template>
+              <router-view/>
+            </el-tab-pane>
 
 
 
-            <li @click="liback(2)">
-              <div v-bind:class="{active:isActive2}">
+
+            <el-tab-pane>
+              <template #label>
                 <router-link :to="{path:this.two,query:{path:this.$route.query.path}}">
                   <span v-bind:class="{sactive:isActive2}">已邀约 (99)</span>
                 </router-link>
-              </div>
-            </li>
-
-          </ul>
+              </template>
+              <router-view/>
+            </el-tab-pane>
+          </el-tabs>
         </div>
-        <div>
-          <router-view/>
-        </div>
+<!--        <div>-->
+<!--          <router-view/>-->
+<!--        </div>-->
 
 
 

@@ -7,29 +7,29 @@
           <!-- 新增招聘计划按钮 -->
           <a style="margin-top: 4px;">
             <router-link :to="{path:this.addresume,query:{path:this.$route.query.path}}">
-            <button type="button" class="ant-btn ant-btn-primary">
-              <span>+ 新增</span>
-            </button>
+              <el-button size="small" type="primary" plain>
+                <el-icon><i-plus/></el-icon>
+                新增
+              </el-button>
             </router-link>
           </a>
           <!-- 批量导入按钮 -->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-            <span>批量导入</span>
-          </button>
+          &nbsp;
+          <el-button  size="small" type="warning" plain >
+            <el-icon><i-download /></el-icon>
+            批量导入
+          </el-button>
           <!-- 批量批量删除按钮 -->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-            <span>批量删除</span>
-          </button>
+          <el-button size="small" type="danger" plain> <el-icon><i-delete /></el-icon>批量删除</el-button>
           <!-- 批量设为候选人 -->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-            <span>批量设为候选人</span>
-          </button>
+          <el-button size="small" type="info"  plain >批量设为候选人</el-button>
+<!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">-->
+<!--            <span>批量设为候选人</span>-->
+<!--          </button>-->
 
 
           <!--筛选框-->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt" @click="icons =! icons">
-            <span>筛选</span>
-          </button>
+
           <!--搜索框-->
           <div style="float: right;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -49,57 +49,14 @@
       <!--
         筛选框
       -->
-      <div class="icon-s" v-show="icons">
 
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues1" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select v-model="formInline.vlues2" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues3" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-select v-model="formInline.vlues4" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="" size="mini">确定</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="" size="mini">重置</el-button>
-          </el-form-item>
-
-          <el-form-item>
-            <span style="cursor: pointer" @click="icons =! icons"> 收起 <i class="iconfont">&#xe76e;</i></span>
-          </el-form-item>
-
-        </el-form>
-
-
-      </div>
     </div>
     <br/>
     <!-- 表格数据 -->
     <div class="ant-table-wrapper j_statistics_layout">
-      <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+<!--      <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+-->
+      <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
         <el-table-column fixed="left"  align="center" type="selection" width="80" />
         <el-table-column fixed="left" prop="name" label="姓名" width="150">
           <template #default="scope">
@@ -122,7 +79,7 @@
         <el-table-column fixed="right" label="操作" width="130">
           <template #default>
             <div style="width: 10px">
-              <el-button type="text" size="small" @click="">删除</el-button>
+              <el-button type="text" size="small" @click="" style="color: #f67183;">删除</el-button>
 
             </div>
 
@@ -220,16 +177,16 @@ export default {
   padding: 16px;
   margin-left: 70px;
 }
-.el-button--primary { /* el-input 显示时 */
-  background: #085fc3 !important;
-  border-color: #085fc3 !important;
-}
+/*.el-button--primary { !* el-input 显示时 *!*/
+/*  background: #085fc3 !important;*/
+/*  border-color: #085fc3 !important;*/
+/*}*/
 
-.el-button--primary:hover {/* el-input 悬浮时 */
-  background: #297ccf !important;
-  border-color: #297ccf !important;
-  color: #FFF !important;
-}
+/*.el-button--primary:hover {!* el-input 悬浮时 *!*/
+/*  background: #297ccf !important;*/
+/*  border-color: #297ccf !important;*/
+/*  color: #FFF !important;*/
+/*}*/
 
 .j-tabs {
   border-bottom: 1px solid #d9d9d9;
