@@ -13,6 +13,21 @@
       <!--  选择月份-->
       <el-date-picker v-model="value2" type="month" placeholder="请选择月份！">
       </el-date-picker>
+      <!--导出导入-->
+      <el-button type="warning" plain size="small" style="margin-left: 770px;margin-right: 20px">
+        <i class="iconfont">&#xe643;</i>
+        导出
+      </el-button>
+
+      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
+      </el-input>
+
+      <!--查询按钮-->
+      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 10px" size="small">
+        <el-icon><i-search />
+        </el-icon>
+      </el-button>
+
     </div>
     <div class="centre">
       <el-icon style="font-size: 16px; color: #409eff"
@@ -41,13 +56,9 @@
     </div>
     <!-- 表格-->
     <div class="bottom">
-      <el-table
-          :data="tableData"
-          stripe
-          border
-          style="width: 100%"
-          height="320"
-      >
+      <el-table :data="tableData" stripe border style="width: 100%" height="310"
+                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                :cell-style="{textAlign: 'center'}">
         <el-table-column prop="A" fixed label="名称"/>
         <el-table-column prop="B" fixed label="部门"/>
         <el-table-column prop="C" label="正常次数"/>
@@ -58,6 +69,24 @@
       </el-table>
     </div>
   </div>
+
+  <!--分页-->
+  <div class="demo-pagination-block">
+    <el-pagination
+        v-model:currentPage="pageInfo.currenPage"
+        :page-sizes="[3, 5, 10, 50]"
+        v-model:page-size="pageInfo.pagesize"
+        :default-page-size="pageInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageInfo.total"
+        :pager-count="5"
+        background
+        @size-change="sele"
+        @current-change="sele"
+    >
+    </el-pagination>
+  </div>
+
 </template>
 
 <script>
@@ -66,6 +95,13 @@ export default {
     return {
       activeName: "first",
       value2: "",
+
+      /* 当前的页 */
+      pageInfo: {
+        currenPage: 1,
+        pagesize: 3,
+        total: 0,
+      },
       // 历史归档数据
       tableData: [
         {
@@ -95,16 +131,11 @@ export default {
 <style scoped>
 .head {
   margin-top: 7px;
-  border: 1px solid #e9e9e9;
   margin-left: 20px;
   margin-right: 5px;
   margin-bottom: 10px;
 }
 
-.head:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
-}
 
 .head-to {
   margin-left: 20px;
@@ -129,5 +160,11 @@ export default {
 .bottom {
   margin-top: 30px;
   margin-left: 20px;
+}
+
+.demo-pagination-block {
+  margin-left: 800px;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 </style>

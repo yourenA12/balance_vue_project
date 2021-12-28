@@ -3,7 +3,7 @@
   <!-- 月份报表页面 -->
   <div class="head">
     <div class="head-surface">
-      <span>2021 6月人事报表</span>
+      <span><span style="color:#000000">2021</span> 6月人事报表</span>
     </div>
     <div class="head-to">
       <el-tabs v-model="activeName">
@@ -12,28 +12,28 @@
     </div>
     <!--    搜索框-->
     <div class="head-examine">
-      <el-input v-model="input" placeholder="搜索" style="width: 200px">
-        <template #suffix>
-          <el-icon style="margin-top: 13px; margin-right: 7px"
-          >
-            <i-search
-            />
-          </el-icon>
-        </template>
+      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
       </el-input>
-      <el-button type="primary" size="small" style="margin-left: 840px">
-        <el-icon style="font-size: 16px">
-          <i-upload/>
+
+      <!--查询按钮-->
+      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 10px" size="small">
+        <el-icon><i-search />
         </el-icon>
+      </el-button>
+      <!--导出导入-->
+      <el-button type="warning" plain size="small" style="margin-left: 850px">
+        <i class="iconfont">&#xe643;</i>
         导出
       </el-button>
-      <el-button type="primary" size="small">
+      <el-button type="info" plain size="small">
         归档2021 6月份报表
       </el-button>
     </div>
 <!--表格-->
     <div class="bottom">
-      <el-table :data="tableData" stripe border style="width: 100%" height="320">
+      <el-table :data="tableData" stripe border style="width: 100%" height="320"
+                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                :cell-style="{textAlign: 'center'}">
         <el-table-column prop="A" fixed label="名称"/>
         <el-table-column prop="B" fixed label="部门"/>
         <el-table-column prop="C" label="正常"/>
@@ -81,16 +81,11 @@ export default {
 <style scoped>
 .head {
   margin-top: 7px;
-  border: 1px solid #e9e9e9;
   margin-left: 20px;
   margin-right: 5px;
   margin-bottom: 10px;
 }
 
-.head:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
-}
 
 .head-surface {
   font-size: 20px;
@@ -99,7 +94,7 @@ export default {
 }
 
 .head-to {
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 .head-examine {
@@ -112,7 +107,7 @@ export default {
 }
 
 .bottom {
-  margin-left: 20px;
+  margin-left: 18px;
   margin-top: 20px;
   margin-right: 5px;
   margin-bottom: 10px;
@@ -123,5 +118,12 @@ export default {
   margin-left: 800px;
   margin-top: 20px;
   margin-bottom: 5px;
+}
+
+@font-face {
+  font-family: 'iconfont';  /* Project id 3056280 */
+  src: url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff2?t=1640334127364') format('woff2'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.woff?t=1640334127364') format('woff'),
+  url('//at.alicdn.com/t/font_3056280_a3nxem44wtk.ttf?t=1640334127364') format('truetype');
 }
 </style>
