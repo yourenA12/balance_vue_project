@@ -42,40 +42,35 @@
       <div class="">
         <el-collapse v-model="activeNames" @change="handleChange">
 
-          <el-collapse-item name="2">
-            <template #title >
-              <h3 style="margin-left: 20px;">固定工资</h3>
+<!--          <el-collapse-item name="2">-->
+<!--            <template #title >-->
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+              <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">固定工资</h3>
               <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.regular,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-            </template>
-          </el-collapse-item>
+<!--            </template>-->
+<!--          </el-collapse-item>-->
+          </div>
           <br />
 
-          <el-collapse-item  name="3">
-            <template #title >
-              <h3 style="margin-left: 20px;">加班工资</h3>
+
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+              <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">加班工资</h3>
               <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.callbackpay,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-            </template>
-
-          </el-collapse-item>
+          </div>
           <br />
 
 
-          <el-collapse-item title="Efficiency" name="4">
-            <template #title >
-              <h3 style="margin-left: 20px;">考勤扣款</h3>
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+              <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">考勤扣款</h3>
               <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.attendanceplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-            </template>
-          </el-collapse-item>
+          </div>
 
           <br/>
 
-          <el-collapse-item title="Efficiency" name="5">
-            <template #title >
-              <h3 style="margin-left: 20px;">出差工资</h3>
+          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
+              <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">出差工资</h3>
               <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-            </template>
-
-          </el-collapse-item>
+          </div>
 
         </el-collapse>
       </div>
@@ -164,7 +159,8 @@ export default defineComponent({
 
 /deep/.span_1_zhe {
   color: rgb(153, 153, 153);
-  margin-left: 60px;
+  margin-left: 180px;
+  display: inline-block;
 }
 
 /deep/.ant-row {
