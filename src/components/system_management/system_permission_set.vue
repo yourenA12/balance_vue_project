@@ -47,10 +47,17 @@
               </div>
             </div>
             <div class="j-set-top-bottom">
-              <el-button type="primary" plain
-                         @click="this.insertMenu=true,this.boxName='新增菜单',this.ruleForm.previousMenu='主类目'">
+<!--              <el-button type="primary" plain-->
+<!--                         @click="this.insertMenu=true,this.boxName='新增菜单',this.ruleForm.previousMenu='主类目'">-->
+<!--                新增-->
+<!--              </el-button>-->
+
+              <el-button size="small" type="primary" plain @click="this.insertMenu=true,this.boxName='新增菜单',this.ruleForm.previousMenu='主类目'">
+                <el-icon><i-plus/></el-icon>
+
                 新增
               </el-button>
+
               <el-button type="info" @click="handle" plain>
                 展开/折叠
               </el-button>
