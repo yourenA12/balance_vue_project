@@ -29,3 +29,31 @@ table * {
 .demo-input-suffix {
   margin-bottom: 16px;
 }
+.if_tg{
+  width: 10px;
+  height: 10px;
+  background: #67C23A ;
+  border-radius: 10px;
+  display: inline-block;
+}
+.if_bh{
+  width: 10px;
+  height: 10px;
+  background: #F56C6C ;
+  border-radius: 10px;
+  display: inline-block;
+}
+.if_spz{
+  width: 10px;
+  height: 10px;
+  background: #909399;
+  border-radius: 10px;
+  display: inline-block;
+}
+.if_cx{
+  width: 10px;
+  height: 10px;
+  background: #E6A23C ;
+  border-radius: 10px;
+  display: inline-block;
+}
