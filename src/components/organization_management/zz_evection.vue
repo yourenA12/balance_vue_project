@@ -86,6 +86,12 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
+        <el-table-column type="expand">
+          <template #default="scope">
+            <span style="margin-left: 50px">部门负责人：{{scope.row.bmr}}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="name" label="部门名称"/>
         <el-table-column prop="times" label="创建时间"/>
         <el-table-column prop="state" label="状态">
@@ -168,13 +174,7 @@ export default {
         {
           name: '开发部',
           times: '2020-12-12 12:34:23',
-          children:[
-            {
-              name: '市场部',
-              times: '2020-12-12 12:34:23'
-            }
-          ]
-
+          bmr:'王鑫'
         },
         {
           name: '市场部',
