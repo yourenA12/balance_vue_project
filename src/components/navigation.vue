@@ -6,9 +6,7 @@
       <div class="ant-row header_row_s">
         <div class="ant-col hq-logo-wrapper header_1_s header_logo_s">
 					<span class="hq-logo_">
-						<a>
-							<img src="../assets/que360_logo.png"/>
-						</a>
+						<img src="../assets/albb.svg">
 					</span>
         </div>
         <!--  导航菜单  -->
@@ -55,6 +53,7 @@
                     <el-dropdown-menu>
                       <el-dropdown-item>账户信息</el-dropdown-item>
                       <el-dropdown-item>SAAS PC</el-dropdown-item>
+                       <el-dropdown-item>修改账号密码</el-dropdown-item>
                       <el-dropdown-item>退出</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -323,6 +322,7 @@ export default {
 
 <style type="text/css" scoped>
 @import url("../css/navigation.css");
+
 .header_message .bottom_panel {
   position: absolute;
   bottom: 0;
@@ -474,7 +474,7 @@ export default {
 .el-menu[data-v-09d1a3b8] {
   height: 71px;
   font-weight: bold;
-  background-color: #085fc3;
+  background-color: #04995a;
 }
 
 .el-menu--horizontal > .el-menu-item {
@@ -686,7 +686,7 @@ ul li {
 
 ::selection {
   color: #fff;
-  background: #085fc3;
+  background: #04995a;
 }
 
 .ant-tabs-nav-scroll {
