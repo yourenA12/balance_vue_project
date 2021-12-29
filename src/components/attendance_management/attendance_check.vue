@@ -55,7 +55,7 @@
               <el-icon><i-edit />
               </el-icon>修改
             </el-button>
-            <span style="color:#e8e8e8">|</span>
+
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
@@ -70,7 +70,7 @@
                 </el-button>
               </template>
             </el-popconfirm>
-            <span style="color:#e8e8e8">|</span>
+
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
@@ -80,7 +80,7 @@
                 @confirm="through2()"
             >
               <template #reference>
-                <el-button type="text" size="small" style="color:darkorange">
+                <el-button type="text" size="small">
                   <el-icon><i-delete /></el-icon>删除
                 </el-button>
               </template>
