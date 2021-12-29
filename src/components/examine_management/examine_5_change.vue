@@ -9,16 +9,19 @@
         <el-input
             v-model="input"
             placeholder="输入名称搜索"
-            style="width: 130px"
+            style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain>搜索</el-button>
+        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
         <!--  表格 -->
         <el-table
             ref="filterTable1"
             row-key="date1"
             :data="tableData1"
             style="width: 100%"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            :cell-style="{textAlign: 'center'}"
+
         >
           <el-table-column
               prop="date1"
@@ -38,7 +41,32 @@
           <el-table-column prop="AUDITFLOW_TYPE" label="流程" width="100"/>
           <el-table-column prop="STAFF_ID" label="申请人" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100"/>
+          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+            <!-- 判断 prop的状态  -->
+            <template #default="scope">
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+                <div class="if_tg"></div>
+                &nbsp;&nbsp;<span>通过</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+                <div class="if_bh"></div>
+                &nbsp;&nbsp;<span>驳回</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待审</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
+                <div class="if_cx"></div>
+                &nbsp;&nbsp;<span>撤销</span>
+              </div>
+            </template>
+
+          </el-table-column>
           <el-table-column prop="STAFF_NAME" label="当前审批人" width="150"/>
           <el-table-column prop="UPDATED_TIME" label="最近处理" width="150"/>
 
@@ -53,7 +81,7 @@
                   @confirm="through1()"
               >
                 <template #reference>
-                  <el-button type="success" plain>通过</el-button>
+                  <el-button type="text">通过 </el-button>
                 </template>
               </el-popconfirm>
               <el-popconfirm
@@ -65,21 +93,18 @@
                   @confirm="through2()"
               >
                 <template #reference>
-                  <el-button type="danger" plain>驳回</el-button>
+                  <el-button type="text">驳回 </el-button>
                 </template>
               </el-popconfirm>
-              <el-button
-                  type="primary"
-                  style="margin-left: 16px"
-                  @click="drawer = true"
-              >
-                详情
-              </el-button>
+
+              <el-button type="text"  @click="drawer = true">详情 </el-button>
+
             </template>
           </el-table-column>
         </el-table>
         <!-- 分页插件 -->
-        <div class="demo-pagination-block">
+        <br>
+        <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
@@ -105,16 +130,19 @@
         <el-input
             v-model="input"
             placeholder="输入名称搜索nima"
-            style="width: 130px"
+            style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain>搜索</el-button>
+        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
 
         <el-table
             ref="filterTable"
             row-key="date"
             :data="tableData"
             style="width: 100%"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            :cell-style="{textAlign: 'center'}"
+
         >
           <el-table-column
               prop="date"
@@ -134,24 +162,43 @@
           <el-table-column prop="AUDITFLOW_TYPE" label="流程" width="100"/>
           <el-table-column prop="STAFF_ID" label="申请人" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100"/>
+          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+            <!-- 判断 prop的状态  -->
+            <template #default="scope">
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+                <div class="if_tg"></div>
+                &nbsp;&nbsp;<span>通过</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+                <div class="if_bh"></div>
+                &nbsp;&nbsp;<span>驳回</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待审</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
+                <div class="if_cx"></div>
+                &nbsp;&nbsp;<span>撤销</span>
+              </div>
+            </template>
+
+          </el-table-column>
           <el-table-column prop="STAFF_NAME" label="历史审批人" width="150"/>
           <el-table-column prop="UPDATED_TIME" label="最近处理" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button
-                  type="primary"
-                  style="margin-left: 5px"
-                  @click="drawer = true"
-              >
-                详情
-              </el-button>
+              <el-button type="text"  @click="drawer = true">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
-
         <!-- 分页插件 -->
-        <div class="demo-pagination-block">
+        <br>
+        <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
@@ -172,14 +219,6 @@
 </template>
 
 <script>
-import {
-  Search,
-  Edit,
-  Check,
-  Message,
-  Star,
-  Delete,
-} from "@element-plus/icons";
 import {defineComponent, ref} from "vue";
 
 export default {
@@ -317,7 +356,7 @@ export default {
           UPDATED_TIME: "2020-01-01",
         },
       ],
-      // 分页
+
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -335,10 +374,10 @@ export default {
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
     },
-    // 筛选
     clearFilter() {
       this.$refs.filterTable.clearFilter();
     },
+    // 筛选
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
@@ -357,4 +396,5 @@ export default {
 
 <style scoped>
 @import url("../../css/Examine_2.css");
+
 </style>

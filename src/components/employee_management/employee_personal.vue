@@ -44,10 +44,10 @@
                 <label>职位</label>
                 <p>{{obj.position}}</p>
               </li>
-              <li>
-                <label>离职原因</label>
-                <p>{{obj.reasons}}</p>
-              </li>
+<!--              <li>-->
+<!--                <label>离职原因</label>-->
+<!--                <p>{{obj.reasons}}</p>-->
+<!--              </li>-->
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
@@ -77,13 +77,13 @@
                   </el-col>
                 </el-form-item><br>
 
-                <el-form-item label="离职原因：" >
-                  <el-col :span="11">
-                    <el-form-item prop="reasons" style="width:240px;">
-                      <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-form-item>
+<!--                <el-form-item label="离职原因：" >-->
+<!--                  <el-col :span="11">-->
+<!--                    <el-form-item prop="reasons" style="width:240px;">-->
+<!--                      <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                  </el-col>-->
+<!--                </el-form-item>-->
               </div>
 
             <div style="display: inline-block;position: absolute;top:20px;right:150px">
@@ -443,11 +443,13 @@
         </h3>
       </div>
 
+
+
       <!--      离职信息-->
       <div class="information">
         <h3 style="color: #085fc3;font-size: 14px;margin-left: 10px;display: inline-block;">离职信息<i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe604;</i></h3>
         <div style="width:845px;border-top:1px solid silver;display: inline-block;margin-left: 7px;margin-bottom: 5px;"></div>
-        <h3 v-show="departureButton" style="color: #085fc3;font-size: 14px;position: relative;margin-left: 5px;display: inline-block;"><el-button type="text" @click="lzbj=!lzbj,lzhs=!lzhs,lzwhite=!lzwhite"><i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe600;</i>编辑</el-button></h3>
+        <h3 v-show="departureButton" style="color: #085fc3;font-size: 14px;position: relative;margin-left: 5px;display: inline-block;"><el-button type="text" @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput"><i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe600;</i>编辑</el-button></h3>
       </div>
 
       <div style="width: 100%;margin-top: 20px;">
@@ -482,7 +484,7 @@
 
         </div>
 
-        <div class="information_from" v-show="lzhs">
+        <div class="information_from" v-show="departureInput">
           <el-form style="width: 90%;margin: auto; " :rules="rules" ref="departureForm" :model="departureForm">
             <br/>
             <div style="display: inline-block;margin:20px 0px 0px 50px">
@@ -543,8 +545,8 @@
 
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
-                <el-button @click="lzwhite=!lzwhite,lzhs=!lzhs,lzbj=!lzbj">取消</el-button>
-                <el-button type="primary" @click="lzwhite=!lzwhite,lzhs=!lzhs,lzbj=!lzbj ">保存</el-button>
+                <el-button @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput">取消</el-button>
+                <el-button type="primary" @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput">保存</el-button>
               </div>
             </div>
           </el-form>
