@@ -1,3 +1,4 @@
+<!--部门管理-->
 <template>
   <!--头-->
   <div class="head">
@@ -7,7 +8,7 @@
     </el-input>
     <!--选择框-->
     <b style="font-size: 18px;margin-left: 20px">状态&nbsp;&nbsp;&nbsp;&nbsp;</b>
-    <el-select size="small" v-model="value" clearable placeholder="班次状态">
+    <el-select size="small" v-model="value" clearable placeholder="部门状态">
       <el-option
           v-for="item in options"
           :key="item.value"
@@ -25,15 +26,63 @@
 
     <!--新增按钮-->
     <div class="head-surface">
-        <el-button size="small" type="primary" plain>
+        <el-button size="small" type="primary" plain @click="drawer = true">
           <el-icon><i-plus/></el-icon>
           新增
         </el-button>
+
     </div>
+    <!--抽屉-->
+    <el-drawer v-model="drawer" :with-header="false">
+      <el-form ref="ruleForm"
+               :model="fo"
+               :rules="rules">
+      
+      
+        <el-form-item prop="name">
+          <template #label><b style="font-size:18px;">部门名称：</b></template>
+          <el-input v-model="fo.name" placeholder="请输入部门名称：" style="width:200px; margin-left: 20px">
+            </el-input>
+        </el-form-item>
+      <!--选择框-->
+        <el-form-item prop="values1">
+          <template #label><b style="font-size:18px;">部门负责人：</b></template>
+      <el-select
+          v-model="fo.values1"
+          clearable
+          placeholder="请选择部门负责人">
+        <el-option
+            v-for="item in optionss"
+            :key="item.values"
+            :label="item.labels"
+            :value="item.values"
+        >
+        </el-option>
+      </el-select>
+        </el-form-item>
+      <!--单选框-->
+      <b style="font-size: 18px;margin-right: 30px">状态:</b>
+      <el-radio v-model="radio1" label="1">启用</el-radio>
+      <el-radio v-model="radio1" label="2">禁用</el-radio>
+      <div class="an">
+      <el-button type="primary" @click="submitForm('ruleForm')">
+        <el-icon>
+          <i-copy-document/>
+        </el-icon>
+        <span>提交</span>
+      </el-button>
+
+      <el-button @click="resetForm('ruleForm')"  >
+        <el-icon><i-close-bold /></el-icon>
+        <span>取消</span>
+      </el-button>
+      </div>
+      </el-form>
+    </el-drawer>
 
     <!--  表格-->
     <div class="y">
-      <el-table :data="tableData" stripe style="width: 100%"
+      <el-table :data="tableData" stripe style="width: 100% ;" height="400"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
@@ -48,10 +97,11 @@
           <template #default>
             <el-button type="text" size="small" @click="redact()">
               <el-icon><i-edit />
-              </el-icon>修改
+              </el-icon>
+              修改
             </el-button>
 
-            <span style="color:#e8e8e8">|</span>
+
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
@@ -61,7 +111,7 @@
                 @confirm="through2()"
             >
               <template #reference>
-                <el-button type="text" size="small" style="color:darkorange">
+                <el-button type="text" size="small">
                   <el-icon><i-delete /></el-icon>删除
                 </el-button>
               </template>
@@ -71,6 +121,22 @@
       </el-table>
     </div>
 
+    <!--分页-->
+    <div class="demo-pagination-block">
+      <el-pagination
+          v-model:currentPage="pageInfo.currenPage"
+          :page-sizes="[3, 5, 10, 50]"
+          v-model:page-size="pageInfo.pagesize"
+          :default-page-size="pageInfo.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageInfo.total"
+          :pager-count="5"
+          background
+          @size-change="sele"
+          @current-change="sele"
+      >
+      </el-pagination>
+    </div>
 
   </div>
 </template>
@@ -80,10 +146,34 @@ import { ref, defineComponent } from "vue";
 export default {
   data() {
     return {
+      fo:{
+        name:"",
+        values1:"",
+
+      },
+      //分页
+      pageInfo: {
+        currenPage: 1,
+        /* 当前的页 */
+        pagesize: 3,
+        total: 0,
+      },
+      //单选状态
+      radio1: ref('1'),
+
+      //抽屉
+      drawer: ref(false),
       tableData: [
+
         {
           name: '开发部',
           times: '2020-12-12 12:34:23',
+          children:[
+            {
+              name: '市场部',
+              times: '2020-12-12 12:34:23'
+            }
+          ]
 
         },
         {
@@ -97,8 +187,20 @@ export default {
         {
           name: '行政部',
           times: '2020-12-12 12:34:23',
-        }
+        },{
+          name: '行政部',
+          times: '2020-12-12 12:34:23',
+        },
+        {
+          name: '行政部',
+          times: '2020-12-12 12:34:23',
+        },
+        {
+          name: '行政部',
+          times: '2020-12-12 12:34:23',
+        },
       ],
+      //状态
       options: ref([
         {
           value: '启用',
@@ -111,8 +213,57 @@ export default {
       ]),
       value: ref(''),
 
-            };
+      //部门负责人
+      optionss: ref([
+        {
+          values: '大象',
+          label: '大象',
+        },
+        {
+          values: '老鼠',
+          label: '老鼠',
+        }
+      ]),
+      values: ref(''),
+      //验证
+      rules:{
+        name: [
+          {
+            required: true,
+            message: "请填写班次名字",
+            trigger: "blur",
+          },
+        ],
+        values1:[
+          {
+            required: true,
+            message: "请选择该负责人",
+            trigger: "change",
+          }
+        ]
+      }
+
+    };
   },
+  methods: {
+    //提交
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //取消
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+      this.radio1= ref('1'),
+      this.drawer = false
+    },
+  }
 };
 </script>
 
@@ -136,6 +287,16 @@ table *{
 
 .y{
   margin-top: 10px;
+}
+.an{
+  margin-top: 20px;
+  margin-left: 1%;
+}
+
+.demo-pagination-block {
+  margin-left: 850px;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 </style>
 
