@@ -59,20 +59,24 @@
         <div class="sub-Content__primary">
           <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
 <!--          <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">-->
-            <el-table-column prop="ID" label="序号" width="150"/>
+            <el-table-column prop="recruitmentPlanId" label="序号" width="150"/>
             <el-table-column label="招聘计划名称" width="200">
               <template #default="scope">
-                <router-link :to="{path:this.two,query:{path:this.$route.query.path,name:scope.row.zpname}}">{{scope.row.zpname}}</router-link>
+                <router-link :to="{path:this.two,query:{path:this.$route.query.path,name:scope.row.zpname}}">{{scope.row.recruitmentName}}</router-link>
               </template>
             </el-table-column>
-            <el-table-column prop="zpzw" label="招聘职位" width="200"/>
-            <el-table-column prop="zpdept" label="需求部门" width="200"/>
-            <el-table-column prop="zpnum" label="招聘人数" width="200"/>
-            <el-table-column prop="statetime" label="发布时间" width="200"/>
-            <el-table-column prop="zpzt" label="招聘状态" width="200"/>
+            <el-table-column prop="postName" label="招聘职位" width="200"/>
+            <el-table-column prop="deptName" label="需求部门" width="200"/>
+            <el-table-column prop="recruitmentPlanNumber" label="招聘人数" width="200"/>
+            <el-table-column prop="recruitmentPlanStartTime" label="发布时间" width="200"/>
+            <el-table-column label="招聘状态" width="200">
+              <template #default="scope">
+                {{scope.row.recruitmentZt=='0'?'招聘中':'已结束'}}
+              </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作" width="180">
               <template #default="scope">
-                <div v-if="tableData[scope.$index].zpzt=='招聘中'">
+                <div v-if="tableData[scope.$index].recruitmentZt==0">
                   <router-link :to="{path:this.one,query:{path:this.$route.query.path,name: '修改'}}">
                   <el-button type="text" size="small" >编辑</el-button>
                   </router-link>
@@ -84,7 +88,7 @@
                   </el-popconfirm>
 
                 </div>
-                <div v-else-if="tableData[scope.$index].zpzt=='已结束'">
+                <div v-else-if="tableData[scope.$index].recruitmentZt!=0">
                   <el-button type="text" size="small" @click="">查看</el-button>
 
                   <el-popconfirm title="是否确认删除该招聘计划?" @confirm="confirmsc()" @cancel="cancelsc()">
@@ -111,8 +115,8 @@
             :total="pageInfo.total"
             :pager-count="5"
             background
-            @size-change="sele"
-            @current-change="sele"
+            @size-change="selectrecruitment_plan"
+            @current-change="selectrecruitment_plan"
 
         >
         </el-pagination>
@@ -131,7 +135,7 @@ export default {
       two:'/recruitment/plan/details',
       //分页
       pageInfo: {
-        currenPage: 3,
+        currenPage: 1,
         /* 当前的页 */
         pagesize: 3,
         total: 3,
@@ -160,26 +164,7 @@ export default {
       },
       //输入框数据
       input: "",
-      tableData: [
-        {
-          ID: '1',
-          zpname: 'HTR2001招聘计划',
-          zpzw: '研发人员',
-          zpdept: '市场部',
-          zpnum: '10',
-          statetime: '2016-05-03',
-          zpzt: '招聘中'
-        },
-        {
-          ID: '1',
-          zpname: 'HTR2001招聘计划',
-          zpzw: '研发人员',
-          zpdept: '市场部',
-          zpnum: '10',
-          statetime: '2016-05-03',
-          zpzt: '已结束'
-        },
-      ]
+      tableData: [],
     }
   },
   methods:{
@@ -210,7 +195,24 @@ export default {
         message: '已取消该操作',
         type: 'warning',
       })
+    },
+    selectrecruitment_plan(){
+      this.axios
+      .get("http://localhost:8010/provider/recruitmentPlanVo/queryPage/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+      .then((response) => {
+        console.log(response);
+        this.tableData = response.data.data.records;
+        console.log(response.data.data.records);
+        this.pageInfo.total = response.data.data.total;
+      })
+      .catch(function (error){
+        console.log(error);
+      })
     }
+
+  },
+  created() {
+    this.selectrecruitment_plan();
   }
 }
 
