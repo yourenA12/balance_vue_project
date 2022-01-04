@@ -5,10 +5,13 @@
       <div class="ant-spin-container">
         <div class="mt-20 ml-20 mr-20">
           <!-- 批量设为候选人 -->
-          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-            <span>批量邀约面试</span>
-          </button>
-
+<!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">-->
+<!--            <span>批量邀约面试</span>-->
+<!--          </button>-->
+          <el-button  size="small" type="warning" plain >
+            <el-icon><i-download /></el-icon>
+            批量邀约面试
+          </el-button>
 
           <!--筛选框-->
 

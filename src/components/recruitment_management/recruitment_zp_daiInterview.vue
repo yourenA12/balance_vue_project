@@ -7,9 +7,10 @@
           <!-- 批量操作 -->
           <el-dropdown :hide-on-click="false">
             <span class="el-dropdown-link">
-                <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">
-                  <span>批量操作</span>
-                </button>
+                 <el-button  size="small" type="warning" plain >
+            <el-icon><i-download /></el-icon>
+            批量操作
+          </el-button>
             </span>
             <template #dropdown>
               <el-dropdown-menu>

@@ -78,7 +78,12 @@
         <el-table-column fixed="right" label="操作" width="180">
           <template #default>
             <div style="width: 110px">
-              <el-button type="text" size="small" @click="" style="color: #ea7c99;">删除</el-button>
+<!--              <el-button type="text" size="small" @click="" style="color: #ea7c99;">删除</el-button>-->
+              <el-popconfirm title="是否确认删除?" @confirm="confirmsc()" @cancel="cancelsc()">
+                <template #reference>
+                  <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
+                </template>
+              </el-popconfirm>
               <el-button type="text" size="small" @click="">移出</el-button>
             </div>
 
@@ -115,6 +120,7 @@
 import {
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -152,7 +158,34 @@ export default {
     }
   },
   methods:{
-
+    //消息提示框确认按钮事件
+    confirmgb(){
+      ElMessage({
+        message: '操作成功',
+        type: 'success',
+      })
+    },
+    //消息提示框取消按钮事件
+    cancelgb(){
+      ElMessage({
+        message: '已取消该操作',
+        type: 'warning',
+      })
+    },
+    //消息提示框确认按钮事件
+    confirmsc(){
+      ElMessage({
+        message: '操作成功',
+        type: 'success',
+      })
+    },
+    //消息提示框取消按钮事件
+    cancelsc(){
+      ElMessage({
+        message: '已取消该操作',
+        type: 'warning',
+      })
+    }
   }
 
 }
