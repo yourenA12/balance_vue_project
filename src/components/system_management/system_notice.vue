@@ -159,7 +159,7 @@
 <!--                  <i class="iconfont">&#xe606</i>-->
 <!--                  修改-->
 <!--                </el-button>-->
-                <el-button @click="become=true" type="text" size="small">修改</el-button>
+                <el-button @click="become=true" type="text" size="small">修改 </el-button>
 <!--                <el-button @click="open" size="mini" style="color: #A3D3FF;width: 75px;">-->
 <!--                  <i class="iconfont">&#xe61c</i>-->
 <!--                  删除-->
@@ -303,6 +303,7 @@ export default {
           zip: "6",
           content:"jkfh是的发送到iwqhbfoewhb"
         }],
+
       affiche:{
         title: '',
         type: '',
@@ -328,6 +329,7 @@ export default {
 
       //按钮是否被禁用
       disableds:true,
+
       //接收表格数据
       table:[],
     }
@@ -351,6 +353,7 @@ export default {
     //     this.disableds=true
     //   }
     // },
+
     //点击修改获取表单里的值
     aaa(row){
        this.affiche = row;
