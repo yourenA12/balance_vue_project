@@ -29,6 +29,11 @@
   <el-table :data="tableData"  style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}">
+    <el-table-column prop="staffName" label="姓名" width="210" />
+    <el-table-column prop="workStareTime" label="开始时间" width="210" />
+    <el-table-column prop="createdTime" label="结束时间" width="210" />
+    <el-table-column prop="companyName" label="任职公司" width="210" />
+    <el-table-column prop="positionName" label="职位" width="210" />
     <el-table-column type="expand" width="100%">
       <template #default="scope">
         <div style="width: 100%;background-color: white;text-align: center">
@@ -63,8 +68,8 @@
         :total="pageInfo.total"
         :pager-count="5"
         background
-        @size-change="selectUsers"
-        @current-change="selectUsers"
+        @size-change="selectWork"
+        @current-change="selectWork"
     >
     </el-pagination>
   </div>
@@ -76,28 +81,7 @@ export default {
   data() {
     return {
       information:'/employee/message/employee_roster/information',
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-      ],
+      tableData: [],
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -136,6 +120,26 @@ export default {
       ],
     }
   },
+  methods:{
+
+    //多表查询
+    selectWork() {
+      this.axios
+          .get("http://localhost:8010/provider/workExperience/selectWorkExperience/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },
+  created() {
+    this.selectWork()
+  }
   methods:{
     getRowKeys(row){
       return row.id

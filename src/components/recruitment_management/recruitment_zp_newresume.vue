@@ -69,7 +69,7 @@
         <el-table-column fixed="left"  align="center" type="selection" width="80" />
         <el-table-column fixed="left" label="姓名" width="150">
           <template #default="scope">
-            <router-link :to="{path:this.details,query:{path:this.$route.query.path,name:scope.row.name}}">{{scope.row.name}}</router-link>
+            <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
         <el-table-column fixed="left" prop="departm" label="投递部门" width="140"/>
@@ -97,7 +97,9 @@
                 </span>
                     <template #dropdown>
                       <el-dropdown-menu>
+
                         <el-dropdown-item style="color: #f88d9c;">删除</el-dropdown-item>
+
                         <el-dropdown-item >转入淘汰库</el-dropdown-item>
                       </el-dropdown-menu>
                     </template>
@@ -121,8 +123,8 @@
             :total="pageInfo.total"
             :pager-count="5"
             background
-            @size-change="sele"
-            @current-change="sele"
+            @size-change="selectresume_plan"
+            @current-change="selectresume_plan"
         >
         </el-pagination>
       </div>
@@ -158,10 +160,7 @@ export default {
       input: "",
       //表格数据
       tableData: [
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'},
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'},
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'}
-      ],
+        ],
       //筛选框数据
       formInline:{
         vlues1:'',
@@ -176,8 +175,24 @@ export default {
     }
   },
   methods:{
-
+    selectnewresume_plan(){
+      this.axios
+          .get("http://localhost:8010/provider/ResumeVo/ResumePage_a/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            // console.log(response.data.data.records);
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    }
+  },
+  created() {
+    this.selectnewresume_plan();
   }
+
 
 }
 
