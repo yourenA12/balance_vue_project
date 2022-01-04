@@ -140,18 +140,18 @@
               <el-table :data="tableData" style="width: 100%;"
                         :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                         :cell-style="{textAlign: 'center'}">
-                <el-table-column fixed prop="date" label="姓名" width="150"/>
-                <el-table-column prop="name" label="工号" width="120"/>
-                <el-table-column prop="state" label="公司/中心" width="120"/>
-                <el-table-column prop="city" label="部门" width="120"/>
-                <el-table-column prop="address" label="职位" width="150"/>
-                <el-table-column prop="zip" label="入职日期" width="120"/>
-                <el-table-column prop="zip" label="状态" width="120"/>
-                <el-table-column prop="zip" label="基本工资" width="120"/>
-                <el-table-column prop="zip" label="岗位" width="120"/>
-                <el-table-column prop="zip" label="基本工资" width="120"/>
-                <el-table-column prop="zip" label="岗位" width="120"/>
-                <el-table-column fixed="right" label="操作" width="120">
+                <el-table-column fixed prop="date" label="姓名" width="180"/>
+<!--                <el-table-column prop="name" label="工号" width="120"/>-->
+<!--                <el-table-column prop="state" label="公司/中心" width="120"/>-->
+                <el-table-column prop="city" label="部门" width="180"/>
+                <el-table-column prop="address" label="职位" width="180"/>
+                <el-table-column prop="zip" label="入职日期" width="180"/>
+                <el-table-column prop="zip" label="状态" width="200"/>
+                <el-table-column prop="zip" label="基本工资" width="200"/>
+<!--                <el-table-column prop="zip" label="岗位" width="120"/>-->
+<!--                <el-table-column prop="zip" label="基本工资" width="120"/>-->
+<!--                <el-table-column prop="zip" label="岗位" width="120"/>-->
+                <el-table-column fixed="right" label="操作" width="180">
                   <template #default>
                     <el-button type="text" size="small" @click="disly=true,disly_1=false">定薪</el-button>
                     <el-button type="text" size="small" @click="disly_1=true,disly=false">调薪</el-button>

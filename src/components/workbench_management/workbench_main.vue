@@ -13,8 +13,8 @@
             </div>
             <!-- 欢迎语句 -->
             <div class="text_left_crld" style="display: inline-block;">
-              <p>欢迎你：XXX，祝你工作顺利<br>
-                <span class="font_xu">公司的 | 超级大 | boss</span></p>
+              <h3>欢迎你：XXX，祝你工作顺利<br>
+                <span class="font_xu">公司的 | 超级大 | boss</span></h3>
             </div>
           </div>
           <!-- 待办事项div -->
@@ -22,10 +22,10 @@
 
             <div class="hp_crld_ringht_dpsx">
 							<span>
-								<el-icon class="i_con_svg">
+								<el-icon class="i_con_svg" style="display: inline-block">
 									<i-tickets />
 								</el-icon>
-								待办事项
+                <h4 style="display: inline-block">待办事项</h4>
 							</span>
               <br>
               <br>
@@ -60,9 +60,23 @@
           </div>
         </div>
         <!-- 便捷入口div -->
+        <el-icon class="i_con_svg" style="display: inline-block;margin-left: 20px;">
+          <i-tickets />
+
+        </el-icon>
+        <h3 style="display: inline-block">便捷入口</h3>
         <div class="body_center_bjrk">
+
           <el-col :span="8">
-            <el-card shadow="hover">
+            <el-card shadow="hover" class="body_col_1" >
+              <el-icon>
+                <i-avatar class="i_icon_svg" />
+              </el-icon>
+              <span class="right_font">审批管理</span>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card shadow="hover" class="body_col_2">
               <el-icon>
                 <i-avatar class="i_icon_svg" />
               </el-icon>
@@ -70,7 +84,7 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card shadow="hover">
+            <el-card shadow="hover" class="body_col_3">
               <el-icon>
                 <i-avatar class="i_icon_svg" />
               </el-icon>
@@ -78,7 +92,7 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card shadow="hover">
+            <el-card shadow="hover" class="body_col_4">
               <el-icon>
                 <i-avatar class="i_icon_svg" />
               </el-icon>
@@ -86,15 +100,7 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card shadow="hover">
-              <el-icon>
-                <i-avatar class="i_icon_svg" />
-              </el-icon>
-              <span class="right_font">用户</span>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover">
+            <el-card shadow="hover" class="body_col_5">
               <el-icon>
                 <i-avatar class="i_icon_svg" />
               </el-icon>
@@ -123,7 +129,7 @@
     <div class="left_data">
       <el-calendar size="mini" ref="calendar">
         <template #header="{ date }">
-          <span>日历日程</span>
+          <h3>日历日程</h3>
           <span>{{ date }}</span>
           <el-button-group>
             <el-button size="mini" @click="selectDate('prev-year')"
@@ -145,7 +151,7 @@
     </div>
     <div class="left_data_right">
       <div class="top_data_right">
-        今日提醒
+        <h3>今日提醒</h3>
       </div>
     </div>
     <br>
@@ -166,6 +172,30 @@
 <style scoped>
 /*导入主界面外部样式*/
 @import url("../../css/work_min.css");
+.body_col_1{
+  background: rgb(35, 102, 167);
+  color: #fff;
+}
+.body_col_2{
+  background: #E6A23C;
+  color: #fff;
+}
+.body_col_3{
+  background: #409EFF;
+  color: #fff;
+}
+.body_col_4{
+  background: #909399;
+  color: #fff;
+}
+.body_col_5{
+  background: #F56C6C;
+  color: #fff;
+}
+/*日历样式*/
+.el-calendar-table{
+  background: #ddd;
+}
 </style>
 
 <script>

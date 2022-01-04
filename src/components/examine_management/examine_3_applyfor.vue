@@ -8,16 +8,19 @@
         <el-input
             v-model="input"
             placeholder="输入名称搜索"
-            style="width: 130px"
+            style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain>搜索</el-button>
+        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
         <!-- 表格   -->
         <el-table
             ref="filterTable"
             row-key="date"
             :data="tableData"
             style="width: 100%"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            :cell-style="{textAlign: 'center'}"
+
         >
           <el-table-column
               prop="date"
@@ -36,7 +39,32 @@
           <el-table-column prop="name" label="审批编号" width="100"/>
           <el-table-column prop="name" label="流程" width="100"/>
           <el-table-column prop="name" label="申请人" width="100"/>
-          <el-table-column prop="name" label="状态" width="100"/>
+          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+            <!-- 判断 prop的状态  -->
+            <template #default="scope">
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+                <div class="if_tg"></div>
+                &nbsp;&nbsp;<span>通过</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+                <div class="if_bh"></div>
+                &nbsp;&nbsp;<span>驳回</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待审</span>
+              </div>
+
+              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
+                <div class="if_cx"></div>
+                &nbsp;&nbsp;<span>撤销</span>
+              </div>
+            </template>
+
+          </el-table-column>
           <el-table-column prop="name" label="当前审批人" width="100"/>
           <el-table-column prop="name" label="最近处理" width="100"/>
           <el-table-column label="操作">
@@ -50,22 +78,17 @@
                   @confirm="through1()"
               >
                 <template #reference>
-                  <el-button type="success" plain>撤销</el-button>
+                  <el-button type="text" >撤销 </el-button>
                 </template>
               </el-popconfirm>
-              <el-button
-                  type="primary"
-                  style="margin-left: 16px"
-                  @click="drawer = true"
-              >
-                详情
-              </el-button>
+              <el-button type="text"  @click="drawer = true">详情 </el-button>
             </template>
           </el-table-column>
         </el-table>
 
         <!-- 分页插件 -->
-        <div class="demo-pagination-block">
+        <br>
+        <div class="demo-pagination-block" style="float:right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
@@ -105,24 +128,28 @@ export default {
           name: "关闵绿",
           address: "yes	. 189, Grove St, Los Angeles",
           tag: "Home",
+          AUDITFLOW_STATE:"通过",
         },
         {
           date: "2016-05-02",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
           tag: "Office",
+          AUDITFLOW_STATE:"通过",
         },
         {
           date: "2016-05-04",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
           tag: "Home",
+          AUDITFLOW_STATE:"驳回",
         },
         {
           date: "2016-05-01",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
           tag: "Office",
+          AUDITFLOW_STATE:"审批中",
         },
       ],
       pageInfo: {
@@ -162,4 +189,5 @@ export default {
 
 <style scoped>
 @import url("../../css/Examine_2.css");
+
 </style>

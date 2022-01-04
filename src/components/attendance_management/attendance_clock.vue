@@ -81,7 +81,7 @@
                 @confirm="through1()"
             >
               <template #reference>
-                <el-button type="text" size="small" style="color:darkorange">
+                <el-button type="text" size="small">
                   <el-icon><i-delete /></el-icon> 删除
                 </el-button>
               </template>
