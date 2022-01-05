@@ -14,17 +14,6 @@
   <div style="width:100px;height:30px;margin-top:40px;"></div>
 <div>
 
-  <el-table :data="tableData1" >
-    <el-table-column type="expand" label="查看" width="100">
-      <template #default="scope">
-        <div style="width: 200px;height: 200px;background-color: red">
-          {{scope.row.id}}
-          cc
-        </div>
-
-      </template>
-    </el-table-column>
-  </el-table>
 
   <el-table :data="tableData"  style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
@@ -34,18 +23,7 @@
     <el-table-column prop="createdTime" label="结束时间" width="210" />
     <el-table-column prop="companyName" label="任职公司" width="210" />
     <el-table-column prop="positionName" label="职位" width="210" />
-    <el-table-column type="expand" width="100%">
-      <template #default="scope">
-        <div style="width: 100%;background-color: white;text-align: center">
-          {{scope.row.date}}
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column prop="date" label="姓名" width="210" />
-    <el-table-column prop="name" label="开始时间" width="210" />
-    <el-table-column prop="name" label="结束时间" width="210" />
-    <el-table-column prop="name" label="任职公司" width="210" />
-    <el-table-column prop="name" label="职位" width="210" />
+
 <!--    <el-table-column prop="name" label="离职原因" width="180" />-->
     <el-table-column fixed="right" label="操作">
     <template #default>
@@ -90,34 +68,6 @@ export default {
       },
       input3:"",
 
-
-      expends:[],
-      tableData1: [
-        {
-          id:1,
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          id:2,
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          id:3,
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          id:4,
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-      ],
     }
   },
   methods:{
@@ -140,15 +90,7 @@ export default {
   created() {
     this.selectWork()
   }
-  // methods:{
-  //   getRowKeys(row){
-  //     return row.id
-  //   },//获取当前页的信息
-  //   toggleRowExpansion(row){
-  //     this.expends=[];
-  //     this.expends.push(row.id)//展开当前行的信息
-  //   },
-  // }
+
 }
 
 </script>
