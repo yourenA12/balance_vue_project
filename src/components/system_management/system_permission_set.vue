@@ -102,6 +102,7 @@
           </div>
           <div class="j-set-bottom">
             <el-table
+                @row-click="toogleExpand(row)"
                 v-if="refreshTable"
                 :data="tableData"
                 style="width: 100%; margin-bottom: 20px;"
@@ -473,6 +474,82 @@ export default {
           MENU_ROUTE: '',
           MENU_STATE: 0,
           CREATED_TIME: '2016-05-03',
+          children: [
+            {
+              MENU_ID: 31,
+              MENU_NAME: '员工信息',
+              MENU_MODULE: '',
+              MENU_ORDER: 1,
+              MENU_ROUTE: '',
+              MENU_STATE: 0,
+              CREATED_TIME: '2016-05-01',
+              children: [
+                {
+                  MENU_ID: 33,
+                  MENU_NAME: '员工花名册',
+                  MENU_MODULE: '',
+                  MENU_ORDER: 1,
+                  MENU_ROUTE: '',
+                  MENU_STATE: 0,
+                  CREATED_TIME: '2016-05-01'
+                },
+                {
+                  MENU_ID: 34,
+                  MENU_NAME: '人才展示',
+                  MENU_MODULE: '',
+                  MENU_ORDER: 2,
+                  MENU_ROUTE: '',
+                  MENU_STATE: 0,
+                  CREATED_TIME: '2016-05-01'
+                },
+                {
+                  MENU_ID: 35,
+                  MENU_NAME: '人才统计',
+                  MENU_MODULE: '',
+                  MENU_ORDER: 3,
+                  MENU_ROUTE: '',
+                  MENU_STATE: 1,
+                  CREATED_TIME: '2016-05-01'
+                },
+                {
+                  MENU_ID: 36,
+                  MENU_NAME: '员工审核',
+                  MENU_MODULE: '',
+                  MENU_ORDER: 4,
+                  MENU_ROUTE: '',
+                  MENU_STATE: 0,
+                  CREATED_TIME: '2016-05-01'
+                },
+                {
+                  MENU_ID: 37,
+                  MENU_NAME: '历史花名册',
+                  MENU_MODULE: '',
+                  MENU_ORDER: 5,
+                  MENU_ROUTE: '',
+                  MENU_STATE: 0,
+                  CREATED_TIME: '2016-05-01'
+                }
+              ]
+            },
+            {
+              MENU_ID: 32,
+              MENU_NAME: '兼职管理',
+              MENU_MODULE: '',
+              MENU_ORDER: 2,
+              MENU_ROUTE: '',
+              MENU_STATE: 0,
+              CREATED_TIME: '2016-05-01',
+            },
+            {
+              MENU_ID: 33,
+              MENU_NAME: '档案管理',
+              MENU_MODULE: '',
+              MENU_ORDER: 3,
+              MENU_ROUTE: '',
+              MENU_STATE: 0,
+              CREATED_TIME: '2016-05-01',
+            },
+          ],
         },
         {
           MENU_ID: 5,
@@ -559,6 +636,16 @@ export default {
         type: 'success',
       })
     },
+    toogleExpand(row) {
+      alert(row.MENU_NAME)
+      let $table = this.$refs.table;
+      this.tableData5.map((item) => {
+        if (row.id != item.id) {
+          $table.toggleRowExpansion(item, false)
+        }
+      })
+      $table.toggleRowExpansion(row)
+    }
 
   }
 }
