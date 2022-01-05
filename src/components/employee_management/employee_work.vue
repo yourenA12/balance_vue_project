@@ -140,15 +140,15 @@ export default {
   created() {
     this.selectWork()
   }
-  methods:{
-    getRowKeys(row){
-      return row.id
-    },//获取当前页的信息
-    toggleRowExpansion(row){
-      this.expends=[];
-      this.expends.push(row.id)//展开当前行的信息
-    },
-  }
+  // methods:{
+  //   getRowKeys(row){
+  //     return row.id
+  //   },//获取当前页的信息
+  //   toggleRowExpansion(row){
+  //     this.expends=[];
+  //     this.expends.push(row.id)//展开当前行的信息
+  //   },
+  // }
 }
 
 </script>
