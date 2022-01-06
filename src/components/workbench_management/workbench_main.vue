@@ -155,9 +155,12 @@
       </div>
     </div>
     <br>
-    <div id="main1" class="tong_left">
 
-    </div>
+
+      <div class="tong_left" id="main1">
+
+      </div>
+
     <div id="main2" class="tong_left">
 
     </div>
@@ -361,7 +364,7 @@ export default {
         {
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', '星期日']
         }
       ],
       yAxis: [
