@@ -60,15 +60,29 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
 
-        <el-table-column fixed prop="name" label="姓名" width="150"/>
-        <el-table-column prop="date" label="出生日期" width="150"/>
-        <el-table-column prop="city" label="部门" width="150"/>
-        <el-table-column prop="state" label="职位" width="150"/>
-        <el-table-column prop="state" label="手机" width="150"/>
-        <el-table-column prop="state" label="状态" width="150"/>
-        <el-table-column prop="date" label="入职日期" sortable width="150">
+        <el-table-column fixed prop="staffName" label="姓名" width="150"/>
+        <el-table-column prop="staffBirthday" label="出生日期" width="150"/>
+        <el-table-column prop="deptName" label="部门" width="150"/>
+        <el-table-column prop="postName" label="职位" width="150"/>
+        <el-table-column prop="staffPhone" label="手机" width="150"/>
+<!--        <el-table-column prop="staffState" label="状态" width="150">-->
+<!--          <template #default="scope">-->
+<!--             {{scope.row.staffState==''}}-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column label="状态" width="150">
+          <template #default="scope">
+            <span v-if="scope.row.staffState==0">在职</span>
+            <span v-if="scope.row.staffState==1">离职</span>
+            <span style="color:#fa8c16;" v-if="scope.row.staffState==2">试用</span>
+            <span style="color: #13c2c2;" v-if="scope.row.staffState==3">正式</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="state" label="转正日期" width="150"/>
+        <el-table-column prop="staffHiredate" label="入职日期" sortable width="150">
+        </el-table-column>
+        <el-table-column prop="state" label="转正日期" width="150">
+
+        </el-table-column>
         <el-table-column prop="state" label="工龄" width="150"/>
         <el-table-column fixed="right" label="操作" width="150">
           <template #default>
@@ -97,8 +111,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="selectUsers"
-          @current-change="selectUsers"
+          @size-change="selectStaff"
+          @current-change="selectStaff"
       >
       </el-pagination>
     </div>
@@ -206,29 +220,29 @@
 </template>
 <script lang="ts">
 import {defineComponent, ref} from 'vue'
-
+import { ElMessage } from "element-plus";
 export default {
 //操作时间
 
   data() {
     const value2 = ref('')
     const one = (rule, value, callback) => {
-      if (new Date()>value){
+      if (new Date() > value) {
         callback(new Error("最后工作时间不能小于当前时间"));
-      }else if(this.ruleForm.dimisiondate<value){
+      } else if (this.ruleForm.dimisiondate < value) {
         callback(new Error("最后工作时间不能大于离职生效时间"));
-      }else {
+      } else {
         callback();
       }
 
     };
     // var date1=this.ruleForm.workdate;
-    const two = (rule, value,callback) => {
-      if (this.ruleForm.workdate>value){
+    const two = (rule, value, callback) => {
+      if (this.ruleForm.workdate > value) {
         callback(new Error("离职生效时间不能小于最后工作时间"));
-      }else if(new Date()>value){
+      } else if (new Date() > value) {
         callback(new Error("离职生效时间不能小于当前时间"));
-      }else {
+      } else {
         callback();
       }
     };
@@ -280,51 +294,6 @@ export default {
       leave: '/employee/message/employee_roster/leave',
       staffedit: '/employee/message/employee_roster/staffedit',
       tableData: [
-        {
-          date: '2016-03-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Home',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-        {
-          date: '2016-07-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-        {
-          date: '2016-08-06',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-        {
-          date: '2016-06-07',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
       ],
       pageInfo: {
         // 分页参数
@@ -335,6 +304,24 @@ export default {
       input3: "",
       value2: "",
     }
+  },
+  methods: {
+    //多表查询
+    selectStaff() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectStaffVo/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  }, created() {
+    this.selectStaff();
   },
 }
 </script>

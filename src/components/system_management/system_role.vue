@@ -61,8 +61,18 @@
 
           <!-- 对数据的增删改按钮 -->
           <div class="button">
-            <el-button class="button-new" size="mini"  @click="outerVisible = true,judge='新增'">+ 新增</el-button>
-            <el-button class="button-delete" size="mini" v-bind:disabled="disableds" @click="remove">删除</el-button>
+<!--            <el-button class="button-new" size="mini"  @click="outerVisible = true,judge='新增'">+ 新增</el-button>-->
+            <el-button size="small" type="primary" plain @click="outerVisible = true,judge='新增'">
+              <el-icon><i-plus/></el-icon>
+
+              新增
+            </el-button>
+<!--            <el-button class="button-delete" size="mini" v-bind:disabled="disableds" @click="remove">删除</el-button>-->
+
+            <el-button size="small" type="danger" plain v-bind:disabled="disableds" @click="remove">
+              <el-icon><i-delete /></el-icon>
+              删除
+            </el-button>
           </div>
 
 
@@ -153,10 +163,16 @@
                     <i class="iconfont" style="font-size: 13px;color: #5aaaff">&#xe606</i>
                     修改&nbsp;&nbsp;&nbsp;
                   </span>
-                  <span style="font-size: 13px;color: #5aaaff" @click="open">
-                    <i class="iconfont"  style="font-size: 13px;color: #5aaaff">&#xe61c</i>
-                    删除&nbsp;&nbsp;&nbsp;
-                  </span>
+<!--                  <span style="font-size: 13px;color: #5aaaff" @click="open">-->
+<!--                    <i class="iconfont"  style="font-size: 13px;color: #5aaaff">&#xe61c</i>-->
+<!--                    删除&nbsp;&nbsp;&nbsp;-->
+<!--                  </span>-->
+                  <el-popconfirm @confirm="deleteRow(scope.$index, tableData)"
+                                 title="确认要删除此方案吗?">
+                    <template #reference>
+                      <el-button  type="text" size="small" style="font-size: 13px;color: #5aaaff">删除 </el-button>
+                    </template>
+                  </el-popconfirm>
                   <!-- 更多-->
                   <el-dropdown>
                   <span style="font-size: 13px;color: #5aaaff" class="el-dropdown-link">
@@ -536,6 +552,14 @@ export default {
       }else {
         this.disableds=true
       }
+    },
+    // 删除行
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+      ElMessage({
+        message: '删除成功',
+        type: 'success',
+      })
     },
     reset(){
       this.search={

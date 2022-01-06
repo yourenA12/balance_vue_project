@@ -1,4 +1,4 @@
-<!-- 登录日志页面 -->
+<!-- 操作日志页面 -->
 
 <template>
   <div class="saas-main-content">
@@ -75,8 +75,13 @@
 
           <!-- 对数据的增删改按钮 -->
           <div class="button">
-            <el-button class="button-delete" size="mini"  v-bind:disabled="disableds" @click="remove">删除</el-button>
-            <el-button class="button-empty" size="mini" @click="empty">清空</el-button>
+            <el-button size="small" type="danger" plain v-bind:disabled="disableds" @click="remove" >
+              <el-icon><i-delete /></el-icon>
+              删除
+            </el-button>
+<!--            <el-button class="button-delete" size="mini"  v-bind:disabled="disableds" @click="remove">删除</el-button>-->
+<!--            <el-button class="button-empty" size="mini" @click="empty">清空</el-button>-->
+            <el-button size="small" type="success" plain @click="empty">清空</el-button>
           </div>
 
           <!-- 表格内容部分 -->

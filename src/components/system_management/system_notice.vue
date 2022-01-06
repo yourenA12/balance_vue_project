@@ -50,10 +50,15 @@
           <!-- 操作按钮部分 -->
           <div class="button">
             <!-- 新增按钮 -->
-            <el-button size="mini"
-                       class="button-new"
-                       @click="outerVisible = true,judge='新增'">
-              + 新增
+<!--            <el-button size="mini"-->
+<!--                       class="button-new"-->
+<!--                       @click="outerVisible = true,judge='新增'">-->
+<!--              + 新增-->
+<!--            </el-button>-->
+            <el-button size="small" type="primary" plain @click="outerVisible = true" style="margin-left: 5px">
+              <el-icon><i-plus/></el-icon>
+
+              新增
             </el-button>
 
 
@@ -118,8 +123,12 @@
             </el-dialog>
 
 
-            <el-button size="mini" class="button-delete" @click="remove" v-bind:disabled="disableds">
-              <i class="iconfont">&#xe61c</i>
+<!--            <el-button size="mini" class="button-delete" @click="remove" v-bind:disabled="disableds">-->
+<!--              <i class="iconfont">&#xe61c</i>-->
+<!--              删除-->
+<!--            </el-button>-->
+            <el-button size="small" type="danger" plain v-bind:disabled="disableds" @click="remove" style="margin-left: 10px;">
+              <el-icon><i-delete /></el-icon>
               删除
             </el-button>
           </div>
@@ -146,15 +155,22 @@
             <el-table-column prop="zip" label="发布时间" width="170" />
             <el-table-column align="center" label="操作" width="200">
               <template #default="scope">
-                <el-button size="mini" style="color: #A3D3FF; width: 75px;"  @click="outerVisible = true,judge='修改',aaa(scope.row)">
-                  <i class="iconfont">&#xe606</i>
-                  修改
-                </el-button>
-
-                <el-button @click="open" size="mini" style="color: #A3D3FF;width: 75px;">
-                  <i class="iconfont">&#xe61c</i>
-                  删除
-                </el-button>
+<!--                <el-button size="mini" style="color: #A3D3FF; width: 75px;"  @click="outerVisible = true,judge='修改',aaa(scope.row)">-->
+<!--                  <i class="iconfont">&#xe606</i>-->
+<!--                  修改-->
+<!--                </el-button>-->
+                <el-button @click="become=true" type="text" size="small">修改 </el-button>
+<!--                <el-button @click="open" size="mini" style="color: #A3D3FF;width: 75px;">-->
+<!--                  <i class="iconfont">&#xe61c</i>-->
+<!--                  删除-->
+<!--                </el-button>-->
+                <el-popconfirm @confirm="deleteRow(scope.$index, tableData)"
+                               title="确认要删除此方案吗?">
+                  <template #reference>
+                    <el-button @click="become=true" type="text" size="small" style="color: orange">删除 </el-button>
+                  </template>
+                </el-popconfirm>
+<!--                <el-button @click="become=true" type="text" size="small">删除</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -287,6 +303,7 @@ export default {
           zip: "6",
           content:"jkfh是的发送到iwqhbfoewhb"
         }],
+
       affiche:{
         title: '',
         type: '',
@@ -312,20 +329,31 @@ export default {
 
       //按钮是否被禁用
       disableds:true,
+
       //接收表格数据
       table:[],
     }
   },
   methods:{
     //判断删除按钮是否可用
-    deletepl(val){
-      this.table=val
-      if(this.table != ''){
-        this.disableds=false
-      }else {
-        this.disableds=true
-      }
+    // 删除行
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+      ElMessage({
+        message: '删除成功',
+        type: 'success',
+      })
     },
+
+    // deletepl(val){
+    //   this.table=val
+    //   if(this.table != ''){
+    //     this.disableds=false
+    //   }else {
+    //     this.disableds=true
+    //   }
+    // },
+
     //点击修改获取表单里的值
     aaa(row){
        this.affiche = row;

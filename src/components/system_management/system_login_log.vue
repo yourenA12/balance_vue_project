@@ -61,8 +61,13 @@
 
           <!-- 对数据的增删改按钮 -->
           <div class="button">
-            <el-button size="mini" style="width: 90px;" v-bind:disabled="disabled" @click="remove">删除</el-button>
-            <el-button class="button-empty" size="mini" @click="empty">清空</el-button>
+<!--            <el-button size="mini" style="width: 90px;" v-bind:disabled="disabled" @click="remove">删除</el-button>-->
+            <el-button size="small" type="danger" plain v-bind:disabled="disableds" @click="remove" >
+              <el-icon><i-delete /></el-icon>
+              删除
+            </el-button>
+<!--            <el-button class="button-empty" size="mini" @click="empty">清空</el-button>-->
+            <el-button size="small" type="success" plain @click="empty">清空</el-button>
           </div>
         </div>
 
