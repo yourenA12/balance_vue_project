@@ -60,9 +60,9 @@
           <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
 <!--          <el-table :data="tableData" style="width: 100%; cursor: pointer" size="mini" :header-cell-style="{background:'#eef1f6',color:'#606266'}">-->
             <el-table-column prop="recruitmentPlanId" label="序号" width="150"/>
-            <el-table-column label="招聘计划名称" width="200">
+            <el-table-column  prop="recruitmentPlanName" label="招聘计划名称" width="200">
               <template #default="scope">
-                <router-link :to="{path:this.two,query:{path:this.$route.query.path,name:scope.row.zpname}}">{{scope.row.recruitmentName}}</router-link>
+                <router-link :to="{path:this.two,query:{path:this.$route.query.path,recruitmentPlanName:scope.row.recruitmentPlanName}}">{{scope.row.recruitmentPlanName}}</router-link>
               </template>
             </el-table-column>
             <el-table-column prop="postName" label="招聘职位" width="200"/>

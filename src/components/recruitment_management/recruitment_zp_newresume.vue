@@ -72,18 +72,39 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="departm" label="投递部门" width="140"/>
-        <el-table-column prop="gender" label="性别" width="140"/>
-        <el-table-column prop="schoolli" label="学历" width="140"/>
-        <el-table-column prop="phone" label="手机号" width="140"/>
-        <el-table-column prop="age" label="年龄" width="140"/>
-        <el-table-column prop="email" label="邮箱" width="140"/>
-        <el-table-column prop="professional" label="专业" width="140"/>
-        <el-table-column prop="birth" label="出生日期" width="140"/>
-        <el-table-column prop="face" label="政治面貌" width="140"/>
-        <el-table-column prop="gradschool" label="毕业学校" width="140"/>
-        <el-table-column prop="invitation" label="是否邀约" width="140"/>
-        <el-table-column prop="state" label="状态" width="140"/>
+        <el-table-column fixed="left" prop="postName" label="投递职位" width="140"/>
+        <el-table-column prop="resumeSex" label="性别" width="140"/>
+        <el-table-column prop="resumeEducation" label="学历" width="140"/>
+        <el-table-column prop="resumePhone" label="手机号" width="140"/>
+        <el-table-column prop="resumeAge" label="年龄" width="140"/>
+        <el-table-column prop="resumeMailbox" label="邮箱" width="140"/>
+<!--        <el-table-column prop="educationMajor" label="专业" width="140"/>-->
+        <el-table-column prop="resumeBirthday" label="出生日期" width="140"/>
+        <el-table-column prop="resumePoliticalOutlook" label="政治面貌" width="140"/>
+        <el-table-column prop="resumeScoller" label="毕业学校" width="140"/>
+<!--        <el-table-column label="是否邀约" width="140">-->
+<!--          <template #default="scope">-->
+<!--            <span v-if="scope.row.inviteState==1">已邀约</span>-->
+<!--            <span v-if="scope.row.inviteState==0">未邀约</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column label="状态" width="140">
+          <template #default="scope">
+            <span v-if="scope.row.resumeZt==0">新简历</span>
+            <span v-if="scope.row.resumeZt==1">候选人</span>
+            <span v-if="scope.row.resumeZt==2">已邀约</span>
+            <span v-if="scope.row.resumeZt==3">已淘汰</span>
+            <span v-if="scope.row.resumeZt==4">面试中</span>
+            <span v-if="scope.row.resumeZt==5">面试通过</span>
+            <span v-if="scope.row.resumeZt==6">复试中</span>
+            <span v-if="scope.row.resumeZt==7">待接受</span>
+            <span v-if="scope.row.resumeZt==8">已接受</span>
+            <span v-if="scope.row.resumeZt==9">已入职</span>
+            <span v-if="scope.row.resumeZt==10">已拒绝</span>
+            <span v-if="scope.row.resumeZt==11">放弃入职</span>
+          </template>
+        </el-table-column>
+
 
         <el-table-column fixed="right" label="操作" width="180">
           <template #default>
@@ -123,8 +144,8 @@
             :total="pageInfo.total"
             :pager-count="5"
             background
-            @size-change="selectresume_plan"
-            @current-change="selectresume_plan"
+            @size-change="selectnewresume_plan"
+            @current-change="selectnewresume_plan"
         >
         </el-pagination>
       </div>

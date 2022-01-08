@@ -67,48 +67,40 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="recruitmentName" label="招聘计划名称" width="140"/>
+        <el-table-column fixed="left" prop="postName" label="招聘职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
-
+          <el-table-column prop="resumeAge" label="年龄" width="140"/>
         <el-table-column prop="resumeMailbox" label="邮箱" width="140"/>
-        <el-table-column prop="educationMajor" label="专业" width="140"/>
+<!--        <el-table-column prop="educationMajor" label="专业" width="140"/>-->
         <el-table-column prop="resumeBirthday" label="出生日期" width="140"/>
         <el-table-column prop="resumePoliticalOutlook" label="政治面貌" width="140"/>
-        <el-table-column prop="educationStudentname" label="毕业学校" width="140"/>
+        <el-table-column prop="resumeScoller" label="毕业学校" width="140"/>
 <!--        <el-table-column prop="inviteState" label="是否邀约" width="140"/>-->
-          <el-table-column label="是否邀约" width="140">
-            <template #default="scope">
-              <span v-if="scope.row.inviteState==1">已邀约</span>
-              <span v-if="scope.row.inviteState==0">未邀约</span>
-            </template>
-          </el-table-column>
+<!--          <el-table-column label="是否邀约" width="140">-->
+<!--            <template #default="scope">-->
+<!--              <span v-if="scope.row.inviteState==1">已邀约</span>-->
+<!--              <span v-if="scope.row.inviteState==0">未邀约</span>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
           <el-table-column label="状态" width="140">
             <template #default="scope">
-              <span v-if="scope.row.resumeZt==0">待阅</span>
-              <span v-if="scope.row.resumeZt==1">已阅</span>
-              <span v-if="scope.row.resumeZt==2">候选人</span>
-              <span v-if="scope.row.resumeZt==3">淘汰</span>
-              <span v-if="scope.row.resumeZt==4">面试中</span>
-              <span v-if="scope.row.resumeZt==5">面试通过</span>
-              <span v-if="scope.row.resumeZt==6">复试中</span>
-              <span v-if="scope.row.resumeZt==7">已入职</span>
-              <span v-if="scope.row.resumeZt==8">放弃入职</span>
-
-<!--              <span v-if="scope.row.resumeZt==0">候选人</span>-->
-<!--              <span v-if="scope.row.resumeZt==1">已邀约</span>-->
-<!--              <span v-if="scope.row.resumeZt==2">已淘汰</span>-->
-<!--              <span v-if="scope.row.resumeZt==3">面试中</span>-->
-
-<!--              <span v-if="scope.row.resumeZt==6">待接受</span>-->
-<!--              <span v-if="scope.row.resumeZt==7">已接受</span>-->
-
-<!--              <span v-if="scope.row.resumeZt==9">已拒绝</span>-->
-
-<!--              <span v-if="scope.row.resumeZt==11">待阅</span>-->
+              <span v-if="scope.row.resumeZt==0">候选人</span>
+              <span v-if="scope.row.resumeZt==1">已邀约</span>
+              <span v-if="scope.row.resumeZt==2">已淘汰</span>
+              <span v-if="scope.row.resumeZt==3">面试中</span>
+              <span v-if="scope.row.resumeZt==4">面试通过</span>
+              <span v-if="scope.row.resumeZt==5">复试中</span>
+              <span v-if="scope.row.resumeZt==6">待接受</span>
+              <span v-if="scope.row.resumeZt==7">已接受</span>
+              <span v-if="scope.row.resumeZt==8">已入职</span>
+              <span v-if="scope.row.resumeZt==9">已拒绝</span>
+              <span v-if="scope.row.resumeZt==10">放弃入职</span>
+              <span v-if="scope.row.resumeZt==11">已离职</span>
             </template>
           </el-table-column>
+
 
 
           <el-table-column fixed="right" label="操作" width="180">
