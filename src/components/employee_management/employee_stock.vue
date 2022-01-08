@@ -38,7 +38,7 @@
             </template>
           </el-popconfirm>
 
-          <el-button @click="become=true" type="text" size="small">放弃</el-button>
+          <el-button @click="ResumeQZ(scope.row)" type="text" size="small">放弃</el-button>
 
         </template>
       </el-table-column>
@@ -48,7 +48,7 @@
     <div class="demo-pagination-block">
       <el-pagination
           v-model:currentPage="pageInfo.currentPage"
-          :page-sizes="[2, 5, 10, 50]"
+          :page-sizes="[3, 5, 10, 50]"
           v-model:page-size="pageInfo.pagesize"
           :default-page-size="pageInfo.pagesize"
           layout="total, sizes, prev, pager, next, jumper"
@@ -68,10 +68,10 @@
           width="30%"
           :close-on-click-modal="false">
         放弃原因：
-        <el-input type="textarea" style="width:240px;"></el-input>
+        <el-input type="textarea" v-model="give_reason" style="width:240px;"></el-input>
         <div style="margin-top:30px;margin-left: 120px;">
           <el-button @click="become=false">取消</el-button>
-          <el-button type="primary">确定</el-button>
+          <el-button @click="updateResum()" type="primary">确定</el-button>
         </div>
 
       </el-dialog>
@@ -90,6 +90,7 @@ export default {
     return {
       become: false,
       input3: "",
+      give_reason:"",
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -107,7 +108,8 @@ export default {
       staffVal:null,
       workVal:null,
       educationVal:null,
-      employmentTableVal:null,
+      resumeVal:null,
+      employmentTableVue:null,
 
     }
   },
@@ -154,10 +156,11 @@ export default {
           //部门
           deptId:row.deptId,
           //职位
-          deptPostId:row.deptPostId
+          deptPostId:row.deptPostId,
           //转正日期
-
+          // workerDate:row.hiredate+,
           //工龄
+
         }
 
         // 工作经历表数据
@@ -196,10 +199,10 @@ export default {
         educationFullTime:row.educationFullTime,
       }
 
-      // 修改录用表状态为已入职
-      this.employmentTableVal={
-        employmentId: row.employmentId,
-        employmentState: 1
+      // 修改简历表状态为已入职
+      this.resumeVal={
+        resumeId: row.resumeId,
+        resumeZt: "9"
       }
 
       this.insertStaff(); // 调用添加方法
@@ -214,7 +217,7 @@ export default {
           Staff:this.staffVal,
           Work:this.workVal,
           Education:this.educationVal,
-          EmploymentTable:this.employmentTableVal
+          Resume:this.resumeVal
         }
       }).then(response => {
         if (response.data.data > 0) {
@@ -222,7 +225,7 @@ export default {
             message: '添加成功',
             type: 'success',
           })
-          this.selectEmps()
+          this.selectEmps() // 修改完成后调用查询方法
         } else {
           ElMessage.error('添加失败')
         }
@@ -231,6 +234,57 @@ export default {
       });
 
   },
+    //修改取简历表id、状态和录用原因
+    ResumeQZ(row){
+      //弹出放弃原因
+      this.become=true
+
+      // 修改简历表状态为已入职
+      this.resumeVal={
+        resumeId: row.resumeId,
+        resumeZt: "10"
+      }
+
+      //修改录用表录用原因
+      this.employmentTableVue={
+        employmentId:row.employmentId,
+        waiveReason:this.give_reason
+      }
+
+    },
+    //修改简历状态和录用原因
+    updateResum(){
+      // 调用修改方法之前，再次取“放弃原因”文本框中的值
+      this.employmentTableVue.waiveReason=this.give_reason
+      if (this.employmentTableVue.waiveReason == "" || this.employmentTableVue.waiveReason == null){
+        ElMessage.error('填写原因！！')
+        return
+      }
+
+      this.axios({
+        url: 'http://localhost:8010/provider/staff/updateResume',
+        method: 'post',
+        data:{
+          Resume:this.resumeVal,
+          EmploymentTable:this.employmentTableVue,
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.selectEmps() // 修改完成后调用查询方法
+          this.become=false // 关闭弹出
+          this.give_reason="" //清空弹出框信息
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
 
   },
   created() {

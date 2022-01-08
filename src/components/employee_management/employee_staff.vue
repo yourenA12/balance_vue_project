@@ -85,15 +85,13 @@
         </el-table-column>
         <el-table-column prop="state" label="工龄" width="150"/>
         <el-table-column fixed="right" label="操作" width="150">
-          <template #default>
-            <router-link :to="{path:this.staffedit,query:{path: this.$route.query.path}}">
-              <el-button type="text" size="small" @click="handleClick"
+          <template #default="scope">
+              <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
               >编辑
               </el-button>
-            </router-link>
             <!--                <router-link :to="{path:this.leave,query:{path: this.$route.query.path}}" style="text-decoration: none">-->
             &nbsp;
-            <el-button @click="become=true" type="text" size="small">办理离职</el-button>
+            <el-button @click="departure(scope.row)" type="text" size="small">办理离职</el-button>
             <!--                </router-link>-->
           </template>
         </el-table-column>
@@ -127,22 +125,23 @@
         :close-on-click-modal="false"
     >
 
+    <!-- 员工办理离职弹出框 -->
     <div style=" width:100%;">
         <el-form
-            ref="ruleForm"
-            :model="ruleForm"
-            :rules="rules"
+            ref="departure_data"
+            :model="departure_data"
+            :rules="departure_rules"
             label-width="120px"
             class="demo-ruleForm"
         >
           <div style="width:50%;display: inline-block;margin-left: -10px">
-            <el-form-item label="名称" prop="name" >
-              <el-input v-model="ruleForm.name" disabled style="width:240px"></el-input>
+            <el-form-item label="名称" prop="name"  >
+              <el-input v-model="departure_data.name" disabled style="width:240px"></el-input>
             </el-form-item><br/>
 
             <el-form-item label="离职原因" prop="cause" >
               <el-select
-                  v-model="ruleForm.cause"
+                  v-model="departure_data.cause"
                   placeholder="请选择" style="width:240px;"
               >
                 <el-option label="家庭原因" value="jtyy" style="margin-left: 20px"></el-option>
@@ -167,7 +166,7 @@
               <el-col :span="11">
                 <el-form-item prop="dimisiondate" style="width: 240px;">
                   <el-date-picker
-                      v-model="ruleForm.dimisiondate"
+                      v-model="departure_data.dimisiondate"
                       type="date"
                       placeholder="请选择日期"
                       style="width: 100%"
@@ -179,7 +178,7 @@
 
           <div style="width:50%;display: inline-block">
           <el-form-item label="状态" >
-            <el-input v-model="ruleForm.state" disabled style="width:240px"></el-input>
+            <el-input v-model="departure_data.state" disabled style="width:240px"></el-input>
           </el-form-item><br/>
 
 
@@ -188,7 +187,7 @@
             <el-col :span="11">
               <el-form-item prop="workdate" style="width: 240px;">
                 <el-date-picker
-                    v-model="ruleForm.workdate"
+                    v-model="departure_data.workdate"
                     type="date"
                     placeholder="请选择日期"
                     style="width: 100%"
@@ -200,13 +199,13 @@
 
 
           <el-form-item label="备注"  prop="remark">
-            <el-input v-model="ruleForm.remark" type="textarea" style="width: 240px;"></el-input>
+            <el-input v-model="departure_data.remark" type="textarea" style="width: 240px;"></el-input>
           </el-form-item>
           </div>
           <div style="margin-left: 300px;margin-top: 30px;">
 
             <el-button style="width: 80px;" @click="become=false">取消</el-button>
-            <el-button style="width: 80px" type="primary" @click="submitForm('ruleForm')">提交
+            <el-button style="width: 80px" type="primary" @click="submitForm('departure_data')">提交
             </el-button>
           </div>
         </el-form>
@@ -249,7 +248,8 @@ export default {
     return {
       //员工花名册
       book: '/employee/message/employee_roster/book',
-      ruleForm: {
+      //
+      departure_data: {
         name: "",
         state: "",
         cause: "",
@@ -257,7 +257,7 @@ export default {
         dimisiondate: '',
         remark: "",
       },
-      rules: {
+      departure_rules: {
         cause: [
           {
             required: true,
@@ -295,6 +295,8 @@ export default {
       staffedit: '/employee/message/employee_roster/staffedit',
       tableData: [
       ],
+      deptPostId0:[],
+      dpetpostid:{},
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -303,6 +305,9 @@ export default {
       },
       input3: "",
       value2: "",
+
+
+
     }
   },
   methods: {
@@ -320,6 +325,25 @@ export default {
             console.log(error);
           });
     },
+    //根据id查询员工信息
+    empMsg(staffId) {
+      this.$router.push({path:this.staffedit,query:{path: this.$route.query.path,staffId:staffId}})
+    },
+    //
+
+    //办理离职 获取员工信息 赋值到弹出框
+    departure(row) {
+
+      // 开启弹出框
+      this.become=true;
+
+      // 赋值到弹出框
+      this.departure_data.name=row.staffName
+      this.departure_data.state=row.staffState
+
+    },
+
+
   }, created() {
     this.selectStaff();
   },

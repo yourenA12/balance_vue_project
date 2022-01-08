@@ -160,7 +160,9 @@
           <el-table
               :data="deptData"
               height="250"
-              style="width: 100%;margin-top: 20px;">
+              style="width: 100%;margin-top: 20px;"
+              :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+              :cell-style="{textAlign: 'center'}">
             <el-table-column
                 width="50">
 
@@ -171,17 +173,17 @@
             </el-table-column>
 
             <el-table-column
-                prop="name"
+                prop="staffName"
                 label="姓名"
                 width="180">
             </el-table-column>
             <el-table-column
-                prop="dept"
+                prop="deptName"
                 label="部门"
                 width="180">
             </el-table-column>
             <el-table-column
-                prop="zw"
+                prop="postName"
                 label="职位">
             </el-table-column>
           </el-table>
@@ -249,31 +251,7 @@ export default defineComponent({
         ]
       },
       radio:"",
-      deptData: [{
-        zw: '2016-05-03',
-        name: '王小虎',
-        dept: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        dept: '2016-05-02',
-        name: '王小虎',
-        zw: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        zw: '2016-05-04',
-        name: '王小虎',
-        dept: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        zw: '2016-05-01',
-        name: '王小虎',
-        dept: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        dept: '2016-05-08',
-        name: '王小虎',
-        zw: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        dept: '2016-05-06',
-        name: '王小虎',
-        zw: '上海市普陀区金沙江路 1518 弄'
-      }]
+      deptData: []
     }
   },
   methods: {
@@ -299,7 +277,24 @@ export default defineComponent({
             transferdept: '',
             transferpost: ''
       }
-    }
+    },//多表查询
+    selectStaff() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectStaffVo/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.deptData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+  },created() {
+    this.selectStaff();
+
   },
   setup() {
     const become = ref(false)
