@@ -6,16 +6,19 @@
 
     <el-tabs type="border-card">
       <!-- 待办申请页面 -->
-      <el-tab-pane label="待办申请">
+      <el-tab-pane>
+        <template #label>
+          <span @click="selectAuditflow(1)">待办申请</span>
+        </template>
         <el-button @click="resetDateFilter1">重置日期过滤</el-button>
         &nbsp;
         <el-input
-            v-model="input"
+            v-model="pageInfo.staffName"
             placeholder="输入名称搜索"
             style="width: 200px"
         />
-        &nbsp;
-        <el-button plain style="margin-bottom: 20px" type="success">搜索</el-button>
+
+        <el-button plain style="margin-bottom: 20px" @click="selectAuditflow(1)" type="success">搜索</el-button>
         <!--  表格 -->
         <el-table
             ref="filterTable1"
@@ -105,8 +108,8 @@
               :total="pageInfo.total"
               background
               layout="total, sizes, prev, pager, next, jumper"
-              @size-change="selectAuditflow"
-              @current-change="selectAuditflow"
+              @size-change="selectAuditflow(1)"
+              @current-change="selectAuditflow(1)"
           >
             <!--  @size-change="selectUsers" @current-change="selectUsers" -->
           </el-pagination>
@@ -133,32 +136,13 @@
               <el-input v-model="auditflow0.deptName" disabled></el-input>
             </el-form-item>
 
-
-
-
           </el-form>
 
-          <div v-for=" (a,index) in auditflow ">
-
-              <div v-if="a.auditflowdetaiState=='1'">
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>待我审批</span>
-              </div>
-               <div v-if="a.auditflowdetaiState=='0'">
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>审批中</span>
-              </div>
-               <div v-if="a.auditflowdetaiState=='2'">
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>审批中</span>
-              </div>
-
-          </div>
-
-        <el-steps :space="200" process-status="error" :active="0" finish-status="success">
-          <el-step title="Done" ></el-step>
-          <el-step title="Done" ></el-step>
-          <el-step title="Step 3"></el-step>
+        <!-- process-status="error" -->
+        <el-steps align-center :space="200" :active="active" finish-status="success">
+          <el-step :title="a.staffName2" ></el-step>
+          <el-step :title="b.staffName2" ></el-step>
+          <el-step :title="c.staffName2"></el-step>
         </el-steps>
 
           <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
@@ -168,21 +152,24 @@
         </span>
       </el-drawer>
       <!-- 已办申请页面 -->
-      <el-tab-pane label="已办申请">
+      <el-tab-pane >
+        <template #label>
+          <span @click="selectAuditflow(2)">已办申请</span>
+        </template>
         <el-button @click="resetDateFilter">重置日期过滤</el-button>
         &nbsp;
         <el-input
-            v-model="input"
+            v-model="pageInfo1.staffName"
             placeholder="输入名称搜索nima"
             style="width: 200px"
         />
         &nbsp;
-        <el-button plain style="margin-bottom: 20px" type="success">搜索</el-button>
+        <el-button plain style="margin-bottom: 20px"  @click="selectAuditflow(2)" type="success">搜索</el-button>
 
         <el-table
             ref="filterTable"
             :cell-style="{textAlign: 'center'}"
-            :data="tableData"
+            :data="tableData1"
             :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             row-key="date"
             style="width: 100%"
@@ -215,25 +202,24 @@
                 &nbsp;&nbsp;<span>待审</span>
               </div>
               <div v-if="scope.row.auditflowdetaiState=='1'">
-                <div class="if_tg"></div>
-                &nbsp;&nbsp;<span>通过</span>
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待我审批</span>
               </div>
 
 
               <div v-if="scope.row.auditflowdetaiState=='2'">
-                <div class="if_bh"></div>
-                &nbsp;&nbsp;<span>驳回</span>
+                <div class="if_tg"></div>
+                &nbsp;&nbsp;<span>通过</span>
               </div>
 
               <div v-if="scope.row.auditflowdetaiState=='3'">
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>撤销</span>
+                <div class="if_bh"></div>
+                &nbsp;&nbsp;<span>驳回</span>
               </div>
 
             </template>
 
           </el-table-column>
-          <el-table-column label="历史审批人" prop="staffName2" width="150"/>
           <el-table-column label="最近处理" prop="updatedTime" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
@@ -246,16 +232,16 @@
         <br>
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
-              v-model:currentPage="pageInfo.currentPage"
-              v-model:page-size="pageInfo.pagesize"
-              :default-page-size="pageInfo.pagesize"
+              v-model:currentPage="pageInfo1.currentPage"
+              v-model:page-size="pageInfo1.pagesize"
+              :default-page-size="pageInfo1.pagesize"
               :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
-              :total="pageInfo.total"
+              :total="pageInfo1.total"
               background
               layout="total, sizes, prev, pager, next, jumper"
-              @size-change="selectAuditflow"
-              @current-change="selectAuditflow"
+              @size-change="selectAuditflow(2)"
+              @current-change="selectAuditflow(2)"
           >
             <!--  @size-change="selectUsers"
 						@current-change="selectUsers" -->
@@ -278,19 +264,48 @@ export default {
   },
   data() {
     return {
+      // 详情中的步骤条
+      active:"",
       // 待办转正审批列表
       tableData: [],
       // 已办转正审批列表
       tableData1: [],
+
       byid: [],
+      //待办申请的分页插件
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        // 当前审批类型
+        auditflowTitle:"转正审批",
+        // 当前审批状态
+        auditflowdetaiState:"待办",
+        // 名称搜索框
+        staffName:""
+
+      },
+      // 参数
+      paramsVal:"",
+      //已办申请分页插件
+      pageInfo1: {
+        // 分页参数
+        currentPage: 1, //当前页
+        pagesize: 3, // 页大小
+        total: 0, // 总页数
+        auditflowTitle:"转正审批",// 当前审批类型
+        auditflowdetaiState:"已办", // 当前审批状态
+        staffName:""// 名称搜索框
       },
       auditflow: [],
       auditflow0: {},
+
+      a:{},
+      b:{},
+      c:{}
+
     }
   },
   methods: {
@@ -310,18 +325,33 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
-    selectAuditflow() {
+    //待办申请 and 分页
+    selectAuditflow(val) {
+      // 待办
+      if(val==1){
+        this.paramsVal=this.pageInfo
+      }else{ // 已办
+        this.paramsVal=this.pageInfo1
+      }
       this.axios
-          .get("http://localhost:8010/provider/findSelectPageWorker/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/findSelectPageWorker",{params:this.paramsVal})
           .then((response) => {
             console.log(response);
-            this.tableData = response.data.data.records;
-            this.pageInfo.total = response.data.data.total;
+            if(val==1){ // 待办
+              this.tableData = response.data.data.records;
+              this.pageInfo.total = response.data.data.total;
+            }else{ // 已办
+              console.log(response);
+              this.tableData1 = response.data.data.records;
+              this.pageInfo1.total = response.data.data.total;
+            }
+
           })
           .catch(function (error) {
             console.log(error);
           })
     },
+
     //
     selectById(row) {
       //打开抽屉
@@ -333,11 +363,31 @@ export default {
             console.log(response);
             this.auditflow = response.data.data;
             this.auditflow0 = this.auditflow[0]
+
+            this.activeVal()
+
           })
           .catch(function (error) {
             console.log(error);
           })
     },
+
+    activeVal(){
+      this.a = this.auditflow[0]
+      this.b = this.auditflow[1]
+      this.c = this.auditflow[2]
+
+      if(this.a.auditflowdetaiState==1)
+        this.active=0
+      if(this.b.auditflowdetaiState==1)
+        this.active=1
+      if(this.c.auditflowdetaiState==1)
+        this.active=2
+      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2)
+      this.active=3
+
+    },
+
     // 点击通过确认按钮触发
     through1() {
       alert(1)
@@ -347,8 +397,8 @@ export default {
       alert(1)
     }
   }, created() {
-    this.selectAuditflow();
-  },
+    this.selectAuditflow(1);
+  }
 };
 </script>
 
