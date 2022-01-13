@@ -21,16 +21,15 @@
                      :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                      :cell-style="{textAlign: 'center'}"
            >
-                        <el-table-column prop="name" fixed label="姓名" width="120" />
-                        <el-table-column prop="depart" label="部门" width="150" />
-                        <el-table-column prop="post" label="职位" width="150" />
-                        <el-table-column prop="workxz" label="工作性质" width="150" />
-                        <el-table-column prop="phone" label="手机号" width="150" />
-                        <el-table-column prop="email" label="邮箱" width="150" />
-                        <el-table-column prop="leaf" label="工龄" width="150" />
-                        <el-table-column prop="entrydate" label="入职日期" width="180" />
-                        <el-table-column prop="dimdate" label="离职日期" width="180" />
-                        <el-table-column prop="dimcause" label="离职原因" />
+                        <el-table-column prop="staffName" fixed label="姓名" width="120" />
+                        <el-table-column prop="deptName" label="部门" width="150" />
+                        <el-table-column prop="postName" label="职位" width="150" />
+                        <el-table-column prop="staffPhone" label="手机号" width="150" />
+                        <el-table-column prop="staffEmail" label="邮箱" width="150" />
+                        <el-table-column prop="staffWorkingYears" label="工龄" width="120" />
+                        <el-table-column prop="staffHiredate" label="入职日期" width="150" />
+                        <el-table-column prop="formalQuitDate" label="离职日期" width="150" />
+                        <el-table-column prop="quitExplain" label="离职原因" />
                     </el-table>
 					
 				</div>
@@ -46,8 +45,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectUsers"
-              @current-change="selectUsers"
+              @size-change="selectHistorical"
+              @current-change="selectHistorical"
           >
           </el-pagination>
         </div>
@@ -71,6 +70,23 @@
           total: 0, // 总页数
         },
       }
+    },methods:{
+      //历史花名册 查询状态为离职的员工信息
+      selectHistorical() {
+        this.axios
+            .get("http://localhost:8010/provider/staff/selectHistorical/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+            .then((response) => {
+              console.log(response);
+              this.tableData = response.data.data.records;
+              console.log(response.data.data.records)
+              this.pageInfo.total = response.data.data.total;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+      },
+    },created() {
+      this.selectHistorical()
     }
   }
 

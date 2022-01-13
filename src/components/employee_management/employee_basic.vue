@@ -36,7 +36,7 @@
             </li>
             <li>
               <label>年龄</label>
-              <p></p>
+              <p>{{empMsg.staffAge}}</p>
             </li>
             <li>
               <label>婚姻状况</label>
@@ -94,7 +94,7 @@
             <br/>
             <div style="display: inline-block;margin:20px 0px 0px 50px;text-align: right">
               <el-form-item label="员工编号：" prop="emp_id" >
-                <el-input v-model="empMsg.staffId" style="width:240px;"></el-input>
+                <el-input v-model="empMsg.staffId" style="width:240px;" disabled v></el-input>
               </el-form-item><br/>
 
 
@@ -149,7 +149,7 @@
 
             <div style="display: inline-block;position: absolute;top:20px;right:150px;text-align: right">
               <br/>
-              <el-form-item prop="emp_name" >
+              <el-form-item prop="staffName" >
                 <template #label >姓名：</template>
                 <el-input v-model="empMsg.staffName" style="width:240px;" disabled></el-input>
               </el-form-item><br/>
@@ -157,19 +157,19 @@
 
 
               <el-form-item label="年龄：" prop="emp_age">
-                <el-input v-model="empMsg.emp_age" style="width:240px;"></el-input>
+                <el-input v-model="empMsg.staffAge" style="width:240px;"></el-input>
               </el-form-item><br/>
 
 
 
               <el-form-item label="最高学历：" prop="official">
                 <el-select v-model="empMsg.staffEducation" placeholder="请选择活动区域" style="width:240px;">
-                  <el-option label="硕士" value="ss"></el-option>
-                  <el-option label="本科" value="bk"></el-option>
-                  <el-option label="大专" value="dz"></el-option>
-                  <el-option label="中专" value="zz"></el-option>
-                  <el-option label="高中" value="gz"></el-option>
-                  <el-option label="其他" value="qt"></el-option>
+                  <el-option label="硕士" value="硕士"></el-option>
+                  <el-option label="本科" value="本科"></el-option>
+                  <el-option label="大专" value="大专"></el-option>
+                  <el-option label="中专" value="中专"></el-option>
+                  <el-option label="高中" value="高中"></el-option>
+                  <el-option label="其他" value="其他"></el-option>
                 </el-select>
               </el-form-item><br/>
 
@@ -203,7 +203,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top: 20px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="informations_1=!informations_1,informations_edit_1=!informations_edit_1,informations_bj_1=!informations_bj_1">取消</el-button>
-                <el-button type="primary">保存</el-button>
+                <el-button type="primary" @click="updateStaff(),selectStaffVoId()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -300,7 +300,7 @@
               <div style="width:20%;height:50px;margin:auto;">
 
                 <el-button @click="informations_2=!informations_2,informations_edit_2=!informations_edit_2,informations_bj_2=!informations_bj_2">取消</el-button>
-                <el-button type="primary">保存</el-button>
+                <el-button type="primary" @click="updateStaff()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -330,7 +330,7 @@
             </li>
             <li>
               <label>员工状态</label>
-              <p>{{empMsg.staffState}}</p>
+              <p>{{empMsg.staffState==2?'试用':'正式'}}</p>
             </li>
             <li>
               <label>入职日期</label>
@@ -338,11 +338,11 @@
             </li>
             <li>
               <label>工龄</label>
-              <p>{{}}</p>
+              <p>{{empMsg.staffWorkingYears}}</p>
             </li>
             <li>
               <label>转正日期</label>
-              <p></p>
+              <p>{{empMsg.workerDate}}</p>
             </li>
 
           </ul>
@@ -354,17 +354,39 @@
             <br/>
             <div style="display: inline-block;margin:20px 0px 0px 50px;text-align: right">
 
-              <el-form-item label="部门：" prop="dept">
-                <el-input v-model="empMsg.dept"  style="width:240px;"></el-input>
+<!--              <el-form-item label="部门：" prop="dept">-->
+<!--                <el-input v-model="empMsg.deptName"  style="width:240px;"></el-input>-->
+<!--              </el-form-item><br/>-->
+
+              <el-form-item label="部门:" prop="dept">
+                <el-select v-model="empMsg.deptId" placeholder="请选择惩罚类型" style="width: 240px;">
+                  <el-option
+                      v-for="item in deptNameAll"
+                      :key="item.deptId"
+                      :label="item.deptName"
+                      :value="item.deptId"
+                  >
+                  </el-option>
+
+                </el-select>
               </el-form-item><br/>
 
-              <el-form-item label="职位：" prop="position">
-                <el-input v-model="empMsg.position" style="width:240px;"></el-input>
+              <el-form-item label="职位:" prop="position">
+                <el-select v-model="empMsg.deptPostId" placeholder="请选择惩罚类型" style="width: 240px;">
+                  <el-option
+                      v-for="item in deptPostNameAll"
+                      :key="item.deptPostId"
+                      :label="item.postName"
+                      :value="item.deptPostId"
+                  >
+                  </el-option>
+
+                </el-select>
               </el-form-item><br/>
 
 
               <el-form-item label="工龄：" prop="service">
-                <el-input v-model="empMsg.service" style="width:240px;"></el-input>
+                <el-input v-model="empMsg.staffWorkingYears" style="width:240px;" disabled></el-input>
               </el-form-item><br/>
 
             </div>
@@ -377,24 +399,24 @@
 
               <el-form-item label="入职日期：" prop="boardDate">
                 <el-date-picker
-                    v-model="empMsg.boardDate"
+                    v-model="empMsg.staffHiredate"
                     type="date"
                     placeholder="选择日期" style="width: 240px">
                 </el-date-picker>
               </el-form-item><br/>
 
               <el-form-item label="员工状态：" prop="state">
-                <el-radio-group v-model="empMsg.state" style="position: absolute;left:4px">
-                  <el-radio label="实习"></el-radio>
-                  <el-radio label="正式"></el-radio>
+                <el-radio-group v-model="empMsg.staffState" style="position: absolute;left:4px" disabled>
+                  <el-radio :label="2">试用</el-radio>
+                  <el-radio :label="3">正式</el-radio>
                 </el-radio-group>
               </el-form-item><br/>
 
               <el-form-item label="转正日期：" prop="positive">
                 <el-date-picker
-                    v-model="empMsg.positive"
+                    v-model="empMsg.workerDate"
                     type="date"
-                    placeholder="选择日期" style="width: 240px">
+                    placeholder="选择日期" style="width: 240px" disabled>
                 </el-date-picker>
               </el-form-item><br/>
 
@@ -406,7 +428,7 @@
               <div style="width:20%;height:50px;margin:auto;">
 
                 <el-button @click="informations_3=!informations_3,informations_edit_3=!informations_edit_3,informations_bj_3=!informations_bj_3">取消</el-button>
-                <el-button type="primary">保存</el-button>
+                <el-button @click="updateStaff()" type="primary">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -423,6 +445,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue'
 import { defineComponent, ref } from 'vue'
+import {ElMessage} from "element-plus";
 export default defineComponent({
   setup() {
     const state = reactive({
@@ -464,6 +487,10 @@ export default defineComponent({
     return{
       // 所有信息
       empMsg:{},
+      //部门名称
+      deptNameAll:[],
+      //部门职位
+      deptPostNameAll:[],
 
       rules:{
         name:
@@ -498,7 +525,7 @@ export default defineComponent({
     //根据id查询员工信息
     selectStaffVoId() {
       this.axios
-          .get("http://localhost:8010/provider/staff/selectStaffId/" + this.$route.query.staffId)
+          .get("http://localhost:8010/provider/staff/selectStaffId/" + this.$store.state.staffId_Msg)
           .then((response) => {
             console.log(response);
             this.empMsg = response.data.data;
@@ -508,8 +535,66 @@ export default defineComponent({
             console.log(error);
           });
     },
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectDeptName")
+          .then((response) => {
+            console.log(response);
+            this.deptNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询部门职位名称
+    selectDeptPostName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectDeptPostName")
+          .then((response) => {
+            console.log(response);
+            this.deptPostNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //修改员工信息
+    updateStaff(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/staff/updateStaff',
+        method: 'put',
+         data: this.empMsg
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectStaffVoId()
+          //关闭基本信息弹出框
+          this.informations_edit_1=false
+          //显示员工信息
+          this.informations_1=true
+          //关闭联系方式弹出框
+          this.informations_edit_2=false
+          this.informations_2=true
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
   },created() {
     this.selectStaffVoId()
+    this.selectDeptName()
+    this.selectDeptPostName()
   }
 
 })

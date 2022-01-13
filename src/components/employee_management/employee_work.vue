@@ -26,9 +26,9 @@
 
 <!--    <el-table-column prop="name" label="离职原因" width="180" />-->
     <el-table-column fixed="right" label="操作">
-    <template #default>
+    <template #default="scope">
       <router-link :to="{path:this.information,query:{path: this.$route.query.path}}">
-			<el-button type="text" size="small">编辑 </el-button>
+			<el-button type="text" size="small" @click="empMsg(scope.row.staffId)">编辑 </el-button>
       </router-link>
 	</template>
     </el-table-column>
@@ -74,6 +74,7 @@ export default {
 
     //多表查询
     selectWork() {
+
       this.axios
           .get("http://localhost:8010/provider/workExperience/selectWorkExperience/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
           .then((response) => {
@@ -86,7 +87,14 @@ export default {
             console.log(error);
           });
     },
-  },
+    //根据id查询员工信息
+    empMsg(staffId) {
+      // 将当前行的员工id 存入 store里面，使得在其他页面也能取到
+      this.$store.state.staffId_Msg = staffId;
+      // 跳转页面
+      this.$router.push({path: this.staffedit, query: {path: this.$route.query.path}})
+    }
+    },
   created() {
     this.selectWork()
   }

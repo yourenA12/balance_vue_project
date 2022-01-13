@@ -158,7 +158,6 @@ export default {
           //职位
           deptPostId:row.deptPostId,
           //转正日期
-          // workerDate:row.hiredate+,
           //工龄
 
         }
@@ -263,7 +262,7 @@ export default {
 
       this.axios({
         url: 'http://localhost:8010/provider/staff/updateResume',
-        method: 'post',
+        method: 'put',
         data:{
           Resume:this.resumeVal,
           EmploymentTable:this.employmentTableVue,

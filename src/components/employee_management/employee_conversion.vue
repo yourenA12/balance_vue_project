@@ -43,10 +43,15 @@
             <el-table-column prop="deptName" label="部门" width="180"/>
             <el-table-column prop="postName" label="职位" width="180"/>
             <el-table-column prop="staffHiredate" label="入职日期" width="180"/>
-            <el-table-column prop="name" label="试用期限" width="180"/>
-            <el-table-column fixed="right" label="操作">
+            <el-table-column label="试用期限" width="180">
               <template #default>
-                <el-button type="text" size="small" @click="become = true">办理转正</el-button>
+                3个月
+              </template>
+            </el-table-column>
+
+            <el-table-column fixed="right" label="操作">
+              <template #default="scope">
+                <el-button type="text" size="small" @click="positive(scope.row)">办理转正</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -83,65 +88,78 @@
     >
       <el-form
           ref="form_1"
-          :model="become_1"
+          :model="positiveTK"
           label-width="120px"
           :rules="rules"
       >
         <div style="width:100%;margin-left: -20px;">
           <div style="display: inline-block;width:50%;">
-            <el-form-item label="员工名称 :" prop="name" style="">
-              <el-input v-model="become_1.name" disabled style="width:240px;"></el-input>
+            <el-form-item label="员工名称 :" prop="staffName" style="">
+              <el-input v-model="positiveTK.staffName" disabled style="width:240px;"></el-input>
             </el-form-item>
 
             <el-form-item label="职位 :">
-              <el-input v-model="become_1.post" disabled style="width:240px;"></el-input>
+              <el-input v-model="positiveTK.postName" disabled style="width:240px;"></el-input>
             </el-form-item>
 
             <el-form-item label="试用期限 :">
-              <el-input v-model="become_1.tryoutdate" disabled style="width:240px;"></el-input>
+              <el-input v-model="positiveTK.TrialPeriod" disabled style="width:240px;"></el-input>
             </el-form-item>
 
-            <el-form-item label="转正日期 :" prop="becomedate">
+            <el-form-item label="原转正日期:" prop="workerDate">
               <el-date-picker
-                  v-model="become_1.becomedate"
+                  v-model="positiveTK.workerDate"
                   type="date"
-                  placeholder="选择时间" style="width:240px;"
+                  placeholder="选择时间" style="width:240px;" disabled
               >
               </el-date-picker>
             </el-form-item>
+
+            <el-form-item label="转正备注 :">
+              <el-input
+                  v-model="positiveTK.remarks"
+                  type="textarea"
+                  maxlength="500"
+                  show-word-limit
+                  prop="remarks_1" style="width:240px;"
+              ></el-input>
+            </el-form-item>
+
+
           </div>
-        <div style="display: inline-block;width:50%;">
+        <div style="display: inline-block;width:50%;position: relative;top:-60px">
         <el-form-item label="部门名称 :" prop="dept">
-          <el-input v-model="become_1.dept" disabled style="width:240px;"></el-input>
+          <el-input v-model="positiveTK.deptName" disabled style="width:240px;"></el-input>
         </el-form-item>
 
         <el-form-item label="入职日期 :">
-          <el-input v-model="become_1.entrydate" disabled style="width:240px;"></el-input>
+          <el-input v-model="positiveTK.staffHiredate" disabled style="width:240px;"></el-input>
         </el-form-item>
 
-        <el-form-item label="转正类型" prop="type" style="width:600px">
+        <el-form-item label="转正类型" prop="workerType" style="width:600px">
           <el-select
-              v-model="become_1.type"
+              v-model="positiveTK.workerType"
               placeholder="请选择" style="width:240px;"
           >
-            <el-option label="转正" value="zz" style="margin-left: 20px"></el-option>
-            <el-option label="提前转正" value="tqzz" style="margin-left: 20px"></el-option>
+            <el-option label="转正" value="转正" style="margin-left: 20px"></el-option>
+            <el-option label="提前转正" value="提前转正" style="margin-left: 20px"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="转正备注 :">
-          <el-input
-              v-model="become_1.remarks"
-              type="textarea"
-              maxlength="500"
-              show-word-limit
-              prop="remarks_1" style="width:240px;"
-          ></el-input>
-        </el-form-item>
+          <el-form-item label="转正日期 :" prop="workersDates">
+            <el-date-picker
+                v-model="positiveTK.workersDates"
+                type="date"
+                placeholder="选择时间" style="width:240px;"
+            >
+            </el-date-picker>
+          </el-form-item>
+
+
         </div>
           <div style="margin-left: 310px;margin-top: 30px">
             <el-button  @click="become=false" style="width:80px">取消</el-button>
-            <el-button type="primary" style="width:80px">确定</el-button>
+            <el-button type="primary" style="width:80px" @click="insertWorker_Staff()">确定</el-button>
 
           </div>
         </div>
@@ -171,15 +189,29 @@ export default defineComponent({
     return {
       tableData: [],
       seek: "",
-      become_1: {
-        name: '',
-        dept: '',
-        post: '',
-        entrydate: '',
-        tryoutdate: '',
-        type: '',
-        remarks: '',
-        becomedate: ''
+      positiveTK: {
+        //员工编号
+        staffId:'',
+        //部门编号
+        deptId:'',
+        //员工姓名
+        staffName: '',
+        //部门
+        deptName: '',
+        //职位
+        postName: '',
+        //入职日职
+        staffHiredate: '',
+        //试用期限
+        TrialPeriod:'3个月',
+        //转正类型
+        workerType:'',
+        //原定计划转正日期
+        workerDate:'',
+        //转正日期
+        workersDates:'',
+        //备注
+        workerRemarks:'',
       },
       pageInfo: {
         // 分页参数
@@ -205,7 +237,20 @@ export default defineComponent({
             validator: one, trigger: "change"
           },
         ],
-      }
+        workerDate: [
+          {
+            required: true,
+            message: '请选择转正日期',
+            trigger: 'change'
+          },
+          {
+            validator: one, trigger: "change"
+          },
+        ],
+      },
+      //转正
+      workerVal:null,
+      staffVal:null,
     };
   },
   setup() {
@@ -225,18 +270,18 @@ export default defineComponent({
         }
       })
     },
-    RestForm() {
-      this.become_1 = {
-        name: '',
-        dept: '',
-        post: '',
-        entrydate: '',
-        tryoutdate: '',
-        type: '',
-        remarks: '',
-        becomedate: ''
-      }
-    },
+    // RestForm() {
+    //   this.become_1 = {
+    //     name: '',
+    //     dept: '',
+    //     post: '',
+    //     entrydate: '',
+    //     tryoutdate: '',
+    //     type: '',
+    //     remarks: '',
+    //     becomedate: ''
+    //   }
+    // },
     //查询试用期人员
     selectProbation() {
       this.axios
@@ -250,6 +295,83 @@ export default defineComponent({
           .catch(function (error) {
             console.log(error);
           });
+    },
+    //获取转正管理数据 赋在弹出框上
+    positive(row){
+      this.become=true;
+      //员工编号
+      this.positiveTK.staffId=row.staffId,
+      //部门编号
+      this.positiveTK.deptId=row.deptId,
+      //员工姓名
+      this.positiveTK.staffName=row.staffName,
+          //部门
+      this.positiveTK.deptName=row.deptName,
+          //职位
+      this.positiveTK.postName=row.postName,
+          //入职日职
+      this.positiveTK.staffHiredate=row.staffHiredate,
+          //原定计划转正日期
+      this.positiveTK.workerDate=row.workerDate
+
+    },
+    //添加转正表和修改员工信息
+    insertWorker_Staff(){
+      //获取弹出框上的值加入到转正表
+      this.workerVal={
+        //员工编号
+       staffId:this.positiveTK.staffId,
+        //员工名称
+        staffName:this.positiveTK.staffName,
+        //部门编号
+        deptId:this.positiveTK.deptId,
+        //转正类型
+        workerType:this.positiveTK.workerType,
+        //备注
+        workerRemarks:this.positiveTK.workerRemarks,
+        //状态
+        workerState:1,
+        //转正时间
+        workerDate:this.positiveTK.workersDates
+      }
+
+      //修改员工表状态和转正日期
+      this.staffVal={
+        //员工编号
+        staffId:this.positiveTK.staffId,
+        //转正时间
+        workerDate:this.positiveTK.workersDates,
+        //员工状态
+        staffState:3
+      }
+      //调用添加转正
+      this.insertWorker()
+
+    },
+    //添加转正表
+    insertWorker(){
+      this.axios({
+        url: 'http://localhost:8010/provider/worker/insertWorker',
+        method: 'post',
+        data:{
+          Worker:this.workerVal,
+          Staff:this.staffVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectProbation() // 修改完成后调用查询方法
+          this.become=false
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
     },
   },created() {
     this.selectProbation();

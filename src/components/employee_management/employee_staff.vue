@@ -65,11 +65,6 @@
         <el-table-column prop="deptName" label="部门" width="150"/>
         <el-table-column prop="postName" label="职位" width="150"/>
         <el-table-column prop="staffPhone" label="手机" width="150"/>
-<!--        <el-table-column prop="staffState" label="状态" width="150">-->
-<!--          <template #default="scope">-->
-<!--             {{scope.row.staffState==''}}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
         <el-table-column label="状态" width="150">
           <template #default="scope">
             <span v-if="scope.row.staffState==0">在职</span>
@@ -80,10 +75,10 @@
         </el-table-column>
         <el-table-column prop="staffHiredate" label="入职日期" sortable width="150">
         </el-table-column>
-        <el-table-column prop="state" label="转正日期" width="150">
+        <el-table-column prop="workerDate" label="转正日期" width="150">
 
         </el-table-column>
-        <el-table-column prop="state" label="工龄" width="150"/>
+        <el-table-column prop="staffWorkingYears" label="工龄" width="150"/>
         <el-table-column fixed="right" label="操作" width="150">
           <template #default="scope">
               <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
@@ -144,23 +139,35 @@
                   v-model="departure_data.cause"
                   placeholder="请选择" style="width:240px;"
               >
-                <el-option label="家庭原因" value="jtyy" style="margin-left: 20px"></el-option>
-                <el-option label="实习生返校" value="sxsfx" style="margin-left: 20px"></el-option>
-                <el-option label="回校深造" value="hxsz" style="margin-left: 20px"></el-option>
-                <el-option label="交通不便" value="jtbb" style="margin-left: 20px"></el-option>
-                <el-option label="身体健康因素" value="stjkys" style="margin-left: 20px"></el-option>
-                <el-option label="薪资原因" value="xzyy" style="margin-left: 20px"></el-option>
-                <el-option label="福利原因" value="flyy" style="margin-left: 20px"></el-option>
-                <el-option label="个人发展原因" value="grfzyy" style="margin-left: 20px"></el-option>
-                <el-option label="人际关系不融洽" value="rjgxyy" style="margin-left: 20px"></el-option>
-                <el-option label="工作环境不适应" value="gzhjbsy" style="margin-left: 20px"></el-option>
-                <el-option label="团队气氛不适应" value="tdqfbsy" style="margin-left: 20px"></el-option>
-                <el-option label="企业文化不适应" value="qyehbsy" style="margin-left: 20px"></el-option>
-                <el-option label="工作职责及目标不明确" value="gzzejmbbmq" style="margin-left: 20px"></el-option>
-                <el-option label="未得到充分的支持和授权" value="wddcfdzchsq" style="margin-left: 20px"></el-option>
-                <el-option label="其它" value="qt" style="margin-left: 20px"></el-option>
+                <el-option label="家庭原因" value="家庭原因" style="margin-left: 20px"></el-option>
+                <el-option label="实习生返校" value="实习生返校" style="margin-left: 20px"></el-option>
+                <el-option label="回校深造" value="回校深造" style="margin-left: 20px"></el-option>
+                <el-option label="交通不便" value="交通不便" style="margin-left: 20px"></el-option>
+                <el-option label="身体健康因素" value="身体健康因素" style="margin-left: 20px"></el-option>
+                <el-option label="薪资原因" value="薪资原因" style="margin-left: 20px"></el-option>
+                <el-option label="福利原因" value="福利原因" style="margin-left: 20px"></el-option>
+                <el-option label="个人发展原因" value="个人发展原因" style="margin-left: 20px"></el-option>
+                <el-option label="人际关系不融洽" value="人际关系不融洽" style="margin-left: 20px"></el-option>
+                <el-option label="工作环境不适应" value="工作环境不适应" style="margin-left: 20px"></el-option>
+                <el-option label="团队气氛不适应" value="团队气氛不适应" style="margin-left: 20px"></el-option>
+                <el-option label="企业文化不适应" value="企业文化不适应" style="margin-left: 20px"></el-option>
+                <el-option label="工作职责及目标不明确" value="工作职责及目标不明确" style="margin-left: 20px"></el-option>
+                <el-option label="未得到充分的支持和授权" value="未得到充分的支持和授权" style="margin-left: 20px"></el-option>
+                <el-option label="其它" value="其它" style="margin-left: 20px"></el-option>
               </el-select>
             </el-form-item><br/>
+
+            <el-form-item label="备注"  prop="remark">
+              <el-input v-model="departure_data.remark" type="textarea" style="width: 240px;"></el-input>
+            </el-form-item>
+          </div>
+
+          <div style="width:50%;display: inline-block;position: relative;top:-60px;">
+          <el-form-item label="状态" >
+            <el-input v-model="fromStaffState" disabled style="width:240px"/>
+          </el-form-item><br/>
+
+
 
             <el-form-item label="离职生效时间" required >
               <el-col :span="11">
@@ -174,38 +181,13 @@
                 </el-form-item>
               </el-col>
             </el-form-item>
-          </div>
-
-          <div style="width:50%;display: inline-block">
-          <el-form-item label="状态" >
-            <el-input v-model="departure_data.state" disabled style="width:240px"></el-input>
-          </el-form-item><br/>
 
 
-
-          <el-form-item label="最后工作时间" required >
-            <el-col :span="11">
-              <el-form-item prop="workdate" style="width: 240px;">
-                <el-date-picker
-                    v-model="departure_data.workdate"
-                    type="date"
-                    placeholder="请选择日期"
-                    style="width: 100%"
-                ></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-form-item><br/>
-
-
-
-          <el-form-item label="备注"  prop="remark">
-            <el-input v-model="departure_data.remark" type="textarea" style="width: 240px;"></el-input>
-          </el-form-item>
           </div>
           <div style="margin-left: 300px;margin-top: 30px;">
 
             <el-button style="width: 80px;" @click="become=false">取消</el-button>
-            <el-button style="width: 80px" type="primary" @click="submitForm('departure_data')">提交
+            <el-button style="width: 80px" type="primary" @click="Dimission(),become=false">提交
             </el-button>
           </div>
         </el-form>
@@ -250,12 +232,14 @@ export default {
       book: '/employee/message/employee_roster/book',
       //
       departure_data: {
+        id:"",
         name: "",
         state: "",
         cause: "",
         workdate: '',
         dimisiondate: '',
         remark: "",
+        deptId:"",
       },
       departure_rules: {
         cause: [
@@ -306,7 +290,11 @@ export default {
       input3: "",
       value2: "",
 
+      dimissionVal:null,
+      staffVal:null,
 
+      // 表单中的员工状态
+      fromStaffState:"",
 
     }
   },
@@ -327,19 +315,89 @@ export default {
     },
     //根据id查询员工信息
     empMsg(staffId) {
-      this.$router.push({path:this.staffedit,query:{path: this.$route.query.path,staffId:staffId}})
+      // 将当前行的员工id 存入 store里面，使得在其他页面也能取到
+      this.$store.state.staffId_Msg=staffId;
+      // 跳转页面
+      this.$router.push({path:this.staffedit,query:{path: this.$route.query.path}})
     },
     //
 
     //办理离职 获取员工信息 赋值到弹出框
     departure(row) {
 
+      //赋值到弹出框中的员工状态
+      if( row.staffState==0 )
+        this.fromStaffState="在职"
+
+      if( row.staffState==1 )
+        this.fromStaffState="离职"
+
+      if( row.staffState==2 )
+        this.fromStaffState="试用"
+
+      if( row.staffState==3 )
+        this.fromStaffState="正式"
+
       // 开启弹出框
       this.become=true;
 
       // 赋值到弹出框
+      this.departure_data.id=row.staffId
       this.departure_data.name=row.staffName
       this.departure_data.state=row.staffState
+
+      this.departure_data.deptId=row.deptId
+
+    },
+    //离职前调用，取值方法
+    Dimission(){
+      //获取离职表信息
+      this.dimissionVal={
+        //员工编号
+        staffId:this.departure_data.id,
+        //员工名称
+        staffName: this.departure_data.name,
+        //部门id
+        deptId:this.departure_data.deptId,
+        //离职原因
+        quitType:this.departure_data.cause,
+        //离职生效时间
+        formalQuitDate:this.departure_data.dimisiondate,
+        //备注
+        quitExplain:this.departure_data.remark,
+        //状态
+        quitState:1,
+      }
+
+      //修改员工状态
+      this.staffVal={
+        staffState:1,
+      }
+      this.insertDimission()
+
+    },  //添加离职表
+    insertDimission(){
+      this.axios({
+        url: 'http://localhost:8010/provider/quit_Staff/insertquit_staff',
+        method: 'post',
+        data:{
+          Staff:this.staffVal,
+          Quit:this.dimissionVal,
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectStaff() // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
 
     },
 

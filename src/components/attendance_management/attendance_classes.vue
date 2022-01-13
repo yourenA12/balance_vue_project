@@ -2,6 +2,10 @@
 <template>
 <!--  新增班次页面-->
   <div class="w">
+    <div class="he">
+      <b>{{this.$route.query.way}}班次</b>
+    </div>
+    
     <el-form
         ref="ruleForm"
         label-position="top"
@@ -9,16 +13,16 @@
         :rules="rules"
         label-width="100px"
     >
-      <el-form-item prop="name" label="班次名称：" style="margin-left: 20px">
+      <el-form-item prop="classesName" label="班次名称：" style="margin-left: 20px">
         <el-input
-            v-model="fo.name"
+            v-model="fo.classesName"
             placeholder="例如：日常班"
             style="width: 250px"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="value1" label="工作时间：" style="margin-left: 20px">
+      <el-form-item prop="classesBeginDate" label="工作时间：" style="margin-left: 20px">
         <el-time-picker
-            v-model="fo.value1"
+            v-model="fo.classesBeginDate"
             :disabled-hours="disabledHours"
             :disabled-minutes="disabledMinutes"
             :disabled-seconds="disabledSeconds"
@@ -28,7 +32,7 @@
         </el-time-picker>
         <span>&nbsp;&nbsp;到&nbsp;&nbsp;</span>
         <el-time-picker
-            v-model="fo.value2"
+            v-model="fo.classesEndDate"
             :disabled-hours="disabledHours"
             :disabled-minutes="disabledMinutes"
             :disabled-seconds="disabledSeconds"
@@ -38,22 +42,22 @@
         </el-time-picker>
       </el-form-item>
 
-      <el-form-item prop="xz" label="班次状态：" style="margin-left: 20px">
-      <el-radio v-model="radio1" label="1">启用</el-radio>
-      <el-radio v-model="radio1" label="2">禁用</el-radio>
+      <el-form-item label="班次状态：" style="margin-left: 20px">
+      <el-radio v-model="fo.classesState" label="0">启用</el-radio>
+      <el-radio v-model="fo.classesState" label="1">禁用</el-radio>
       </el-form-item>
 
 
       <el-form-item>
         <div class="u">
-          <router-link to="/attendance/check">
+          <router-link :to="{path:'/attendance/check',query:{path:this.$route.query.path}}" >
             <el-button>
               <el-icon><i-close-bold /></el-icon>
               <span>取消</span>
             </el-button>
           </router-link>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <el-button type="primary" @click="submitForm('ruleForm')">
+          <el-button type="primary"  @click="submitForm('ruleForm')">
             <el-icon>
               <i-copy-document/>
             </el-icon>
@@ -68,25 +72,28 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
 export default {
   data() {
     return {
-      radio1: ref('1'),
+      classesState: ref('1'),
       fo: {
-        name: "",
-        value1: "",
-        value2: "",
-        xz:"",
+        classesId: "",
+        classesName: "",
+        classesBeginDate: "",
+        classesEndDate: "",
+        classesState:"1",
       },
       rules: {
-        name: [
+        classesName: [
           {
             required: true,
             message: "请填写班次名字",
             trigger: "blur",
           },
         ],
-        value1: [
+        classesBeginDate: [
           {
             required: true,
             message: "请选择工作时间",
@@ -99,17 +106,88 @@ export default {
 
   },
   methods: {
+ /*   提交验证*/
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+
+          if( this.$route.query.way ==="新增" ){
+            this.addition();
+          }else {
+            this.modification();
+          }
+
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-  }
+    //添加
+    addition(){
+      this.axios
+          .post("http://localhost:8010/provider/classes/add", this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage({
+                message: '添加成功',
+                type: 'success',
+              });
+              this.$router.go(-1);
+            }else{
+              ElMessage({
+                message: '添加失败',
+                type: 'error',
+              })
+            }
+
+
+            // console.log(response);
+            // this.tableData = response.data.data.records;
+            // console.log(response.data.data.records)
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+    //修改方法
+    modification(){
+      // 如果 状态为启用 弹出保留一个班次状态
+      if(this.$route.query.classesState==0){
+        ElMessage.error('请保留一个班次状态')
+        return
+      }
+      this.axios
+          .put("http://localhost:8010/provider/classes/amend", this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.$router.go(-1);
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+  },
+  //修改取值
+  created() {
+    if(! this.$route.query.classesName == ""){
+      this.fo.classesId=this.$route.query.classesId
+      this.fo.classesName=this.$route.query.classesName
+      this.fo.classesBeginDate=this.$route.query.classesBeginDate
+      this.fo.classesEndDate=this.$route.query.classesEndDate
+      this.fo.classesState=this.$route.query.classesState
+    }else{
+      this.fo.classesName=""
+      this.fo.classesBeginDate=""
+      this.fo.classesEndDate=""
+      this.fo.classesState="1"
+    }
+  },
 };
 </script>
 
@@ -132,5 +210,9 @@ export default {
 .u {
   margin-left: 40%;
 }
-
+.he{
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 18px;
+}
 </style>
