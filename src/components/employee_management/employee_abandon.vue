@@ -16,12 +16,12 @@
     <el-table :data="tableData" style="width: 100%;"
               :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
               :cell-style="{textAlign: 'center'}" >
-      <el-table-column prop="name" label="姓名" width="200"/>
-      <el-table-column prop="depart" label="部门" width="200"/>
-      <el-table-column prop="post" label="职位" width="200"/>
-      <el-table-column prop="phone" label="手机号" width="200"/>
-      <el-table-column prop="entrydate" label="入职日期" width="200"/>
-      <el-table-column prop="cause" label="放弃原因" width=""/>
+      <el-table-column prop="resumeName" label="姓名" width="200"/>
+      <el-table-column prop="deptName" label="部门" width="200"/>
+      <el-table-column prop="postName" label="职位" width="200"/>
+      <el-table-column prop="resumePhone" label="手机号" width="200"/>
+      <el-table-column prop="hiredate" label="入职日期" width="200"/>
+      <el-table-column prop="waiveReason" label="放弃原因" width=""/>
 
     </el-table>
 
@@ -36,8 +36,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="selectUsers"
-          @current-change="selectUsers"
+          @size-change="selectAbandon"
+          @current-change="selectAbandon"
       >
       </el-pagination>
     </div>
@@ -50,44 +50,7 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          entrydate: '2016-05-03',
-          name: 'Tom',
-          depart: 'California',
-          post: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          phone: 'CA 90036',
-          cause: 'Home',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Home',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-      ],
+      tableData: [],
       input3: '',
       pageInfo: {
         // 分页参数
@@ -97,6 +60,23 @@ export default {
       },
 
     }
+  },methods:{
+    //多表查询
+    selectAbandon() {
+      this.axios
+          .get("http://localhost:8010/provider/entryhirdeVo/selectEntryhirdeVoFQ/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+  },created() {
+    this.selectAbandon();
   },
 }
 </script>

@@ -38,11 +38,11 @@
           <el-table :data="tableData"
                     :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
-            <el-table-column prop="date" label="姓名" width="180"/>
-            <el-table-column prop="name" label="证件号码" width="180"/>
-            <el-table-column prop="name" label="部门" width="180"/>
-            <el-table-column prop="name" label="职位" width="180"/>
-            <el-table-column prop="name" label="入职日期" width="180"/>
+            <el-table-column prop="staffName" label="姓名" width="180"/>
+            <el-table-column prop="staffIdentity" label="证件号码" width="180"/>
+            <el-table-column prop="deptName" label="部门" width="180"/>
+            <el-table-column prop="postName" label="职位" width="180"/>
+            <el-table-column prop="staffHiredate" label="入职日期" width="180"/>
             <el-table-column prop="name" label="试用期限" width="180"/>
             <el-table-column fixed="right" label="操作">
               <template #default>
@@ -64,8 +64,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectUsers"
-              @current-change="selectUsers"
+              @size-change="selectProbation"
+              @current-change="selectProbation"
           >
           </el-pagination>
         </div>
@@ -169,29 +169,7 @@ export default defineComponent({
       }
     };
     return {
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-
-      ],
+      tableData: [],
       seek: "",
       become_1: {
         name: '',
@@ -258,8 +236,24 @@ export default defineComponent({
         remarks: '',
         becomedate: ''
       }
-    }
-  }
+    },
+    //查询试用期人员
+    selectProbation() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectProbation/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectProbation();
+  },
 })
 </script>
 

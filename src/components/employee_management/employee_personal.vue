@@ -1395,11 +1395,9 @@ export default {
         this.addEducational=true // 添加工作经历按钮显示
         this.educationalButton=false // 右上角添加按钮隐藏
       }
-    }
-
-
-
+    },
   },
+
 
 }
 </script>
