@@ -229,7 +229,7 @@ table * {
 }
 
 .demo-pagination-block {
-  margin-left: 850px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 30px;
 }
