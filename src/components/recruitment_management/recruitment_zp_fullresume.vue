@@ -64,7 +64,12 @@
         <el-table-column fixed="left" align="center" type="selection" width="80"/>
         <el-table-column fixed="left" prop="resumeName" label="姓名" width="120">
           <template #default="scope">
-            <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
+<!--            <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>-->
+<!--            <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">-->
+            <el-button type="text" size="small" @click="empMsg(scope.row.resumeId)"
+            >{{scope.row.resumeName}}
+            </el-button>
+<!--            </router-link>-->
           </template>
         </el-table-column>
         <el-table-column fixed="left" prop="postName" label="招聘职位" width="140"/>
@@ -247,7 +252,11 @@ export default {
         .catch(function (error){
           console.log(error);
         })
-  }
+  },
+    empMsg(resumeId){
+      this.$router.push({path:this.details,query:{path:this.$route.query.path,resumeId:resumeId}})
+    }
+
 },
   created(){
     this.selectresume_plan();

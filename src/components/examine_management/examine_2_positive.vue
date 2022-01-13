@@ -1,4 +1,6 @@
 <template>
+
+
   <!--  转正表格 -->
   <div class="body_1">
 
@@ -13,40 +15,40 @@
             style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
+        <el-button plain style="margin-bottom: 20px" type="success">搜索</el-button>
         <!--  表格 -->
         <el-table
             ref="filterTable1"
-            row-key="date1"
-            :data="tableData1"
-            style="width: 100%"
-            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
+            :data="tableData"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            row-key="date1"
+            style="width: 100%"
 
         >
           <el-table-column
-              prop="createdTime"
-              label="日期"
-              sortable
-              width="140"
-              column-key="date1"
+              :filter-method="filterHandler"
               :filters="[
               { text: '2016-05-01', value: '2016-05-01' },
               { text: '2016-05-02', value: '2016-05-02' },
               { text: '2016-05-03', value: '2016-05-03' },
               { text: '2016-05-04', value: '2016-05-04' },
             ]"
-              :filter-method="filterHandler"
+              column-key="date1"
+              label="日期"
+              prop="createdTime"
+              sortable
+              width="140"
           />
-          <el-table-column prop="auditflowdetailId" label="审批编号" width="100"/>
-          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
-          <el-table-column prop="staffName1" label="申请人" width="150"/>
+          <el-table-column label="审批编号" prop="auditflowId" width="100"/>
+          <el-table-column label="流程" prop="auditflowTitle" width="100"/>
+          <el-table-column label="申请人" prop="staffName1" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="auditflowState" label="状态" width="100">
+          <el-table-column label="状态" prop="auditflowState" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowState=='0'" >
+              <div v-if="scope.row.auditflowState=='0'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待我审批</span>
               </div>
@@ -54,37 +56,37 @@
             </template>
 
           </el-table-column>
-          <el-table-column prop="staffName2" label="当前审批人" width="150"/>
-          <el-table-column prop="updatedTime" label="最近处理" width="150"/>
+          <el-table-column label="当前审批人" prop="staffName2" width="150"/>
+          <el-table-column label="最近处理" prop="updatedTime" width="150"/>
 
           <el-table-column label="操作">
             <template #default="scope">
               <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
                   :icon="InfoFilled"
+                  cancel-button-text="取消"
+                  confirm-button-text="确定"
                   icon-color="red"
                   title="确定通过吗?"
                   @confirm="through1()"
               >
                 <template #reference>
-                  <el-button type="text">通过 </el-button>
+                  <el-button type="text">通过</el-button>
                 </template>
               </el-popconfirm>
               <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
                   :icon="InfoFilled"
+                  cancel-button-text="取消"
+                  confirm-button-text="确定"
                   icon-color="red"
                   title="确定驳回吗?"
                   @confirm="through2()"
               >
                 <template #reference>
-                  <el-button type="text">驳回 </el-button>
+                  <el-button type="text">驳回</el-button>
                 </template>
               </el-popconfirm>
 
-              <el-button type="text"  @click="drawer = true">详情 </el-button>
+              <el-button type="text" @click="selectById(scope.row)">详情</el-button>
 
             </template>
           </el-table-column>
@@ -96,25 +98,73 @@
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
-              :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo.total"
+              :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
+              :total="pageInfo.total"
+              background
+              layout="total, sizes, prev, pager, next, jumper"
               @size-change="selectAuditflow"
               @current-change="selectAuditflow"
-              background
           >
             <!--  @size-change="selectUsers" @current-change="selectUsers" -->
           </el-pagination>
         </div>
       </el-tab-pane>
       <!-- 点击详情，弹出抽屉-->
-      <el-drawer v-model="drawer" title="I am the title" :with-header="false">
+      <el-drawer v-model="drawer" :with-header="false" title="I am the title">
         <span>
-       sss
 
+          <el-form :model="auditflow0" label-width="">
+            <el-form-item label="员工名称 :">
+              <el-input v-model="auditflow0.staffName1" disabled></el-input>
+            </el-form-item>
+             <el-form-item label="审核人名称 :">
+              <el-input v-model="auditflow0.staffName2" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="转正类型 :">
+              <el-input v-model="auditflow0.workerType" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="申请转正时间 :">
+              <el-input v-model="auditflow0.workerDate" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="员工部门 :">
+              <el-input v-model="auditflow0.deptName" disabled></el-input>
+            </el-form-item>
+
+
+
+
+          </el-form>
+
+          <div v-for=" (a,index) in auditflow ">
+
+              <div v-if="a.auditflowdetaiState=='1'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待我审批</span>
+              </div>
+               <div v-if="a.auditflowdetaiState=='0'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>审批中</span>
+              </div>
+               <div v-if="a.auditflowdetaiState=='2'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>审批中</span>
+              </div>
+
+          </div>
+
+        <el-steps :space="200" process-status="error" :active="0" finish-status="success">
+          <el-step title="Done" ></el-step>
+          <el-step title="Done" ></el-step>
+          <el-step title="Step 3"></el-step>
+        </el-steps>
+
+          <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
+          <!--              -->
+          <!--            <el-input   disabled></el-input>-->
+          <!--          </el-form-item>-->
         </span>
       </el-drawer>
       <!-- 已办申请页面 -->
@@ -127,55 +177,55 @@
             style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
+        <el-button plain style="margin-bottom: 20px" type="success">搜索</el-button>
 
         <el-table
             ref="filterTable"
-            row-key="date"
-            :data="tableData1"
-            style="width: 100%"
-            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
+            :data="tableData"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            row-key="date"
+            style="width: 100%"
 
         >
           <el-table-column
-              prop="createdTime"
-              label="日期"
-              sortable
-              width="140"
-              column-key="date"
+              :filter-method="filterHandler"
               :filters="[
               { text: '2016-05-01', value: '2016-05-01' },
               { text: '2016-05-02', value: '2016-05-02' },
               { text: '2016-05-03', value: '2016-05-03' },
               { text: '2016-05-04', value: '2016-05-04' },
             ]"
-              :filter-method="filterHandler"
+              column-key="date"
+              label="日期"
+              prop="createdTime"
+              sortable
+              width="140"
           />
-          <el-table-column prop="auditflowdetailId" label="审批编号" width="100"/>
-          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
-          <el-table-column prop="staffName1" label="申请人" width="150"/>
+          <el-table-column label="审批编号" prop="auditflowId" width="100"/>
+          <el-table-column label="流程" prop="auditflowTitle" width="100"/>
+          <el-table-column label="申请人" prop="staffName1" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="auditflowdetaiState" label="状态" width="100">
-          <!-- 判断 prop的状态  -->
+          <el-table-column label="状态" prop="auditflowdetaiState" width="100">
+            <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowdetaiState=='0'" >
+              <div v-if="scope.row.auditflowdetaiState=='0'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待审</span>
               </div>
-              <div v-if="scope.row.auditflowdetaiState=='1'" >
+              <div v-if="scope.row.auditflowdetaiState=='1'">
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
 
-              <div v-if="scope.row.auditflowdetaiState=='2'" >
+              <div v-if="scope.row.auditflowdetaiState=='2'">
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
 
-              <div v-if="scope.row.auditflowdetaiState=='3'" >
+              <div v-if="scope.row.auditflowdetaiState=='3'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>撤销</span>
               </div>
@@ -183,28 +233,29 @@
             </template>
 
           </el-table-column>
-          <el-table-column prop="staffName2" label="历史审批人" width="150"/>
-          <el-table-column prop="updatedTime" label="最近处理" width="140"/>
+          <el-table-column label="历史审批人" prop="staffName2" width="150"/>
+          <el-table-column label="最近处理" prop="updatedTime" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text"  @click="drawer = true">详情</el-button>
+              <el-button type="text" @click="selectById(scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
+
         <!-- 分页插件 -->
         <br>
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
-              :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo.total"
+              :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
+              :total="pageInfo.total"
+              background
+              layout="total, sizes, prev, pager, next, jumper"
               @size-change="selectAuditflow"
               @current-change="selectAuditflow"
-              background
           >
             <!--  @size-change="selectUsers"
 						@current-change="selectUsers" -->
@@ -231,14 +282,16 @@ export default {
       tableData: [],
       // 已办转正审批列表
       tableData1: [],
-
+      byid: [],
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
       },
-    };
+      auditflow: [],
+      auditflow0: {},
+    }
   },
   methods: {
     // 重置日期过滤
@@ -259,14 +312,29 @@ export default {
     },
     selectAuditflow() {
       this.axios
-          .get("http://localhost:8010/provider/findSelectPageWorker/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
-          .then((response)=>{
+          .get("http://localhost:8010/provider/findSelectPageWorker/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize)
+          .then((response) => {
             console.log(response);
-            this.tableData1 = response.data.data.records;
+            this.tableData = response.data.data.records;
             this.pageInfo.total = response.data.data.total;
-
           })
-          .catch(function (error){
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    //
+    selectById(row) {
+      //打开抽屉
+      this.drawer = true
+      //更具id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectPageById/" + row.auditflowId)
+          .then((response) => {
+            console.log(response);
+            this.auditflow = response.data.data;
+            this.auditflow0 = this.auditflow[0]
+          })
+          .catch(function (error) {
             console.log(error);
           })
     },
@@ -278,7 +346,7 @@ export default {
     through2() {
       alert(1)
     }
-  },created() {
+  }, created() {
     this.selectAuditflow();
   },
 };
@@ -286,31 +354,35 @@ export default {
 
 <style scoped>
 @import url("../../css/Examine_2.css");
-.if_tg{
+
+.if_tg {
   width: 10px;
   height: 10px;
-  background: #67C23A ;
+  background: #67C23A;
   border-radius: 10px;
   display: inline-block;
 }
-.if_bh{
+
+.if_bh {
   width: 10px;
   height: 10px;
-  background: #F56C6C ;
+  background: #F56C6C;
   border-radius: 10px;
   display: inline-block;
 }
-.if_spz{
+
+.if_spz {
   width: 10px;
   height: 10px;
   background: #909399;
   border-radius: 10px;
   display: inline-block;
 }
-.if_cx{
+
+.if_cx {
   width: 10px;
   height: 10px;
-  background: #E6A23C ;
+  background: #E6A23C;
   border-radius: 10px;
   display: inline-block;
 }

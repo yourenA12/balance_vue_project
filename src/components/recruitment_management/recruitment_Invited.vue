@@ -175,7 +175,8 @@ export default {
             console.log(error);
           })
     }
-  }, created() {
+  },
+  created() {
   this.selectInvited_plan();
 }
 
