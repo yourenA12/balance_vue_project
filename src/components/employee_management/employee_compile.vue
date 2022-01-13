@@ -46,7 +46,7 @@
                @select="handleSelect">
 
              <router-link :to="{path:this.basicfile,query:{path: this.$route.query.path}}" style="text-decoration: none;">
-             <el-menu-item index="1">基本档案</el-menu-item>
+             <el-menu-item index="1" >基本档案</el-menu-item>
              </router-link>
 
              <router-link :to="{path:this.information,query:{path: this.$route.query.path}}" style="text-decoration: none;">
@@ -119,6 +119,9 @@ export default {
     forkImage() {
       this.src = '';
       this.isShow = false;
+    },
+    empMsg(staffId) {
+      this.$router.push({path:this.staffedit,query:{path: this.$route.query.path,staffId:staffId}})
     },
   }
 };

@@ -26,22 +26,26 @@
                         :cell-style="{textAlign: 'center'}"
                         style="width: 100%;font-size: 12px;color:black;font-weight: normal;">
                 <el-table-column label="荣誉与奖励">
-                  <el-table-column prop="name" label="荣誉与奖励姓名" width="150"/>
-                  <el-table-column prop="name" label="奖励日期" width="150"/>
-                  <el-table-column prop="name" label="颁发单位名称" width="150"/>
-                    <el-table-column   prop="name" label="备注" width="150" />
+                  <el-table-column prop="staffName" label="荣誉与奖励姓名" width="150"/>
+                  <el-table-column prop="createdTime" label="奖励日期" width="150"/>
+                  <el-table-column prop="gloryName" label="颁发单位名称" width="150"/>
+                    <el-table-column   prop="gloryRemark" label="备注" width="150" />
                 </el-table-column>
 
                 <el-table-column label="惩罚">
-                  <el-table-column prop="name" label="惩罚类型" width="150"/>
-                  <el-table-column prop="name" label=" 惩罚原因" width="150"/>
-                  <el-table-column prop="name" label="惩罚单位" width="150"/>
-                  <el-table-column prop="name" label=" 是否撤销" width="150"/>
-                  <el-table-column prop="name" label="备注" width="150"/>
+                  <el-table-column prop="punishType" label="惩罚类型" width="150"/>
+                  <el-table-column prop="punishCause" label=" 惩罚原因" width="150"/>
+                  <el-table-column prop="punishUnit" label="惩罚单位" width="150"/>
+                  <el-table-column prop="isRevocation" label=" 是否撤销" width="150"/>
+                  <el-table-column prop="punishRemark" label="备注" width="150"/>
                 </el-table-column>
 
 
-                <el-table-column prop="name" label="操作" width="100" fixed="right"/>
+                <el-table-column prop="name" label="操作" width="100" fixed="right">
+                  <router-link :to="{path:this.information,query:{path: this.$route.query.path}}">
+                  <el-button type="text" size="small">编辑</el-button>
+                  </router-link>
+                </el-table-column>
 
               </el-table>
             </div>
@@ -57,8 +61,8 @@
                   :total="pageInfo.total"
                   :pager-count="5"
                   background
-                  @size-change="selectUsers"
-                  @current-change="selectUsers"
+                  @size-change="selectGloryPunish"
+                  @current-change="selectGloryPunish"
               >
               </el-pagination>
             </div>
@@ -75,57 +79,8 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-
-      ],
+      information:'/employee/message/employee_roster/information',
+      tableData: [],
       seek: "",
       pageInfo: {
         // 分页参数
@@ -135,7 +90,24 @@ export default {
       },
 
     }
-  },
+  },methods:{
+    //多表查询
+    selectGloryPunish() {
+      this.axios
+          .get("http://localhost:8010/provider/GloryPunishVo/selectGloryPunishVo/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectGloryPunish()
+  }
 }
 </script>
 <style scoped>

@@ -30,68 +30,58 @@
             <ul style="list-style-type: none; ">
               <li>
                 <label>开始时间</label>
-                <p>{{obj.start_time}}</p>
+                <p>{{obj.workStareTime}}</p>
               </li>
               <li>
                 <label>结束时间</label>
-                <p>{{obj.end_time}}</p>
+                <p>{{obj.workEndTime}}</p>
               </li>
               <li>
                 <label>任职公司</label>
-                <p>{{obj.company}}</p>
+                <p>{{obj.companyName}}</p>
               </li>
               <li>
                 <label>职位</label>
-                <p>{{obj.position}}</p>
+                <p>{{obj.positionName}}</p>
               </li>
-<!--              <li>-->
-<!--                <label>离职原因</label>-->
-<!--                <p>{{obj.reasons}}</p>-->
-<!--              </li>-->
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
-          <el-button type="text" style="color: #085fc3;" @click="workEditor(index)">编辑</el-button>
-          <el-button type="text" style="color: red;" @click="workDelete(index)">删除</el-button>
+          <el-button type="text" style="color: #085fc3;" @click="workEditor(index)">编辑 </el-button>
+          <el-button type="text" style="color: red;" @click="deleteWorkId(obj)">删除 </el-button>
           </div>
           <br/>
         </div>
 
+      <!--添加工作经历-->
         <div class="information_from" v-show="workInput">
           <el-form style="width: 90%;margin: auto; " :rules="rules" ref="workForm" :model="workForm">
              <br/>
               <div style="display: inline-block;margin:20px 0px 0px 50px">
                 <el-form-item label="开始时间:" required >
                   <el-col :span="11" >
-                    <el-form-item prop="start_time" style="width:240px;">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="workForm.start_time" style="width: 100%;"></el-date-picker>
+                    <el-form-item prop="workStareTime" style="width:240px;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workStareTime"  style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
 
                 <el-form-item label="任职公司：" class="el-form-item" >
                   <el-col :span="11">
-                    <el-form-item prop="company" style="width:240px;">
-                      <el-input   v-model="workForm.company" style="width: 100%;"></el-input>
+                    <el-form-item prop="companyName" style="width:240px;">
+                      <el-input v-model="workForm.companyName"   style="width: 100%;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
 
-<!--                <el-form-item label="离职原因：" >-->
-<!--                  <el-col :span="11">-->
-<!--                    <el-form-item prop="reasons" style="width:240px;">-->
-<!--                      <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>-->
-<!--                    </el-form-item>-->
-<!--                  </el-col>-->
-<!--                </el-form-item>-->
               </div>
 
             <div style="display: inline-block;position: absolute;top:20px;right:150px">
               <br>
                 <el-form-item label="结束时间:" required >
                   <el-col :span="11">
-                    <el-form-item prop="end_time" style="width:240px;">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="workForm.end_time" style="width: 100%;"></el-date-picker>
+                    <el-form-item prop="workEndTime" style="width:240px;">
+                      <el-date-picker type="date" placeholder="选择日期" style="width: 100%;" v-model="workForm.workEndTime"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
@@ -100,8 +90,8 @@
                 <div style="float: right">
                 <el-form-item label="职位：" >
 
-                    <el-form-item prop="position" style="width:240px;">
-                      <el-input  v-model="workForm.position" style="width: 100%;"></el-input>
+                    <el-form-item prop="positionName" style="width:240px;">
+                      <el-input v-model="workForm.positionName" style="width: 100%;"></el-input>
                     </el-form-item>
 
                 </el-form-item>
@@ -111,7 +101,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="workCancel()">取消</el-button>
-                <el-button type="primary" @click="workSave()">保存</el-button>
+                <el-button type="primary" @click="insertWork()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -572,7 +562,7 @@
           <el-form-item label="开始时间:" required >
             <el-col :span="11" >
               <el-form-item prop="start_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.start_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workStareTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -580,18 +570,10 @@
           <el-form-item label="任职公司：" class="el-form-item" >
             <el-col :span="11">
               <el-form-item prop="company" style="width:240px;">
-                <el-input   v-model="workForm.company" style="width: 100%;"></el-input>
+                <el-input   v-model="workForm.companyName" style="width: 100%;"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item><br>
-
-          <el-form-item label="离职原因：" >
-            <el-col :span="11">
-              <el-form-item prop="reasons" style="width:240px;">
-                <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
         </div>
 
         <div style="display: inline-block;position: absolute;top:82px;right:50px">
@@ -599,7 +581,7 @@
           <el-form-item label="结束时间:" required >
             <el-col :span="11">
               <el-form-item prop="end_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.end_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workEndTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -609,7 +591,7 @@
             <el-form-item label="职位：" >
 
               <el-form-item prop="position" style="width:240px;">
-                <el-input  v-model="workForm.position" style="width: 100%;"></el-input>
+                <el-input  v-model="workForm.positionName" style="width: 100%;"></el-input>
               </el-form-item>
 
             </el-form-item>
@@ -618,8 +600,8 @@
 
         <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
           <div style="width:30%;height:50px;margin:auto;">
-            <el-button @click="workbecome=false">取消</el-button>
-            <el-button type="primary" @click="workSave()">保存</el-button>
+            <el-button @click="workbecome=false;selectWorkId()">取消</el-button>
+            <el-button type="primary" @click="updateWork()">保存</el-button>
           </div>
         </div>
       </el-form>
@@ -840,6 +822,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -859,27 +842,24 @@ export default {
       //教育经历
       educationalAll:[],
 
-
      //工作经历
       workForm: {
         //开始时间
-        start_time:'',
+        workStareTime:'',
         //任职公司
-        company:'',
-        //离职原因
-        reasons:'',
+        companyName:'',
         //职位
-        position:'',
+        positionName:'',
         //结束时间
-        end_time:'',
+        workEndTime:'',
 
       },
       rules: {
-        start_time: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        workStareTime: [
+          { type: 'date', required: true, message: '请选择日期', trigger: 'blur' }
         ],
-        end_time: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        workEndTime: [
+          { type: 'date', required: true, message: '请选择时间', trigger: 'blur' }
         ],
       },
 
@@ -994,8 +974,29 @@ export default {
       this.$refs[formName].resetFields();
     },
 
+
+    //点击个人信息 显示
+    childrenWork(){
+      //当workForm中有值时，显示出来
+      if(this.workAll.length>0){
+        //显示工作经历信息
+        this.workShow=true
+        //隐藏 添加工作经历框
+        this.addWork=false
+        //显示右上角添加按钮
+        this.workerButton=true
+      }else{
+        //显示工作经历信息
+        this.workShow=false
+        //隐藏 添加工作经历框
+        this.addWork=true
+        //显示右上角添加按钮
+        this.workerButton=false
+      }
+    },
     // 添加 工作经历
     addWorks(){
+
       this.workInput=true // 显示灰色 表单
       this.addWork=false // 隐藏 添加工作经历
     },
@@ -1019,21 +1020,6 @@ export default {
 
     // 工作经历表单保存按钮
     workSave(){
-      // 取表单数据
-      let form = {
-        //获取开始时间
-        start_time:this.workForm.start_time,
-        //获取任职公司
-        company:this.workForm.company,
-        //获取离职原因
-        reasons:this.workForm.reasons,
-        //获取职位
-        position:this.workForm.position,
-        //获取结束时间
-        end_time:this.workForm.end_time,
-      }
-      // 向数组里面添加 表单数据
-      this.workAll.push(form)
 
       this.workInput=false // 隐藏灰色 表单
       this.workShow=true // 显示所有工作经历信息
@@ -1041,54 +1027,53 @@ export default {
 
       // 清空表单数据  this.xxx=null or =""
       //清空开始时间
-      this.workForm.start_time="";
+      this.workForm.workStareTime="";
       //清空任职公司
-      this.workForm.company="";
-      //清空离职原因
-      this.workForm.reasons="";
+      this.workForm.companyName="";
       //清空职位
-      this.workForm.position="";
+      this.workForm.positionName="";
       //清空结束时间
-      this.workForm.end_time="";
+      this.workForm.workEndTime="";
     },
 
     // 右上角的添加按钮
     addButton(){
       this.workInput=true // 显示灰色 表单
+
+      //清空开始时间
+      this.workForm.workStareTime="";
+      //清空任职公司
+      this.workForm.companyName="";
+      //清空职位
+      this.workForm.positionName="";
+      //清空结束时间
+      this.workForm.workEndTime="";
     },
+
 
     // 工作经历编辑按钮
     workEditor(i){
-       this.workbecome=true,
-           // alert(123)
-
-      this.workForm.start_time=this.workAll[i].start_time
-      this.workForm.company=this.workAll[i].company
-      this.workForm.reasons=this.workAll[i].reasons
-      this.workForm.position=this.workAll[i].position
-      this.workForm.end_time=this.workAll[i].end_time
+      // 根据id取值 赋值到弹出框
+      this.workForm=this.workAll[i]
+      // 打开弹出框
+      this.workbecome=true
 
     },
 
     // 工作经历删除按钮
-     workDelete(i){
+     workDelete(){
       /*
        splice（i,n） : 按照下标删除数组里的元素 从i开始删除n个元素
        i: 下标
        n: 删除个数
        */
 
-      this.workAll.splice(i,1)
        // 当工作经历信息删除为空时(数组长度为0时)
        if(this.workAll.length==0){
          this.addWork=true // 添加工作经历按钮显示
          this.workerButton=false // 右上角添加按钮隐藏
        }
      },
-
-
-
-
 
 
     // 添加 荣誉与奖励
@@ -1395,11 +1380,104 @@ export default {
         this.addEducational=true // 添加工作经历按钮显示
         this.educationalButton=false // 右上角添加按钮隐藏
       }
-    }
+    },
+    //根据id查询员工信息
+    selectWorkId(){
+
+        this.axios
+            .get("http://localhost:8010/provider/workExperience/selectWorkExperienceId/" + this.$store.state.staffId_Msg)
+            .then((response) => {
+              console.log(response);
+              this.workAll = response.data.data;
+              this.childrenWork();
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+    },
+    // 修改工作经历
+    updateWork(){
+      this.axios({
+        url: 'http://localhost:8010/provider/workExperience/updateWorkExperienceId',
+        method: 'put',
+        data: this.workForm
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectWorkId()
+          //关闭弹出框
+          this.workbecome=false
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //根据id删除工作经历
+    deleteWorkId(index){
+      this.axios
+          .delete("http://localhost:8010/provider/workExperience/deleteWorkExperienceId/"+index.workExperienceId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectWorkId()
 
 
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
-  },
+    },
+    //添加工作经历
+    insertWork(){
+      this.axios({
+        url: 'http://localhost:8010/provider/workExperience/insertWorkExperience',
+        method: 'post',
+        data:{
+          staffId:this.$store.state.staffId_Msg,
+          workStareTime:this.workForm.workStareTime,
+          workEndTime:this.workForm.workEndTime,
+          companyName:this.workForm.companyName,
+          positionName:this.workForm.positionName
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectWorkId() // 修改完成后调用查询方法
+          this.workSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+  },created() {
+    this.selectWorkId()
+  }
+
 
 }
 </script>

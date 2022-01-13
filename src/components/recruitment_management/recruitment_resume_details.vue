@@ -16,7 +16,7 @@
             <div class="ant-col">
               <span style="font-size: 18px; font-weight: bold;">{{this.$route.query.name}}</span>
               &nbsp;&nbsp;
-              <span>ID:31089 </span>
+              <span>ID:{{empMsg.resumeId}}</span>
               &nbsp;&nbsp;
               <span><span>来源</span>：boss直聘</span>
               &nbsp;&nbsp;
@@ -72,14 +72,14 @@
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
                                         <span>性别</span>：
-                                        男
+                                        {{empMsg.resumeSex}}
                                       </div>
                                     </div>
                                     <!-- 邮箱 -->
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
                                         <span>邮箱</span>：
-                                        3210053361@qq.com
+                                        {{empMsg.resumeMailbox}}
                                       </div>
                                     </div>
                                   </div>
@@ -87,12 +87,14 @@
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
                                         <span>政治面貌</span>：
+                                        {{empMsg.resumePoliticalOutlook}}
                                       </div>
                                     </div>
                                     <!-- 婚姻状况 -->
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
                                         <span>婚姻状况</span>：
+                                        {{empMsg.resumeHy}}
                                       </div>
                                     </div>
                                   </div>
@@ -188,8 +190,8 @@
                                   <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
-                                        <span>期望薪资</span>：3000-4000
-                                        元
+                                        <span>期望薪资</span>：
+                                        {{empMsg.resumeQxingz}}
                                       </div>
                                     </div>
 
@@ -198,7 +200,8 @@
                                   <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
-                                        <span>到岗时间</span>：2020-10-11
+                                        <span>期望职位</span>：
+                                        {{empMsg.resumeQzhiw}}
                                       </div>
                                     </div>
 
@@ -207,7 +210,8 @@
                                   <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
                                     <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                       <div style="float: left;">
-                                        <span>自我评价</span>：优秀、非常优秀、相对牛逼
+                                        <span>自我评价</span>：
+                                        {{empMsg.resumeIntroduce}}
                                       </div>
                                     </div>
 
@@ -231,7 +235,7 @@
                                 <el-input v-model="affiches.pay"></el-input>
                               </el-form-item>
 
-                              <el-form-item style="font-weight: bold;size: 14px;margin-left: 53px;margin-top: -15px;"  label="到岗时间：">
+                              <el-form-item style="font-weight: bold;size: 14px;margin-left: 53px;margin-top: -15px;"  label="期望职位：">
                                 <div class="block">
                                   <el-date-picker v-model="affiches.value1" type="date" placeholder="Pick a day">
                                   </el-date-picker>
@@ -292,39 +296,41 @@
 
                                   <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                     <div style="float: left;">
-                                      <span>专业</span>：java工程师
+                                      <span>专业</span>：
+                                      {{empMsg.educationMajor}}
                                     </div>
                                   </div>
 
                                   <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                     <div style="float: left;">
-                                      <span>职位</span>：老板
-                                    </div>
-                                  </div>
-
-                                </div>
-
-                                <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
-
-
-                                  <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
-                                    <div style="float: left;">
-                                      <span>学校</span>：家里蹲大学
-                                    </div>
-                                  </div>
-
-                                  <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
-                                    <div style="float: left;">
-                                      <span>公司</span>：王鑫科技集团
+                                      <span>职位</span>：
+                                      {{empMsg.resumeQzhiw}}
                                     </div>
                                   </div>
 
                                 </div>
 
                                 <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
+
+
                                   <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
                                     <div style="float: left;">
-                                      <span>学历</span>：博士之上
+                                      <span>学校</span>：{{empMsg.resumeScoller}}
+                                    </div>
+                                  </div>
+
+                                  <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
+                                    <div style="float: left;">
+                                      <span>公司</span>：{{empMsg.resumeZjzw}}
+                                    </div>
+                                  </div>
+
+                                </div>
+
+                                <div style="margin-left: -8px; margin-right: -8px;" class="ant-row">
+                                  <div style="padding-left: 8px; padding-right: 8px;" class="ant-col ant-col-7 gutter-row">
+                                    <div style="float: left;">
+                                      <span>学历</span>：{{empMsg.resumeEducation}}
                                     </div>
                                   </div>
 
@@ -416,9 +422,9 @@
                                     <i class="iconfont">&#xe603;</i>
                                   </div>
                                   <div class="title">
-                                    <span>时间：2001-10-10~2010-11-12</span>
-                                    <span>任职公司：王鑫科技集团</span>
-                                    <span>所属行业：销售</span>
+                                    <span>时间：{{empMsg.workStareTime}}</span>
+                                    <span>任职公司：{{empMsg.companyName}}</span>
+                                    <span>所属行业：{{empMsg.educationMajor}}</span>
                                   </div>
                                   <div class="title">
                                     <span>职位：总管</span>
@@ -704,6 +710,7 @@ export default {
     })
 
     return {
+      empMsg:{},
       //到岗时间
       ...toRefs(state),
       activeName: 'one',
@@ -848,8 +855,23 @@ export default {
     },
     goback(){
       this.$router.go('-1');
+    },
+    selectdetails_plan(){
+      this.axios
+          .get("http://localhost:8010/provider/ResumeVo/SelectRexumeId/"+this.$route.query.resumeId)
+          .then((response) => {
+            console.log(response);
+            this.empMsg=response.data.data;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
     }
   },
+  created() {
+    this.selectdetails_plan();
+  }
+
 }
 
 

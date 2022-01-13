@@ -58,28 +58,49 @@
 -->
       <el-table :data="tableData" stripe style="width: 100%;" :header-cell-style="{background:'#eef1f6',color:'#606266'}" >
         <el-table-column fixed="left"  align="center" type="selection" width="80" />
-        <el-table-column fixed="left" prop="name" label="姓名" width="150">
+        <el-table-column fixed="left" prop="resumeName" label="姓名" width="150">
           <template #default="scope">
-            <router-link :to="{path:this.details,query:{path:this.$route.query.path,name:scope.row.name}}">{{scope.row.name}}</router-link>
+            <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="departm" label="投递部门" width="140"/>
-        <el-table-column prop="gender" label="性别" width="140"/>
-        <el-table-column prop="schoolli" label="学历" width="140"/>
-        <el-table-column prop="phone" label="手机号" width="140"/>
-        <el-table-column prop="age" label="年龄" width="140"/>
-        <el-table-column prop="email" label="邮箱" width="140"/>
-        <el-table-column prop="professional" label="专业" width="140"/>
-        <el-table-column prop="birth" label="出生日期" width="140"/>
-        <el-table-column prop="face" label="政治面貌" width="140"/>
-        <el-table-column prop="gradschool" label="毕业学校" width="140"/>
-        <el-table-column prop="invitation" label="是否邀约" width="140"/>
-        <el-table-column prop="state" label="状态" width="140"/>
+        <el-table-column fixed="left" prop="postName" label="投递职位" width="140"/>
+        <el-table-column prop="resumeSex" label="性别" width="140"/>
+        <el-table-column prop="resumeEducation" label="学历" width="140"/>
+        <el-table-column prop="resumePhone" label="手机号" width="140"/>
+        <el-table-column prop="resumeAge" label="年龄" width="140"/>
+        <el-table-column prop="resumeMailbox" label="邮箱" width="140"/>
+<!--        <el-table-column prop="educationMajor" label="专业" width="140"/>-->
+        <el-table-column prop="resumeBirthday" label="出生日期" width="140"/>
+        <el-table-column prop="resumePoliticalOutlook" label="政治面貌" width="140"/>
+        <el-table-column prop="resumeScoller" label="毕业学校" width="140"/>
+<!--        <el-table-column prop="invitation" label="是否邀约" width="140"/>-->
+        <el-table-column label="状态" width="140">
+          <template #default="scope">
+            <span v-if="scope.row.resumeZt==0">新简历</span>
+            <span v-if="scope.row.resumeZt==1">候选人</span>
+            <span v-if="scope.row.resumeZt==2">已邀约</span>
+            <span v-if="scope.row.resumeZt==3">已淘汰</span>
+            <span v-if="scope.row.resumeZt==4">面试中</span>
+            <span v-if="scope.row.resumeZt==5">面试通过</span>
+            <span v-if="scope.row.resumeZt==6">复试中</span>
+            <span v-if="scope.row.resumeZt==7">待接受</span>
+            <span v-if="scope.row.resumeZt==8">已接受</span>
+            <span v-if="scope.row.resumeZt==9">已入职</span>
+            <span v-if="scope.row.resumeZt==10">已拒绝</span>
+            <span v-if="scope.row.resumeZt==11">放弃入职</span>
+          </template>
+        </el-table-column>
+
 
         <el-table-column fixed="right" label="操作" width="130">
           <template #default>
             <div style="width: 10px">
-              <el-button type="text" size="small" @click="" style="color: #f67183;">删除</el-button>
+<!--              <el-button type="text" size="small" @click="" style="color: #f67183;">删除</el-button>-->
+              <el-popconfirm title="是否确认删除?" @confirm="confirmsc()" @cancel="cancelsc()">
+                <template #reference>
+                  <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
+                </template>
+              </el-popconfirm>
 
             </div>
 
@@ -98,8 +119,8 @@
             :total="pageInfo.total"
             :pager-count="5"
             background
-            @size-change="sele"
-            @current-change="sele"
+            @size-change="selecteliminate_plan"
+            @current-change="selecteliminate_plan"
         >
         </el-pagination>
       </div>
@@ -116,6 +137,7 @@
 import {
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -135,10 +157,7 @@ export default {
       input: "",
       //表格数据
       tableData: [
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'},
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'},
-        {name:'tom',departm:'tom',gender:'tom',schoolli:'tom',phone:'tom',age:'tom',email:'tom',professional:'tom',birth:'tom',face:'tom',gradschool:'tom   ',invitation:'tom',state:'tom'}
-      ],
+        ],
       //筛选框数据
       formInline:{
         vlues1:'',
@@ -153,7 +172,50 @@ export default {
     }
   },
   methods:{
-
+    //消息提示框确认按钮事件
+    confirmgb(){
+      ElMessage({
+        message: '操作成功',
+        type: 'success',
+      })
+    },
+    //消息提示框取消按钮事件
+    cancelgb(){
+      ElMessage({
+        message: '已取消该操作',
+        type: 'warning',
+      })
+    },
+    //消息提示框确认按钮事件
+    confirmsc(){
+      ElMessage({
+        message: '操作成功',
+        type: 'success',
+      })
+    },
+    //消息提示框取消按钮事件
+    cancelsc(){
+      ElMessage({
+        message: '已取消该操作',
+        type: 'warning',
+      })
+    },
+    selecteliminate_plan(){
+      this.axios
+          .get("http://localhost:8010/provider/ResumeVo/ResumePage_D/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            // console.log(response.data.data.records);
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    }
+  },
+  created() {
+    this.selecteliminate_plan();
   }
 
 }

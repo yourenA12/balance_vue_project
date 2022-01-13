@@ -2,6 +2,8 @@ import {createStore} from 'vuex'
 
 const store = createStore({
     state: {
+        // 员工花名册点击编辑按钮，将当前员工id传入
+        staffId_Msg:"",
         //员工信息
         staffMessage: {},
         //动态菜单

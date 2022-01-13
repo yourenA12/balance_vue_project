@@ -10,17 +10,17 @@
           <el-form style="margin-bottom: -18px;" :inline="true" v-model="search">
             <!-- 公告标题搜索 -->
             <el-form-item class="form-gg" label="公告标题">
-              <el-input size="small" placeholder="请输入公告标题" v-model="search.notice"></el-input>
+              <el-input size="small" placeholder="请输入公告标题" v-model="search.noticeTitle"></el-input>
             </el-form-item>
             <!-- 操作人员搜索 -->
-            <el-form-item class="form-ry" label="操作人员">
-              <el-input size="small" placeholder="请输入操作人员" v-model="search.operation_staff"></el-input>
+            <el-form-item class="form-ry" label="发布人">
+              <el-input size="small" placeholder="请输入发布人" v-model="search.noticePeople"></el-input>
             </el-form-item>
             <!-- 公告类型搜索 -->
             <el-form-item class="form-lx" label="类型">
-              <el-select size="small" v-model="search.type" placeholder="公告类型">
+              <el-select size="small" v-model="search.noticeType" placeholder="公告类型">
                 <el-option
-                    v-for="item in type"
+                    v-for="item in noticeTypes"
                     :key="item.value1"
                     :label="item.label"
                     :value="item.value1"
@@ -30,7 +30,7 @@
             </el-form-item>
 
             <el-form-item class="search" style="margin-left: 10px;">
-              <el-button size="mini" class="search-ss" type="primary">
+              <el-button @click="selectAllPage()" size="mini" class="search-ss" type="primary">
                 <i class="iconfont">
                   &#xe61b
                 </i>
@@ -55,12 +55,20 @@
 <!--                       @click="outerVisible = true,judge='新增'">-->
 <!--              + 新增-->
 <!--            </el-button>-->
-            <el-button size="small" type="primary" plain @click="outerVisible = true" style="margin-left: 5px">
+            <el-button size="small" type="primary" plain @click="outerVisible = true,affiche={}" style="margin-left: 5px">
               <el-icon><i-plus/></el-icon>
 
-              新增
+                新增
             </el-button>
 
+            <!--            <el-button size="mini" class="button-delete" @click="remove" v-bind:disabled="disableds">-->
+            <!--              <i class="iconfont">&#xe61c</i>-->
+            <!--              删除-->
+            <!--            </el-button>-->
+            <el-button size="small" type="danger" v-bind:disabled="disableds" plain @click="remove" style="margin-left: 10px;">
+              <el-icon><i-delete /></el-icon>
+              删除
+            </el-button>
 
             <!-- 弹出操作窗口 -->
             <el-dialog width="670px"  v-model="outerVisible" destroy-on-close="false" >
@@ -70,35 +78,47 @@
                 <!-- 公告标题 -->
                 <h2 class="headlines" >公告标题</h2>
                 <el-form-item class="announcement-title">
-                  <el-input size="small" placeholder="请输入公告标题" v-model="affiche.title"></el-input>
+                  <el-input size="small" placeholder="请输入公告标题" v-model="affiche.noticeTitle"></el-input>
                 </el-form-item>
                 <!-- 公告类型-->
                 <h2 class="types" >公告类型</h2>
-                <el-form-item  class="announcement-type">
-                  <el-select  size="small"  v-model="affiche.type" placeholder="公告类型">
+                <el-form-item class="announcement-type">
+                  <el-select size="small" v-model="affiche.noticeType" placeholder="公告类型">
                     <el-option
-
-                        v-for="item in type"
+                        v-for="item in noticeTypes"
                         :key="item.value1"
                         :label="item.label"
                         :value="item.value1"
                     ></el-option>
-
                   </el-select>
                 </el-form-item>
                 <!-- 公告状态 -->
                 <h2 class="state">状态</h2>
                 <el-form-item>
                   <div class="announcement-zt">
-                    <el-radio v-model="affiche.city" label="正常">正常</el-radio>
-                    <el-radio v-model="affiche.city" label="关闭" style="margin-left: 16px">关闭</el-radio>
+                    <el-radio v-model="affiche.noticeState" :label="0">正常</el-radio>
+                    <el-radio v-model="affiche.noticeState" :label="1" style="margin-left: 16px">关闭</el-radio>
                   </div>
                 </el-form-item>
+                <!-- 选择部门 -->
+                <h2 class="types">发布部门</h2>
+                <el-form-item class="announcement-type">
+                  <el-select  size="small" multiple v-model="affiche.deptIds" placeholder="公告类型">
+                    <el-option
+
+                        v-for="item in deptIds"
+                        :key="item.deptId"
+                        :label="item.deptName"
+                        :value="item.deptId"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+
                 <!-- 公告内容 -->
                 <span class="neirong" >内容</span>
                 <el-form-item>
                   <el-input
-                      v-model="affiche.content"
+                      v-model="affiche.noticeMatter"
                       style="width: 514px;
                       font-weight: bold;
                       size: 14px;
@@ -123,14 +143,6 @@
             </el-dialog>
 
 
-<!--            <el-button size="mini" class="button-delete" @click="remove" v-bind:disabled="disableds">-->
-<!--              <i class="iconfont">&#xe61c</i>-->
-<!--              删除-->
-<!--            </el-button>-->
-            <el-button size="small" type="danger" plain v-bind:disabled="disableds" @click="remove" style="margin-left: 10px;">
-              <el-icon><i-delete /></el-icon>
-              删除
-            </el-button>
           </div>
         </div>
 
@@ -147,27 +159,36 @@
                    >
             <!-- 全选操作按钮 -->
             <el-table-column type="selection" width="90" />
-            <el-table-column prop="date" label="序号" width="150" />
-            <el-table-column prop="title" label="公告标题" width="170" />
-            <el-table-column prop="type" label="公告类型" width="170" />
-            <el-table-column prop="city" label="公告状态" width="160" />
-            <el-table-column prop="address" label="发布人" width="160" />
-            <el-table-column prop="zip" label="发布时间" width="170" />
+
+            <el-table-column  :index="indexMethod" type="index" label="序号" width="150" />
+            <el-table-column prop="noticeTitle" label="公告标题" width="170" />
+            <el-table-column prop="noticeType" label="公告类型" width="170" >
+              <template #default="scope">
+                {{ scope.row.noticeType==1?'公告':'通知' }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="noticeState" label="公告状态" width="160" >
+              <template #default="scope">
+                {{ scope.row.noticeState==0?'启用':'关闭' }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="noticePeople" label="发布人" width="160" />
+            <el-table-column prop="updatedTime" label="发布时间" width="170" />
             <el-table-column align="center" label="操作" width="200">
               <template #default="scope">
 <!--                <el-button size="mini" style="color: #A3D3FF; width: 75px;"  @click="outerVisible = true,judge='修改',aaa(scope.row)">-->
 <!--                  <i class="iconfont">&#xe606</i>-->
 <!--                  修改-->
 <!--                </el-button>-->
-                <el-button @click="become=true" type="text" size="small">修改</el-button>
+                <el-button @click="updateRow(scope.row)" type="text" size="small">修改 </el-button>
 <!--                <el-button @click="open" size="mini" style="color: #A3D3FF;width: 75px;">-->
 <!--                  <i class="iconfont">&#xe61c</i>-->
 <!--                  删除-->
 <!--                </el-button>-->
-                <el-popconfirm @confirm="deleteRow(scope.$index, tableData)"
-                               title="确认要删除此方案吗?">
+                <el-popconfirm @confirm="deleteNotice(scope.row.noticeId,'one')"
+                               title="确认要删除此公告吗?">
                   <template #reference>
-                    <el-button @click="become=true" type="text" size="small" style="color: orange">删除 </el-button>
+                    <el-button type="text" size="small" style="color: orange">删除 </el-button>
                   </template>
                 </el-popconfirm>
 <!--                <el-button @click="become=true" type="text" size="small">删除</el-button>-->
@@ -180,7 +201,7 @@
         <div class="demo-pagination-block">
           <!-- <span class="demonstration">All combined</span> -->
           <el-pagination
-              v-model:currentPage="pageInfo.currenPage"
+              v-model:currentPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
@@ -188,12 +209,12 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="sele"
-              @current-change="sele"
+              @size-change="selectAllPage"
+              @current-change="selectAllPage"
           >
           </el-pagination>
-        </div>
 
+        </div>
 
       </div>
     </div>
@@ -208,53 +229,24 @@ import { ElNotification } from 'element-plus'
 
 export default {
   data() {
-
-    //删除提示框
-    const open = () => {
-      ElMessageBox.confirm(
-          '是否确定删除！！！',
-          '友情提示',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: '友情提示',
-          }
-      )
-          .then(() => {
-            ElMessage({
-              type: 'success',
-              message: '删除成功！！',
-            })
-          })
-          .catch(() => {
-            ElMessage({
-              message: '感谢你的参与',
-              type: 'warning',
-            })
-          })
-    }
-
     //批量删除提示框
     const remove = () => {
       ElMessageBox.confirm(
           '是否确定删除！！！',
-          '友情提示',
           {
             confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: '友情提示',
+            cancelButtonText: '取消'
           }
       )
           .then(() => {
-            ElMessage({
-              type: 'success',
-              message: '删除成功！！',
-            })
+
+            // 批量删除方法
+            this.deleteNotice(this.deleteNoticeIds,'all')
+
           })
           .catch(() => {
             ElMessage({
-              message: '感谢你的参与',
-              type: 'warning',
+              message: '取消',
             })
           })
     }
@@ -263,63 +255,50 @@ export default {
     return {
       //表格批量删除
       remove,
+      // 删除 公告ids
+      deleteNoticeIds:[],
 
-      //弹出框删除
-      open,
       //搜索重置form
       search:{
-        //类型
-        type:'',
-        //公告标题
-        notice:'',
-        //操作人员
-        operation_staff:''
+        noticeTitle: '', // 标题
+        noticePeople:'', //发布人
+        noticeType: '', // 类型
       },
 
       // 分页
       pageInfo: {
-        currenPage: 1,
-        /* 当前的页 */
-        pagesize: 3,
-        total: 0,
+        // 分页参数
+        currentPage: 1, //当前页
+        pagesize: 3, // 页大小
+        total: 0, // 总页数
       },
 
+      // 表格数据
+      tableData: [],
 
-      tableData: [{
-        date: "1",
-        title: "2",
-        type: "3",
-        city: "关闭",
-        address: "5",
-        zip: "6",
-        content:"jkfhujehbfguoeiwqhbfoewhb"
-      },
-        {
-          date: "2",
-          title: "2",
-          type: "2",
-          city: "正常",
-          address: "5",
-          zip: "6",
-          content:"jkfh是的发送到iwqhbfoewhb"
-        }],
+      // 弹出框数据
       affiche:{
-        title: '',
-        type: '',
-        city: '',
-        content:'',
+        noticeTitle: '', // 标题
+        noticeType: '', // 类型
+        noticeState: '', // 状态
+        deptIds:[], // 部门s
+        noticeMatter:'',// 内容
       },
 
-      type:([
+      // 公告发布部门下拉框数据
+      deptIds:[],
+
+      // 公告类型下拉框数据
+      noticeTypes:[
         {
-          value1: '通知',
+          value1: 0,
           label: '通知',
         },
         {
-          value1: '公告',
+          value1: 1,
           label: '公告',
         }
-      ]),
+      ],
       //显示添加还是有修改的状态
       outerVisible: ref(false),
 
@@ -328,150 +307,196 @@ export default {
 
       //按钮是否被禁用
       disableds:true,
-      //接收表格数据
-      table:[],
+
+      // 多选时 数据
+      tableVal:[],
     }
   },
   methods:{
-    //判断删除按钮是否可用
-    // 删除行
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
-      ElMessage({
-        message: '删除成功',
-        type: 'success',
-      })
+
+    /*序号*/
+    indexMethod(index) {
+      let curpage = this.pageInfo.currentPage; //单前页码，具体看组件取值
+      let limitpage = this.pageInfo.pagesize; //每页条数，具体是组件取值
+      // return index + 1 + (curpage - 1) * limitpage;
+
+      return this.pageInfo.total - (index + (curpage - 1) * limitpage);
     },
 
-    // deletepl(val){
-    //   this.table=val
-    //   if(this.table != ''){
-    //     this.disableds=false
-    //   }else {
-    //     this.disableds=true
-    //   }
-    // },
-    //点击修改获取表单里的值
-    aaa(row){
-       this.affiche = row;
-    },
-    //新增对话框表单验证
-    new(){
-      if (this.affiche.title.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '公告标题不能为空！！',
-          type: 'error',
-        })
-      }else if(this.affiche.type.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '请选择公告类型！！',
-          type: 'error',
-        })
-      }else if(this.affiche.city.length ===0){
-        ElNotification({
-          title: '错误消息',
-          message: '请选择公告状态！！',
-          type: 'error',
-        })
-      }else if(this.affiche.content.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '请填写公告内容，不能为空！！',
-          type: 'error',
-        })
-      }else{
-        ElMessage({
-          type: 'success',
-          message: '添加成功！！',
+    // 查询所有公告
+    selectAllPage() {
 
-        })
-        this.affiche={
-          title:"",
-          type:'',
-          //单选框按钮
-          radio1:'',
-          /*内容*/
-          content:'',
-        }
-        this.outerVisible=false
+      this.axios
+          .get("http://localhost:8010/provider/notice/selectAllPage",
+            {
+              params: {
+                currentPage:this.pageInfo.currentPage,
+                pagesize:this.pageInfo.pagesize,
+                noticeTitle:this.search.noticeTitle,
+                noticePeople:this.search.noticePeople,
+                noticeType:this.search.noticeType
+              }
+            })
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 查询所有部门
+    selectAllDept() {
+      this.axios
+          .get("http://localhost:8010/provider/notice/selectAllDept")
+          .then((response) => {
+            console.log(response);
+            this.deptIds=response.data.data
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按公告id查询所有部门
+    selectAllDeptByNoticeId(noticeId) {
+      this.axios
+          .get("http://localhost:8010/provider/notice/selectAllDeptByNoticeId/"+ noticeId)
+          .then((response) => {
+            console.log(response);
+            for (let i=0;i<response.data.data.length;i++){
+              this.affiche.deptIds.push(response.data.data[i].deptId)
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 向后台传输多个id 进行删除
+    deleteNotice(noticeIds,type) {
+
+      if(type=='one'){
+        this.deleteNoticeIds=[]
+        // 添加
+        this.deleteNoticeIds.push(noticeIds)
+      }
+
+      this.axios
+          .delete("http://localhost:8010/provider/notice/deleteNotices/" +  this.deleteNoticeIds)
+          .then((response) => {
+            console.log(response);
+              if(response.data.data>0){
+                ElMessage({
+                  type: 'success',
+                  message: '删除成功！！',
+                })
+                // 调用删除
+                this.selectAllPage()
+              }else{
+                ElMessage('删除失败！！')
+              }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 点击修改按钮先传值
+    updateRow(row){
+      // 打开弹出框
+      this.outerVisible=true
+      // 状态改为修改
+      this.judge='修改'
+      // 一行的数据
+      this.affiche=row
+      // 清空部门
+      this.affiche.deptIds=[],
+      // 按公告id查询部门
+      this.selectAllDeptByNoticeId(row.noticeId)
+
+    },
+
+    // 修改单条部门数据
+    updateNotice() {
+      this.axios
+          .put("http://localhost:8010/provider/notice/updateOneNotice" ,this.affiche)
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '修改成功！！',
+              })
+              // 关闭弹出框
+              this.outerVisible=false
+              // 调用查询
+              this.selectAllPage()
+            }else{
+              ElMessage('修改失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+
+    // 多选删除按钮是否被禁用
+    deletepl(val){
+      // 选中的值
+      this.tableVal=val
+      // 清空选中 id
+      this.deleteNoticeIds=[]
+
+      // 循环获取选中行的id
+      for(let i=0;i<val.length;i++){
+        this.deleteNoticeIds.push( val[i].noticeId )
+      }
+
+      // 如果没有选中 将删除按钮禁用
+      if(this.tableVal != ''){
+        this.disableds=false
+      }else {
+        this.disableds=true
       }
     },
-    //修改对话框表单验证
-    amend(){
-      if (this.affiche.title.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '公告标题不能为空！！',
-          type: 'error',
-        })
-      }else if(this.affiche.type.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '请选择公告类型！！',
-          type: 'error',
-        })
-      }else if(this.affiche.city.length ===0){
-        ElNotification({
-          title: '错误消息',
-          message: '请选择公告状态！！',
-          type: 'error',
-        })
-      }else if(this.affiche.content.length === 0){
-        ElNotification({
-          title: '错误消息',
-          message: '请填写公告内容，不能为空！！',
-          type: 'error',
-        })
-      }else{
-        ElMessage({
-          type: 'success',
-          message: '修改成功！！',
 
-        })
-        this.affiche={
-          title:"",
-          type:'',
-          //单选框按钮
-          radio1:'',
-          /*内容*/
-          content:'',
-        }
-        this.outerVisible=false
-      }
-    },
+
     //新增或修改方法判断方法
     judges(){
       if(this.judge==="新增"){
         this.new();
       }else{
-        this.amend()
+        this.updateNotice()
       }
     },
     //取消按钮方法
     cancel(){
-      this.affiche={
-        title:"",
-        type:'',
-        //单选框按钮
-        radio1:'',
-        /*内容*/
-        content:'',
-      }
+      this.affiche={}
       this.outerVisible = false
+      this.selectAllPage()
     },
     //重置
     reset(){
+      //搜索重置form
       this.search={
-        //类型
-        type:'',
-        //公告标题
-        notice:'',
-        //操作人员
-        operation_staff:''
+        noticeTitle: '', // 标题
+        noticePeople:'', //发布人
+        noticeType: '', // 类型
       }
+      // 调用查询
+      this.selectAllPage()
     }
+  },
+  created() {
+    // 分页
+    this.selectAllPage()
+    // 查询所有部门
+    this.selectAllDept()
   }
 }
 </script>

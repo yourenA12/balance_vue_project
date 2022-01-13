@@ -23,50 +23,51 @@
 
         >
           <el-table-column
-              prop="date"
+              prop="createdTime"
               label="日期"
               sortable
               width="140"
               column-key="date"
               :filters="[
-              { text: '2016-05-01', value: '2016-05-01' },
+              { text: '2021-12-29', value: '2016-05-01' },
               { text: '2016-05-02', value: '2016-05-02' },
               { text: '2016-05-03', value: '2016-05-03' },
               { text: '2016-05-04', value: '2016-05-04' },
             ]"
               :filter-method="filterHandler"
           />
-          <el-table-column prop="name" label="审批编号" width="100"/>
-          <el-table-column prop="name" label="流程" width="100"/>
-          <el-table-column prop="name" label="申请人" width="100"/>
-          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+          <el-table-column prop="auditflowdetailId" label="审批编号" width="100"/>
+          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
+
+          <el-table-column prop="staffName2" label="申请人" width="100"/>
+          <el-table-column prop="auditflowdetaiState" label="状态" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+              <div v-if="scope.row.auditflowdetaiState=='2'" >
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+              <div v-if="scope.row.auditflowdetaiState=='3'" >
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
+              <div v-if="scope.row.auditflowdetaiState=='0'" >
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待审</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
+              <div v-if="scope.row.auditflowdetaiState=='1'" >
                 <div class="if_cx"></div>
                 &nbsp;&nbsp;<span>撤销</span>
               </div>
             </template>
 
           </el-table-column>
-          <el-table-column prop="name" label="当前审批人" width="100"/>
-          <el-table-column prop="name" label="最近处理" width="100"/>
+          <el-table-column prop="staffName1" label="当前审批人" width="100"/>
+          <el-table-column prop="updatedTime" label="最近处理" width="100"/>
           <el-table-column label="操作">
             <template #default="scope">
               <el-popconfirm
@@ -78,7 +79,10 @@
                   @confirm="through1()"
               >
                 <template #reference>
-                  <el-button type="text" >撤销 </el-button>
+
+
+                  <el-button  type="text" disabled  >撤销 </el-button>
+
                 </template>
               </el-popconfirm>
               <el-button type="text"  @click="drawer = true">详情 </el-button>
@@ -98,9 +102,12 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
+              @size-change="selectAuditflow"
+              @current-change="selectAuditflow"
           >
           </el-pagination>
         </div>
+
       </el-tab-pane>
     </el-tabs>
     <!--   弹出抽屉 -->
@@ -122,36 +129,7 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "关闵绿",
-          address: "yes	. 189, Grove St, Los Angeles",
-          tag: "Home",
-          AUDITFLOW_STATE:"通过",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-          tag: "Office",
-          AUDITFLOW_STATE:"通过",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-          tag: "Home",
-          AUDITFLOW_STATE:"驳回",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-          tag: "Office",
-          AUDITFLOW_STATE:"审批中",
-        },
-      ],
+      tableData: [],
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -179,11 +157,29 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
+    // 查询待审批加班数据
+     selectAuditflow() {
+      this.axios
+       .get("http://localhost:8010/provider/findSelectPage/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+       .then((response)=>{
+          console.log(response);
+          this.tableData = response.data.data.records;
+          this.pageInfo.total = response.data.data.total;
+       })
+       .catch(function (error){
+         console.log(error);
+       })
+    },
+
     // 点击撤销确认按钮触发
     through1() {
       alert(1)
     },
   },
+  created() {
+    this.selectAuditflow();
+  },
+
 };
 </script>
 

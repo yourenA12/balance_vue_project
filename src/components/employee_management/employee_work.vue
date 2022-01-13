@@ -13,19 +13,22 @@
 </div>
   <div style="width:100px;height:30px;margin-top:40px;"></div>
 <div>
+
+
   <el-table :data="tableData"  style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}">
-    <el-table-column prop="date" label="姓名" width="210" />
-    <el-table-column prop="name" label="开始时间" width="210" />
-    <el-table-column prop="name" label="结束时间" width="210" />
-    <el-table-column prop="name" label="任职公司" width="210" />
-    <el-table-column prop="name" label="职位" width="210" />
+    <el-table-column prop="staffName" label="姓名" width="210" />
+    <el-table-column prop="workStareTime" label="开始时间" width="210" />
+    <el-table-column prop="createdTime" label="结束时间" width="210" />
+    <el-table-column prop="companyName" label="任职公司" width="210" />
+    <el-table-column prop="positionName" label="职位" width="210" />
+
 <!--    <el-table-column prop="name" label="离职原因" width="180" />-->
     <el-table-column fixed="right" label="操作">
-    <template #default>
+    <template #default="scope">
       <router-link :to="{path:this.information,query:{path: this.$route.query.path}}">
-			<el-button type="text" size="small">编辑 </el-button>
+			<el-button type="text" size="small" @click="empMsg(scope.row.staffId)">编辑 </el-button>
       </router-link>
 	</template>
     </el-table-column>
@@ -37,14 +40,14 @@
     <el-pagination
         v-model:currentPage="pageInfo.currentPage"
         :page-sizes="[3, 5, 10, 50]"
-        v-model:page-size="pageInfo.pagesize"
+        :page-size="pageInfo.pagesize"
         :default-page-size="pageInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageInfo.total"
         :pager-count="5"
         background
-        @size-change="selectUsers"
-        @current-change="selectUsers"
+        @size-change="selectWork"
+        @current-change="selectWork"
     >
     </el-pagination>
   </div>
@@ -56,28 +59,7 @@ export default {
   data() {
     return {
       information:'/employee/message/employee_roster/information',
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-      ],
+      tableData: [],
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -85,8 +67,38 @@ export default {
         total: 0, // 总页数
       },
       input3:"",
+
     }
   },
+  methods:{
+
+    //多表查询
+    selectWork() {
+
+      this.axios
+          .get("http://localhost:8010/provider/workExperience/selectWorkExperience/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //根据id查询员工信息
+    empMsg(staffId) {
+      // 将当前行的员工id 存入 store里面，使得在其他页面也能取到
+      this.$store.state.staffId_Msg = staffId;
+      // 跳转页面
+      this.$router.push({path: this.staffedit, query: {path: this.$route.query.path}})
+    }
+    },
+  created() {
+    this.selectWork()
+  }
+
 }
 
 </script>
