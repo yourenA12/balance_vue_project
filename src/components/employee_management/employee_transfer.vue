@@ -142,12 +142,12 @@
             <el-table-column prop="postName" label="原职位" width="180"/>
             <el-table-column prop="postName2" label="变动后职位" width="180"/>
             <el-table-column prop="takeEffectDate" label="生效时间" width="180" />
-            <el-table-column fixed="right" label="操作" width="120">
-              <template #default="scope">
-                <el-button type="text" size="small" >撤销 </el-button>
-                <el-button type="text" size="small" @click="TransferXX(scope.row)">编辑 </el-button>
-              </template>
-            </el-table-column>
+<!--            <el-table-column fixed="right" label="操作" width="120">-->
+<!--              <template #default="scope">-->
+<!--                <el-button type="text" size="small" >撤销 </el-button>-->
+<!--                <el-button type="text" size="small" @click="TransferXX(scope.row)">编辑 </el-button>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
           </el-table>
         </div>
       </div>
