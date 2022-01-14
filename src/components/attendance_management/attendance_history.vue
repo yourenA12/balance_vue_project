@@ -56,7 +56,7 @@
     </div>
     <!-- 表格-->
     <div class="bottom">
-      <el-table :data="tableData" stripe border style="width: 100%" height="310"
+      <el-table :data="tableData" stripe border style="width: 100%"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
         <el-table-column prop="A" fixed label="名称"/>
@@ -163,7 +163,7 @@ export default {
 }
 
 .demo-pagination-block {
-  margin-left: 800px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 5px;
 }
