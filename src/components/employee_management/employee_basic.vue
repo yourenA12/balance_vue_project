@@ -648,7 +648,7 @@ export default defineComponent({
 }
 .information_from{
   width:100%;
-  background: #e8edf2;
+  background: #f4f5f7;
   position: relative;
 
 }
