@@ -163,8 +163,8 @@
             :total="pageInfo.total"
             :pager-count="5"
             background
-            @size-change="selectTransfer"
-            @current-change="selectTransfer"
+            @size-change="selectTransfer()"
+            @current-change="selectTransfer()"
         >
         </el-pagination>
       </div>
@@ -284,16 +284,16 @@ export default defineComponent({
 
       },
       rules: {
-        tableData: [
-          {
-            required: true,
-            message: '请选择生效日期',
-            trigger: 'change',
-          },
-          {
-            validator: one, trigger: "change"
-          }
-        ],
+        // tableData: [
+        //   {
+        //     required: true,
+        //     message: '请选择生效日期',
+        //     trigger: 'change',
+        //   },
+        //   {
+        //     validator: one, trigger: "change"
+        //   }
+        // ],
         type:[
           {
             required:true,
@@ -423,6 +423,7 @@ export default defineComponent({
             type: 'success',
           })
           this.changesadd=false // 添加完成关闭input框
+          this.selectTransfer();
         } else {
           ElMessage.error('添加失败')
         }
@@ -460,10 +461,8 @@ export default defineComponent({
     //         transferdept: '',
     //         transferpost: ''
     //   }
-    // },//多表查询
+    // },//多表查询员工信息
     selectStaffXX() {
-
-
       this.axios
           .get("http://localhost:8010/provider/staff/selectStaffXX")
           .then((response) => {
