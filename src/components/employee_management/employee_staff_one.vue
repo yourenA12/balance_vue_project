@@ -15,13 +15,14 @@
             <router-view></router-view>
 
           </el-tab-pane>
-          <el-tab-pane label="工作经历">
-            <template #label>
-              <router-link :to="{path:this.business,query:{path: this.$route.query.path}}" style="text-decoration: none">&nbsp;&nbsp;&nbsp;工作经历&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</router-link>
-            </template>
 
-            <router-view></router-view>
-          </el-tab-pane>
+<!--          <el-tab-pane label="工作经历">-->
+<!--            <template #label>-->
+<!--              <router-link :to="{path:this.business,query:{path: this.$route.query.path}}" style="text-decoration: none">&nbsp;&nbsp;&nbsp;工作经历&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</router-link>-->
+<!--            </template>-->
+
+<!--            <router-view></router-view>-->
+<!--          </el-tab-pane>-->
 
           <el-tab-pane label="奖罚记录">
             <template #label>

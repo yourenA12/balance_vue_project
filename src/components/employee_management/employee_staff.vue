@@ -44,15 +44,37 @@
 
     <div style="margin-top:10px;">
       <!--搜索输入框-->
-      <el-row style="width:200px;float:right;">
-        <el-input v-model="input3" placeholder="搜索">
-          <template #suffix>
-            <el-icon class="el-input__icon">
-              <i-search/>
-            </el-icon>
-          </template>
-        </el-input>
+      <div style="display: inline-block">
+    <span style="font-weight:bold">员工名称</span>
+        <el-row style="width:200px;display: inline-block;margin-left: 15px">
+        <el-input v-model="staffNameSS" placeholder="请输入用户名称" />
       </el-row>
+      </div>
+
+    <div style="display: inline-block;margin-left:25px">
+    <span style="font-weight:bold">部门 </span>
+      <el-row style="width:200px;display: inline-block;margin-left:15px">
+        <el-input v-model="deptSS" placeholder="请输入部门名称" />
+      </el-row>
+    </div>
+
+    <div style="display: inline-block;margin-left:25px">
+    <span style="font-weight:bold"> 状态</span>
+      <el-form-item style="width:200px;display: inline-block;margin-left:15px">
+        <el-select  placeholder="请选择状态" v-model="stateSS">
+          <el-option label="正式" value="正式" style="margin-left: 15px"></el-option>
+          <el-option label="试用" value="试用" style="margin-left: 15px"></el-option>
+        </el-select>
+      </el-form-item>
+    </div>
+      <div style="display: inline-block;margin-left:25px">
+      <span style="font-weight:bold">入职日期</span>
+        <el-row style="width:200px;display: inline-block;margin-left:15px">
+        <el-input v-model="hiredateSS" placeholder="请输入日期" />
+      </el-row>
+      </div>
+      <el-button type="primary" style="width: 70px;margin-left:25px"><el-icon><i-search /></el-icon>搜索 </el-button>
+      <el-button style="width: 70px;" @click="replacement()"><el-icon><i-refresh /></el-icon>重置 </el-button>
     </div>
     <br/>
     <div style="margin-top:30px;">
@@ -287,8 +309,12 @@ export default {
         pagesize: 3, // 页大小
         total: 0, // 总页数
       },
-      input3: "",
-      value2: "",
+      //搜索绑定值
+      staffNameSS:'',
+      deptSS:'',
+      stateSS:'',
+      hiredateSS:'',
+
 
       dimissionVal:null,
       staffVal:null,
@@ -299,6 +325,13 @@ export default {
     }
   },
   methods: {
+    //搜索框重置
+    replacement(){
+      this.staffNameSS='',
+      this.deptSS='',
+      this.stateSS='',
+      this.hiredateSS=''
+    },
     //多表查询
     selectStaff() {
       this.axios
