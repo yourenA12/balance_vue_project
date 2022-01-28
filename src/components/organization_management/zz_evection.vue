@@ -19,84 +19,168 @@
     </el-select>
     <!--查询按钮-->
     <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
-      <el-icon><i-search />
+      <el-icon>
+        <i-search/>
 
       </el-icon>
     </el-button>
 
     <!--新增按钮-->
     <div class="head-surface">
-        <el-button size="small" type="primary" plain @click="drawer = true">
-          <el-icon><i-plus/></el-icon>
-          新增
-        </el-button>
+      <el-button size="small" type="primary" plain @click="drawer = true,this.fo={}">
+        <el-icon>
+          <i-plus/>
+        </el-icon>
+        新增
+      </el-button>
 
     </div>
+
     <!--抽屉-->
     <el-drawer v-model="drawer" :with-header="false">
       <el-form ref="ruleForm"
                :model="fo"
                :rules="rules">
-      
-      
         <el-form-item prop="name">
           <template #label><b style="font-size:18px;">部门名称：</b></template>
-          <el-input v-model="fo.name" placeholder="请输入部门名称：" style="width:200px; margin-left: 20px">
-            </el-input>
+          <el-input v-model="fo.deptName" placeholder="请输入部门名称：" style="width:200px; margin-left: 20px">
+          </el-input>
         </el-form-item>
-      <!--选择框-->
+        <!--选择框-->
         <el-form-item prop="values1">
           <template #label><b style="font-size:18px;">部门负责人：</b></template>
-      <el-select
-          v-model="fo.values1"
-          clearable
-          placeholder="请选择部门负责人">
-        <el-option
-            v-for="item in optionss"
-            :key="item.values"
-            :label="item.labels"
-            :value="item.values"
-        >
-        </el-option>
-      </el-select>
-        </el-form-item>
-      <!--单选框-->
-      <b style="font-size: 18px;margin-right: 30px">状态:</b>
-      <el-radio v-model="radio1" label="1">启用</el-radio>
-      <el-radio v-model="radio1" label="2">禁用</el-radio>
-      <div class="an">
-      <el-button type="primary" @click="submitForm('ruleForm')">
-        <el-icon>
-          <i-copy-document/>
-        </el-icon>
-        <span>提交</span>
-      </el-button>
+          <el-input  @click="become=true" v-model="fo.staffName" placeholder="选择员工" style="width:200px; margin-left: 20px"/>
+<!--          <el-select-->
+<!--              v-model="fo.values1"-->
+<!--              clearable-->
+<!--              placeholder="请选择部门负责人">-->
+<!--            <el-option-->
+<!--                v-for="item in optionss"-->
+<!--                :key="item.values"-->
+<!--                :label="item.labels"-->
+<!--                :value="item.values"-->
+<!--            >-->
+<!--            </el-option>-->
+<!--          </el-select>-->
 
-      <el-button @click="resetForm('ruleForm')"  >
-        <el-icon><i-close-bold /></el-icon>
-        <span>取消</span>
-      </el-button>
-      </div>
+        </el-form-item>
+
+        <!-- 弹出框 -->
+        <div>
+          <el-dialog
+              v-model="become"
+              title="选择员工"
+              width="50%"
+              :close-on-click-modal="false">
+
+            <!--搜索输入框-->
+            <el-row style="width: 200px;margin-left:528px;margin-top: -20px">
+              <el-input v-model="seek2" placeholder="搜索">
+                <template #suffix @click="become = true">
+                  <el-icon class="el-input__icon">
+                    <i-search/>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-row>
+
+            <el-table
+                :data="deptData"
+                height="250"
+                style="width: 100%;margin-top: 20px;"
+                :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+                :cell-style="{textAlign: 'center'}">
+
+              <el-table-column width="60">
+                <template #default="scope">
+                  <el-radio :label="scope.row.staffId" v-model="radioStaff" @change.native="getCurrentRow(scope.row)">
+                    <!-- 以为有Label的原因，所以添加&nbsp以空格显示 -->
+                    &nbsp;
+                  </el-radio>
+                </template>
+
+              </el-table-column>
+
+              <el-table-column
+                  prop="staffName"
+                  label="姓名">
+              </el-table-column>
+              <el-table-column
+                  prop="deptName"
+                  label="性别">
+              </el-table-column>
+              <el-table-column
+                  prop="staffName"
+                  label="学历">
+              </el-table-column>
+              <el-table-column
+                  prop="postName"
+                  label="职位">
+              </el-table-column>
+            </el-table>
+
+            <div style="margin-top: 30px;margin-left:280px">
+              <el-button @click="become=false" style="width: 80px;">取消</el-button>
+              <el-button type="primary" style="width: 80px;" @click="staffRow()">确定</el-button></div>
+
+
+          </el-dialog>
+        </div>
+
+        <!--单选框-->
+        <b style="font-size: 18px;margin-right: 30px">状态:</b>
+        <el-radio v-model="fo.deptState" :label="0">启用</el-radio>
+        <el-radio v-model="fo.deptState" :label="1">禁用</el-radio>
+        <div class="an">
+
+          <el-button @click="resetForm('ruleForm')">
+            <el-icon>
+              <i-close-bold/>
+            </el-icon>
+            <span>取消</span>
+          </el-button>
+
+          <el-button type="primary" @click="submitForm('ruleForm')">
+            <el-icon>
+              <i-copy-document/>
+            </el-icon>
+            <span>提交</span>
+          </el-button>
+
+        </div>
       </el-form>
     </el-drawer>
 
     <!--  表格-->
     <div class="y">
-      <el-table :data="tableData" stripe style="width: 100% ;" height="400"
+      <el-table :data="tableData" stripe style="width: 100% ;"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
-        <el-table-column prop="name" label="部门名称"/>
-        <el-table-column prop="times" label="创建时间"/>
-        <el-table-column prop="state" label="状态">
+        <el-table-column type="expand">
+          <template #default="scope">
+
+            <span style="margin-left: 50px">部门负责人：{{ scope.row.staffName }}</span><br>
+            <span style="margin-left: 50px">部门人数：{{ scope.row.empNum }}</span>
+
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="deptName" label="部门名称"/>
+        <el-table-column prop="createdTime" label="创建时间"/>
+        <el-table-column prop="deptState" label="状态">
           <template #default>
             <el-button size="mini" round type="primary" plain>启用</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="operate" label="操作">
-          <template #default>
-            <el-button type="text" size="small" @click="redact()">
-              <el-icon><i-edit />
+        <el-table-column label="操作">
+          <template #default="scope">
+
+
+
+            <el-button type="text" size="small" @click="drawer = true,updateRow(scope.row)">
+              <el-icon>
+                <i-edit/>
               </el-icon>
               修改
             </el-button>
@@ -108,11 +192,14 @@
                 :icon="InfoFilled"
                 icon-color="red"
                 title="确定删除吗?"
-                @confirm="through2()"
+                @confirm="through3(scope.row)"
             >
               <template #reference>
                 <el-button type="text" size="small">
-                  <el-icon><i-delete /></el-icon>删除
+                  <el-icon>
+                    <i-delete/>
+                  </el-icon>
+                  删除
                 </el-button>
               </template>
             </el-popconfirm>
@@ -132,8 +219,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="sele"
-          @current-change="sele"
+          @size-change="deptinquire()"
+          @current-change="deptinquire()"
       >
       </el-pagination>
     </div>
@@ -142,13 +229,20 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import {ref, defineComponent} from "vue";
+import {ElMessage} from "element-plus";
+
 export default {
   data() {
     return {
-      fo:{
-        name:"",
-        values1:"",
+      // 弹出框
+      become:false,
+      fo: {
+        deptId:"",
+        deptName: "",
+        staffId: "",
+        staffName: "",
+        deptState: 1,
 
       },
       //分页
@@ -163,43 +257,7 @@ export default {
 
       //抽屉
       drawer: ref(false),
-      tableData: [
-
-        {
-          name: '开发部',
-          times: '2020-12-12 12:34:23',
-          children:[
-            {
-              name: '市场部',
-              times: '2020-12-12 12:34:23'
-            }
-          ]
-
-        },
-        {
-          name: '市场部',
-          times: '2020-12-12 12:34:23',
-        },
-        {
-          name: '人事部',
-          times: '2020-12-12 12:34:23',
-        },
-        {
-          name: '行政部',
-          times: '2020-12-12 12:34:23',
-        },{
-          name: '行政部',
-          times: '2020-12-12 12:34:23',
-        },
-        {
-          name: '行政部',
-          times: '2020-12-12 12:34:23',
-        },
-        {
-          name: '行政部',
-          times: '2020-12-12 12:34:23',
-        },
-      ],
+      tableData: [],
       //状态
       options: ref([
         {
@@ -225,32 +283,106 @@ export default {
         }
       ]),
       values: ref(''),
+      deptData:[{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      },{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      },{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      },{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      },{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      },{
+        staffName:'王鑫',
+        deptName:'哈哈哈',
+        postName:'还是你呀',
+      }],
       //验证
-      rules:{
-        name: [
+      rules: {
+        deptName: [
           {
             required: true,
             message: "请填写班次名字",
             trigger: "blur",
           },
         ],
-        values1:[
-          {
-            required: true,
-            message: "请选择该负责人",
-            trigger: "change",
-          }
-        ]
+        // values1: [
+        //   {
+        //     required: true,
+        //     message: "请选择该负责人",
+        //     trigger: "change",
+        //   }
+        // ]
       }
 
     };
   },
   methods: {
+
+    //分页查询
+    deptinquire() {
+      this.axios
+          .get("http://localhost:8010/provider/deptVo/dept/" + this.pageInfo.currenPage + "/" + this.pageInfo.pagesize)
+          .then((rersponse) => {
+            console.log(rersponse);
+            this.tableData = rersponse.data.data.records;
+            console.log(rersponse.data.data.records)
+            this.pageInfo.total = rersponse.data.data.total;
+          }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    //删除
+    deptdelete(row) {
+      this.axios
+          .delete("http://localhost:8010/provider/dept/deptsc/" + row.deptId)
+          .then((response) => {
+            console.log(response)
+            if (response.data.data === "成功") {
+              ElMessage.success("删除成功")
+              this.deptinquire() //删除成功后，在查询一次
+            } else {
+              ElMessage.error("删除失败")
+            }
+          })
+
+    },
+    //添加
+    add(){
+      this.axios
+          .post("http://localhost:8010/provider/dept/add", this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+                ElMessage.success("添加成功")
+              this.deptinquire() //删除成功后，在查询一次
+            }else{
+                ElMessage.error("添加失败")
+            }
+          }).catch(function (error){
+            console.log(error);
+          })
+    },
+    //修改 提取当前行
+    updateRow(row){
+      this.fo=row
+    },
     //提交
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.add() //添加方法
         } else {
           console.log("error submit!!");
           return false;
@@ -260,41 +392,55 @@ export default {
     //取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
-      this.radio1= ref('1'),
-      this.drawer = false
+      this.radio1 = ref('1'),
+          this.drawer = false
     },
-  }
+    // 点击删除确认按钮触发
+    through3(row) {
+      this.deptdelete(row)
+    },
+    // 点击禁用确认按钮触发
+    through4(row) {
+      this.state(row)
+    },
+  },
+  //分页查询
+  created() {
+    this.deptinquire();
+  },
 };
 </script>
 
 <style>
-table *{
+table * {
   text-align: center;
 }
+
 /* 调整输入框的高度 */
 ::v-deep .el-input__inner {
   height: 32px;
 }
 
-.head{
+.head {
   margin-top: 20px;
 }
 
-.head-surface{
+.head-surface {
   margin-left: 20px;
   margin-top: 20px;
 }
 
-.y{
+.y {
   margin-top: 10px;
 }
-.an{
+
+.an {
   margin-top: 20px;
   margin-left: 1%;
 }
 
 .demo-pagination-block {
-  margin-left: 850px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 30px;
 }

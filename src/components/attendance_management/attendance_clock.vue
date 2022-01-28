@@ -5,35 +5,34 @@
       <!--选择开始日期和结束日期-->
       <b style="font-size: 18px;margin-left:10px;margin-right: 10px">打卡时间</b>
       <el-date-picker
-          v-model="value1"
+          v-model="clockTime"
           type="daterange"
           unlink-panels
           range-separator="TO"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          wdaWD
-          aW
           :shortcuts="shortcuts"
+          value-format="YYYY-MM-DD"
       >
       </el-date-picker>
       <!--    全部部门-->
-      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">全部部门</b>
-      <el-select size="small" v-model="value" clearable placeholder="选择部门" >
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">部门名称</b>
+      <el-select size="small" v-model="pageInfo.optionsDeptId" clearable placeholder="选择部门" >
         <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in optionsDept"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptId"
         >
         </el-option>
       </el-select>
       <!--搜索框-->
-      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员/部名称</b>
-      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员工名称</b>
+      <el-input size="small" v-model="pageInfo.staffName" placeholder="请输入员工名称" style="width:150px;">
       </el-input>
 
       <!--查询按钮-->
-      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
+      <el-button @click="about()" style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
         <el-icon><i-search />
 
         </el-icon>
@@ -42,43 +41,43 @@
     </div>
     <div class="head-export">
       <!--导出导入-->
-            <el-button type="warning" plain size="small" @click="derive()">
-              <i class="iconfont">&#xe643;</i>
-              导出
-            </el-button>
-            <el-upload
-                class="upload-demo"
-                action
-                :on-change="channel"
-                accept=".xls, .xlsx"
-                :auto-upload="false"
-                :show-file-list="false"
-            >
-            <el-button type="success" plain size="small">
-              <i class="iconfont">&#xe645;</i>
-              导入
-            </el-button>
-            </el-upload>
+      <el-button type="warning" plain size="small" @click="derive()">
+        <i class="iconfont">&#xe643;</i>
+        导出
+      </el-button>
+      <el-upload
+          class="upload-demo"
+          action
+          :on-change="channel"
+          accept=".xls, .xlsx"
+          :auto-upload="false"
+          :show-file-list="false"
+      >
+        <el-button type="success" plain size="small">
+          <i class="iconfont">&#xe645;</i>
+          导入
+        </el-button>
+      </el-upload>
     </div>
     <!--    表格-->
     <div class="y">
       <el-table :data="tableData" stripe style="width: 100%"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
-        <el-table-column prop="staff" label="员工名称"/>
-        <el-table-column prop="department" label="部门名称"/>
-        <el-table-column prop="morning" label="早上打卡时间"/>
-        <el-table-column prop="afternoon" label="下午打卡时间"/>
-        <el-table-column prop="record" label="记录时间"/>
+        <el-table-column prop="staffName" label="员工名称"/>
+        <el-table-column prop="deptName" label="部门名称"/>
+        <el-table-column prop="mornClock" label="早上打卡时间"/>
+        <el-table-column prop="afternoonClock" label="下午打卡时间"/>
+        <el-table-column prop="updatedTime" label="记录时间"/>
         <el-table-column prop="operate" label="操作">
-          <template #default>
+          <template #default="scope">
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
                 :icon="InfoFilled"
                 icon-color="red"
                 title="确定删除吗?"
-                @confirm="through1()"
+                @confirm="through1(scope.row)"
             >
               <template #reference>
                 <el-button type="text" size="small">
@@ -101,8 +100,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="sele"
-          @current-change="sele"
+          @size-change="about"
+          @current-change="about"
       >
       </el-pagination>
     </div>
@@ -119,12 +118,25 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
+      // 分页
       pageInfo: {
         currenPage: 1,
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        // 员工名称
+        staffName:"",
+        // 部门下拉框值
+        optionsDeptId:"",
+
+        // 开始时间
+        clockTimeStart:"",
+        //结束时间
+        clockTimeEnd:""
+
       },
+      // 打卡时间
+      clockTime:[],
       //时间选择
       shortcuts: [
         {
@@ -155,81 +167,76 @@ export default {
           },
         },
       ],
-      //查询所有部门
-      options: ref([
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-        {
-          value: "Option3",
-          label: "Option3",
-        },
-        {
-          value: "Option4",
-          label: "Option4",
-        },
-        {
-          value: "Option5",
-          label: "Option5",
-        },
-      ]),
+
+      //查询所有部门名称,ID -- 部门下拉框数据
+      optionsDept: [],
       //打卡记录数据
-      tableData: [
-        {
-          staff: '123',
-          department: '23',
-          morning: '9:00',
-          afternoon: '18:00',
-          record: '8',
+      tableData: [],
 
-        },
-        {
-          staff: '123',
-          department: '23',
-          morning: '9:00',
-          afternoon: '18:00',
-          record: '8',
-
-        },
-        {
-          staff: '123',
-          department: '23',
-          morning: '9:00',
-          afternoon: '18:00',
-          record: '8',
-
-        },
-        {
-          staff: '123',
-          department: '23',
-          morning: '9:00',
-          afternoon: '18:00',
-          record: '8',
-
-        },
-        {
-          staff: '123',
-          department: '23',
-          morning: '9:00',
-          afternoon: '18:00',
-          record: '8',
-
-        }
-      ],
       value1: "", //日期
       value: ref(""), //选择
     };
   },
   methods: {
     // 点击删除确认按钮触发
-    through1() {
-      alert(1)
+    through1(row) {
+      /*alert(row.clockRecordId)*/
+      this.deletedk(row);
     },
+    //分页查询
+    about(){
+      // 首先清空
+      this.pageInfo.clockTimeStart=""
+      this.pageInfo.clockTimeEnd=""
+      if(this.clockTime != ""){ // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart=this.clockTime[0]
+        this.pageInfo.clockTimeEnd=this.clockTime[1]
+      }
+
+      this.axios
+          .get("http://localhost:8010/provider/clockVo/punchcard",{params:this.pageInfo})
+          .then((response)=>{
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+
+    // 查询所有部门 赋值上下拉框
+    selectAllDept(){
+      this.axios
+          .get("http://localhost:8010/provider/clockVo/selectAllDept")
+          .then((response)=>{
+            console.log(response);
+            this.optionsDept=response.data.data;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+
+    //删除
+    deletedk(row){
+      this.axios
+          .delete("http://localhost:8010/provider/clockRecord/delete/" + row.clockRecordId)
+          .then((response)=>{
+            console.log(response)
+            if (response.data.data === "成功"){
+              ElMessage.success("删除成功");
+              this.about() //删完在查一次
+            }else {
+              ElMessage.error("删除失败")
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+
+
     // 点击导出操作
     derive() {
       ElMessageBox.confirm(
@@ -258,13 +265,13 @@ export default {
         confirmButtonText: '生成',
         cancelButtonText: '取消',
       }).then(({value}) => {
-            let data = _this.formatJson(filterVal, _this.tableData);
-            export_json_to_excel(tHeader, data, value);
-            ElMessage({
-              type: 'success',
-              message: `生成成功`,
-            })
-          })
+        let data = _this.formatJson(filterVal, _this.tableData);
+        export_json_to_excel(tHeader, data, value);
+        ElMessage({
+          type: 'success',
+          message: `生成成功`,
+        })
+      })
           .catch(() => {
             ElMessage({
               type: 'info',
@@ -328,7 +335,12 @@ export default {
         reader.readAsBinaryString(f);
       }
     }
-  }
+  },created() {
+    // 分页查询
+    this.about();
+    // 查询所有部门id 与 ，名称
+    this.selectAllDept();
+  },
 };
 </script>
 
@@ -352,7 +364,7 @@ table * {
 }
 
 .demo-pagination-block {
-  margin-left: 850px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 30px;
 }

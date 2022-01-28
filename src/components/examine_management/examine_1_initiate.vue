@@ -909,9 +909,9 @@ export default defineComponent({
       //转正表单
       become_1: {
         //名称
-        name: "",
+        name: "ss",
         //部门
-        dept: "",
+        dept: "ss",
         //类型
         type_1: "",
         //备注
@@ -1035,6 +1035,8 @@ export default defineComponent({
           label: '部门2',
         }
       ]),
+      //存放获取的数据
+      auditflow1:null,
     };
   },
   setup() {
@@ -1070,6 +1072,12 @@ export default defineComponent({
     };
   },
   methods: {
+    //获取转正表单里的数据
+    getWorker(){
+      become_1
+    },
+
+
     // 提交转正
     submitForm_1() {
       if (this.become_1.remarks_1.length === 0) {
