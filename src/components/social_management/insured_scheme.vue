@@ -71,7 +71,7 @@
                 </router-link
                 >&nbsp;
 
-                <el-button type="text" size="small"> {{ scope.row.defInsuredState === 0 ? '禁用 ' : '启用 ' }}</el-button>
+                <el-button @click="updateDefInsuredState(scope.row.defInsuredId,scope.row.defInsuredState)" type="text" size="small"> {{ scope.row.defInsuredState === 0 ? '禁用 ' : '启用 ' }}</el-button>
 
                 <!-- 删除行确认框 -->
                 <el-popconfirm v-if="scope.row.defInsuredState===1"
@@ -115,6 +115,29 @@ import {ElMessage} from 'element-plus'
 
 export default {
   methods: {
+
+    // 修改参保方案状态
+    updateDefInsuredState(id,state){
+      this.axios
+          .put("http://localhost:8010/provider/defInsured/updateDefInsuredState",{defInsuredId:id,defInsuredState:state==0?1:0})
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '操作成功！！',
+              })
+              // 调用查询
+              this.selectAllPage()
+            }else{
+              ElMessage('操作失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
     // 删除行
     deleteRow(id) {
       this.axios
