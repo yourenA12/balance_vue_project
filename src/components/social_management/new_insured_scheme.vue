@@ -35,6 +35,22 @@
               placeholder="基数上限"
               style="width: 120px"
           />
+          &nbsp;
+          <!-- 弹出消息 -->
+          <el-popover
+              placement="right-start"
+              title="基数范围"
+              :width="200"
+              trigger="hover"
+              content="不填写基数上限，默认 无上限"
+          >
+            <template #reference>
+              <el-button type="text"
+              ><i class="iconfont">&#xe600;</i></el-button
+              >
+            </template>
+          </el-popover>
+          <br/>
 
           <!-- 社保缴纳项目，表单 -->
           <el-table :data="social_tableData" max-height="464" style="width: 100%">
@@ -240,6 +256,13 @@
         </div>
 
         <!-- 标题 -->
+        <div class="big-title">&nbsp;&nbsp;&nbsp;选择参保组织</div>
+
+        <div>
+
+        </div>
+
+        <!-- 标题 -->
         <div class="big-title">&nbsp;&nbsp;&nbsp;计算验证</div>
 
         <!-- 缴费计算表单 -->
@@ -313,7 +336,7 @@
             <el-button size="small">取消</el-button>
           </router-link>
           &nbsp;&nbsp;
-          <el-button size="small" type="primary">保存</el-button>
+          <el-button @click="verify()" size="small" type="primary">保存</el-button>
         </div>
       </div>
     </div>
@@ -327,6 +350,58 @@ import {ElMessage} from "element-plus";
 
 export default {
   methods: {
+
+    verify(){
+
+      // 验证参保方案名称
+      if(this.schemeName=="" || this.schemeName==null ){
+        ElMessage({
+          message: '参保方案名称不能为空！！',
+          type: 'warning',
+        })
+        return
+      }
+
+      if( this.security_cardinal_lower >= this.security_cardinal_upper && this.security_cardinal_upper!=0 ){
+        ElMessage({
+          message: '基数上限要大于基数下限！！',
+          type: 'warning',
+        })
+        return
+      }
+
+      for( let i=0; i<this.social_tableData.length; i++ ){
+
+        for( let j=0; j<this.social_tableData.length; j++ ){
+            if( this.social_tableData[i].payment_name == this.social_tableData[j].payment_name && i!=j ){
+              ElMessage({
+                message: '险种名称重复！！',
+                type: 'warning',
+              })
+              return
+            }
+        }
+
+      }
+
+      for( let i=0; i<this.accumulation_tableData.length; i++ ){
+
+        for( let j=0; j<this.accumulation_tableData.length; j++ ){
+          if( this.accumulation_tableData[i].payment_name == this.accumulation_tableData[j].payment_name && i!=j ){
+            ElMessage({
+              message: '公积金名称重复！！',
+              type: 'warning',
+            })
+            return
+          }
+        }
+
+      }
+
+      alert(111)
+
+    },
+
     // 删除行
     deleteRow(index, rows) {
       rows.splice(index, 1);
@@ -415,15 +490,15 @@ export default {
       social_tableData: [
         {
           payment_name: "养老保险", // 缴费项目
-          lower: 1, // 基数下限
-          upper: 2, // 基数上限
-          company_payment_ratio: 3, // 公司缴纳比例
-          personage_payment_ratio: 4, // 个人缴纳比例
-          company_fixed_money: 5, // 公司固定金额
-          personage_fixed_money: 6, // 个人固定金额
+          lower: null, // 基数下限
+          upper: null, // 基数上限
+          company_payment_ratio: null, // 公司缴纳比例
+          personage_payment_ratio: null, // 个人缴纳比例
+          company_fixed_money: null, // 公司固定金额
+          personage_fixed_money: null, // 个人固定金额
         },
         {
-          payment_name: "养老保险", // 缴费项目
+          payment_name: "失业保险", // 缴费项目
           lower: null, // 基数下限、
           upper: null, // 基数上限
           company_payment_ratio: null, // 公司缴纳比例
@@ -432,7 +507,7 @@ export default {
           personage_fixed_money: null, // 个人固定金额
         },
         {
-          payment_name: "养老保险", // 缴费项目
+          payment_name: "工伤保险", // 缴费项目
           lower: null, // 基数下限、
           upper: null, // 基数上限
           company_payment_ratio: null, // 公司缴纳比例
@@ -441,7 +516,7 @@ export default {
           personage_fixed_money: null, // 个人固定金额
         },
         {
-          payment_name: "养老保险", // 缴费项目
+          payment_name: "生育保险", // 缴费项目
           lower: null, // 基数下限、
           upper: null, // 基数上限
           company_payment_ratio: null, // 公司缴纳比例
@@ -450,7 +525,7 @@ export default {
           personage_fixed_money: null, // 个人固定金额
         },
         {
-          payment_name: "养老保险", // 缴费项目
+          payment_name: "医疗保险", // 缴费项目
           lower: null, // 基数下限、
           upper: null, // 基数上限
           company_payment_ratio: null, // 公司缴纳比例
@@ -463,12 +538,12 @@ export default {
       accumulation_tableData: [
         {
           payment_name: "公积金", // 缴费项目
-          lower: 1, // 基数下限、
-          upper: 2, // 基数上限
-          company_payment_ratio: 3, // 公司缴纳比例
-          personage_payment_ratio: 4, // 个人缴纳比例
-          company_fixed_money: 5, // 公司固定金额
-          personage_fixed_money: 6, // 个人固定金额
+          lower: null, // 基数下限、
+          upper: null, // 基数上限
+          company_payment_ratio: null, // 公司缴纳比例
+          personage_payment_ratio: null, // 个人缴纳比例
+          company_fixed_money: null, // 公司固定金额
+          personage_fixed_money: null, // 个人固定金额
         },
       ],
       //缴纳明细表数据
