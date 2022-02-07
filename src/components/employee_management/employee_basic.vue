@@ -359,7 +359,7 @@
 <!--              </el-form-item><br/>-->
 
               <el-form-item label="部门:" prop="dept">
-                <el-select v-model="empMsg.deptId" placeholder="请选择惩罚类型" style="width: 240px;">
+                <el-select v-model="empMsg.deptId" placeholder="请输入部门名称" style="width: 240px;">
                   <el-option
                       v-for="item in deptNameAll"
                       :key="item.deptId"
@@ -372,12 +372,12 @@
               </el-form-item><br/>
 
               <el-form-item label="职位:" prop="position">
-                <el-select v-model="empMsg.deptPostId" placeholder="请选择惩罚类型" style="width: 240px;">
+                <el-select v-model="empMsg.postSearch" placeholder="请输入部门名称" style="width: 200px;margin-left: 15px">
                   <el-option
-                      v-for="item in deptPostNameAll"
-                      :key="item.deptPostId"
-                      :label="item.postName"
-                      :value="item.deptPostId"
+                      v-for="item in positionAll"
+                      :key="item.positionId"
+                      :label="item.positionName"
+                      :value="item.positionId"
                   >
                   </el-option>
 
@@ -490,7 +490,7 @@ export default defineComponent({
       //部门名称
       deptNameAll:[],
       //部门职位
-      deptPostNameAll:[],
+      positionAll:[],
 
       rules:{
         name:
@@ -522,8 +522,10 @@ export default defineComponent({
 
    },
   methods: {
+
     //根据id查询员工信息
     selectStaffVoId() {
+      alert(this.$store.state.staffId_Msg)
       this.axios
           .get("http://localhost:8010/provider/staff/selectStaffId/" + this.$store.state.staffId_Msg)
           .then((response) => {
@@ -548,13 +550,13 @@ export default defineComponent({
             console.log(error);
           });
     },
-    //查询部门职位名称
-    selectDeptPostName() {
+    //查询职位名称
+    selectPositionName() {
       this.axios
-          .get("http://localhost:8010/provider/staff/selectDeptPostName")
+          .get("http://localhost:8010/provider/staff/selectPositionName")
           .then((response) => {
             console.log(response);
-            this.deptPostNameAll = response.data.data;
+            this.positionAll = response.data.data;
 
           })
           .catch(function (error) {
@@ -594,7 +596,7 @@ export default defineComponent({
   },created() {
     this.selectStaffVoId()
     this.selectDeptName()
-    this.selectDeptPostName()
+    this.selectPositionName()
   }
 
 })

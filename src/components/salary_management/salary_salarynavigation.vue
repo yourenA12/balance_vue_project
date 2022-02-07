@@ -6,25 +6,27 @@
         <span></span>
         <div class="payroll2-tabs">
           <ul style="margin-left: 85px">
-            <router-link :to="{path:this.flat,query:{path: this.$route.query.path}}">
+
+              <router-link :to="{path:this.scheme,query:{path: this.$route.query.path}}">
             <!--              <li class="active1">-->
               <li>
               <i class="iconfont i-iconfont">&#xe602;</i>
               <h3>
                 <span>第一步</span>
               </h3>
-              <p><span>设置薪酬结构</span></p>
+              <p><span>设置薪酬组</span></p>
             </li>
             </router-link>
 
-            <router-link :to="{path:this.scheme,query:{path: this.$route.query.path}}">
+            <router-link :to="{path:this.flat,query:{path: this.$route.query.path}}">
+
             <li style="border: none"><i class="iconfont" style="margin-top: 52px">&#xe658;</i></li>
             <li class="" >
               <i class="iconfont">&#xe633;</i>
               <h3>
                 <span>第二步</span>
               </h3>
-              <p><span>设置核算方案</span></p>
+              <p><span>设置薪酬结构</span></p>
             </li>
             </router-link>
 
@@ -52,10 +54,10 @@
 export default {
   data(){
     return{
+      //薪酬组
+      scheme:'/salary/scheme',
       //薪酬结构
       flat:'/salary/flat',
-      //核算方案
-      scheme:'/salary/scheme',
       //工资表
       paysheet:'/salary/paysheet',
     }

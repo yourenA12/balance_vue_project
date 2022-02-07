@@ -45,36 +45,66 @@
     <div style="margin-top:10px;">
       <!--搜索输入框-->
       <div style="display: inline-block">
-    <span style="font-weight:bold">员工名称</span>
+        <span style="font-weight:bold">员工名称</span>
         <el-row style="width:200px;display: inline-block;margin-left: 15px">
-        <el-input v-model="staffNameSS" placeholder="请输入用户名称" />
-      </el-row>
+          <el-input v-model="pageInfo.staffNameSearch" placeholder="请输入用户名称"/>
+        </el-row>
       </div>
 
-    <div style="display: inline-block;margin-left:25px">
-    <span style="font-weight:bold">部门 </span>
-      <el-row style="width:200px;display: inline-block;margin-left:15px">
-        <el-input v-model="deptSS" placeholder="请输入部门名称" />
-      </el-row>
-    </div>
-
-    <div style="display: inline-block;margin-left:25px">
-    <span style="font-weight:bold"> 状态</span>
-      <el-form-item style="width:200px;display: inline-block;margin-left:15px">
-        <el-select  placeholder="请选择状态" v-model="stateSS">
-          <el-option label="正式" value="正式" style="margin-left: 15px"></el-option>
-          <el-option label="试用" value="试用" style="margin-left: 15px"></el-option>
-        </el-select>
-      </el-form-item>
-    </div>
       <div style="display: inline-block;margin-left:25px">
-      <span style="font-weight:bold">入职日期</span>
-        <el-row style="width:200px;display: inline-block;margin-left:15px">
-        <el-input v-model="hiredateSS" placeholder="请输入日期" />
-      </el-row>
+        <span style="font-weight:bold">部门 </span>
+
+        <el-select v-model="pageInfo.deptSearch" placeholder="请输入部门名称" style="width: 200px;">
+          <el-option
+              v-for="item in deptNameAll"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId"
+          >
+          </el-option>
+        </el-select>
+
       </div>
-      <el-button type="primary" style="width: 70px;margin-left:25px"><el-icon><i-search /></el-icon>搜索 </el-button>
-      <el-button style="width: 70px;" @click="replacement()"><el-icon><i-refresh /></el-icon>重置 </el-button>
+
+      <div style="display: inline-block;margin-left:25px">
+        <span style="font-weight:bold"> 状态</span>
+
+        <el-select placeholder="请选择状态" v-model="pageInfo.stateSearch" style="margin-left: 15px;">
+          <el-option label="正式" value="3" style="margin-left: 15px"></el-option>
+          <el-option label="试用" value="2" style="margin-left: 15px"></el-option>
+        </el-select>
+
+      </div>
+      <div style="display: inline-block;margin-left:25px">
+
+        <div class="block">
+          <span class="demonstration" style="font-weight:bold">入职日期</span>
+          <el-date-picker style="margin-left: 15px;"
+                          v-model="hiredateSearch"
+                          type="daterange"
+                          unlink-panels
+                          range-separator="至"
+                          start-placeholder="开始时间"
+                          end-placeholder="结束时间"
+                          :shortcuts="shortcuts"
+                          value-format="YYYY-MM-DD"
+          >
+          </el-date-picker>
+
+        </div>
+      </div>
+      <el-button @click="selectStaff()" type="primary" style="width: 70px;margin-left:25px;margin-top:20px;">
+        <el-icon>
+          <i-search/>
+        </el-icon>
+        搜索
+      </el-button>
+      <el-button style="width: 70px;" @click="replacement()">
+        <el-icon>
+          <i-refresh/>
+        </el-icon>
+        重置
+      </el-button>
     </div>
     <br/>
     <div style="margin-top:30px;">
@@ -85,7 +115,7 @@
         <el-table-column fixed prop="staffName" label="姓名" width="150"/>
         <el-table-column prop="staffBirthday" label="出生日期" width="150"/>
         <el-table-column prop="deptName" label="部门" width="150"/>
-        <el-table-column prop="postName" label="职位" width="150"/>
+        <el-table-column prop="positionName" label="职位" width="150"/>
         <el-table-column prop="staffPhone" label="手机" width="150"/>
         <el-table-column label="状态" width="150">
           <template #default="scope">
@@ -103,9 +133,9 @@
         <el-table-column prop="staffWorkingYears" label="工龄" width="150"/>
         <el-table-column fixed="right" label="操作" width="150">
           <template #default="scope">
-              <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
-              >编辑
-              </el-button>
+            <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
+            >编辑
+            </el-button>
             <!--                <router-link :to="{path:this.leave,query:{path: this.$route.query.path}}" style="text-decoration: none">-->
             &nbsp;
             <el-button @click="departure(scope.row)" type="text" size="small">办理离职</el-button>
@@ -126,8 +156,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="selectStaff"
-          @current-change="selectStaff"
+          @size-change="selectStaff()"
+          @current-change="selectStaff()"
       >
       </el-pagination>
     </div>
@@ -142,8 +172,8 @@
         :close-on-click-modal="false"
     >
 
-    <!-- 员工办理离职弹出框 -->
-    <div style=" width:100%;">
+      <!-- 员工办理离职弹出框 -->
+      <div style=" width:100%;">
         <el-form
             ref="departure_data"
             :model="departure_data"
@@ -152,11 +182,12 @@
             class="demo-ruleForm"
         >
           <div style="width:50%;display: inline-block;margin-left: -10px">
-            <el-form-item label="名称" prop="name"  >
+            <el-form-item label="名称" prop="name">
               <el-input v-model="departure_data.name" disabled style="width:240px"></el-input>
-            </el-form-item><br/>
+            </el-form-item>
+            <br/>
 
-            <el-form-item label="离职原因" prop="cause" >
+            <el-form-item label="离职原因" prop="cause">
               <el-select
                   v-model="departure_data.cause"
                   placeholder="请选择" style="width:240px;"
@@ -177,21 +208,22 @@
                 <el-option label="未得到充分的支持和授权" value="未得到充分的支持和授权" style="margin-left: 20px"></el-option>
                 <el-option label="其它" value="其它" style="margin-left: 20px"></el-option>
               </el-select>
-            </el-form-item><br/>
+            </el-form-item>
+            <br/>
 
-            <el-form-item label="备注"  prop="remark">
+            <el-form-item label="备注" prop="remark">
               <el-input v-model="departure_data.remark" type="textarea" style="width: 240px;"></el-input>
             </el-form-item>
           </div>
 
           <div style="width:50%;display: inline-block;position: relative;top:-60px;">
-          <el-form-item label="状态" >
-            <el-input v-model="fromStaffState" disabled style="width:240px"/>
-          </el-form-item><br/>
+            <el-form-item label="状态">
+              <el-input v-model="fromStaffState" disabled style="width:240px"/>
+            </el-form-item>
+            <br/>
 
 
-
-            <el-form-item label="离职生效时间" required >
+            <el-form-item label="离职生效时间" required>
               <el-col :span="11">
                 <el-form-item prop="dimisiondate" style="width: 240px;">
                   <el-date-picker
@@ -216,52 +248,58 @@
       </div>
 
 
-
-  </el-dialog>
+    </el-dialog>
   </div>
 
 </template>
 <script lang="ts">
+
+import {ref} from 'vue'
 import {defineComponent, ref} from 'vue'
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
+
+
+const hiredateSearch = ref('')
+
 export default {
 //操作时间
 
   data() {
-    const value2 = ref('')
-    const one = (rule, value, callback) => {
-      if (new Date() > value) {
-        callback(new Error("最后工作时间不能小于当前时间"));
-      } else if (this.ruleForm.dimisiondate < value) {
-        callback(new Error("最后工作时间不能大于离职生效时间"));
-      } else {
-        callback();
-      }
+    // const value2 = ref('')
+    // const one = (rule, value, callback) => {
+    //   if (new Date() > value) {
+    //     callback(new Error("最后工作时间不能小于当前时间"));
+    //   } else if (this.ruleForm.dimisiondate < value) {
+    //     callback(new Error("最后工作时间不能大于离职生效时间"));
+    //   } else {
+    //     callback();
+    //   }
+    //
+    // };
+    // // var date1=this.ruleForm.workdate;
+    // const two = (rule, value, callback) => {
+    //   if (this.ruleForm.workdate > value) {
+    //     callback(new Error("离职生效时间不能小于最后工作时间"));
+    //   } else if (new Date() > value) {
+    //     callback(new Error("离职生效时间不能小于当前时间"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
 
-    };
-    // var date1=this.ruleForm.workdate;
-    const two = (rule, value, callback) => {
-      if (this.ruleForm.workdate > value) {
-        callback(new Error("离职生效时间不能小于最后工作时间"));
-      } else if (new Date() > value) {
-        callback(new Error("离职生效时间不能小于当前时间"));
-      } else {
-        callback();
-      }
-    };
     return {
       //员工花名册
       book: '/employee/message/employee_roster/book',
       //
       departure_data: {
-        id:"",
+        id: "",
         name: "",
         state: "",
         cause: "",
         workdate: '',
         dimisiondate: '',
         remark: "",
-        deptId:"",
+        deptId: "",
       },
       departure_rules: {
         cause: [
@@ -278,9 +316,9 @@ export default {
             message: "请选择最后工作时间",
             trigger: "change",
           },
-          {
-            validator: one, trigger: "change"
-          }
+          // {
+          //   validator: one, trigger: "change"
+          // }
         ],
         dimisiondate: [
           {
@@ -289,53 +327,114 @@ export default {
             message: "请选择离职生效时间",
             trigger: "change",
           },
-          {
-            validator: two, trigger: "change"
-          }
+          // {
+          //   validator: two, trigger: "change"
+          // }
         ],
       },
 
+      //时间选择
+      shortcuts: [
+        {
+          text: "最近一周",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end];
+          },
+        },
+        {
+          text: "最近一个月",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end];
+          },
+        },
+        {
+          text: "最近三个月",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            return [start, end];
+          },
+        },
+      ],
 
+      // 弹出框
       become: false,
       leave: '/employee/message/employee_roster/leave',
       staffedit: '/employee/message/employee_roster/staffedit',
-      tableData: [
-      ],
-      deptPostId0:[],
-      dpetpostid:{},
+      tableData: [],
+      deptPostId0: [],
+      dpetpostid: {},
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        //搜索绑定值
+        // 员工名称
+        staffNameSearch: '',
+        // 部门名称
+        deptSearch: '',
+        // 员工状态
+        stateSearch: '',
+        // 入职日期  开始时间
+        clockTimeStart: '',
+        // 结束时间
+        clockTimeEnd: ''
+
       },
-      //搜索绑定值
-      staffNameSS:'',
-      deptSS:'',
-      stateSS:'',
-      hiredateSS:'',
+
+      //部门名称
+      deptNameAll: [],
+
+      // 入职日期 时间段
+      hiredateSearch: [],
 
 
-      dimissionVal:null,
-      staffVal:null,
+      dimissionVal: null,
+      staffVal: null,
 
       // 表单中的员工状态
-      fromStaffState:"",
+      fromStaffState: "",
 
     }
   },
   methods: {
     //搜索框重置
-    replacement(){
-      this.staffNameSS='',
-      this.deptSS='',
-      this.stateSS='',
-      this.hiredateSS=''
+    replacement() {
+      this.pageInfo.currentPage = 1
+      this.pageInfo.staffNameSearch = ''
+      this.pageInfo.deptSearch = ''
+      this.pageInfo.stateSearch = ''
+      this.pageInfo.hiredateSearch = ''
+      this.pageInfo.clockTimeStart = ''
+      this.pageInfo.clockTimeEnd = ''
+      this.hiredateSearch = []
+
+
+      this.selectStaff()
+
     },
     //多表查询
     selectStaff() {
+
+      // 首先清空
+      this.pageInfo.clockTimeStart = ""  // 开始时间
+      this.pageInfo.clockTimeEnd = "" // 结束时间
+      if (this.hiredateSearch != "") { // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart = this.hiredateSearch[0] // 取 入职日期选择框 的开始时间 就是数组下标为0（第一个）
+        this.pageInfo.clockTimeEnd = this.hiredateSearch[1]
+      }
+
       this.axios
-          .get("http://localhost:8010/provider/staff/selectStaffVo/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/staff/selectStaffVo", {params: this.pageInfo})
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;
@@ -346,12 +445,27 @@ export default {
             console.log(error);
           });
     },
+
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectDeptName")
+          .then((response) => {
+            console.log(response);
+            this.deptNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
     //根据id查询员工信息
     empMsg(staffId) {
       // 将当前行的员工id 存入 store里面，使得在其他页面也能取到
-      this.$store.state.staffId_Msg=staffId;
+      this.$store.state.staffId_Msg = staffId;
       // 跳转页面
-      this.$router.push({path:this.staffedit,query:{path: this.$route.query.path}})
+      this.$router.push({path: this.staffedit, query: {path: this.$route.query.path}})
     },
     //
 
@@ -359,63 +473,63 @@ export default {
     departure(row) {
 
       //赋值到弹出框中的员工状态
-      if( row.staffState==0 )
-        this.fromStaffState="在职"
+      if (row.staffState == 0)
+        this.fromStaffState = "在职"
 
-      if( row.staffState==1 )
-        this.fromStaffState="离职"
+      if (row.staffState == 1)
+        this.fromStaffState = "离职"
 
-      if( row.staffState==2 )
-        this.fromStaffState="试用"
+      if (row.staffState == 2)
+        this.fromStaffState = "试用"
 
-      if( row.staffState==3 )
-        this.fromStaffState="正式"
+      if (row.staffState == 3)
+        this.fromStaffState = "正式"
 
       // 开启弹出框
-      this.become=true;
+      this.become = true;
 
       // 赋值到弹出框
-      this.departure_data.id=row.staffId
-      this.departure_data.name=row.staffName
-      this.departure_data.state=row.staffState
+      this.departure_data.id = row.staffId
+      this.departure_data.name = row.staffName
+      this.departure_data.state = row.staffState
 
-      this.departure_data.deptId=row.deptId
+      this.departure_data.deptId = row.deptId
 
     },
     //离职前调用，取值方法
-    Dimission(){
+    Dimission() {
       //获取离职表信息
-      this.dimissionVal={
+      this.dimissionVal = {
         //员工编号
-        staffId:this.departure_data.id,
+        staffId: this.departure_data.id,
         //员工名称
         staffName: this.departure_data.name,
         //部门id
-        deptId:this.departure_data.deptId,
+        deptId: this.departure_data.deptId,
         //离职原因
-        quitType:this.departure_data.cause,
+        quitType: this.departure_data.cause,
         //离职生效时间
-        formalQuitDate:this.departure_data.dimisiondate,
+        formalQuitDate: this.departure_data.dimisiondate,
         //备注
-        quitExplain:this.departure_data.remark,
+        quitExplain: this.departure_data.remark,
         //状态
-        quitState:1,
+        quitState: 1,
       }
 
       //修改员工状态
-      this.staffVal={
-        staffState:1,
+      this.staffVal = {
+        staffState: 1,
       }
       this.insertDimission()
 
     },  //添加离职表
-    insertDimission(){
+    insertDimission() {
       this.axios({
         url: 'http://localhost:8010/provider/quit_Staff/insertquit_staff',
         method: 'post',
-        data:{
-          Staff:this.staffVal,
-          Quit:this.dimissionVal,
+        data: {
+          Staff: this.staffVal,
+          Quit: this.dimissionVal,
 
         }
       }).then(response => {
@@ -437,6 +551,7 @@ export default {
 
   }, created() {
     this.selectStaff();
+    this.selectDeptName()
   },
 }
 </script>
