@@ -27,30 +27,43 @@
               :size="formSize"
           >
             <el-form-item label="组名称：" prop="name" style="margin-top: 20px;">
-              <el-input v-model="compensationForm.name" style="width:240px"></el-input>
+              <el-input v-model="compensationForm.compensationName" style="width:240px"></el-input>
             </el-form-item>
 
-<!--            <el-form-item label="试用部门：" prop="name" style="margin-top: 20px;">-->
-<!--              <el-input v-model="compensationForm.name" style="width:240px"></el-input>-->
-<!--            </el-form-item>-->
+
 
             <el-form-item label="试用部门：" style="margin-top: 20px;">
-              <el-select  placeholder="请选择试用部门" multiple v-model="citysDept" style="width:240px">
+<!--              <el-select  placeholder="请选择试用部门" multiple v-model="citysDept" style="width:240px">-->
+<!--                <el-option-->
+<!--                    v-for="item in deptNameAll"-->
+<!--                    :key="item.deptId"-->
+<!--                    :label="item.deptName"-->
+<!--                    :value="item.deptId" />-->
+
+<!--              </el-select>-->
+              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
+                <el-option hidden></el-option>
                 <el-option
-                    v-for="item in deptNameAll"
+                    class="xxx"
+                    v-for="item in dept"
                     :key="item.deptId"
                     :label="item.deptName"
-                    :value="item.deptId" />
+                    :value="item.deptId"
+                >
+                </el-option>
+                <el-tree :data="deptlists"
+                         show-checkbox
+                         :default-expand-all=true
+                         :check-on-click-node=true
+                         node-key="deptId"
 
+                         :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
               </el-select>
             </el-form-item>
 
-<!--            <el-form-item label="试用职位：" prop="name" style="margin-top: 20px;">-->
-<!--              <el-input v-model="compensationForm.name" style="width:240px"></el-input>-->
-<!--            </el-form-item>-->
 
             <el-form-item label="试用职位：" style="margin-top: 20px;">
-              <el-select  placeholder="请选择试用职位" multiple v-model="citysPost" style="width:240px">
+              <el-select  placeholder="请选择试用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
                 <el-option
                     v-for="item in positionAll"
                     :key="item.positionId"
@@ -61,11 +74,11 @@
             </el-form-item>
 
             <el-form-item label="备注：" prop="name" style="margin-top: 20px;">
-              <el-input v-model="compensationForm.name" style="width:240px"></el-input>
+              <el-input v-model="compensationForm.compensationRemark" style="width:240px"></el-input>
             </el-form-item>
 
             <el-button style="width:80px;margin-top: 30px;margin-left: 120px">取消</el-button>
-            <el-button type="primary" style="width:80px">提交</el-button>
+            <el-button type="primary" style="width:80px" @click="compensationSalary()">提交</el-button>
 
           </el-form>
 
@@ -135,6 +148,7 @@
 <script >
 
 import { ref } from 'vue'
+import {ElMessage} from "element-plus";
 
 // const activeName = ref('first')
 
@@ -143,7 +157,26 @@ export default {
 
 
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value:'deptId'
+    }
     return {
+
+      res:"",
+      // 选中值1
+      res1:"",
+      // 选中值2
+      res2:"",
+      // 部门  文本框的值
+      dept:[],
+      deptId:[],
+      // 格式
+      defaultProps,
+      //存放部门信息
+      deptlists: [],
 
       //存储部门名称
       deptNameAll:[],
@@ -151,8 +184,12 @@ export default {
       positionAll:[],
       //存选中的部门
       citysDept:[],
-      //存选中的职位
-      citysPost:[],
+
+      //薪酬组
+      compensationVal:null,
+      //薪酬组部门职位
+      compensationDeptPost:null,
+
 
       radio1 :'1',
       become:false,
@@ -160,20 +197,76 @@ export default {
       compensationStaff:false,
       //
       compensationForm:{
-        name:"",
+        //薪酬组名称
+        compensationName:"",
+        //部门
+        dept:"",
+        //存选中的职位
+        citysPost:[],
+        //备注
+        compensationRemark:'',
+
       },
       compensationStaffForm:{
         name:"",
       }
     }
   },methods:{
+
+    // 当文本框值发生变化时调用的方法
+    onchange(){
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys(this.deptId, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicks() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1 = this.$refs.tree.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChange(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.res = this.$refs.tree.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2 = this.$refs.tree.getCheckedKeys()
+
+      // 清空部门
+      this.dept = []
+      // 清空选中的部门
+      this.deptId = []
+      let x = 0
+      for (let i = 0; i < this.res.length; i++) {
+
+        for (let j = 0; j < this.res.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.res[i].deptPid != this.res[j].deptId) {
+            //并且是最后一个
+            if (j == this.res.length - 1 && x == 0) {
+              // 加入数据
+              this.dept.push(this.res[i])
+              // 赋值到文本框
+              this.deptId.push(this.res[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
     //查询部门名称
     selectDeptName() {
       this.axios
-          .get("http://localhost:8010/provider/staff/selectDeptName")
+          .get("http://localhost:8010/provider/dept/selectAll")
           .then((response) => {
             console.log(response);
-            this.deptNameAll = response.data.data;
+            this.deptlists = response.data.data;
 
           })
           .catch(function (error) {
@@ -195,7 +288,49 @@ export default {
     },
     aa(){
       alert(1)
-    }
+    },
+    //取薪酬组input文本里面的值
+    compensationSalary(){
+
+      //薪酬组数据
+      this.compensationVal={
+        //取薪酬组名称
+        compensationName:this.compensationForm.compensationName,
+        //备注
+        compensationRemark:this.compensationForm.compensationRemark,
+      }
+
+
+
+    },
+    //添加薪酬组
+    insertcompensation(){
+      this.axios({
+        url: 'http://localhost:8010/provider/compensation/insertcompensation',
+        method: 'post',
+        data:{
+          Compensation:this.compensationVal,
+          //取部门信息
+          deptIds:this.$refs.tree.getCheckedKeys(),
+          //取职位信息
+          postIds:this.compensationForm.citysPost
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectEmps() // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
   }
 }
 </script>
@@ -203,6 +338,10 @@ export default {
 <style scoped>
 @import url("../../css/navigation.css");
 @import url("../../css/Salary.css");
+
+.xxx{
+  display: none;
+}
 
 .mainContent {
   width: 155px;
