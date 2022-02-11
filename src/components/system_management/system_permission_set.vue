@@ -380,6 +380,7 @@ export default {
           MENU_ROUTE: '',
           MENU_STATE: 0,
           CREATED_TIME: '2016-05-04',
+          children: []
         },
         {
           MENU_ID: 3,

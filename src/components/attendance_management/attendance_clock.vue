@@ -124,6 +124,7 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+
         // 员工名称
         staffName:"",
         // 部门下拉框值

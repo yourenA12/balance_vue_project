@@ -50,21 +50,12 @@
           <!-- 操作按钮部分 -->
           <div class="button">
             <!-- 新增按钮 -->
-<!--            <el-button size="mini"-->
-<!--                       class="button-new"-->
-<!--                       @click="outerVisible = true,judge='新增'">-->
-<!--              + 新增-->
-<!--            </el-button>-->
             <el-button size="small" type="primary" plain @click="outerVisible = true,affiche={}" style="margin-left: 5px">
               <el-icon><i-plus/></el-icon>
 
                 新增
             </el-button>
 
-            <!--            <el-button size="mini" class="button-delete" @click="remove" v-bind:disabled="disableds">-->
-            <!--              <i class="iconfont">&#xe61c</i>-->
-            <!--              删除-->
-            <!--            </el-button>-->
             <el-button size="small" type="danger" v-bind:disabled="disableds" plain @click="remove" style="margin-left: 10px;">
               <el-icon><i-delete /></el-icon>
               删除
@@ -176,22 +167,17 @@
             <el-table-column prop="updatedTime" label="发布时间" width="170" />
             <el-table-column align="center" label="操作" width="200">
               <template #default="scope">
-<!--                <el-button size="mini" style="color: #A3D3FF; width: 75px;"  @click="outerVisible = true,judge='修改',aaa(scope.row)">-->
-<!--                  <i class="iconfont">&#xe606</i>-->
-<!--                  修改-->
-<!--                </el-button>-->
+
+                <el-button @click="checkRow(scope.row)" type="text" size="small">详情 </el-button>
+
                 <el-button @click="updateRow(scope.row)" type="text" size="small">修改 </el-button>
-<!--                <el-button @click="open" size="mini" style="color: #A3D3FF;width: 75px;">-->
-<!--                  <i class="iconfont">&#xe61c</i>-->
-<!--                  删除-->
-<!--                </el-button>-->
+
                 <el-popconfirm @confirm="deleteNotice(scope.row.noticeId,'one')"
                                title="确认要删除此公告吗?">
                   <template #reference>
                     <el-button type="text" size="small" style="color: orange">删除 </el-button>
                   </template>
                 </el-popconfirm>
-<!--                <el-button @click="become=true" type="text" size="small">删除</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -219,6 +205,34 @@
       </div>
     </div>
   </div>
+
+<!-- 详情弹出框 （抽屉） -->
+  <el-drawer v-model="noticeCheck" :with-header="false">
+    <h2 style="text-align: center">公告详情</h2>
+
+    <br/><br/>
+
+    <span style="font-size: 18px;font-weight: bold">公告标题：</span> <span> {{this.noticeDetail.noticeTitle}}</span><br/><br/>
+    <span style="font-size: 18px;font-weight: bold">公告类型：</span> <span> {{this.noticeDetail.noticeType==0?'通知':'公告'}}</span><br/><br/>
+    <span style="font-size: 18px;font-weight: bold">公告状态：</span> <span> {{this.noticeDetail.noticeState==0?'正常':'关闭'}}</span><br/><br/>
+    <span style="font-size: 18px;font-weight: bold">发布人：</span> <span> {{this.noticeDetail.noticePeople}}</span><br/><br/>
+    <span style="font-size: 18px;font-weight: bold">发布时间：</span> <span> {{this.noticeDetail.updatedTime}}</span><br/><br/>
+
+    <div style="word-wrap:break-word; overflow:hidden">
+      <span style="font-size: 18px;font-weight: bold">内容：</span>
+      {{this.noticeDetail.noticeMatter}}</div><br/>
+
+    <span style="font-size: 18px;font-weight: bold">发布部门：</span>
+    <span v-for="item in noticeDept">{{item}}</span><br/><br/>
+
+    <span style="font-size: 18px;font-weight: bold">已阅员工：</span>
+    <span v-for="item in readStaff">{{item}}</span><br/><br/>
+
+    <span style="font-size: 18px;font-weight: bold">未阅员工：</span>
+    <span v-for="item in unreadStaff">{{item}}</span><br/><br/>
+
+  </el-drawer>
+
 </template>
 
 <script>
@@ -257,6 +271,18 @@ export default {
       remove,
       // 删除 公告ids
       deleteNoticeIds:[],
+      // 某条公告详情
+      noticeDetail:null,
+      // 公告发布部门
+      noticeDept:[],
+      // 公告已阅员工
+      readStaff:[],
+      // 未读员工
+      unreadStaff:[],
+
+      // 公告 抽屉
+      noticeCheck:false,
+
 
       //搜索重置form
       search:{
@@ -369,7 +395,9 @@ export default {
             console.log(response);
             for (let i=0;i<response.data.data.length;i++){
               this.affiche.deptIds.push(response.data.data[i].deptId)
+              this.noticeDept.push(response.data.data[i].deptName + "、 " )
             }
+
           })
           .catch(function (error) {
             console.log(error);
@@ -394,11 +422,52 @@ export default {
                   type: 'success',
                   message: '删除成功！！',
                 })
-                // 调用删除
+                // 调用查询
                 this.selectAllPage()
               }else{
                 ElMessage('删除失败！！')
               }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 点击一行公告查看详情
+    checkRow(row){
+      //查询当前公告
+      this.noticeDetail=row
+      // 打开抽屉
+      this.noticeCheck=true
+      // 清空部门
+      this.affiche.deptIds=[]
+      this.noticeDept=[]
+      // 按公告id查询发布部门
+      this.selectAllDeptByNoticeId(row.noticeId)
+      //清空员工
+      this.readStaff=[]
+      this.unreadStaff=[]
+      // 按公告id查询员工
+      this.selectNoticeStaffByNoticeId(row.noticeId,row.staffId)
+
+    },
+
+    // 查询公告员工表数据
+    selectNoticeStaffByNoticeId(noticeId,staffId) {
+      this.axios
+          .get("http://localhost:8010/provider/notice/selectNoticeStaffByNoticeId/"+ noticeId+"/"+staffId)
+          .then((response) => {
+            console.log(response);
+            for (let i=0;i<response.data.data.length;i++){
+
+              if( response.data.data[i].noticeState==1 ){
+                this.readStaff.push(response.data.data[i].staffName + "、 ")
+              }else{
+                this.unreadStaff.push(response.data.data[i].staffName + "、 " )
+              }
+
+            }
+
           })
           .catch(function (error) {
             console.log(error);
@@ -414,8 +483,8 @@ export default {
       // 一行的数据
       this.affiche=row
       // 清空部门
-      this.affiche.deptIds=[],
-      // 按公告id查询部门
+      this.affiche.deptIds=[]
+      // 按公告id查询发布部门
       this.selectAllDeptByNoticeId(row.noticeId)
 
     },

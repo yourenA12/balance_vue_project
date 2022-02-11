@@ -6,16 +6,7 @@
         <span></span>
         <br/>
         <!--搜索输入框-->
-        <el-row style="width: 200px; margin-left: 1110px">
-          <el-input v-model="seek" placeholder="搜索">
-            <template #suffix>
-              <el-icon class="el-input__icon">
-                <i-search/>
-              </el-icon>
-            </template>
-          </el-input>
-        </el-row>
-        <br/>
+
         <div style="width:100%;height: 100px;margin: auto;padding: 12px 24px;">
           <div class="staff_div_2" style="float:left;">
 
@@ -33,6 +24,89 @@
           </div>
         </div>
 
+        <div style="margin-top:10px;">
+          <!--搜索输入框-->
+          <div style="display: inline-block">
+            <span style="font-weight:bold;margin-left: 30px">员工名称</span>
+            <el-row style="width:200px;display: inline-block;margin-left: 15px">
+              <el-input v-model="pageInfo.staffNameSearch" placeholder="请输入用户名称"/>
+            </el-row>
+          </div>
+
+          <div style="display: inline-block;margin-left:25px">
+            <span style="font-weight:bold">部门 </span>
+
+            <el-select v-model="pageInfo.deptSearch" placeholder="请输入部门名称" style="width: 200px;margin-left: 15px">
+              <el-option
+                  v-for="item in deptNameAll"
+                  :key="item.deptId"
+                  :label="item.deptName"
+                  :value="item.deptId"
+              >
+              </el-option>
+            </el-select>
+
+          </div>
+
+          <div style="display: inline-block;margin-left:25px">
+            <span style="font-weight:bold">职位 </span>
+
+            <el-select v-model="pageInfo.postSearch" placeholder="请输入部门名称" style="width: 200px;margin-left: 15px">
+              <el-option
+                  v-for="item in positionAll"
+                  :key="item.positionId"
+                  :label="item.positionName"
+                  :value="item.positionId"
+              >
+              </el-option>
+            </el-select>
+
+          </div>
+
+          <div style="display: inline-block;margin-left:25px">
+            <span style="font-weight:bold"> 快转正员工</span>
+
+            <el-select placeholder="请选择状态" v-model="pageInfo.stateSearch" style="margin-left: 15px;">
+              <el-option label="近一周" value="3" style="margin-left: 15px"></el-option>
+              <el-option label="近一个月" value="2" style="margin-left: 15px"></el-option>
+            </el-select>
+
+          </div>
+          <div style="display: inline-block;margin-left:25px;margin-top:20px">
+
+            <div class="block">
+              <span class="demonstration" style="font-weight:bold">入职日期</span>
+              <el-date-picker style="margin-left: 15px;"
+                              v-model="hiredateSearch"
+                              type="daterange"
+                              unlink-panels
+                              range-separator="至"
+                              start-placeholder="开始时间"
+                              end-placeholder="结束时间"
+                              :shortcuts="shortcuts"
+                              value-format="YYYY-MM-DD"
+              >
+              </el-date-picker>
+
+            </div>
+          </div>
+
+
+          <el-button @click="selectProbation()" type="primary" style="width: 70px;margin-left:25px">
+            <el-icon>
+              <i-search/>
+            </el-icon>
+            搜索
+          </el-button>
+          <el-button style="width: 70px;" @click="replacement()">
+            <el-icon>
+              <i-refresh/>
+            </el-icon>
+            重置
+          </el-button>
+        </div>
+        <br/>
+
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
           <el-table :data="tableData"
@@ -41,7 +115,7 @@
             <el-table-column prop="staffName" label="姓名" width="180"/>
             <el-table-column prop="staffIdentity" label="证件号码" width="180"/>
             <el-table-column prop="deptName" label="部门" width="180"/>
-            <el-table-column prop="postName" label="职位" width="180"/>
+            <el-table-column prop="positionName" label="职位" width="180"/>
             <el-table-column prop="staffHiredate" label="入职日期" width="180"/>
             <el-table-column label="试用期限" width="180">
               <template #default>
@@ -61,7 +135,7 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-              v-model:currentPage="pageInfo.currentPage"
+              v-model:currenPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
@@ -141,8 +215,9 @@
               v-model="positiveTK.workerType"
               placeholder="请选择" style="width:240px;"
           >
-            <el-option label="转正" value="转正" style="margin-left: 20px"></el-option>
-            <el-option label="提前转正" value="提前转正" style="margin-left: 20px"></el-option>
+            <el-option label="转正" value="转正" ></el-option>
+            <el-option label="提前转正" value="提前转正" ></el-option>
+            <el-option label="延迟转正" value="延迟转正" ></el-option>
           </el-select>
         </el-form-item>
 
@@ -186,7 +261,46 @@ export default defineComponent({
         callback();
       }
     };
+
+
     return {
+
+      // 入职日期 时间段
+      hiredateSearch: [],
+      //存储部门名称
+      deptNameAll:[],
+      //存储职位名称
+      positionAll:[],
+      //时间选择
+      shortcuts: [
+        {
+          text: "最近一周",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end];
+          },
+        },
+        {
+          text: "最近一个月",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end];
+          },
+        },
+        {
+          text: "最近三个月",
+          value: () => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            return [start, end];
+          },
+        },
+      ],
       tableData: [],
       seek: "",
       positiveTK: {
@@ -215,9 +329,22 @@ export default defineComponent({
       },
       pageInfo: {
         // 分页参数
-        currentPage: 1, //当前页
+        currenPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        //搜索绑定值
+        // 员工名称
+        staffNameSearch: '',
+        // 部门名称
+        deptSearch: '',
+        //部门职位名称
+        postSearch:'',
+
+        // 入职日期  开始时间
+        clockTimeStart: '',
+        // 结束时间
+        clockTimeEnd: ''
       },
       rules: {
         type: [
@@ -270,22 +397,32 @@ export default defineComponent({
         }
       })
     },
-    // RestForm() {
-    //   this.become_1 = {
-    //     name: '',
-    //     dept: '',
-    //     post: '',
-    //     entrydate: '',
-    //     tryoutdate: '',
-    //     type: '',
-    //     remarks: '',
-    //     becomedate: ''
-    //   }
-    // },
+    //搜索框重置
+    replacement() {
+      this.pageInfo.currentPage = 1,
+          this.pageInfo.staffNameSearch = '',
+          this.pageInfo.deptSearch = '',
+          this.pageInfo.postSearch = '',
+          this.pageInfo.clockTimeStart = '',
+          this.pageInfo.clockTimeEnd = ''
+
+          this.selectProbation()
+
+    },
+
     //查询试用期人员
     selectProbation() {
+
+      // 首先清空
+      this.pageInfo.clockTimeStart = ""  // 开始时间
+      this.pageInfo.clockTimeEnd = "" // 结束时间
+      if (this.hiredateSearch != "") { // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart = this.hiredateSearch[0] // 取 入职日期选择框 的开始时间 就是数组下标为0（第一个）
+        this.pageInfo.clockTimeEnd = this.hiredateSearch[1]
+      }
+
       this.axios
-          .get("http://localhost:8010/provider/staff/selectProbation/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/staff/selectProbation",{params: this.pageInfo})
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;
@@ -373,8 +510,36 @@ export default defineComponent({
       });
 
     },
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectDeptName")
+          .then((response) => {
+            console.log(response);
+            this.deptNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询职位名称
+    selectPositionName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectPositionName")
+          .then((response) => {
+            console.log(response);
+            this.positionAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
   },created() {
     this.selectProbation();
+    this.selectDeptName();
+    this.selectPositionName();
   },
 })
 </script>
