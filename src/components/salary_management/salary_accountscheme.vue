@@ -300,7 +300,10 @@ export default {
         compensationRemark:this.compensationForm.compensationRemark,
       }
 
+      console.log( this.$refs.tree.getCheckedKeys() )
+      console.log( this.compensationForm.citysPost )
 
+      this.insertcompensation()
 
     },
     //添加薪酬组
@@ -316,6 +319,7 @@ export default {
           postIds:this.compensationForm.citysPost
         }
       }).then(response => {
+        console.log(response);
         if (response.data.data > 0) {
           ElMessage({
             message: '添加成功',
