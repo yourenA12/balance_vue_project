@@ -260,7 +260,7 @@ export default {
     deriveExcel() {
       var _this = this;
       let tHeader = ["员工名称", "部门名称", "早上打卡时间", "下午打卡时间", "记录时间"]; // 导出的表头名
-      let filterVal = ["staff", "department", "morning", "afternoon", "record"];//导出其prop属性
+      let filterVal = ["staffName", "deptName", "mornClock", "afternoonClock", "updatedTime"];//导出其prop属性
       ElMessageBox.prompt('请输入文件名', '提示', {
         confirmButtonText: '生成',
         cancelButtonText: '取消',

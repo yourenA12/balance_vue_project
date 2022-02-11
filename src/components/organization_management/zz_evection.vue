@@ -333,7 +333,7 @@ export default {
     //分页查询
     deptinquire() {
       this.axios
-          .get("http://localhost:8010/provider/deptVo/dept/" + this.pageInfo.currenPage + "/" + this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/dept/yyds"/* + this.pageInfo.currenPage + "/" + this.pageInfo.pagesize*/)
           .then((rersponse) => {
             console.log(rersponse);
             this.tableData = rersponse.data.data.records;
