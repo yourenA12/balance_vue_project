@@ -150,21 +150,25 @@
         </div>
       </el-form>
     </el-drawer>
-
     <!--  表格-->
     <div class="y">
-      <el-table :data="tableData" stripe style="width: 100% ;"
+      <el-table :data="tableData"
+                v-if="refreshTable"
+                row-key="deptId"
+                :default-expand-all="expands"
+                @expand-change="expands=true"
+                stripe style="width: 100% ;"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
-        <el-table-column type="expand">
-          <template #default="scope">
+<!--        <el-table-column type="expand">-->
+<!--          <template #default="scope">-->
 
-            <span style="margin-left: 50px">部门负责人：{{ scope.row.staffName }}</span><br>
-            <span style="margin-left: 50px">部门人数：{{ scope.row.empNum }}</span>
+<!--            <span style="margin-left: 50px">部门负责人：{{ scope.row.staffName }}</span><br>-->
+<!--            <span style="margin-left: 50px">部门人数：{{ scope.row.empNum }}</span>-->
 
-          </template>
-        </el-table-column>
+<!--          </template>-->
+<!--        </el-table-column>-->
 
         <el-table-column prop="deptName" label="部门名称"/>
         <el-table-column prop="createdTime" label="创建时间"/>
@@ -258,6 +262,10 @@ export default {
       //抽屉
       drawer: ref(false),
       tableData: [],
+      //一键展开收缩菜单
+      expands: false,
+      //渲染展开菜单
+      refreshTable: true,
       //状态
       options: ref([
         {
@@ -336,9 +344,9 @@ export default {
           .get("http://localhost:8010/provider/dept/yyds"/* + this.pageInfo.currenPage + "/" + this.pageInfo.pagesize*/)
           .then((rersponse) => {
             console.log(rersponse);
-            this.tableData = rersponse.data.data.records;
-            console.log(rersponse.data.data.records)
-            this.pageInfo.total = rersponse.data.data.total;
+            this.tableData = rersponse.data.data;
+            // console.log(rersponse.data.data.records)
+            // this.pageInfo.total = rersponse.data.data.total;
           }).catch(function (error) {
         console.log(error);
       })
