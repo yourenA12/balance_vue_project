@@ -92,7 +92,7 @@
           </div>
 
 
-          <el-button @click="selectStaff()" type="primary" style="width: 70px;margin-left:25px">
+          <el-button @click="selectProbation()" type="primary" style="width: 70px;margin-left:25px">
             <el-icon>
               <i-search/>
             </el-icon>
@@ -135,7 +135,7 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-              v-model:currentPage="pageInfo.currentPage"
+              v-model:currenPage="pageInfo.currentPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
@@ -215,8 +215,9 @@
               v-model="positiveTK.workerType"
               placeholder="请选择" style="width:240px;"
           >
-            <el-option label="转正" value="转正" style="margin-left: 20px"></el-option>
-            <el-option label="提前转正" value="提前转正" style="margin-left: 20px"></el-option>
+            <el-option label="转正" value="转正" ></el-option>
+            <el-option label="提前转正" value="提前转正" ></el-option>
+            <el-option label="延迟转正" value="延迟转正" ></el-option>
           </el-select>
         </el-form-item>
 
@@ -328,7 +329,7 @@ export default defineComponent({
       },
       pageInfo: {
         // 分页参数
-        currentPage: 1, //当前页
+        currenPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
 
@@ -396,22 +397,32 @@ export default defineComponent({
         }
       })
     },
-    // RestForm() {
-    //   this.become_1 = {
-    //     name: '',
-    //     dept: '',
-    //     post: '',
-    //     entrydate: '',
-    //     tryoutdate: '',
-    //     type: '',
-    //     remarks: '',
-    //     becomedate: ''
-    //   }
-    // },
+    //搜索框重置
+    replacement() {
+      this.pageInfo.currentPage = 1,
+          this.pageInfo.staffNameSearch = '',
+          this.pageInfo.deptSearch = '',
+          this.pageInfo.postSearch = '',
+          this.pageInfo.clockTimeStart = '',
+          this.pageInfo.clockTimeEnd = ''
+
+          this.selectProbation()
+
+    },
+
     //查询试用期人员
     selectProbation() {
+
+      // 首先清空
+      this.pageInfo.clockTimeStart = ""  // 开始时间
+      this.pageInfo.clockTimeEnd = "" // 结束时间
+      if (this.hiredateSearch != "") { // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart = this.hiredateSearch[0] // 取 入职日期选择框 的开始时间 就是数组下标为0（第一个）
+        this.pageInfo.clockTimeEnd = this.hiredateSearch[1]
+      }
+
       this.axios
-          .get("http://localhost:8010/provider/staff/selectProbation/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/staff/selectProbation",{params: this.pageInfo})
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;

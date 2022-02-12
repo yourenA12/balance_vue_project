@@ -59,13 +59,13 @@
       <el-table :data="tableData" stripe border style="width: 100%"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
-        <el-table-column prop="A" fixed label="名称"/>
-        <el-table-column prop="B" fixed label="部门"/>
-        <el-table-column prop="C" label="正常次数"/>
-        <el-table-column prop="D" label="迟到次数"/>
-        <el-table-column prop="D" label="早退次数"/>
-        <el-table-column prop="D" label="旷工次数"/>
-        <el-table-column prop="C" label="是否全勤"/>
+        <el-table-column prop="staffName" fixed label="名称"/>
+        <el-table-column prop="clssName" fixed label="部门"/>
+        <el-table-column prop="normalFrequency" label="正常次数"/>
+        <el-table-column prop="lateFrequency" label="迟到次数"/>
+        <el-table-column prop="leaveEarlyFrequency" label="早退次数"/>
+        <el-table-column prop="absenteeismFrequency" label="旷工次数"/>
+        <el-table-column prop="present" label="是否全勤"/>
       </el-table>
     </div>
   </div>
@@ -81,8 +81,8 @@
         :total="pageInfo.total"
         :pager-count="5"
         background
-        @size-change="sele"
-        @current-change="sele"
+        @size-change="His"
+        @current-change="His"
     >
     </el-pagination>
   </div>
@@ -103,27 +103,28 @@ export default {
         total: 0,
       },
       // 历史归档数据
-      tableData: [
-        {
-          A: '王鑫',
-          B: '人事部',
-          C: '1',
-          D: '2',
-        }, {
-          A: '王鑫',
-          B: '人事部',
-          C: '1',
-          D: '2',
-        }, {
-          A: '王鑫',
-          B: '人事部',
-          C: '1',
-          D: '2',
-        },
-
-      ]
+      tableData: []
 
     };
+  },
+  methods:{
+    //分页查询
+    His(){
+      this.axios
+          .get("http://localhost:8010/provider/archive/HiS/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+          .then((response)=>{
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+  },
+  created() {
+    this.His();
   },
 };
 </script>

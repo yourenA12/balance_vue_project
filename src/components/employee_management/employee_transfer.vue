@@ -62,9 +62,9 @@
                 <div style="display: inline-block;position: absolute;left:500px;" >
                   <el-form-item label="异动类型：" prop="type">
                     <el-select v-model="mobilizeForm.transferType" placeholder="请选择活动区域" style="width:240px;">
-                      <el-option label="调岗" value="调岗" style="margin-left: 20px;"></el-option>
-                      <el-option label="普升" value="普升" style="margin-left: 20px;"></el-option>
-                      <el-option label="降职" value="降职" style="margin-left: 20px;"></el-option>
+                      <el-option label="调岗" value="调岗" ></el-option>
+                      <el-option label="普升" value="普升" ></el-option>
+                      <el-option label="降职" value="降职" ></el-option>
                     </el-select>
                   </el-form-item><br/>
 
