@@ -259,7 +259,6 @@
         <div class="big-title">&nbsp;&nbsp;&nbsp;选择参保组织</div>
 
         <div>
-
         </div>
 
         <!-- 标题 -->
