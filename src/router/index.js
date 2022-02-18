@@ -441,17 +441,17 @@ const routes = [
                     {
                         path: '/salary/paynavigation',
                         component: modules[`${'../components/salary_management/salary_salarynavigation.vue'}`],
-                        redirect: "/salary/flat",
+                        redirect: "/salary/scheme",
                         children: [
+                            //薪酬组
+                            {
+                                path: '/salary/scheme',
+                                component: modules[`${'../components/salary_management/salary_accountscheme.vue'}`]
+                            },
                             //薪酬结构
                             {
                                 path: '/salary/flat',
                                 component: modules[`${'../components/salary_management/salary_construction.vue'}`]
-                            },
-                            //核算方案
-                            {
-                                path: '/salary/scheme',
-                                component: modules[`${'../components/salary_management/salary_accountscheme.vue'}`]
                             },
                             //工资表
                             {
@@ -736,4 +736,5 @@ const router = createRouter({
 //         next()
 //     }
 // })
+
 export default router

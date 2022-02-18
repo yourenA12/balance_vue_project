@@ -6,7 +6,7 @@
       <!--选择开始日期和结束日期-->
       <b style="font-size: 18px;margin-left:10px;margin-right: 10px">补打卡时间</b>
       <el-date-picker
-          v-model="value1"
+          v-model="clockTime"
           type="daterange"
           unlink-panels
           range-separator="TO"
@@ -19,22 +19,22 @@
       </el-date-picker>
       <!--    全部部门-->
       <b style="font-size: 18px;margin-left:25px;margin-right: 10px">全部部门</b>
-      <el-select size="small" v-model="value" clearable placeholder="选择部门" >
+      <el-select size="small" v-model="pageInfo.optionsDeptId" clearable placeholder="选择部门" >
         <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in optionsDept"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptId"
         >
         </el-option>
       </el-select>
       <!--搜索框-->
-      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员/部名称</b>
-      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员工名称</b>
+      <el-input size="small" v-model="pageInfo.staffName" placeholder="请输入员工名称" style="width:150px;">
       </el-input>
 
       <!--查询按钮-->
-      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
+      <el-button @click="card" style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
         <el-icon><i-search />
 
         </el-icon>
@@ -57,19 +57,20 @@
       <el-table :data="tableData" stripe style="width: 100%"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
-        <el-table-column prop="applyfor" label="申请名称"/>
-        <el-table-column prop="type" label="补打卡类型"/>
-        <el-table-column prop="hour" label="补打卡时间"/>
-        <el-table-column prop="remark" label="备注"/>
+        <el-table-column prop="staffName" label="申请名称"/>
+        <el-table-column prop="deptName" label="发起人部门"/>
+        <el-table-column prop="cardType" label="补打卡类型"/>
+        <el-table-column prop="cardDate" label="补打卡时间"/>
+        <el-table-column prop="cardRemarks" label="备注"/>
         <el-table-column prop="operate" label="操作">
-          <template #default>
+          <template #default="scope">
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
                 :icon="InfoFilled"
                 icon-color="red"
                 title="确定删除吗?"
-                @confirm="through1()"
+                @confirm="through1(scope.row)"
             >
               <template #reference>
                 <el-button type="text" size="small">
@@ -92,8 +93,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="sele"
-          @current-change="sele"
+          @size-change="card"
+          @current-change="card"
       >
       </el-pagination>
     </div>
@@ -103,6 +104,7 @@
 
 <script lang="ts">
 import {ref, defineComponent} from "vue";
+import {ElMessage} from "element-plus/es";
 
 export default {
   data() {
@@ -112,6 +114,10 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        // 员工名称
+        staffName:"",
+        // 部门下拉框值
+        optionsDeptId:"",
       },
       shortcuts: [
         {
@@ -142,48 +148,74 @@ export default {
           },
         },
       ],
-      options: ref([
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-        {
-          value: "Option3",
-          label: "Option3",
-        },
-        {
-          value: "Option4",
-          label: "Option4",
-        },
-        {
-          value: "Option5",
-          label: "Option5",
-        },
-      ]),
-      tableData: [
-        {
-          applyfor: '七七',
-          type: '车祸',
-          place: '厦门',
-          hour: '8:10',
-          remark: '啊啊啊',
-
-        },
-      ],
-      value1: "", //日期
+      //查询全部部门
+      optionsDept: ref([]),
+      tableData: [],
+      clockTime: "", //日期
       value: ref(""), //选择
     };
   },
   methods:{
-    // 点击删除确认按钮触发
-    through1() {
-      alert(1)
+    //分页查询
+    card(){
+      // 首先清空
+      this.pageInfo.clockTimeStart=""
+      this.pageInfo.clockTimeEnd=""
+      if(this.clockTime != ""){ // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart=this.clockTime[0]
+        this.pageInfo.clockTimeEnd=this.clockTime[1]
+      }
+      this.axios
+          .get("http://localhost:8010/provider/CardVo/card",{params:this.pageInfo})
+          .then((response)=>{
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
     },
-  }
+    //查询所有部门
+    CardDept(){
+      this.axios
+          .get("http://localhost:8010/provider/CardVo/Dept")
+          .then((response)=>{
+            console.log(response);
+            this.optionsDept=response.data.data;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+    //删除
+    Carddelete(row){
+      this.axios
+          .delete("http://localhost:8010/provider/card/Traveldelete/" + row.cardId)
+          .then((response)=>{
+            console.log(response)
+            if (response.data.data === "成功"){
+              ElMessage.success("删除成功");
+              this.card() //删完在查一次
+            }else {
+              ElMessage.error("删除失败")
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+    // 点击删除确认按钮触发
+    through1(row) {
+      alert(row.cardId)
+      this.Carddelete(row)
+    },
+  },
+  created() {
+    // 分页查询
+    this.card();
+    this.CardDept()
+  },
 };
 </script>
 
@@ -203,7 +235,7 @@ table * {
 }
 
 .demo-pagination-block {
-  margin-left: 850px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 30px;
 }

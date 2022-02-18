@@ -1,5 +1,5 @@
 <template>
-<!-- 参保方案 -->
+  <!-- 参保方案 -->
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
@@ -10,13 +10,27 @@
             <el-button style="width:75px" size="mini" type="primary" plain> +新增</el-button>
           </router-link>
 
+          <el-button size="mini" plain class="search-ss" type="primary" @click="reset()">
+            <i class="iconfont">
+              &#xe6b8
+            </i>
+            重置
+          </el-button>
+
+          <el-button @click="selectAllPage()" size="mini" class="search-ss" type="primary">
+            <i class="iconfont">
+              &#xe61b
+            </i>
+            搜索
+          </el-button>
+
           <!-- 下拉选择器 -->
           <div class="resume-operation">
             <el-select
-                v-model="state"
+                v-model="pageInfo.state"
                 size="small"
                 clearable
-                placeholder="请选择"
+                placeholder="请选择公告状态"
             >
               <el-option
                   v-for="item in options"
@@ -27,17 +41,26 @@
               </el-option>
             </el-select>
           </div>
+
+          <!-- 方案名称搜索 -->
+          <el-input v-model="pageInfo.input" style="width:200px;float: right;margin-right: 20px" size="small"
+                    placeholder="请输入方案名称"></el-input>
+
         </div>
+
 
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
-          <el-table :data="scheme_table"  style="width: 100%;margin-top: 20px"
+          <el-table :data="tableData" style="width: 100%;margin-top: 20px"
                     :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
-            <el-table-column prop="scheme_id" label="方案编号"/>
-            <el-table-column prop="scheme_name" label="方案名称"/>
-            <el-table-column prop="insured_number" label="参保人数"/>
-            <el-table-column prop="scheme_state" label="状态"/>
+            <el-table-column prop="defInsuredName" label="方案名称"/>
+            <el-table-column prop="defInsuredNumber" label="参保人数"/>
+            <el-table-column prop="defInsuredState" label="状态">
+              <template #default="scope">
+                {{ scope.row.defInsuredState==0?'启用':'禁用' }}
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template #default="scope"
               >
@@ -48,13 +71,13 @@
                 </router-link
                 >&nbsp;
 
-                <el-button type="text" size="small"> {{ scope.row.scheme_state === '启用' ? '禁用 ' : '启用 ' }}</el-button>
+                <el-button @click="updateDefInsuredState(scope.row.defInsuredId,scope.row.defInsuredState)" type="text" size="small"> {{ scope.row.defInsuredState === 0 ? '禁用 ' : '启用 ' }}</el-button>
 
                 <!-- 删除行确认框 -->
-                <el-popconfirm v-if="scope.row.scheme_state==='禁用'"
+                <el-popconfirm v-if="scope.row.defInsuredState===1"
                                @confirm="deleteRow(scope.$index, scheme_table)" title="删除此方案?">
                   <template #reference>
-                    <el-button style="color:red" type="text" size="small">删除 </el-button>
+                    <el-button style="color:red" type="text" size="small">删除</el-button>
                   </template>
                 </el-popconfirm>
 
@@ -75,8 +98,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectUsers"
-              @current-change="selectUsers"
+              @size-change="selectAllPage()"
+              @current-change="selectAllPage()"
           >
           </el-pagination>
         </div>
@@ -88,18 +111,81 @@
 
 <script>
 import {ref, defineComponent} from "vue";
-import { ElMessage } from 'element-plus'
+import {ElMessage} from 'element-plus'
 
 export default {
   methods: {
-    // 删除行
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
-      ElMessage({
-        message: '删除成功',
-        type: 'success',
-      })
+
+    // 修改参保方案状态
+    updateDefInsuredState(id,state){
+      this.axios
+          .put("http://localhost:8010/provider/defInsured/updateDefInsuredState",{defInsuredId:id,defInsuredState:state==0?1:0})
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '操作成功！！',
+              })
+              // 调用查询
+              this.selectAllPage()
+            }else{
+              ElMessage('操作失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     },
+
+    // 删除行
+    deleteRow(id) {
+      this.axios
+          .delete("http://localhost:8010/provider/notice/deleteNotices/" +  id)
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '删除成功！！',
+              })
+              // 调用查询
+              this.selectAllPage()
+            }else{
+              ElMessage('删除失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 重置按钮
+    reset() {
+      this.pageInfo.input = ""
+      this.pageInfo.state = ""
+      // 调用查询
+      this.selectAllPage()
+    },
+
+    // 查询所有参保方案
+    selectAllPage() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectAllPage",{params:this.pageInfo})
+          .then((response) => {
+            console.log(response);
+            this.tableData =response.data.data.records
+            this.pageInfo.total=response.data.data.total
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+  },
+  created() {
+    // 调用查询
+    this.selectAllPage()
   },
   data() {
     return {
@@ -109,47 +195,16 @@ export default {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+        input: "",// 参保方案名称搜索框的值
+        state: "",// 参保方案状态下拉框的值
       },
       //下拉选择器
       options: [
         {value: "0", label: "启用"},
         {value: "1", label: "禁用"},
       ],
-      // 下拉框的值
-      state: "",
       // 参保方案表数据
-      scheme_table: [
-        {
-          scheme_id: 1, // 方案id
-          scheme_name: "方案1", // 方案名称
-          insured_number: 10, // 参保人数
-          scheme_state: "启用", // 方案状态
-        },
-        {
-          scheme_id: 2, // 方案id
-          scheme_name: "方案2", // 方案名称
-          insured_number: 20, // 参保人数
-          scheme_state: "禁用", // 方案状态
-        },
-        {
-          scheme_id: 3, // 方案id
-          scheme_name: "方案3", // 方案名称
-          insured_number: 30, // 参保人数
-          scheme_state: "启用", // 方案状态
-        },
-        {
-          scheme_id: 4, // 方案id
-          scheme_name: "方案4", // 方案名称
-          insured_number: 40, // 参保人数
-          scheme_state: "禁用", // 方案状态
-        },
-        {
-          scheme_id: 5, // 方案id
-          scheme_name: "方案5", // 方案名称
-          insured_number: 50, // 参保人数
-          scheme_state: "启用", // 方案状态
-        },
-      ],
+      tableData: [],
     };
   },
 };
@@ -167,7 +222,7 @@ export default {
 	 */
 .resume-operation {
   float: right;
-  width: 120px;
+  width: 150px;
 }
 
 /* 外层阴影 */
@@ -221,6 +276,11 @@ export default {
 
 table * {
   text-align: center;
+}
+
+.search-ss {
+  float: right;
+  margin-left: 20px;
 }
 
 </style>

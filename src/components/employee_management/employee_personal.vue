@@ -30,68 +30,58 @@
             <ul style="list-style-type: none; ">
               <li>
                 <label>开始时间</label>
-                <p>{{obj.start_time}}</p>
+                <p>{{obj.workStareTime}}</p>
               </li>
               <li>
                 <label>结束时间</label>
-                <p>{{obj.end_time}}</p>
+                <p>{{obj.workEndTime}}</p>
               </li>
               <li>
                 <label>任职公司</label>
-                <p>{{obj.company}}</p>
+                <p>{{obj.companyName}}</p>
               </li>
               <li>
                 <label>职位</label>
-                <p>{{obj.position}}</p>
+                <p>{{obj.positionName}}</p>
               </li>
-<!--              <li>-->
-<!--                <label>离职原因</label>-->
-<!--                <p>{{obj.reasons}}</p>-->
-<!--              </li>-->
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
-          <el-button type="text" style="color: #085fc3;" @click="workEditor(index)">编辑</el-button>
-          <el-button type="text" style="color: red;" @click="workDelete(index)">删除</el-button>
+          <el-button type="text" style="color: #085fc3;" @click="workEditor(index)">编辑 </el-button>
+          <el-button type="text" style="color: red;" @click="deleteWorkId(obj)">删除 </el-button>
           </div>
           <br/>
         </div>
 
+      <!--添加工作经历-->
         <div class="information_from" v-show="workInput">
           <el-form style="width: 90%;margin: auto; " :rules="rules" ref="workForm" :model="workForm">
              <br/>
               <div style="display: inline-block;margin:20px 0px 0px 50px">
                 <el-form-item label="开始时间:" required >
                   <el-col :span="11" >
-                    <el-form-item prop="start_time" style="width:240px;">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="workForm.start_time" style="width: 100%;"></el-date-picker>
+                    <el-form-item prop="workStareTime" style="width:240px;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workStareTime"  style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
 
                 <el-form-item label="任职公司：" class="el-form-item" >
                   <el-col :span="11">
-                    <el-form-item prop="company" style="width:240px;">
-                      <el-input   v-model="workForm.company" style="width: 100%;"></el-input>
+                    <el-form-item prop="companyName" style="width:240px;">
+                      <el-input v-model="workForm.companyName"   style="width: 100%;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
 
-<!--                <el-form-item label="离职原因：" >-->
-<!--                  <el-col :span="11">-->
-<!--                    <el-form-item prop="reasons" style="width:240px;">-->
-<!--                      <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>-->
-<!--                    </el-form-item>-->
-<!--                  </el-col>-->
-<!--                </el-form-item>-->
               </div>
 
             <div style="display: inline-block;position: absolute;top:20px;right:150px">
               <br>
                 <el-form-item label="结束时间:" required >
                   <el-col :span="11">
-                    <el-form-item prop="end_time" style="width:240px;">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="workForm.end_time" style="width: 100%;"></el-date-picker>
+                    <el-form-item prop="workEndTime" style="width:240px;">
+                      <el-date-picker type="date" placeholder="选择日期" style="width: 100%;" v-model="workForm.workEndTime"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-form-item><br>
@@ -100,8 +90,8 @@
                 <div style="float: right">
                 <el-form-item label="职位：" >
 
-                    <el-form-item prop="position" style="width:240px;">
-                      <el-input  v-model="workForm.position" style="width: 100%;"></el-input>
+                    <el-form-item prop="positionName" style="width:240px;">
+                      <el-input v-model="workForm.positionName" style="width: 100%;"></el-input>
                     </el-form-item>
 
                 </el-form-item>
@@ -111,7 +101,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="workCancel()">取消</el-button>
-                <el-button type="primary" @click="workSave()">保存</el-button>
+                <el-button type="primary" @click="insertWork()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -142,28 +132,29 @@
         <div v-for="(obj,index) in honorsAll" style="width:100%;position: relative;margin-top: 20px;" v-show="honorsShow">
           <div class="information_text">
             <ul style="list-style-type: none; ">
+
               <li>
                 <label>荣誉/奖项名称</label>
-                <p>{{obj.honors_name}}</p>
+                <p>{{obj.gloryName}}</p>
               </li>
               <li>
                 <label>奖励日期</label>
-                <p>{{obj.honors_time}}</p>
+                <p>{{obj.createdTime}}</p>
               </li>
               <li>
                 <label>颁发单位名称</label>
-                <p>{{obj.issuing_name}}</p>
+                <p>{{obj.gloryUnitname}}</p>
               </li>
               <li>
                 <label>备注</label>
-                <p>{{obj.remarks}}</p>
+                <p>{{obj.gloryRemark}}</p>
               </li>
 
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
-            <el-button type="text" style="color: #085fc3;" @click="honorsEditor(index)">编辑</el-button>
-            <el-button type="text" style="color: red;" @click="honorsDelete(index)">删除</el-button>
+            <el-button type="text" style="color: #085fc3;" @click="honorsEditor(index)">编辑 </el-button>
+            <el-button type="text" style="color: red;" @click="deleteGloryId(obj)">删除 </el-button>
           </div><br/>
         </div>
 
@@ -171,14 +162,14 @@
           <el-form style="width: 90%;margin: auto; " :rules="rules" ref="honorsForm" :model="honorsForm">
             <br/>
             <div style="display: inline-block;margin:20px 0px 0px 50px">
-              <el-form-item label="荣誉/奖项名称:" prop="honors_name" >
-              <el-input v-model="honorsForm.honors_name" style="width:240px;"></el-input>
+              <el-form-item label="荣誉/奖项名称:" prop="gloryName" >
+              <el-input v-model="honorsForm.gloryName" style="width:240px;"></el-input>
             </el-form-item><br>
 
               <el-form-item label="颁发单位名称：" class="el-form-item" >
                 <el-col :span="11">
-                  <el-form-item prop="issuing_name" style="width:240px;">
-                    <el-input   v-model="honorsForm.issuing_name" style="width: 100%;"></el-input>
+                  <el-form-item prop="gloryUnitname" style="width:240px;">
+                    <el-input   v-model="honorsForm.gloryUnitname" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
@@ -189,8 +180,8 @@
               <br>
               <el-form-item label="奖励日期:" >
                 <el-col :span="11">
-                  <el-form-item prop="honors_time" style="width:240px;">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="honorsForm.honors_time" style="width: 100%;"></el-date-picker>
+                  <el-form-item prop="createdTime" style="width:240px;">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="honorsForm.createdTime" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
@@ -199,8 +190,8 @@
               <div style="float: right">
                 <el-form-item label="备注：" >
 
-                  <el-form-item prop="remarks" style="width:240px;">
-                    <el-input type="textarea"  v-model="honorsForm.remarks" style="width: 100%;"></el-input>
+                  <el-form-item prop="gloryRemark" style="width:240px;">
+                    <el-input type="textarea"  v-model="honorsForm.gloryRemark" style="width: 100%;"></el-input>
                   </el-form-item>
 
                 </el-form-item>
@@ -211,7 +202,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="honorsCancel()">取消</el-button>
-                <el-button type="primary" @click="honorsSave()">保存</el-button>
+                <el-button type="primary" @click="insertGlory()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -237,31 +228,32 @@
         <div v-for="(obj,index) in punishmentAll" style="width:100%;position: relative;margin-top: 20px;" v-show="punishmentShow">
           <div class="information_text">
             <ul style="list-style-type: none; ">
+
               <li>
                 <label>惩罚类型</label>
-                <p>{{obj.punishment_type}}</p>
+                <p>{{obj.punishType}}</p>
               </li>
               <li>
                 <label>惩罚原因</label>
-                <p>{{obj.punishment_reason}}</p>
+                <p>{{obj.punishCause}}</p>
               </li>
               <li>
                 <label>惩罚单位</label>
-                <p>{{obj.punishment_unit}}</p>
+                <p>{{obj.punishUnit}}</p>
               </li>
               <li>
                 <label>是否撤销</label>
-                <p>{{obj.is_whether}}</p>
+                <p>{{obj.isRevocation==0?'否':'是'}}</p>
               </li>
               <li>
                 <label>备注</label>
-                <p>{{obj.punishment_remarks}}</p>
+                <p>{{obj.punishRemark}}</p>
               </li>
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
-            <el-button type="text" style="color: #085fc3;" @click="punishmentEditor(index)">编辑</el-button>
-            <el-button type="text" style="color: red;" @click="punishmentDelete(index)">删除</el-button>
+            <el-button type="text" style="color: #085fc3;" @click="punishmentEditor(index)">编辑 </el-button>
+            <el-button type="text" style="color: red;" @click="deletePunishId(obj)">删除 </el-button>
           </div><br/>
         </div>
 
@@ -269,8 +261,8 @@
           <el-form style="width: 90%;margin: auto; " :rules="rules" ref="punishmentForm" :model="punishmentForm">
             <br/>
             <div style="display: inline-block;margin:20px 0px 0px 50px">
-              <el-form-item label="惩罚类型:" prop="punishment_type">
-                <el-select v-model="punishmentForm.punishment_type" placeholder="请选择惩罚类型" style="width: 240px;">
+              <el-form-item label="惩罚类型:" prop="punishType">
+                <el-select v-model="punishmentForm.punishType" placeholder="请选择惩罚类型" style="width: 240px;">
                   <el-option label="警告" value="警告"></el-option>
                   <el-option label="记过" value="记过"></el-option>
                   <el-option label="记大过" value="记大过"></el-option>
@@ -281,15 +273,15 @@
 
               <el-form-item label="惩罚单位：" class="el-form-item" >
                 <el-col :span="11">
-                  <el-form-item prop="punishment_unit" style="width:240px;">
-                    <el-input   v-model="punishmentForm.punishment_unit" style="width: 100%;"></el-input>
+                  <el-form-item prop="punishUnit" style="width:240px;">
+                    <el-input   v-model="punishmentForm.punishUnit" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
 
               <el-form-item label="惩罚备注：" >
-                <el-form-item prop="punishment_remarks" style="width:240px;">
-                  <el-input type="textarea"  v-model="punishmentForm.punishment_remarks" style="width: 100%;"></el-input>
+                <el-form-item prop="punishRemark" style="width:240px;">
+                  <el-input type="textarea"  v-model="punishmentForm.punishRemark" style="width: 100%;"></el-input>
                 </el-form-item>
 
               </el-form-item>
@@ -301,16 +293,16 @@
               <div style="float: right">
 
                 <el-form-item label="惩罚原因：" >
-                  <el-form-item prop="punishment_reason" style="width:240px;">
-                    <el-input   v-model="punishmentForm.punishment_reason" style="width: 100%;"></el-input>
+                  <el-form-item prop="punishCause" style="width:240px;">
+                    <el-input   v-model="punishmentForm.punishCause" style="width: 100%;"></el-input>
                   </el-form-item>
 
                 </el-form-item>
 
                 <el-form-item label="是否撤销：" >
-                  <el-radio-group v-model="punishmentForm.is_whether" style="position: absolute;left:2px;">
-                    <el-radio label="是"></el-radio>
-                    <el-radio label="否"></el-radio>
+                  <el-radio-group v-model="punishmentForm.isRevocation" style="position: absolute;left:2px;">
+                    <el-radio :label="0">否</el-radio>
+                    <el-radio :label="1">是</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </div>
@@ -320,7 +312,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="punishmentCancel()">取消</el-button>
-                <el-button type="primary" @click="punishmentSave()">保存</el-button>
+                <el-button type="primary" @click="insertPunish()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -356,25 +348,25 @@
             <ul style="list-style-type: none; ">
               <li>
                 <label>开始时间</label>
-                <p>{{obj. start_time}}</p>
+                <p>{{obj. educationStartTime}}</p>
               </li>
               <li>
                 <label>结束时间</label>
-                <p>{{obj.end_time}}</p>
+                <p>{{obj.educationEndTime}}</p>
               </li>
               <li>
                 <label>学校名称</label>
-                <p>{{obj.school_name}}</p>
+                <p>{{obj.educationStudentname}}</p>
               </li>
               <li>
-                <label>备注</label>
-                <p>{{obj.educational_remarks}}</p>
+                <label>所属专业</label>
+                <p>{{obj.educationMajor}}</p>
               </li>
             </ul>
           </div>
           <div style="position: absolute;right: 6px;top:-5px">
-            <el-button type="text" style="color: #085fc3;" @click="educationalEditor(index)">编辑</el-button>
-            <el-button type="text" style="color: red;" @click="educationalDelete(index)">删除</el-button>
+            <el-button type="text" style="color: #085fc3;" @click="educationalEditor(index)">编辑 </el-button>
+            <el-button type="text" style="color: red;" @click="deleteEducationId(obj)">删除 </el-button>
           </div>
         </div><br/>
 
@@ -384,16 +376,16 @@
             <div style="display: inline-block;margin:20px 0px 0px 50px">
               <el-form-item label="开始时间:" required >
                 <el-col :span="11" >
-                  <el-form-item prop="start_time" style="width:240px;">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.start_time" style="width: 100%;"></el-date-picker>
+                  <el-form-item prop="educationStartTime" style="width:240px;">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.educationStartTime" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
 
               <el-form-item label="学校名称：" class="el-form-item" >
                 <el-col :span="11">
-                  <el-form-item prop="school_name" style="width:240px;">
-                    <el-input   v-model="educationalForm.school_name" style="width: 100%;"></el-input>
+                  <el-form-item prop="educationStudentname" style="width:240px;">
+                    <el-input   v-model="educationalForm.educationStudentname" style="width: 100%;"></el-input>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
@@ -405,18 +397,18 @@
               <br>
               <el-form-item label="结束时间:" required >
                 <el-col :span="11">
-                  <el-form-item prop="end_time" style="width:240px;">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.end_time" style="width: 100%;"></el-date-picker>
+                  <el-form-item prop="educationEndTime" style="width:240px;">
+                    <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.educationEndTime" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-form-item><br>
 
 
               <div style="float: right">
-                <el-form-item label="备注：" >
+                <el-form-item label="所属专业：" >
                   <el-col :span="11">
-                    <el-form-item prop="educational_remarks" style="width:240px;">
-                      <el-input type="textarea" v-model="educationalForm.educational_remarks" style="width: 100%;"></el-input>
+                    <el-form-item prop="educationMajor" style="width:240px;">
+                      <el-input type="textarea" v-model="educationalForm.educationMajor" style="width: 100%;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-form-item>
@@ -427,7 +419,7 @@
             <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
               <div style="width:20%;height:50px;margin:auto;">
                 <el-button @click="educationalCancel()">取消</el-button>
-                <el-button type="primary" @click="educationalSave()">保存</el-button>
+                <el-button type="primary" @click="insertEducation()">保存</el-button>
               </div>
             </div>
           </el-form>
@@ -436,121 +428,54 @@
       </div>
 
 
-      <!--      离职信息-->
+      <!--      调动记录-->
       <div style="border-left:3px solid blue;margin-top: 20px; ">
         <h3>
-          <span style="margin-left:10px;">离职信息</span>
+          <span style="margin-left:10px;">调动记录</span>
         </h3>
       </div>
 
-
-
-      <!--      离职信息-->
+      <!--      调动记录信息-->
       <div class="information">
-        <h3 style="color: #085fc3;font-size: 14px;margin-left: 10px;display: inline-block;">离职信息<i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe604;</i></h3>
+        <h3 style="color: #085fc3;font-size: 14px;margin-left: 10px;display: inline-block;">调动记录信息<i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe604;</i></h3>
         <div style="width:845px;border-top:1px solid silver;display: inline-block;margin-left: 7px;margin-bottom: 5px;"></div>
-        <h3 v-show="departureButton" style="color: #085fc3;font-size: 14px;position: relative;margin-left: 5px;display: inline-block;"><el-button type="text" @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput"><i class="iconfont" style="color: #085fc3;margin-right:2px;">&#xe600;</i>编辑</el-button></h3>
       </div>
 
       <div style="width: 100%;margin-top: 20px;">
 
-
-        <div style="width:100%;position: relative;margin-top: 20px;" v-show="departureShow">
-          <div class="information_text">
+        <div style="width:100%;position: relative;margin-top: 20px;" v-show="tranferShow">
+          <div v-for="(obj,index) in tranferAll" class="information_text">
             <ul style="list-style-type: none; ">
               <li>
-                <label>员工状态</label>
-                <p></p>
+                <label>异动类型</label>
+                <p>{{obj.transferType}}</p>
               </li>
               <li>
-                <label>离职原因</label>
-                <p>23</p>
+                <label>原部门名称</label>
+                <p>{{obj.deptName}}</p>
               </li>
               <li>
-                <label>离职时间</label>
-                <p></p>
+                <label>变动后部门名称</label>
+                <p>{{obj.deptName2}}</p>
               </li>
               <li>
-                <label>薪资结算日期</label>
-                <p></p>
+                <label>原职位名称</label>
+                <p>{{obj.positionName}}</p>
               </li>
               <li>
-                <label>备注</label>
-                <p></p>
+                <label>变动后部门名称</label>
+                <p>{{obj.positionName2}}</p>
+              </li>
+              <li>
+                <label>生效日期</label>
+                <p>{{obj.takeEffectDate}}</p>
               </li>
 
-            </ul>
+            </ul><br/>
           </div>
 
         </div>
 
-        <div class="information_from" v-show="departureInput">
-          <el-form style="width: 90%;margin: auto; " :rules="rules" ref="departureForm" :model="departureForm">
-            <br/>
-            <div style="display: inline-block;margin:20px 0px 0px 50px">
-              <el-form-item label="离职原因:" prop="reasons" >
-                <el-select
-                    v-model="departureForm.reasons"
-                    placeholder="请选择" style="width:240px">
-                  <el-option label="家庭原因" value="jtyy"></el-option>
-                  <el-option label="实习生返校" value="sxsfx"></el-option>
-                  <el-option label="回校深造" value="hxsz"></el-option>
-                  <el-option label="交通不便" value="jtbb"></el-option>
-                  <el-option label="身体健康因素" value="stjkys"></el-option>
-                  <el-option label="薪资原因" value="xzyy"></el-option>
-                  <el-option label="福利原因" value="flyy"></el-option>
-                  <el-option label="个人发展原因" value="grfzyy"></el-option>
-                  <el-option label="人际关系不融洽" value="rjgxyy"></el-option>
-                  <el-option label="工作环境不适应" value="gzhjbsy"></el-option>
-                  <el-option label="团队气氛不适应" value="tdqfbsy"></el-option>
-                  <el-option label="企业文化不适应" value="qyehbsy"></el-option>
-                  <el-option label="工作职责及目标不明确" value="gzzejmbbmq"></el-option>
-                  <el-option label="未得到充分的支持和授权" value="wddcfdzchsq"></el-option>
-                  <el-option label="其它" value="qt"></el-option>
-                </el-select>
-              </el-form-item>
-              <br>
-
-              <el-form-item label="薪酬结算日期:" required >
-                <el-col :span="11">
-                  <el-form-item prop="gotobi" style="width:240px;">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="departureForm.gotobi" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-form-item><br>
-
-
-            </div>
-
-            <div style="display: inline-block;position: absolute;top:20px;right:150px">
-              <br>
-              <el-form-item label="离职时间:" required >
-                <el-col :span="11">
-                  <el-form-item prop="date2" style="width:240px;">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="departureForm.date2" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-form-item><br>
-
-
-              <el-form-item label="备注：" style="position: absolute;left:28px;">
-                <el-col :span="11">
-                  <el-form-item prop="departure_remarks" style="width:240px;">
-                    <el-input type="textarea" v-model="departureForm.departure_remarks" style="width: 100%;"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-form-item>
-            </div>
-
-
-            <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
-              <div style="width:20%;height:50px;margin:auto;">
-                <el-button @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput">取消</el-button>
-                <el-button type="primary" @click="departureButton=!departureButton,departureShow=!departureShow,departureInput=!departureInput">保存</el-button>
-              </div>
-            </div>
-          </el-form>
-        </div>
 
       </div>
 
@@ -572,7 +497,7 @@
           <el-form-item label="开始时间:" required >
             <el-col :span="11" >
               <el-form-item prop="start_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.start_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workStareTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -580,18 +505,10 @@
           <el-form-item label="任职公司：" class="el-form-item" >
             <el-col :span="11">
               <el-form-item prop="company" style="width:240px;">
-                <el-input   v-model="workForm.company" style="width: 100%;"></el-input>
+                <el-input   v-model="workForm.companyName" style="width: 100%;"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item><br>
-
-          <el-form-item label="离职原因：" >
-            <el-col :span="11">
-              <el-form-item prop="reasons" style="width:240px;">
-                <el-input type="textarea" v-model="workForm.reasons" style="width: 100%;"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
         </div>
 
         <div style="display: inline-block;position: absolute;top:82px;right:50px">
@@ -599,7 +516,7 @@
           <el-form-item label="结束时间:" required >
             <el-col :span="11">
               <el-form-item prop="end_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.end_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" v-model="workForm.workEndTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -609,7 +526,7 @@
             <el-form-item label="职位：" >
 
               <el-form-item prop="position" style="width:240px;">
-                <el-input  v-model="workForm.position" style="width: 100%;"></el-input>
+                <el-input  v-model="workForm.positionName" style="width: 100%;"></el-input>
               </el-form-item>
 
             </el-form-item>
@@ -618,8 +535,8 @@
 
         <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
           <div style="width:30%;height:50px;margin:auto;">
-            <el-button @click="workbecome=false">取消</el-button>
-            <el-button type="primary" @click="workSave()">保存</el-button>
+            <el-button @click="workbecome=false;selectWorkId()">取消</el-button>
+            <el-button type="primary" @click="updateWork()">保存</el-button>
           </div>
         </div>
       </el-form>
@@ -641,15 +558,16 @@
     >
       <el-form style="width: 90%;margin: auto; " :rules="rules" ref="honorsForm" :model="honorsForm">
         <br/>
+
         <div style="display: inline-block;margin:0px 0px 0px -10px">
-          <el-form-item label="荣誉/奖项名称:" prop="honors_name" >
-            <el-input v-model="honorsForm.honors_name" style="width:240px;"></el-input>
+          <el-form-item label="荣誉/奖项名称:" prop="gloryName" >
+            <el-input v-model="honorsForm.gloryName" style="width:240px;"></el-input>
           </el-form-item><br>
 
           <el-form-item label="颁发单位名称：" class="el-form-item" >
             <el-col :span="11">
-              <el-form-item prop="issuing_name" style="width:240px;">
-                <el-input   v-model="honorsForm.issuing_name" style="width: 100%;"></el-input>
+              <el-form-item prop="gloryUnitname" style="width:240px;">
+                <el-input   v-model="honorsForm.gloryUnitname" style="width: 100%;"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -660,8 +578,8 @@
           <br>
           <el-form-item label="奖励日期:" >
             <el-col :span="11">
-              <el-form-item prop="honors_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="honorsForm.honors_time" style="width: 100%;"></el-date-picker>
+              <el-form-item prop="createdTime" style="width:240px;">
+                <el-date-picker type="date" placeholder="选择日期" v-model="honorsForm.createdTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -670,8 +588,8 @@
           <div style="float: right">
             <el-form-item label="备注：" >
 
-              <el-form-item prop="remarks" style="width:240px;">
-                <el-input type="textarea"  v-model="honorsForm.remarks" style="width: 100%;"></el-input>
+              <el-form-item prop="gloryRemark" style="width:240px;">
+                <el-input type="textarea"  v-model="honorsForm.gloryRemark" style="width: 100%;"></el-input>
               </el-form-item>
 
             </el-form-item>
@@ -681,8 +599,8 @@
 
         <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
           <div style="width:30%;height:50px;margin:auto;">
-            <el-button @click="honorsbecome=false">取消</el-button>
-            <el-button type="primary" @click="honorsSave()">保存</el-button>
+            <el-button @click="honorsbecome=false,selectGlory()">取消</el-button>
+            <el-button type="primary" @click="updateGlory()">保存</el-button>
           </div>
         </div>
       </el-form>
@@ -705,9 +623,10 @@
     >
       <el-form style="width: 90%;margin: auto; " :rules="rules" ref="punishmentForm" :model="punishmentForm">
         <br/>
+
         <div style="display: inline-block;margin:0px 0px 0px -10px">
-          <el-form-item label="惩罚类型:" prop="punishment_type">
-            <el-select v-model="punishmentForm.punishment_type" placeholder="请选择惩罚类型" style="width: 240px;">
+          <el-form-item label="惩罚类型:" prop="punishType">
+            <el-select v-model="punishmentForm.punishType" placeholder="请选择惩罚类型" style="width: 240px;">
               <el-option label="警告" value="警告"></el-option>
               <el-option label="记过" value="记过"></el-option>
               <el-option label="记大过" value="记大过"></el-option>
@@ -718,15 +637,15 @@
 
           <el-form-item label="惩罚单位：" class="el-form-item" >
             <el-col :span="11">
-              <el-form-item prop="punishment_unit" style="width:240px;">
-                <el-input   v-model="punishmentForm.punishment_unit" style="width: 100%;"></el-input>
+              <el-form-item prop="punishUnit" style="width:240px;">
+                <el-input   v-model="punishmentForm.punishUnit" style="width: 100%;"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item><br>
 
           <el-form-item label="惩罚备注：" >
-            <el-form-item prop="punishment_remarks" style="width:240px;">
-              <el-input type="textarea"  v-model="punishmentForm.punishment_remarks" style="width: 100%;"></el-input>
+            <el-form-item prop="punishRemark" style="width:240px;">
+              <el-input type="textarea"  v-model="punishmentForm.punishRemark" style="width: 100%;"></el-input>
             </el-form-item>
 
           </el-form-item>
@@ -738,16 +657,16 @@
           <div style="float: right">
 
             <el-form-item label="惩罚原因：" >
-              <el-form-item prop="punishment_reason" style="width:240px;">
-                <el-input   v-model="punishmentForm.punishment_reason" style="width: 100%;"></el-input>
+              <el-form-item prop="punishCause" style="width:240px;">
+                <el-input   v-model="punishmentForm.punishCause" style="width: 100%;"></el-input>
               </el-form-item>
 
             </el-form-item><br/>
 
             <el-form-item label="是否撤销：" >
-              <el-radio-group v-model="punishmentForm.is_whether" style="position: absolute;left:2px;">
-                <el-radio label="是"></el-radio>
-                <el-radio label="否"></el-radio>
+              <el-radio-group v-model="punishmentForm.isRevocation" style="position: absolute;left:2px;">
+                <el-radio :label="0">否</el-radio>
+                <el-radio :label="1">是</el-radio>
               </el-radio-group>
             </el-form-item>
           </div>
@@ -756,8 +675,8 @@
 
         <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
           <div style="width:30%;height:50px;margin:auto;">
-            <el-button @click="punishmentCancel()">取消</el-button>
-            <el-button type="primary" @click="punishmentSave()">保存</el-button>
+            <el-button @click="punishmentbecome=false;selectPunish()">取消</el-button>
+            <el-button type="primary" @click="updatePunish()">保存</el-button>
           </div>
         </div>
       </el-form>
@@ -766,7 +685,6 @@
 
 
   </div>
-
 
 
   <!--  //教育经历编辑弹框-->
@@ -782,16 +700,16 @@
         <div style="display: inline-block;margin:0px 0px 0px -10px">
           <el-form-item label="开始时间:" required >
             <el-col :span="11" >
-              <el-form-item prop="start_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.start_time" style="width: 100%;"></el-date-picker>
+              <el-form-item prop="educationStartTime" style="width:240px;">
+                <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.educationStartTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
 
           <el-form-item label="学校名称：" class="el-form-item" >
             <el-col :span="11">
-              <el-form-item prop="school_name" style="width:240px;">
-                <el-input   v-model="educationalForm.school_name" style="width: 100%;"></el-input>
+              <el-form-item prop="educationStudentname" style="width:240px;">
+                <el-input   v-model="educationalForm.educationStudentname" style="width: 100%;"></el-input>
               </el-form-item>
             </el-col>
           </el-form-item><br>
@@ -803,18 +721,18 @@
           <br>
           <el-form-item label="结束时间:" required >
             <el-col :span="11">
-              <el-form-item prop="end_time" style="width:240px;">
-                <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.end_time" style="width: 100%;"></el-date-picker>
+              <el-form-item prop="educationEndTime" style="width:240px;">
+                <el-date-picker type="date" placeholder="选择日期" v-model="educationalForm.educationEndTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item><br>
 
 
           <div style="float: right">
-            <el-form-item label="备注：" >
+            <el-form-item label="所属专业：" >
               <el-col :span="11">
-                <el-form-item prop="educational_remarks" style="width:240px;">
-                  <el-input type="textarea" v-model="educationalForm.educational_remarks" style="width: 100%;"></el-input>
+                <el-form-item prop="educationMajor" style="width:240px;">
+                  <el-input  v-model="educationalForm.educationMajor" style="width: 100%;"></el-input>
                 </el-form-item>
               </el-col>
             </el-form-item>
@@ -825,7 +743,7 @@
         <div style="width:90%;height:60px;margin: auto;margin-top:30px;padding: 0px 0px 30px 0px">
           <div style="width:30%;height:50px;margin:auto;">
             <el-button @click="educationalbecome=false">取消</el-button>
-            <el-button type="primary" @click="educationalSave()">保存</el-button>
+            <el-button type="primary" @click="updateEducation()">保存</el-button>
           </div>
         </div>
       </el-form>
@@ -840,11 +758,14 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
     return {
-
+      //显示调动记录信息
+      tranferShow:true,
+      //工作经历弹框
       workbecome:false,
       honorsbecome:false,
       punishmentbecome:false,
@@ -859,27 +780,24 @@ export default {
       //教育经历
       educationalAll:[],
 
-
      //工作经历
       workForm: {
         //开始时间
-        start_time:'',
+        workStareTime:'',
         //任职公司
-        company:'',
-        //离职原因
-        reasons:'',
+        companyName:'',
         //职位
-        position:'',
+        positionName:'',
         //结束时间
-        end_time:'',
+        workEndTime:'',
 
       },
       rules: {
-        start_time: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        workStareTime: [
+          { type: 'date', required: true, message: '请选择日期', trigger: 'blur' }
         ],
-        end_time: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        workEndTime: [
+          { type: 'date', required: true, message: '请选择时间', trigger: 'blur' }
         ],
       },
 
@@ -895,13 +813,13 @@ export default {
       //荣誉与奖励
       honorsForm:{
         //荣誉与奖励名称
-        honors_name:'',
+        gloryName:'',
         //颁发单位名称
-        issuing_name:'',
+        gloryUnitname:'',
         //奖励日期
-        honors_time:'',
+        createdTime:'',
         //备注
-        remarks:'',
+        gloryRemark:'',
       },
 
       //荣誉与奖励右上角的添加按钮
@@ -916,15 +834,15 @@ export default {
       //惩罚
       punishmentForm:{
         //惩罚类型
-        punishment_type:'',
+        punishType:'',
         //惩罚单位
-        punishment_unit:'',
+        punishUnit:'',
         //惩罚备注
-        punishment_remarks:'',
+        punishRemark:'',
         //惩罚原因
-        punishment_reason:'',
+        punishCause:'',
         //是否撤销
-        is_whether:'',
+        isRevocation:'',
       },
 
       //惩罚右上角的添加按钮
@@ -939,13 +857,13 @@ export default {
       //教育经历
       educationalForm:{
         //开始时间
-        start_time:'',
+        educationStartTime:'',
         //学校名称
-        school_name:'',
+        educationStudentname:'',
         //结束时间
-        end_time:'',
-        //备注
-        educational_remarks:'',
+        educationEndTime:'',
+        //所属专业
+        educationMajor:'',
       },
 
       //教育经历右上角的添加按钮
@@ -957,24 +875,19 @@ export default {
       //显示编辑的input表单
       educationalInput:false,
 
-      //离职信息
-      departureForm:{
-        //离职原因
-        reasons:'',
-        //薪酬结算日期
-        gotobi:'',
-        //离职时间
-        resignation_time:'',
-        //备注
-        departure_remarks:'',
+      //调动记录表
+      tranferAll:{
+        //异动类型
+        transferType:'' ,
+        //原部门名称
+        deptName:'' ,
+        //变动后部门名称
+        deptName2:'',
+        positionName:'',//原部门职位名称
+        positionName2:'',// 变动后部门职位名称
+        takeEffectDate:'',//生效日期
       },
 
-      //右上角编辑按钮
-      departureButton:true,
-      //显示离职信息
-      departureShow:true,
-      //显示编辑的input表单
-      departureInput:false,
 
 
     };
@@ -994,8 +907,83 @@ export default {
       this.$refs[formName].resetFields();
     },
 
+
+    //点击个人信息 显示
+    childrenWork(){
+      //当workForm中有值时，显示出来
+      if(this.workAll.length>0){
+        //显示工作经历信息
+        this.workShow=true
+        //隐藏 添加工作经历框
+        this.addWork=false
+        //显示右上角添加按钮
+        this.workerButton=true
+
+      }else {
+        //显示工作经历信息
+        this.workShow = false
+        //隐藏 添加工作经历框
+        this.addWork = true
+        //显示右上角添加按钮
+        this.workerButton = false
+      }
+
+        if(this.honorsAll.length>0){
+          //显示荣誉/奖励信息
+          this.honorsShow=true
+          //隐藏 添加荣誉/奖励框
+          this.addHonors=false
+          //显示右上角添加按钮
+          this.honorsButton=true
+        }else{
+          //显示荣誉/奖励信息
+          this.honorsShow=false
+          //隐藏 添加荣誉/奖励框
+          this.addHonors=true
+          //显示右上角添加按钮
+          this.honorsButton=false
+        }
+
+        if(this.punishmentAll.length>0){
+          //显示惩罚信息
+          this.punishmentShow=true
+          //隐藏 添加惩罚框
+          this.addPunishment=false
+          //显示右上角添加按钮
+          this.punishmentButton=true
+        }else{
+          //显示惩罚信息
+          this.punishmentShow=false
+          //隐藏 添加惩罚框
+          this.addPunishment=true
+          //显示右上角添加按钮
+          this.punishmentButton=false
+
+        }
+
+        if(this.educationalAll.length>0){
+          //显示教育经历信息
+          this.educationalShow=true
+          //隐藏 添加教育经历框
+          this.addEducational=false
+          //显示右上角添加按钮
+          this.educationalButton=true
+        }else{
+          //显示教育经历信息
+          this.educationalShow=false
+          //隐藏 添加教育经历框
+          this.addEducational=true
+          //显示右上角添加按钮
+          this.educationalButton=false
+        }
+
+      this.tranferShow=true;
+
+
+    },
     // 添加 工作经历
     addWorks(){
+
       this.workInput=true // 显示灰色 表单
       this.addWork=false // 隐藏 添加工作经历
     },
@@ -1009,31 +997,18 @@ export default {
 
       this.workInput=false // 隐藏灰色 表单
 
-      // 清空表单数据  this.xxx=null or =""
-      this.workForm.start_time="";
-      this.company="";
-      this.reasons="";
-      this.position="";
-      this.end_time="";
+      //清空开始时间
+      this.workForm.workStareTime="";
+      //清空任职公司
+      this.workForm.companyName="";
+      //清空职位
+      this.workForm.positionName="";
+      //清空结束时间
+      this.workForm.workEndTime="";
     },
 
     // 工作经历表单保存按钮
     workSave(){
-      // 取表单数据
-      let form = {
-        //获取开始时间
-        start_time:this.workForm.start_time,
-        //获取任职公司
-        company:this.workForm.company,
-        //获取离职原因
-        reasons:this.workForm.reasons,
-        //获取职位
-        position:this.workForm.position,
-        //获取结束时间
-        end_time:this.workForm.end_time,
-      }
-      // 向数组里面添加 表单数据
-      this.workAll.push(form)
 
       this.workInput=false // 隐藏灰色 表单
       this.workShow=true // 显示所有工作经历信息
@@ -1041,54 +1016,54 @@ export default {
 
       // 清空表单数据  this.xxx=null or =""
       //清空开始时间
-      this.workForm.start_time="";
+      this.workForm.workStareTime="";
       //清空任职公司
-      this.workForm.company="";
-      //清空离职原因
-      this.workForm.reasons="";
+      this.workForm.companyName="";
       //清空职位
-      this.workForm.position="";
+      this.workForm.positionName="";
       //清空结束时间
-      this.workForm.end_time="";
+      this.workForm.workEndTime="";
+
     },
 
     // 右上角的添加按钮
     addButton(){
       this.workInput=true // 显示灰色 表单
+
+      //清空开始时间
+      this.workForm.workStareTime="";
+      //清空任职公司
+      this.workForm.companyName="";
+      //清空职位
+      this.workForm.positionName="";
+      //清空结束时间
+      this.workForm.workEndTime="";
     },
+
 
     // 工作经历编辑按钮
     workEditor(i){
-       this.workbecome=true,
-           // alert(123)
-
-      this.workForm.start_time=this.workAll[i].start_time
-      this.workForm.company=this.workAll[i].company
-      this.workForm.reasons=this.workAll[i].reasons
-      this.workForm.position=this.workAll[i].position
-      this.workForm.end_time=this.workAll[i].end_time
+      // 根据id取值 赋值到弹出框
+      this.workForm=this.workAll[i]
+      // 打开弹出框
+      this.workbecome=true
 
     },
 
     // 工作经历删除按钮
-     workDelete(i){
+     workDelete(){
       /*
        splice（i,n） : 按照下标删除数组里的元素 从i开始删除n个元素
        i: 下标
        n: 删除个数
        */
 
-      this.workAll.splice(i,1)
        // 当工作经历信息删除为空时(数组长度为0时)
        if(this.workAll.length==0){
          this.addWork=true // 添加工作经历按钮显示
          this.workerButton=false // 右上角添加按钮隐藏
        }
      },
-
-
-
-
 
 
     // 添加 荣誉与奖励
@@ -1108,65 +1083,49 @@ export default {
 
       // 清空表单数据  this.xxx=null or =""
       //清空荣誉与奖励名称
-      this.honorsForm.honors_name="";
+      this.honorsForm.gloryName="";
       //清空颁发单位名称
-      this.honorsForm.issuing_name="";
+      this.honorsForm.gloryUnitname="";
       //清空奖励日期
-      this.honorsForm.honors_time="";
+      this.honorsForm.createdTime="";
       //清空备注
-      this.honorsForm.remarks="";
+      this.honorsForm.gloryRemark="";
 
     },
 
     // 荣誉与奖励表单保存按钮
     honorsSave(){
-      // 取表单数据
-      let formhonor = {
-        //获取荣誉与奖励名称
-        honors_name:this.honorsForm.honors_name,
-        //获取颁发单位名称
-        issuing_name:this.honorsForm.issuing_name,
-        //获取奖励日期
-        honors_time:this.honorsForm.honors_time,
-        //获取备注
-        remarks: this.honorsForm.remarks,
-      }
-      // 向数组里面添加 表单数据
-      this.honorsAll.push(formhonor)
-
       this.honorsInput=false // 隐藏灰色 表单
-      this.honorsShow=true // 显示所有荣誉与奖励信息
+      this.honorsShow=true // 显示所有工作经历信息
       this.honorsButton=true // 显示右上角添加按钮
 
-      // 清空表单数据  this.xxx=null or =""
-      //清空荣誉与奖励名称
-      this.honorsForm.honors_name="";
-      //清空颁发单位名称
-      this.honorsForm.issuing_name="";
-      //清空奖励日期
-      this.honorsForm.honors_time="";
-      //清空备注
-      this.honorsForm.remarks="";
+
     },
 
-    // 右上角的添加按钮
+    //右上角的添加按钮
     addhonorsButton(){
+      //清空荣誉与奖励名称
+      this.honorsForm.gloryName="";
+      //清空颁发单位名称
+      this.honorsForm.gloryUnitname="";
+      //清空奖励日期
+      this.honorsForm.createdTime="";
+      //清空备注
+      this.honorsForm.gloryRemark="";
       this.honorsInput=true // 显示灰色 表单
+
+
 
     },
 
     // 荣誉与奖励编辑按钮
     honorsEditor(i){
-      this.honorsbecome=true
+
 
       //编辑荣誉与奖励名称
-      this.honorsForm.honors_name=this.honorsAll[i].honors_name;
-      //编辑颁发单位名称
-      this.honorsForm.issuing_name=this.honorsAll[i].issuing_name;
-      //编辑奖励日期
-      this.honorsForm.honors_time=this.honorsAll[i].honors_time;
-      //编辑备注
-      this.honorsForm.remarks=this.honorsAll[i].remarks;
+      this.honorsForm=this.honorsAll[i]
+      this.honorsbecome=true
+
 
     },
 
@@ -1190,6 +1149,14 @@ export default {
 
 
 
+    // 惩罚表单保存按钮
+    punishSave(){
+      this.punishmentInput=false // 隐藏灰色 表单
+      this.punishmentShow=true // 显示所有工作经历信息
+      this.punishmentButton=true // 显示右上角添加按钮
+
+
+    },
 
     // 添加 惩罚
     addPunishments(){
@@ -1209,73 +1176,42 @@ export default {
       // 清空表单数据  this.xxx=null or =""
 
       //清空惩罚类型
-      this.punishmentForm.punishment_type="";
+      this.punishmentForm.punishType="";
       //清空惩罚单位
-      this.punishmentForm.punishment_unit="";
+      this.punishmentForm.punishUnit="";
       //清空惩罚备注
-      this.punishmentForm.punishment_remarks="";
+      this.punishmentForm.punishRemark="";
       //清空惩罚原因
-      this.punishmentForm.punishment_reason="";
+      this.punishmentForm.punishCause="";
       //清空是否撤销
-      this.punishmentForm.is_whether="";
+      this.punishmentForm.isRevocation="";
+
 
     },
 
-    // 惩罚表单保存按钮
-    punishmentSave(){
-      // 取表单数据
-      let formpunish = {
-        //获取惩罚类型
-        punishment_type:this.punishmentForm.punishment_type,
-        //获取惩罚单位
-        punishment_unit:this.punishmentForm.punishment_unit,
-        //获取惩罚备注
-        punishment_remarks:this.punishmentForm.punishment_remarks,
-        //获取惩罚原因
-        punishment_reason:this.punishmentForm.punishment_reason,
-        //获取是否撤销
-        is_whether:this.punishmentForm.is_whether,
-
-      }
-      // 向数组里面添加 表单数据
-      this.punishmentAll.push(formpunish)
-
-      this.punishmentInput=false // 隐藏灰色 表单
-      this.punishmentShow=true // 显示所有荣誉与奖励信息
-      this.punishmentButton=true // 显示右上角添加按钮
-
-      // 清空表单数据  this.xxx=null or =""
-      //清空惩罚类型
-      this.punishmentForm.punishment_type="";
-      //清空惩罚单位
-      this.punishmentForm.punishment_unit="";
-      //清空惩罚备注
-      this.punishmentForm.punishment_remarks="";
-      //清空惩罚原因
-      this.punishmentForm.punishment_reason="";
-      //清空是否撤销
-      this.punishmentForm.is_whether="";
-    },
 
     // 右上角的添加按钮
     addpunishmentButton(){
       this.punishmentInput=true // 显示灰色 表单
+
+      //清空惩罚类型
+      this.punishmentForm.punishType="";
+      //清空惩罚单位
+      this.punishmentForm.punishUnit="";
+      //清空惩罚备注
+      this.punishmentForm.punishRemark="";
+      //清空惩罚原因
+      this.punishmentForm.punishCause="";
+      //清空是否撤销
+      this.punishmentForm.isRevocation="";
     },
 
     // 荣誉与奖励编辑按钮
     punishmentEditor(i){
-      this.punishmentbecome=true,
-      // alert( this.gzjlall[i] )
-       // 编辑惩罚类型
-       this.punishmentForm.punishment_type=this.punishmentAll[i].punishment_type;
-      //编辑惩罚单位
-      this.punishmentForm.punishment_unit=this.punishmentAll[i].punishment_unit;
-      //编辑惩罚备注
-      this.punishmentForm.punishment_remarks=this.punishmentAll[i].punishment_remarks;
-      //编辑惩罚原因
-      this.punishmentForm.punishment_reason=this.punishmentAll[i].punishment_reason;
-      //编辑是否撤销
-      this.punishmentForm.is_whether=this.punishmentAll[i].is_whether;
+
+      this.punishmentForm=this.punishmentAll[i]
+      this.punishmentbecome=true;
+
     },
 
     // 工作经历删除按钮
@@ -1316,31 +1252,20 @@ export default {
       // 清空表单数据  this.xxx=null or =""
 
       //清空开始时间
-      this.educationalForm.start_time="";
+      this.educationalForm.educationStartTime="";
       //清空学校名称
-      this.educationalForm.school_name="";
+      this.educationalForm.educationStudentname="";
       //清空结束时间
-      this.educationalForm.end_time="";
-      //清空备注
-      this.educationalForm.educational_remarks="";
+      this.educationalForm.educationEndTime="";
+      //清空所属专业
+      this.educationalForm.educationMajor="";
 
 
     },
 
     // 教育经历表单保存按钮
     educationalSave(){
-      // 取表单数据
-      let formeducat = {
-        //获取开始时间
-        start_time:this.educationalForm.start_time,
-        //获取学校名称
-        school_name:this.educationalForm.school_name,
-        //获取结束时间
-        end_time:this.educationalForm.end_time,
-        //获取备注
-        educational_remarks:this.educationalForm.educational_remarks,
 
-      }
       // 向数组里面添加 表单数据
       this.educationalAll.push(formeducat)
 
@@ -1350,13 +1275,14 @@ export default {
 
       // 清空表单数据  this.xxx=null or =""
       //清空开始时间
-      this.educationalForm.start_time="";
+      this.educationalForm.educationStartTime="";
       //清空学校名称
-      this.educationalForm.school_name="";
+      this.educationalForm.educationStudentname="";
       //清空结束时间
-      this.educationalForm.end_time="";
-      //清空备注
-      this.educationalForm.educational_remarks="";
+      this.educationalForm.educationEndTime="";
+      //清空所属专业
+      this.educationalForm.educationMajor="";
+
 
     },
 
@@ -1367,17 +1293,10 @@ export default {
 
     // 教育经历编辑按钮
     educationalEditor(i){
-      this.educationalbecome=true,
-      // alert( this.gzjlall[i] )
 
-      //编辑开始时间
-      this.educationalForm.start_time=this.educationalAll[i].start_time;
-      //编辑学校名称
-      this.educationalForm.school_name=this.educationalAll[i].school_name;
-      //编辑结束时间
-      this.educationalForm.end_time=this.educationalAll[i].end_time;
-      //编辑备注
-      this.educationalForm.educational_remarks=this.educationalAll[i].educational_remarks;
+      this.educationalForm=this.educationalAll[i],
+      this.educationalbecome=true
+
 
     },
 
@@ -1396,7 +1315,433 @@ export default {
         this.educationalButton=false // 右上角添加按钮隐藏
       }
     },
-  },
+    //根据id查询员工信息
+    selectWorkId(){
+
+        this.axios
+            .get("http://localhost:8010/provider/workExperience/selectWorkExperienceId/" + this.$store.state.staffId_Msg)
+            .then((response) => {
+              console.log(response);
+              this.workAll = response.data.data;
+              this.childrenWork();
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+    },
+    // 修改工作经历
+    updateWork(){
+      this.axios({
+        url: 'http://localhost:8010/provider/workExperience/updateWorkExperienceId',
+        method: 'put',
+        data: this.workForm
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectWorkId()
+          //关闭弹出框
+          this.workbecome=false
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //根据id删除工作经历
+    deleteWorkId(index){
+
+      this.axios
+          .delete("http://localhost:8010/provider/workExperience/deleteWorkExperienceId/"+index.workExperienceId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectWorkId()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //添加工作经历
+    insertWork(){
+      this.axios({
+        url: 'http://localhost:8010/provider/workExperience/insertWorkExperience',
+        method: 'post',
+        data:{
+          staffId:this.$store.state.staffId_Msg,
+          workStareTime:this.workForm.workStareTime,
+          workEndTime:this.workForm.workEndTime,
+          companyName:this.workForm.companyName,
+          positionName:this.workForm.positionName
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectWorkId() // 修改完成后调用查询方法
+          this.workSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
+    //查询荣誉/奖励信息
+    selectGlory(){
+
+      this.axios
+          .get("http://localhost:8010/provider/Glory/selectGloryId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.honorsAll = response.data.data;
+            this.childrenWork();
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
+    },
+    //修改荣誉/奖励信息
+    updateGlory(){
+      this.axios({
+        url: 'http://localhost:8010/provider/Glory/updateGlory',
+        method: 'put',
+        data: this.honorsForm
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectGlory()
+          //关闭弹出框
+          this.honorsbecome=false
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //添加荣誉/奖励信息
+    insertGlory(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/Glory/insertGlory',
+        method: 'post',
+        data:{
+          //员工编号
+          staffId:this.$store.state.staffId_Msg,
+          //荣誉与奖励名称
+          gloryName:this.honorsForm.gloryName,
+          //颁发单位名称
+          gloryUnitname:this.honorsForm.gloryUnitname,
+          //奖励日期
+          createdTime:this.honorsForm.createdTime,
+          //备注
+          gloryRemark:this.honorsForm.gloryRemark,
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectGlory() // 修改完成后调用查询方法
+          this.honorsSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+    //根据id删除荣誉/奖励信息
+    deleteGloryId(index){
+      this.axios
+          .delete("http://localhost:8010/provider/Glory/deleteGloryId/"+index.gloryId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectGlory()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //查询惩罚表信息
+    selectPunish(){
+
+      this.axios
+          .get("http://localhost:8010/provider/Punish/selectPunishId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.punishmentAll = response.data.data;
+            this.childrenWork();
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
+    },
+    //修改惩罚信息
+    updatePunish(){
+      this.axios({
+        url: 'http://localhost:8010/provider/Punish/updatePunish',
+        method: 'put',
+        data: this.punishmentForm
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectPunish()
+          //关闭弹出框
+          this.punishmentbecome=false
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //添加荣誉/奖励信息
+    insertPunish(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/Punish/insertPunish',
+        method: 'post',
+        data:{
+          //员工编号
+          staffId:this.$store.state.staffId_Msg,
+          //惩罚类型
+          punishType:this.punishmentForm.punishType,
+          //惩罚单位
+          punishUnit:this.punishmentForm.punishUnit,
+          //惩罚备注
+          punishRemark:this.punishmentForm.punishRemark,
+          //惩罚原因
+          punishCause:this.punishmentForm.punishCause,
+          //是否撤销
+          isRevocation:this.punishmentForm.isRevocation,
+
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectPunish() // 修改完成后调用查询方法
+          this.punishSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+    //根据id删除荣誉/奖励信息
+    deletePunishId(index){
+      this.axios
+          .delete("http://localhost:8010/provider/Punish/deletePunishId/"+index.punishId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectPunish()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //查询教育经历表信息
+    selectEducation(){
+
+      this.axios
+          .get(" http://localhost:8010/provider/education/selectEducationId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.educationalAll = response.data.data;
+            this.childrenWork();
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
+    },
+    //修改教育经历信息
+    updateEducation(){
+      this.axios({
+        url: 'http://localhost:8010/provider/education/updateEducation',
+        method: 'put',
+        data: this.educationalForm
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          //调用查询工作经历
+          this.selectEducation()
+          //关闭弹出框
+          this.educationalbecome=false
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //添加教育经历信息
+    insertEducation(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/education/insertEducation',
+        method: 'post',
+        data:{
+          //员工编号
+          staffId:this.$store.state.staffId_Msg,
+
+          //开始时间
+          educationStartTime:this.educationalForm.educationStartTime,
+          //学校名称
+          educationStudentname:this.educationalForm.educationStudentname,
+          //结束时间
+          educationEndTime:this.educationalForm.educationEndTime,
+          //所属专业
+          educationMajor:this.educationalForm.educationMajor,
+
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectEducation() // 修改完成后调用查询方法
+          this.educationalSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+    //根据id删除教育经历信息
+    deleteEducationId(index){
+      this.axios
+          .delete("http://localhost:8010/provider/education/deleteEducationId/"+index.educationId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectEducation()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //查询调动记录
+    selectTranferId(){
+
+      this.axios
+          .get("http://localhost:8010/provider/transfer/selectTransferId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.tranferAll = response.data.data;
+
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
+    },
+  },created() {
+    this.selectWorkId()
+    this.selectGlory()
+    this.selectPunish()
+    this.selectEducation()
+    this.selectTranferId()
+  }
 
 
 }

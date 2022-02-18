@@ -2,6 +2,8 @@ import {createStore} from 'vuex'
 
 const store = createStore({
     state: {
+        // 员工花名册点击编辑按钮，将当前员工id传入
+        staffId_Msg:"",
         //员工信息
         staffMessage: {},
         //动态菜单
@@ -601,21 +603,22 @@ const store = createStore({
                 MENU_STATE: 0,//是否启用 0启用 1禁用
                 MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
                 MENU_LEAF: 0,//是否有叶子 0有 1没有
-                son: [{
-                    MENU_ID: 7.1,//菜单编号
+                son: [
+                    {
+                        MENU_ID: 7.1,//菜单编号
+                        MENU_NAME: '薪酬组',//菜单名称
+                        PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                        MENU_ROUTE: '/salary/scheme',//路由地址
+                        MENU_MODULE: '/salary_management/salary_accountscheme.vue',//组件地址
+                        MENU_STATE: 0,//是否启用 0启用 1禁用
+                        MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                        MENU_LEAF: 1,//是否有叶子 0有 1没有
+                    }, {
+                    MENU_ID: 7.2,//菜单编号
                     MENU_NAME: '薪酬结构',//菜单名称
                     PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                    MENU_ROUTE: '/salary/paynavigation',//路由地址
-                    MENU_MODULE: '/salary_management/salary_salarynavigation.vue',//组件地址
-                    MENU_STATE: 0,//是否启用 0启用 1禁用
-                    MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                    MENU_LEAF: 1,//是否有叶子 0有 1没有
-                }, {
-                    MENU_ID: 7.2,//菜单编号
-                    MENU_NAME: '核算方案',//菜单名称
-                    PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                    MENU_ROUTE: '/salary/scheme',//路由地址
-                    MENU_MODULE: '/salary_management/salary_accountscheme.vue',//组件地址
+                    MENU_ROUTE: '/salary/flat',//路由地址
+                    MENU_MODULE: '/components/salary_management/salary_construction.vue',//组件地址
                     MENU_STATE: 0,//是否启用 0启用 1禁用
                     MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
                     MENU_LEAF: 1,//是否有叶子 0有 1没有
@@ -633,7 +636,7 @@ const store = createStore({
                     MENU_NAME: '薪酬统计',//菜单名称
                     PICTURE_ADDRESS: '&#xe64c;',//图片地址
                     MENU_ROUTE: '/salary/count',//路由地址
-                    MENU_MODULE: '/salary_management/salary_statistics.vue',//组件地址
+                    MENU_MODULE: '/components/salary_management/salary_archive.vue',//组件地址
                     MENU_STATE: 0,//是否启用 0启用 1禁用
                     MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
                     MENU_LEAF: 1,//是否有叶子 0有 1没有

@@ -6,35 +6,34 @@
       <!--选择开始日期和结束日期-->
       <b style="font-size: 18px;margin-left:10px;margin-right: 10px">加班时间</b>
       <el-date-picker
-          v-model="value1"
+          v-model="clockTime"
           type="daterange"
           unlink-panels
           range-separator="TO"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          wdaWD
-          aW
           :shortcuts="shortcuts"
+          value-format="YYYY-MM-DD"
       >
       </el-date-picker>
       <!--    全部部门-->
       <b style="font-size: 18px;margin-left:25px;margin-right: 10px">全部部门</b>
-      <el-select size="small" v-model="value" clearable placeholder="选择部门" >
+      <el-select size="small" v-model="pageInfo.optionsDeptId" clearable placeholder="选择部门" >
         <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in optionsDept"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptId"
         >
         </el-option>
       </el-select>
       <!--搜索框-->
-      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员/部名称</b>
-      <el-input size="small" v-model="input" placeholder="请输入员/部名称" style="width:150px;">
+      <b style="font-size: 18px;margin-left:25px;margin-right: 10px">员工名称</b>
+      <el-input size="small" v-model="pageInfo.staffName" placeholder="请输入员/部名称" style="width:150px;">
       </el-input>
 
       <!--查询按钮-->
-      <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
+      <el-button @click="about()" style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
         <el-icon><i-search />
 
         </el-icon>
@@ -59,23 +58,26 @@
       <el-table :data="tableData" stripe style="width: 100%"
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}">
-        <el-table-column prop="applyfor" label="申请名称"/>
-        <el-table-column prop="department" label="发起人部门"/>
-        <el-table-column prop="type" label="加班类型"/>
-        <el-table-column prop="thing" label="加班事由"/>
-        <el-table-column prop="begin" label="加班开始时间"/>
-        <el-table-column prop="finish" label="加班结束时间"/>
-        <el-table-column prop="hour" label="加班总小时"/>
-        <el-table-column prop="subsidy" label="加班补贴"/>
+        <el-table-column prop="staffName" label="申请名称"/>
+        <el-table-column prop="deptName" label="发起人部门"/>
+        <el-table-column prop="overtimeaskType" label="加班类型"/>
+        <el-table-column prop="overtimeaskMatter" label="加班事由"/>
+        <el-table-column prop="overtimeaskSDate" label="加班开始时间"/>
+        <el-table-column prop="overtimeaskEDate" label="加班结束时间"/>
+        <el-table-column prop="overtimeaskTotalDate" label="加班总小时">
+        </el-table-column>
+        <el-table-column prop="" label="加班补贴">
+        <span>补贴</span>
+        </el-table-column>
         <el-table-column prop="operate" label="操作">
-          <template #default>
+          <template #default="scope">
             <el-popconfirm
                 confirm-button-text="确定"
                 cancel-button-text="取消"
                 :icon="InfoFilled"
                 icon-color="red"
                 title="确定删除吗?"
-                @confirm="through1()"
+                @confirm="through1(scope.row)"
             >
               <template #reference>
                 <el-button type="text" size="small">
@@ -98,8 +100,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="sele"
-          @current-change="sele"
+          @size-change="about"
+          @current-change="about"
       >
       </el-pagination>
     </div>
@@ -109,7 +111,9 @@
 
 <script lang="ts">
 import {ref, defineComponent} from "vue";
-
+import {ElMessage} from "element-plus/es";
+import {ElMessage, ElMessageBox, ElNotification} from "element-plus";
+import {export_json_to_excel} from '/src/excal/Export2Excel.js'
 export default {
   data() {
     return {
@@ -118,7 +122,19 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        // 员工名称
+        staffName:"",
+        // 部门下拉框值
+        optionsDeptId:"",
+        // 开始时间
+        clockTimeStart:"",
+        //结束时间
+        clockTimeEnd:""
       },
+
+      // 打卡时间
+      clockTime:[],
+
       shortcuts: [
         {
           text: "最近一周",
@@ -148,80 +164,115 @@ export default {
           },
         },
       ],
-      options: ref([
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-        {
-          value: "Option3",
-          label: "Option3",
-        },
-        {
-          value: "Option4",
-          label: "Option4",
-        },
-        {
-          value: "Option5",
-          label: "Option5",
-        },
-      ]),
+      //查询所有部门名称,ID -- 部门下拉框数据
+      optionsDept:[
+
+      ],
       tableData: [
-        {
-          applyfor: '王鑫',
-          department: '行政部',
-          type: '加班',
-          thing: '没有钱了',
-          begin: '20:00',
-          finish: '22:00',
-          hour: '4小时',
-          subsidy: '补贴',
-        },
-        {
-          applyfor: '王鑫',
-          department: '行政部',
-          type: '加班',
-          thing: '没有钱了',
-          begin: '20:00',
-          finish: '22:00',
-          hour: '4小时',
-          subsidy: '补贴',
-        },
-        {
-          applyfor: '王鑫',
-          department: '行政部',
-          type: '加班',
-          thing: '没有钱了',
-          begin: '20:00',
-          finish: '22:00',
-          hour: '4小时',
-          subsidy: '补贴',
-        },
-        {
-          applyfor: '王鑫',
-          department: '行政部',
-          type: '加班',
-          thing: '没有钱了',
-          begin: '20:00',
-          finish: '22:00',
-          hour: '4小时',
-          subsidy: '补贴',
-        }
       ],
       value1: "", //日期
       value: ref(""), //选择
     };
   },
   methods: {
-    // 点击删除确认按钮触发
-    through1() {
-      alert(1)
+    //分页查询
+    about(){// 首先清空
+      this.pageInfo.clockTimeStart=""
+      this.pageInfo.clockTimeEnd=""
+      if(this.clockTime != ""){ // 如果选择的打卡时间不为空
+        this.pageInfo.clockTimeStart=this.clockTime[0]
+        this.pageInfo.clockTimeEnd=this.clockTime[1]
+      }
+
+      this.axios
+          .get("http://localhost:8010/provider/OvertVo/ovfy",{params:this.pageInfo})
+          .then((response)=>{
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
     },
-  }
+    //查询所有部门
+    Dept(){
+      this.axios
+          .get("http://localhost:8010/provider/OvertVo/Dept")
+          .then((response)=>{
+            console.log(response);
+            this.optionsDept=response.data.data;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+    //删除
+    ovedelete(row){
+      this.axios
+          .delete("http://localhost:8010/provider/overtimeask/ovedelete/" + row.overtimeaskId)
+          .then((response)=>{
+            console.log(response)
+            if (response.data.data === "成功"){
+              ElMessage.success("删除成功");
+              this.about() //删完在查一次
+            }else {
+              ElMessage.error("删除失败")
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+    // 点击删除确认按钮触发
+    through1(row) {
+      /*alert(row.overtimeaskId)*/
+      this.ovedelete(row)
+    },
+
+    // 点击导出操作
+    derive() {
+      ElMessageBox.confirm(
+          '此操作将导出excel文件, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(() => {
+        this.deriveExcel();
+      }).catch(() => {
+        ElMessage.success("取消成功")
+      })
+    },
+    // 导出方法
+    deriveExcel() {
+      var _this = this;
+      let tHeader = ["申请名称", "发起人部门", "加班类型", "加班事由", "加班开始时间","加班结束时间","加班总小时","加班补贴"]; // 导出的表头名
+      let filterVal = ["staffName", "deptName", "overtimeaskType", "overtimeaskMatter", "overtimeaskSDate","overtimeaskEDate","overtimeaskTotalDate",'补贴'];//导出其prop属性
+      ElMessageBox.prompt('请输入文件名', '提示', {
+        confirmButtonText: '生成',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        let data = _this.formatJson(filterVal, _this.tableData);
+        export_json_to_excel(tHeader, data, value);
+        ElMessage.success("生成成功")
+      })
+          .catch(() => {
+            ElMessage.success("失败成功")
+          })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
+    },
+  },
+  created() {
+    // 分页查询
+    this.about();
+    // 查询所有部门id 与 ，名称
+    this.Dept();
+  },
 };
 </script>
 
@@ -242,7 +293,7 @@ table * {
 }
 
 .demo-pagination-block {
-  margin-left: 850px;
+  float: right;
   margin-top: 20px;
   margin-bottom: 30px;
 }
