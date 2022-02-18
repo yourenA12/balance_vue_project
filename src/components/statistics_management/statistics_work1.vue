@@ -37,10 +37,10 @@
       <br>
       <span class="ziti">昨日早退人数</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">0</span>
       <br>
       <span class="ziti">昨日未打卡人数</span><br>
-      <span class="ziti">???</span>
+      <span class="ziti">0</span>
     </div>
   </div>
 
@@ -60,7 +60,7 @@
       <br>
       <span class="ziti">相比前天</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">0</span>
       <br>
 
     </div>
@@ -79,7 +79,7 @@
       <br>
       <span class="ziti">相比前台</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">1</span>
       <br>
 
     </div>
@@ -94,11 +94,11 @@
 
       <span class="ziti">昨日出勤人数</span>
       <br>
-      <span class="ziti">2</span>
+      <span class="ziti">5</span>
       <br>
       <span class="ziti">昨日出勤率</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">100%</span>
       <br>
 
     </div>
@@ -113,11 +113,11 @@
 
       <span class="ziti">昨日缺勤人数</span>
       <br>
-      <span class="ziti">3</span>
+      <span class="ziti">0</span>
       <br>
       <span class="ziti">昨日缺勤率</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">0%</span>
     </div>
   </div>
 
@@ -410,7 +410,7 @@ export default {
           name: 'Rainfall',
           type: 'bar',
           data: [
-            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+            5, 4, 7., 23, 25, 76, 13, 16, 32, 20, 6, 5
           ],
           markPoint: {
             data: [
@@ -441,95 +441,7 @@ export default {
       ]
     };
     /* <!-- 每日出差人数 --> */
-    // option1 = {
-    //   title: {
-    //     text: ''
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       crossStyle: {
-    //         color: '#999'
-    //       }
-    //     }
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       magicType: {
-    //         show: true,
-    //         type: ['line', 'bar'],
-    //         title:{
-    //           line:"折线图",
-    //           bar: "柱状图",
-    //         }
-    //       },
-    //       restore: {
-    //         show: true,
-    //         title:"还原"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     data: ['出差人数', '增长率']
-    //   },
-    //   xAxis: [{
-    //     type: 'category',
-    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-    //       '2021-12-03'
-    //     ],
-    //     axisPointer: {
-    //       type: 'shadow'
-    //     }
-    //   }],
-    //   yAxis: [{
-    //     type: 'value',
-    //     name: '人数(人)',
-    //     min: 0,
-    //     max: 250,
-    //     interval: 50,
-    //     axisLabel: {
-    //       formatter: '{value} 人'
-    //     }
-    //   },
-    //     {
-    //       type: 'value',
-    //       name: '增长律（%）',
-    //       min: 0,
-    //       max: 100,
-    //       interval: 10,
-    //       axisLabel: {
-    //         formatter: '{value} %'
-    //       }
-    //     },
-    //
-    //   ],
-    //   series: [{
-    //     name: '出差人数',
-    //     type: 'bar',
-    //     data: [
-    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6,
-    //     ],
-    //     barWidth:'25%',
-    //   },
-    //
-    //     {
-    //       name: '增长率',
-    //       type: 'line',
-    //       yAxisIndex: 1,
-    //       data: [10, 20, 30, 40, 50, 30, 40]
-    //     }
-    //   ]
-    // };
+
     option1 = {
       title: {
         text: '每日出差人数',
@@ -599,94 +511,7 @@ export default {
       ]
     };
     /* 	 <!-- 员工出勤率 --> */
-    // option2 = {
-    //   title: {
-    //     text: ''
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       crossStyle: {
-    //         color: '#999'
-    //       }
-    //     }
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       magicType: {
-    //         show: true,
-    //         type: ['line', 'bar'],
-    //         title:{
-    //           line:"折线图",
-    //           bar: "柱状图",
-    //         }
-    //       },
-    //       restore: {
-    //         show: true,
-    //         title:"还原"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     data: ['出勤人数', '增长率']
-    //   },
-    //   xAxis: [{
-    //     type: 'category',
-    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-    //       '2021-12-03'
-    //     ],
-    //     axisPointer: {
-    //       type: 'shadow'
-    //     }
-    //   }],
-    //   yAxis: [{
-    //     type: 'value',
-    //     name: '人数(人)',
-    //     min: 0,
-    //     max: 250,
-    //     interval: 50,
-    //     axisLabel: {
-    //       formatter: '{value} 人'
-    //     }
-    //   },
-    //     {
-    //       type: 'value',
-    //       name: '增长律（%）',
-    //       min: 0,
-    //       max: 100,
-    //       interval: 10,
-    //       axisLabel: {
-    //         formatter: '{value} %'
-    //       }
-    //     },
-    //
-    //   ],
-    //   series: [{
-    //     name: '出勤人数',
-    //     type: 'bar',
-    //     data: [
-    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
-    //     ], barWidth:'25%',
-    //   },
-    //
-    //     {
-    //       name: '增长率',
-    //       type: 'line',
-    //       yAxisIndex: 1,
-    //       data: [10, 20, 30, 40, 50, 30, 40]
-    //     }
-    //   ]
-    // };
+
     option2 = {
       title: {
         text: '员工出勤率',
@@ -756,94 +581,7 @@ export default {
       ]
     };
     /*  <!--  员工缺勤率 --> */
-    // option3 = {
-    //   title: {
-    //     text: '员工缺勤率'
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       crossStyle: {
-    //         color: '#999'
-    //       }
-    //     }
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       magicType: {
-    //         show: true,
-    //         type: ['line', 'bar'],
-    //         title:{
-    //           line:"折线图",
-    //           bar: "柱状图",
-    //         }
-    //       },
-    //       restore: {
-    //         show: true,
-    //         title:"还原"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     data: ['缺勤人数', '增长率']
-    //   },
-    //   xAxis: [{
-    //     type: 'category',
-    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-    //       '2021-12-03'
-    //     ],
-    //     axisPointer: {
-    //       type: 'shadow'
-    //     }
-    //   }],
-    //   yAxis: [{
-    //     type: 'value',
-    //     name: '人数(人)',
-    //     min: 0,
-    //     max: 250,
-    //     interval: 50,
-    //     axisLabel: {
-    //       formatter: '{value} 人'
-    //     }
-    //   },
-    //     {
-    //       type: 'value',
-    //       name: '增长律（%）',
-    //       min: 0,
-    //       max: 100,
-    //       interval: 10,
-    //       axisLabel: {
-    //         formatter: '{value} %'
-    //       }
-    //     },
-    //
-    //   ],
-    //   series: [{
-    //     name: '缺勤人数',
-    //     type: 'bar',
-    //     data: [
-    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2,
-    //     ], barWidth:'25%',
-    //   },
-    //
-    //     {
-    //       name: '增长率',
-    //       type: 'line',
-    //       yAxisIndex: 1,
-    //       data: [10, 20, 30, 40, 50, 30, 40]
-    //     }
-    //   ]
-    // };
+
     option3 = {
       title: {
         text: '员工缺勤率',
@@ -914,61 +652,7 @@ export default {
     };
 
     /* <!-- 	每日员工异常人数	 --> */
-    // option5 = {
-    //   title: {
-    //     text: ''
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis'
-    //   },
-    //   legend: {
-    //     data: ['迟到', '早退', '未打卡(未签到或未签退)']
-    //   },
-    //   grid: {
-    //     left: '3%',
-    //     right: '4%',
-    //     bottom: '3%',
-    //     containLabel: true
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   xAxis: {
-    //     type: 'category',
-    //     boundaryGap: false,
-    //     data: []
-    //   },
-    //   yAxis: {
-    //     type: 'value'
-    //   },
-    //   series: [{
-    //     name: '迟到',
-    //     type: 'line',
-    //     stack: 'Total',
-    //     data: [120, 132, 101, 134, 90, 230, 210]
-    //   },
-    //
-    //
-    //     {
-    //       name: '早退',
-    //       type: 'line',
-    //       stack: 'Total',
-    //       data: [320, 332, 301, 334, 390, 330, 320]
-    //     },
-    //     {
-    //       name: '未打卡(未签到或未签退)',
-    //       type: 'line',
-    //       stack: 'Total',
-    //       data: [820, 932, 901, 934, 1290, 1330, 1320]
-    //     }
-    //   ]
-    // };
+
     option5 = {
       title: {
         text: '每月员工异动人数'

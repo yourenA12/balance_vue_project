@@ -1,3 +1,4 @@
+<!--人员数量分袖-->
 <template>
   <div class="demo-date-picker" style="width: 100%;height: 49px;">
     <div class="" style="width: 850px;height: 49px; float: right;">
@@ -39,7 +40,7 @@
       <br>
       <span class="ziti">相比上月：</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">3</span>
     </div>
   </div>
   <div style="position: relative; display: block; width: 100%;border-top: 1px #000000 dashed;">
@@ -52,9 +53,9 @@
       <br>
       <span class="ziti">当前月个人社保总额：</span>
       <br>
-      <span class="ziti">123</span><br>
+      <span class="ziti">3</span><br>
       <span class="ziti">相比上月：</span><br>
-      <span class="ziti">1223</span>
+      <span class="ziti">3</span>
     </div>
   </div>
   <div style="position: relative; display: block; width: 100%;border-top: 1px #000000 dashed;">
@@ -82,7 +83,7 @@
       <br>
       <span class="ziti">相比上月：</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">3</span>
     </div>
   </div>
 </template>
@@ -242,104 +243,6 @@ export default {
     var optiony2;
     var optiony3;
 
-    /* <!-- 每月参保人数 --> */
-
-    // optiony1 = {
-    //   title: {
-    //     text: ''
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       crossStyle: {
-    //         color: '#999'
-    //       }
-    //     }
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       magicType: {
-    //         show: true,
-    //         type: ['line', 'bar'],
-    //         title:{
-    //           line:"折线图",
-    //           bar:"柱状图",
-    //         }
-    //       },
-    //       restore: {
-    //         show: true,
-    //         title:"还原"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     data: ['参保人数', '增长率']
-    //   },
-    //   xAxis: [{
-    //     type: 'category',
-    //     data: ['2021-11-29', '2021-11-30', '2021-11-29', '2021-11-30', '2021-12-01', '2021-12-02',
-    //       '2021-12-03'
-    //     ],
-    //     axisPointer: {
-    //       type: 'shadow'
-    //     }
-    //   }],
-    //   yAxis: [{
-    //     type: 'value',
-    //     name: '人数(人)',
-    //     min: 0,
-    //     max: 250,
-    //     interval: 50,
-    //     axisLabel: {
-    //       formatter: '{value} 人'
-    //     }
-    //   },
-    //     {
-    //       type: 'value',
-    //       name: '增长律（%）',
-    //       min: 0,
-    //       max: 100,
-    //       interval: 10,
-    //       axisLabel: {
-    //         formatter: '{value} %'
-    //       }
-    //     },
-    //
-    //   ],
-    //   series: [{
-    //     name: '参保人数',
-    //     type: 'bar',
-    //     data: [
-    //       2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-    //     ],barWidth:'25%',
-    //   },
-    //
-    //     {
-    //       name: '增长率',
-    //       type: 'line',
-    //       yAxisIndex: 1,
-    //       data: [10, 20, 30, 40, 50, 30, 40],
-    //       itemStyle: {
-    //         normal: {
-    //           color: "#FFFF66", //折线点的颜色
-    //           lineStyle: {
-    //             color: "#FFFF66" //折线的颜色
-    //           }
-    //         }
-    //       },
-    //     }
-    //   ]
-    // };
     optiony1 = {
       title: {
         text: '每月参保人数',

@@ -599,7 +599,7 @@ const routes = [
             {//统计分析
                 path: '/statistics',
                 component: modules[`${'../components/statistics_management/statistics_main.vue'}`],
-                redirect: "/statistics/remuneration_analyze/three",
+                redirect: '/statistics/staff_analyze/statistics_personnel1',
                 children: [
 
 
