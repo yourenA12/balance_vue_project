@@ -36,13 +36,13 @@
     <div :id="uuid" :style="style"></div>
     <div style="width: 17%;height: 320px; float: right; margin-top: -390px;">
 
-      <span class="ziti">当前月在职人数</span>
+      <span class="ziti">当前月在职人数：</span>
       <br>
-      <span class="ziti">1</span>
+      <span class="ziti">5</span>
       <br>
-      <span class="ziti">相比上月</span>
+      <span class="ziti">相比上月：</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">0</span>
       <br>
 
     </div>
@@ -53,13 +53,13 @@
     <div id="main1" style="width: 1050px;height:460px;"></div>
     <div style="width: 16%;height: 320px; float: right; margin-top: -390px;">
 
-      <span class="ziti">当前月入职人数</span>
+      <span class="ziti">当前月入职人数：</span>
       <br>
-      <span class="ziti">2</span>
+      <span class="ziti">0</span>
       <br>
-      <span class="ziti">相比上月</span>
+      <span class="ziti">相比上月：</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">0</span>
       <br>
 
     </div>
@@ -70,13 +70,13 @@
     <div id="main2" style="width: 1050px;height:460px;"></div>
     <div style="width: 16%;height: 320px; float: right; margin-top: -390px;">
 
-      <span class="ziti">当前月离职人数</span>
+      <span class="ziti">当前月离职人数：</span>
       <br>
-      <span class="ziti">3</span>
+      <span class="ziti">5</span>
       <br>
-      <span class="ziti">相比上月</span>
+      <span class="ziti">相比上月：</span>
       <br>
-      <span class="ziti">???</span>
+      <span class="ziti">5</span>
       <br>
 
     </div>
@@ -87,13 +87,13 @@
     <div id="main3" style="width: 1050px;height:460px;"></div>
     <div style="width: 16%;height: 320px; float: right; margin-top: -390px;">
 
-      <span class="ziti">当前月转正人数</span>
+      <span class="ziti">当前月转正人数：</span>
       <br>
-      <span class="ziti">4</span>
+      <span class="ziti">0</span>
       <br>
 
-      <span class="ziti">人数</span><br>
-      <span class="ziti">???</span>
+      <span class="ziti">人数：</span><br>
+      <span class="ziti">0</span>
     </div>
   </div>
 
@@ -102,13 +102,13 @@
     <div id="main4" style="width: 1050px;height:460px;"></div>
     <div style="width: 16%;height: 320px; float: right; margin-top: -390px;">
 
-      <span class="ziti">当前最多人数部门</span>
+      <span class="ziti">当前最多人数部门：</span>
       <br>
-      <span class="ziti">4</span>
+      <span class="ziti">林业部</span>
       <br>
 
-      <span class="ziti">人数</span><br>
-      <span class="ziti">???</span>
+      <span class="ziti">人数：</span><br>
+      <span class="ziti">5</span>
     </div>
   </div>
 
@@ -295,7 +295,7 @@ export default ({
         }
       },
       xAxis: {
-        data: ['2021-07', '2021-07', '2021-07', '2021-07', '2021-07', '2021-07']
+        data: ['2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06']
       },
       yAxis: {
         type: 'value',
@@ -309,7 +309,7 @@ export default ({
       series: [{
         name: '在职人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [10, 20, 25, 10, 10, 5],
          barWidth:'25%',
       }, ],
 
@@ -353,7 +353,7 @@ export default ({
         }
       },
       xAxis: {
-        data: ['2021-07', '2021-07', '2021-07', '2021-07', '2021-07', '2021-07']
+        data: ['2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06']
       },
       yAxis: {
         type: 'value',
@@ -366,7 +366,7 @@ export default ({
       series: [{
         name: '入职人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [20, 20, 25, 10, 10, 5],
         barWidth:'25%',
       },
       ]
@@ -383,7 +383,7 @@ export default ({
         data: ['离职人数', '增长率']
       },
       xAxis: {
-        data: ['2021-07', '2021-07', '2021-07', '2021-07', '2021-07', '2021-07']
+        data: ['2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06']
       },
       toolbox: {
         feature: {
@@ -420,7 +420,7 @@ export default ({
       series: [{
         name: '离职人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [5, 20, 25, 10, 0, 5],
         barWidth:'25%',
       }, ]
     };
@@ -461,7 +461,7 @@ export default ({
         }
       },
       xAxis: {
-        data: ['2021-07', '2021-07', '2021-07', '2021-07', '2021-07', '2021-07']
+        data: ['2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06']
       },
       yAxis: {
         type: 'value',
@@ -474,7 +474,7 @@ export default ({
       series: [{
         name: '转正人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [5, 20, 25, 10, 10, 0],
         barWidth:'25%',
       }, ]
     };
@@ -528,7 +528,7 @@ export default ({
       series: [{
         name: '人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [20, 20, 25, 10, 10, 5],
         barWidth:'25%',
       },]
     };
@@ -582,7 +582,7 @@ export default ({
       series: [{
         name: '人数',
         type: 'bar',
-        data: [5, 20, 25, 10, 10, 20],
+        data: [5, 0, 25, 10, 10, 5],
         barWidth:'25%',
       },]
     };

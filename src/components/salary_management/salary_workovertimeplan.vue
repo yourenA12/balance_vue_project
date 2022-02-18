@@ -32,23 +32,40 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
                   style="width: 97%;margin: auto">
-        <el-table-column prop="name" label="方案名称" width="180" />
-        <el-table-column prop="name" label="核算规则" width="180" />
-        <el-table-column prop="name" label="适用对象" width="180" />
-        <el-table-column prop="name" label="职位" width="180" />
-        <el-table-column prop="name" label="备注" width="180" />
-        <el-table-column prop="name" label="状态" width="180" />
+        <el-table-column prop="workschemeName" label="方案名称" width="270" />
+        <el-table-column prop="name" label="核算规则" width="270" >
+          <template #default="scope">
+          <span>工作日加班工资：小时工资 x {{scope.row.workschemeWorkratio}}%</span><br/>
+          <span>休息日加班工资：小时工资 x {{scope.row.workschemeDayoffratio}}%</span><br/>
+          <span>节假日加班工资：小时工资 x {{scope.row.workschemeHolidayratio}}%</span>
+
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="workschemeRemark" label="备注" width="270" />
+        <el-table-column prop="workschemeState" label="状态" width="270" >
+          <template #default="scope">
+            <span v-if="scope.row.workschemeState==0" style="color: #5aaaff">启用</span>
+            <span v-if="scope.row.workschemeState==1" style="color: red">禁用</span>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
-            <router-link :to="{path:this.insertcallbackpay,query:{path: this.$route.query.path,name:'编辑'}}">
-            <el-button type="text"  size="small" @click="handleClick"
-            >编辑 </el-button
-            >
-            </router-link>&nbsp;
-            <el-button type="text" size="small" @click="handleClick">禁用 </el-button>
+
+            <el-button type="text"  size="small" @click="WorkschemeMsg(scope.row.workschemeId)"
+            >编辑 </el-button>
+
+            <el-button type="text" size="small" @click="updateWorkschemeState(scope.row.workschemeId,scope.row.workschemeState)">
+              {{ scope.row.workschemeState === 0 ? '禁用 ' : '启用 ' }}
+            </el-button>
 <!--              <el-button type="text" size="small">删除 </el-button>-->
-            <el-popconfirm @confirm="deleteRow(scope.$index, tableData)"
-                           title="确认要删除此方案吗?">
+
+              <el-popconfirm
+                  confirm-button-text="确定"
+                  cancel-button-text="取消"
+                  title="确认要删除此方案吗?"
+                  @confirm="deleteWorkschemeId(scope.row)"
+              >
               <template #reference>
                 <el-button type="text" size="small" style="color: orange">删除 </el-button>
               </template>
@@ -70,8 +87,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="selectUsers"
-          @current-change="selectUsers"
+          @size-change="selectWorkscheme"
+          @current-change="selectWorkscheme"
       >
       </el-pagination>
     </div>
@@ -86,14 +103,77 @@
 import {ElMessage} from "element-plus";
 export default {
   methods:{
-    // 删除行
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
-      ElMessage({
-        message: '删除成功',
-        type: 'success',
-      })
+
+    //查询加班方案
+    selectWorkscheme() {
+
+      this.axios
+          .get("http://localhost:8010/provider/workscheme/selectWorkscheme/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     },
+    // 修改参保方案状态
+    updateWorkschemeState(id,state){
+      this.axios
+          .put("http://localhost:8010/provider/workscheme/updateWorkschemeState",{workschemeId:id,workschemeState:state==0?1:0})
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '操作成功！！',
+              })
+              // 调用查询
+              this.selectWorkscheme()
+            }else{
+              ElMessage('操作失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //删除加班方案
+    deleteWorkschemeId(index){
+        this.axios
+            .delete("http://localhost:8010/provider/workscheme/deleteWorkschemeId/"+index.workschemeId)
+            .then((response) => {
+              console.log(response);
+
+              if (response.data.data >0) {
+                ElMessage({
+                  message: '删除成功',
+                  type: 'success',
+                })
+                //调用查询
+                this.selectWorkscheme()
+
+
+              } else {
+                ElMessage.error('删除失败')
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
+    },
+    WorkschemeMsg(row){
+      //跳转页面
+      this.$router.push({path:this.insertcallbackpay,query:{path: this.$route.query.path,name:'编辑',id:row}})
+
+    }
+
+  },created() {
+    this.selectWorkscheme();
   },
   data(){
     return{

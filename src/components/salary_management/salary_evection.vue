@@ -31,23 +31,34 @@
         <div class="sub-Content__primary" style="margin-top: 70px">
 
           <el-table :data="tableData" stripe style="width: 97%;margin: auto;">
-            <el-table-column prop="name" label="方案名称" width="180" />
-            <el-table-column prop="name" label="核算规则" width="180" />
-            <el-table-column prop="name" label="适用对象" width="180" />
-            <el-table-column prop="name" label="职位" width="180" />
-            <el-table-column prop="name" label="备注" width="180" />
-            <el-table-column prop="name" label="状态" width="180" />
-            <el-table-column fixed="right" label="操作" width="180">
+            <el-table-column prop="businessName" label="方案名称" width="260" />
+            <el-table-column prop="name" label="核算规则" width="260" >
               <template #default="scope">
-                <router-link :to="{path:this.insertevectionplan,query:{path: this.$route.query.path,name:'编辑'}}">
-                  <el-button type="text" size="small" @click="handleClick"
-                  >编辑 </el-button
-                  >
-                </router-link>&nbsp;
-                <el-button type="text" size="small" @click="handleClick">禁用 </el-button>
+                出差工资：{{scope.row.businessOnemoney}}元 × 出差的小时数
+              </template>
+            </el-table-column>
+            <el-table-column prop="businessRemark" label="备注" width="250" />
+            <el-table-column prop="businessState" label="状态" width="250" >
+              <template #default="scope">
+                <span v-if="scope.row.businessState==0" style="color: #5aaaff">启用</span>
+                <span v-if="scope.row.businessState==1" style="color: red">禁用</span>
+
+              </template>
+            </el-table-column>
+            <el-table-column  label="操作" width="250">
+              <template #default="scope">
+                   <el-button type="text" size="small" @click="BusinessMsg(scope.row.businessId)">编辑 </el-button>
+
+                <el-button type="text" size="small"  @click="updateBusinessState(scope.row.businessId,scope.row.businessState)">
+                  {{ scope.row.businessState === 0 ? '禁用 ' : '启用 ' }}
+                </el-button>
 <!--                <el-button type="text" size="small">删除 </el-button>-->
-                <el-popconfirm @confirm="deleteRow(scope.$index, tableData)"
-                               title="确认要删除此方案吗?">
+                <el-popconfirm
+                    confirm-button-text="确定"
+                    cancel-button-text="取消"
+                    title="确认要删除此方案吗?"
+                    @confirm="deleteBusinessId(scope.row)"
+                >
                   <template #reference>
                     <el-button type="text" size="small" style="color: orange">删除 </el-button>
                   </template>
@@ -69,8 +80,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectUsers"
-              @current-change="selectUsers"
+              @size-change="selectBusiness"
+              @current-change="selectBusiness"
           >
           </el-pagination>
         </div>
@@ -129,6 +140,74 @@ export default {
         type: 'success',
       })
     },
+    //查询出差方案
+    selectBusiness() {
+
+      this.axios
+          .get("http://localhost:8010/provider/business/selectBusiness/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //修改出差方案状态
+    updateBusinessState(id,state){
+      this.axios
+          .put(" http://localhost:8010/provider/business/updateBusinessState",{businessId:id,businessState:state==0?1:0})
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '操作成功！！',
+              })
+              // 调用查询
+              this.selectBusiness()
+            }else{
+              ElMessage('操作失败！！')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //删除出差方案
+    deleteBusinessId(index){
+      alert(index.businessId)
+      this.axios
+          .delete("http://localhost:8010/provider/business/deleteBusinessId/"+index.businessId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data >0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询
+              this.selectBusiness()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    BusinessMsg(row){
+      //跳转页面
+      this.$router.push({path:this.insertevectionplan,query:{path: this.$route.query.path,name:'编辑',id:row}})
+
+    }
+  },created() {
+    this.selectBusiness()
   }
 }
 </script>

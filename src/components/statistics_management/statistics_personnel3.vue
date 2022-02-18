@@ -137,89 +137,7 @@ export default {
     var chartDomy5 = document.getElementById('mainy5');
     var myCharty5 = echarts.init(chartDomy5);
     var optiony5;
-    /* 	<!-- 员工年龄段分布 --> */
-    // var chartDomy7 = document.getElementById('mainy7');
-    // var myCharty7 = echarts.init(chartDomy7);
-    // var optiony7;
-    // /* 	<!-- 员工年龄段分布 --> */
-    // var chartDomy8 = document.getElementById('mainy8');
-    // var myCharty8 = echarts.init(chartDomy8);
-    // var optiony8;
 
-
-
-    /*  员工性别分布 */
-    // var colors1 = [
-    //   '#5e81ec',
-    //   '#ffc855',
-    //   '#98e79b',
-    //   '#00d695',
-    //   '#00b29a',
-    //   '#5470c6',
-    //   '#91cc75',
-    //   '#fac858',
-    //   '#ee6666',
-    //   '#73c0de',
-    //   '#3ba272',
-    //   '#fc8452',
-    //   '#9a60b4',
-    //   '#ea7ccc',
-    // ];
-    // var data1 = [
-    //   { value: 55, name: '煤' },
-    //   { value: 38, name: '电' },
-    //   { value: 32, name: '油' },
-    //   { value: 30, name: '其他' },
-    //   { value: 28, name: '气' },
-    // ];
-    // var total = data1.reduce((p, v) => {
-    //   return p + v.value;
-    // }, 0);
-    // optiony1 = {
-    //   title:{
-    //     text: "员工性别分布"
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors1,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data1,
-    //     },
-    //   ],
-    // };
     optiony1 = {
       title: {
         text: '员工性别分布',
@@ -252,9 +170,9 @@ export default {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 1048, name: '男',itemStyle:{color: '#ea7c99'}},
+            { value: 2, name: '男',itemStyle:{color: '#0941f1'}},
 
-            { value: 300, name: '女',itemStyle:{color: '#0941f1'} }
+            { value: 3, name: '女',itemStyle:{color: '#ea7c99'} }
           ],
           emphasis: {
             itemStyle: {
@@ -293,51 +211,7 @@ export default {
     var total = data2.reduce((p, v) => {
       return p + v.value;
     }, 0);
-    // optiony2 = {
-    //   title:{
-    //     text:"员工婚姻分布",
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors2,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data2,
-    //     },
-    //   ],
-    // };
+
     optiony2 = {
       title: {
         text: '员工婚姻分布',
@@ -370,11 +244,9 @@ export default {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 5, name: '已婚' },
+            { value: 4, name: '未婚' },
+            { value: 0, name: '离异' },
           ],
           emphasis: {
             itemStyle: {
@@ -413,51 +285,7 @@ export default {
     var total = data3.reduce((p, v) => {
       return p + v.value;
     }, 0);
-    // optiony3 = {
-    //   title:{
-    //     text:"员工司龄分布",
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors3,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data3,
-    //     },
-    //   ],
-    // };
+
     optiony3 = {
       title: {
         text: '员工司龄分布',
@@ -490,11 +318,10 @@ export default {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 1048, name: '三年及以下' },
+            { value: 735, name: '五年及以下' },
+            { value: 580, name: '五年以上' },
+
           ],
           emphasis: {
             itemStyle: {
@@ -533,51 +360,7 @@ export default {
     var total = data4.reduce((p, v) => {
       return p + v.value;
     }, 0);
-    // optiony4 = {
-    //   title:{
-    //     text:"",
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors4,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data4,
-    //     },
-    //   ],
-    // };
+
     optiony4 = {
       title: {
         text: '员工学历分布',
@@ -610,11 +393,11 @@ export default {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 1048, name: '高中' },
+            { value: 735, name: '大专' },
+            { value: 580, name: '本科' },
+            { value: 484, name: '硕士' },
+            { value: 300, name: '博士' }
           ],
           emphasis: {
             itemStyle: {
@@ -653,51 +436,7 @@ export default {
     var total = data5.reduce((p, v) => {
       return p + v.value;
     }, 0);
-    // optiony5 = {
-    //   title:{
-    //     text:"",
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors5,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data5,
-    //     },
-    //   ],
-    // };
+
     optiony5 = {
       title: {
         text: '员工年龄段分布',
@@ -730,11 +469,9 @@ export default {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 1048, name: '二十五岁以下' },
+            { value: 735, name: '三十岁以下' },
+            { value: 580, name: '三十岁以上' },
           ],
           emphasis: {
             itemStyle: {
@@ -774,52 +511,7 @@ export default {
     var total = data6.reduce((p, v) => {
       return p + v.value;
     }, 0);
-    // optiony6 = {
-    //   title:{
-    //     text:"员工年代分布",
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       dataView: {
-    //         show: true,
-    //         readOnly: false,
-    //         title:"数据视图"
-    //       },
-    //       saveAsImage: {
-    //         show: true,
-    //         title:"保存"
-    //       }
-    //     }
-    //   },
-    //   tooltip: {
-    //     trigger: 'item',
-    //     formatter: '{b} : {c} ({d}%)',
-    //   },
-    //   color: colors6,
-    //   calculable: true,
-    //   series: [
-    //     {
-    //       type: 'pie',
-    //       radius: ['30%', '65%'],
-    //       center: ['50%', '50%'],
-    //       roseType: 'radius',
-    //       label: {
-    //         show: true,
-    //         color: 'inherit',
-    //         position: 'outside',
-    //         fontSize: 14,
-    //         formatter:"{b} {d}%",
-    //       },
-    //       labelLine: {
-    //         length: 1,
-    //         length2: 20,
-    //         smooth: true,
-    //       },
-    //       data: data6,
-    //     },
-    //   ],
-    // };
-     /* 员工星座分布*/
+
     var colors6 = [
       '#5e81ec',
       '#ffc855',
@@ -837,11 +529,18 @@ export default {
       '#ea7ccc',
     ];
     var data6 = [
-      { value: 55, name: '煤' },
-      { value: 38, name: '电' },
-      { value: 32, name: '油' },
-      { value: 30, name: '其他' },
-      { value: 28, name: '气' },
+      { value: 5, name: '水瓶座' },
+      { value: 8, name: '双鱼座' },
+      { value: 0, name: '摩羯座' },
+      { value: 3, name: '射手座' },
+      { value: 0, name: '天蝎座' },
+      { value: 0, name: '天秤座' },
+      { value: 0, name: '处女座' },
+      { value: 0, name: '狮子座' },
+      { value: 0, name: '巨蟹座' },
+      { value: 0, name: '双子座' },
+      { value:0, name: '金牛座' },
+      { value: 0, name: '白羊座' },
     ];
     var total = data6.reduce((p, v) => {
       return p + v.value;
