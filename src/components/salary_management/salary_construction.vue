@@ -6,11 +6,15 @@
 <!--      <span style="font-size: 14px;">1、选择一个部门</span>&nbsp;-->
       <!--选择部门的下拉框-->
       <el-form>
-      <el-form-item label="1、选择一个部门：" prop="dept">
-        <el-select v-model="ruleForm.dept" placeholder="请选择部门" style="width:240px;">
-          <el-option label="11" value="dept1" style="margin-left: 20px;"></el-option>
-          <el-option label="02465" value="dept2" style="margin-left: 20px;"></el-option>
-          <el-option label="333" value="dept3" style="margin-left: 20px;"></el-option>
+      <el-form-item label="1、选择一个薪酬组：" prop="dept">
+        <el-select v-model="ruleForm.compensationName" placeholder="请选择一个薪酬组" style="width: 200px;margin-left: 15px">
+          <el-option
+              v-for="item in CompensationNameAll"
+              :key="item.compensationId"
+              :label="item.compensationName"
+              :value="item.compensationId"
+          >
+          </el-option>
         </el-select>
       </el-form-item>
       </el-form><br>
@@ -107,11 +111,31 @@ export default defineComponent({
 
       checkList:'',
       activeNames:'',
+      //存薪酬组名称
+      CompensationNameAll:[],
       ruleForm:{
-        dept:'',
+        compensationId:'',
+        compensationName:'',
       }
 
     }
+  },methods:{
+      //查询薪酬组名称
+
+    selectCompensationName() {
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectCompensationName")
+          .then((response) => {
+            console.log(response);
+            this.CompensationNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectCompensationName()
   },
   setup() {
     const checkList = ref(['selected and disabled', 'Option A'])

@@ -14,24 +14,24 @@
               <div style="margin-left: 150px">
                 <el-form
                     ref="ruleForm"
-                    :model="ruleForm"
+                    :model="businessform"
                     :rules="rules"
                     label-width="150px"
                     class="demo-ruleForm"
                 >
-                  <el-form-item label="方案名称" prop="schemename" style="width:370px">
-                    <el-input v-model="ruleForm.schemename"></el-input>
+                  <el-form-item label="方案名称" prop="businessName" style="width:370px">
+                    <el-input v-model="businessform.businessName"></el-input>
                   </el-form-item>
 
                   <el-form-item label="出差工资" prop="businesswage">
-                    <el-select v-model="ruleForm.businesswage" placeholder="请选择">
-                      <el-option label="按出差时长" value="wagebyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按固定金额" value="wagebyfixed" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="businessform.businesswage" placeholder="请选择">-->
+<!--                      <el-option label="按出差时长" value="wagebyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按固定金额" value="wagebyfixed" style="margin-left: 20px;"></el-option>-->
+                      <el-input v-model="businessform.businesswage" style="width:210px" value=""></el-input>
+<!--                    </el-select>-->
                   </el-form-item>
 
-                  <el-form-item label="发放："  style="width:500px"
-                                v-if="ruleForm.businesswage=='wagebyhour'">
+                  <el-form-item label="发放："  style="width:500px">
                     <el-input-number
                         v-model="num"
                         :min="1"
@@ -43,52 +43,9 @@
                     <span>元 × 出差的小时数</span>
                   </el-form-item>
 
-                  <el-form-item label="发放："  style="width:500px"
-                                v-else="">
-                    <el-input-number
-                        v-model="num"
-                        :min="1"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元/次</span>
-                  </el-form-item>
 
-
-
-
-                  <el-form-item label="适用对象" prop="suitableusers">
-                    <el-select v-model="ruleForm.suitableusers" placeholder="请选择">
-                      <el-option label="1" value="suitableusers1" style="margin-left: 20px;"></el-option>
-                      <el-option label="111" value="suitableusers2" style="margin-left: 20px;"></el-option>
-                    </el-select>
-                  </el-form-item>
-
-
-                  <el-form-item label="职位" prop="post">
-                    <el-select v-model="ruleForm.post" placeholder="请选择">
-                      <el-option label="212" value="post1" style="margin-left: 20px;"></el-option>
-                      <el-option label="22222" value="post2" style="margin-left: 20px;"></el-option>
-                    </el-select>
-                  </el-form-item>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <el-form-item label="备注" prop="remark" style="width:500px">
-                    <el-input v-model="ruleForm.remark" type="textarea"></el-input>
+                  <el-form-item label="备注" prop="businessRemark" style="width:500px">
+                    <el-input v-model="businessform.businessRemark" type="textarea"></el-input>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" style="width: 60px;" @click="submitForm('ruleForm')"
@@ -118,13 +75,16 @@ export default {
   data() {
 
     return {
-      ruleForm: {
-        schemename: '',
-        businesswage: '',
-        suitableusers: '',
-        post: '',
-        remark: '',
+      businessform: {
+        //出差方案名称
+        businessName: '',
+        //
+        businesswage: '按出差时长',
+        //备注
+        businessRemark: '',
       },
+      //存出差方案信息
+      businessMsg:[],
       num: '150',
       rules: {
         schemename:[
@@ -134,13 +94,13 @@ export default {
             trigger: 'blur',
           }
         ],
-        businesswage: [
-          {
-            required: true,
-            message: '请选择出差工资规则',
-            trigger: 'change',
-          },
-        ],
+        // businesswage: [
+        //   {
+        //     required: true,
+        //     message: '请选择出差工资规则',
+        //     trigger: 'change',
+        //   },
+        // ],
       }
     }
   },
@@ -151,13 +111,99 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          if(this.$route.query.name='新增'){
+            this.insertBusiness();
+          }else{
+            this.updateBusiness()
+          }
+
         } else {
           console.log('error submit!!')
-          return false
+
         }
       })
     },
+    //新增出差方案
+    insertBusiness(){
+      alert(this.businessform.businessName)
+      this.axios({
+        url: 'http://localhost:8010/provider/business/insertBusiness',
+        method: 'post',
+        data:{
+
+          // 出差方案名称
+          businessName:this.businessform.businessName,
+          //出差一天金额
+          businessOnemoney:this.num,
+          //状态
+          businessState:0,
+          //备注
+          businessRemark:this.businessform.businessRemark,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //根据id查询出差方案信息
+    selectBusinessId() {
+      alert(this.$route.query.id)
+      this.axios
+          .get("http://localhost:8010/provider/business/selectBusinessId/" + this.$route.query.id)
+          .then((response) => {
+            console.log(response);
+            this.businessMsg = response.data.data;
+
+            this.businessform.businessName=this.businessMsg.businessName;
+            this.num=this.businessMsg.businessOnemoney;
+            this.businessform.businessRemark=this.businessMsg.businessRemark;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //修改出差信息
+    updateBusiness(){
+      this.axios({
+        url: 'http://localhost:8010/provider/business/updateBusiness',
+        method: 'put',
+        data: {
+          //出差方案id
+          businessId:this.$route.query.id,         // 出差方案名称
+          businessName:this.businessform.businessName,
+          //出差一天金额
+          businessOnemoney:this.num,
+          //备注
+          businessRemark:this.businessform.businessRemark,
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  },created() {
+    if(this.$route.query.name=='编辑'){
+      this.selectBusinessId()
+    }
   }
 }
 </script>
