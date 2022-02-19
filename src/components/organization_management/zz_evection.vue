@@ -8,14 +8,10 @@
     </el-input>
     <!--选择框-->
     <b style="font-size: 18px;margin-left: 20px">状态&nbsp;&nbsp;&nbsp;&nbsp;</b>
-    <el-select size="small" v-model="value" clearable placeholder="部门状态">
-      <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-      >
-      </el-option>
+    <el-select size="small" v-model="pageInfo.deptState" clearable placeholder="部门状态">
+
+      <el-option label="启用" value="0" style="margin-left: 15px"></el-option>
+      <el-option label="禁用" value="1" style="margin-left: 15px"></el-option>
     </el-select>
     <!--查询按钮-->
     <el-button @click="deptmo()" style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
@@ -327,6 +323,8 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        //部门状态
+        deptState:"",
       },
 
       //员工查询分页
@@ -356,19 +354,12 @@ export default {
 
       options: ref([]),
 
-      value: ref(''),
+
 
 
       //部门负责人
       optionss: ref([
-        {
-          values: '大象',
-          label: '大象',
-        },
-        {
-          values: '老鼠',
-          label: '老鼠',
-        }
+
       ]),
       values: ref(''),
       deptData: [],
@@ -468,12 +459,20 @@ export default {
     //模糊搜索
     deptmo(){
       // 判断文本框为空
-      if ( this.input == "" || this.input == null){
+      if ( (this.input == "" || this.input) == null && (this.pageInfo.deptState == "" || this.pageInfo.deptState == null)){
         this.deptinquire()
         return
       }
+
+      let param1={
+        currenPage:this.pageInfo.currenPage,
+        pagesize:this.pageInfo.pagesize,
+        input:this.input,
+        inputs:this.pageInfo.deptState
+      }
+
       this.axios
-          .get("http://localhost:8010/provider/dept/deptmo/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize+"/"+this.input)
+          .get("http://localhost:8010/provider/dept/deptmo",{params:param1})
           .then((response) =>{
             console.log(response);
             this.tableData = response.data.data.records;
@@ -512,6 +511,18 @@ export default {
       this.become=false;
 
     },
+    //部门状态
+    state(){
+      this.axios
+          .get("http://localhost:8010/provider/dept/state")
+          .then((response)=>{
+            console.log(response);
+            this.optionsDept=response.data.data;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
     //提交
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -545,11 +556,12 @@ export default {
   },
   //分页查询
   created() {
+    //部门
     this.deptinquire();
+    //员工
     this.staff();
-  },
-  created2(){
-
+    //部门状态
+    this.state()
   },
 
 };
