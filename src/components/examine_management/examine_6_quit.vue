@@ -3,28 +3,32 @@
   <div class="body_1">
     <el-tabs type="border-card">
       <!-- 待办申请页面 -->
-      <el-tab-pane label="待办申请">
+      <!-- 待办申请页面 -->
+      <el-tab-pane>
+        <template #label>
+          <span @click="selectAuditflow(1)">待办申请</span>
+        </template>
         <el-button @click="resetDateFilter1">重置日期过滤</el-button>
         &nbsp;
         <el-input
-            v-model="input"
             placeholder="输入名称搜索"
+            v-model="pageInfo.staffName"
             style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
+        <el-button type="success" plain style="margin-bottom: 20px" @click="selectAuditflow(1)">搜索</el-button>
         <!--  表格 -->
         <el-table
             ref="filterTable1"
             row-key="date1"
-            :data="tableData1"
+            :data="tableData"
             style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
 
         >
           <el-table-column
-              prop="date1"
+              prop="createdTime"
               label="日期"
               sortable
               width="140"
@@ -37,38 +41,40 @@
             ]"
               :filter-method="filterHandler"
           />
-          <el-table-column prop="AUDITFLOW_ID" label="审批编号" width="100"/>
-          <el-table-column prop="AUDITFLOW_TYPE" label="流程" width="100"/>
-          <el-table-column prop="STAFF_ID" label="申请人" width="150"/>
+          <el-table-column prop="auditflowId" label="审批编号" width="100"/>
+          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
+          <el-table-column prop="staffName1" label="申请人" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+          <el-table-column prop="auditflowState" label="状态" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+              <div v-if="scope.row.auditflowdetaiState=='0'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待审</span>
+              </div>
+              <div v-if="scope.row.auditflowdetaiState=='1'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待我审批</span>
+              </div>
+
+
+              <div v-if="scope.row.auditflowdetaiState=='2'">
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+              <div v-if="scope.row.auditflowdetaiState=='3'">
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>待审</span>
-              </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
-                <div class="if_cx"></div>
-                &nbsp;&nbsp;<span>撤销</span>
-              </div>
             </template>
 
           </el-table-column>
-          <el-table-column prop="STAFF_NAME" label="当前审批人" width="150"/>
-          <el-table-column prop="UPDATED_TIME" label="最近处理" width="150"/>
+          <el-table-column prop="staffName2" label="当前审批人" width="150"/>
+          <el-table-column prop="updatedTime" label="最近处理" width="150"/>
 
           <el-table-column label="操作">
             <template #default="scope">
@@ -81,7 +87,7 @@
                   @confirm="through1()"
               >
                 <template #reference>
-                  <el-button type="text">通过</el-button>
+                  <el-button type="text">通过 </el-button>
                 </template>
               </el-popconfirm>
               <el-popconfirm
@@ -97,7 +103,7 @@
                 </template>
               </el-popconfirm>
 
-              <el-button type="text"  @click="drawer = true">详情 </el-button>
+              <el-button type="text"   @click="">详情 </el-button>
 
             </template>
           </el-table-column>
@@ -124,11 +130,14 @@
         <span>Hi there!</span>
       </el-drawer>
       <!-- 已办申请页面 -->
-      <el-tab-pane label="已办申请">
+      <el-tab-pane>
+        <template #label>
+          <span @click="selectAuditflow(2)">已办申请</span>
+        </template>
         <el-button @click="resetDateFilter">重置日期过滤</el-button>
         &nbsp;
         <el-input
-            v-model="input"
+            v-model="pageInfo1.staffName"
             placeholder="输入名称搜索nima"
             style="width: 200px"
         />
@@ -138,14 +147,14 @@
         <el-table
             ref="filterTable"
             row-key="date"
-            :data="tableData"
+            :data="tableData1"
             style="width: 100%"
             :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
 
         >
           <el-table-column
-              prop="date"
+              prop="createdTime"
               label="日期"
               sortable
               width="140"
@@ -158,41 +167,36 @@
             ]"
               :filter-method="filterHandler"
           />
-          <el-table-column prop="AUDITFLOW_ID" label="审批编号" width="100"/>
-          <el-table-column prop="AUDITFLOW_TYPE" label="流程" width="100"/>
-          <el-table-column prop="STAFF_ID" label="申请人" width="150"/>
+          <el-table-column prop="auditflowId" label="审批编号" width="100"/>
+          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
+          <el-table-column prop="staffName1" label="申请人" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="AUDITFLOW_STATE" label="状态" width="100">
+          <el-table-column prop="auditflowdetaiState" label="状态" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='通过'" >
+              <div v-if="scope.row.auditflowdetaiState=='2'" >
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='驳回'" >
+              <div v-if="scope.row.auditflowdetaiState=='3'" >
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='审批中'" >
+              <div v-if="scope.row.auditflowdetaiState=='1'" >
                 <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>待审</span>
+                &nbsp;&nbsp;<span>待我审批</span>
               </div>
 
-              <div v-if="scope.row.AUDITFLOW_STATE=='撤销'" >
-                <div class="if_cx"></div>
-                &nbsp;&nbsp;<span>撤销</span>
-              </div>
             </template>
 
           </el-table-column>
-          <el-table-column prop="STAFF_NAME" label="历史审批人" width="150"/>
-          <el-table-column prop="UPDATED_TIME" label="最近处理" width="140"/>
+          <el-table-column prop="updatedTime" label="最近处理" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text"  @click="drawer = true">详情</el-button>
+              <el-button type="text"  @click="selectById(scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -231,141 +235,61 @@ export default {
   data() {
     return {
       // 待办转正审批列表
-      tableData: [
-        {
-          date: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData: [],
       // 已办转正审批列表
-      tableData1: [
-        {
-          date1: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "离职",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData1: [],
 
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+        // 当前审批类型
+        auditflowTitle:"离职审批",
+        // 当前审批状态
+        auditflowdetaiState:"待办",
+        // 名称搜索框
+        staffName:""
+      },
+      // 参数
+      paramsVal:"",
+      //已办申请分页插件
+      pageInfo1: {
+        // 分页参数
+        currentPage: 1, //当前页
+        pagesize: 3, // 页大小
+        total: 0, // 总页数
+        auditflowTitle:"离职审批", // 当前审批类型
+        auditflowdetaiState:"已办", // 当前审批状态
+        staffName:""// 名称搜索框
       },
     };
   },
   methods: {
+    selectAuditflow(val) {
+      // 待办
+      if(val==1){
+        this.paramsVal=this.pageInfo
+      }else{ // 已办
+        this.paramsVal=this.pageInfo1
+      }
+      this.axios
+          .get("http://localhost:8010/provider/findSelectPageWorker",{params:this.paramsVal})
+          .then((response) => {
+            console.log(response);
+            if(val==1){ // 待办
+              this.tableData = response.data.data.records;
+              this.pageInfo.total = response.data.data.total;
+            }else{ // 已办
+              console.log(response);
+              this.tableData1 = response.data.data.records;
+              this.pageInfo1.total = response.data.data.total;
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     // 重置日期过滤
     resetDateFilter1() {
       this.$refs.filterTable1.clearFilter("date1");
@@ -390,7 +314,9 @@ export default {
     through2() {
       alert(1)
     }
-  },
+  },created() {
+    this.selectAuditflow(1);
+  }
 };
 </script>
 

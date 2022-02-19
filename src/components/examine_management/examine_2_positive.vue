@@ -70,7 +70,8 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="through1()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowdetailId,2),
+                  updateAuditflow(scope.row.auditflowId,2)"
               >
                 <template #reference>
                   <el-button type="text">通过</el-button>
@@ -82,7 +83,8 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="through2()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowdetailId,3),
+                  updateAuditflow(scope.row.auditflowId,3)"
               >
                 <template #reference>
                   <el-button type="text">驳回</el-button>
@@ -254,6 +256,7 @@
 
 <script>
 import {defineComponent, ref} from "vue";
+import { ElMessage } from "element-plus";
 
 export default {
   setup() {
@@ -278,14 +281,12 @@ export default {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
-
         // 当前审批类型
         auditflowTitle:"转正审批",
         // 当前审批状态
         auditflowdetaiState:"待办",
         // 名称搜索框
         staffName:""
-
       },
       // 参数
       paramsVal:"",
@@ -295,12 +296,13 @@ export default {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
-        auditflowTitle:"转正审批",// 当前审批类型
+        auditflowTitle:"转正审批", // 当前审批类型
         auditflowdetaiState:"已办", // 当前审批状态
         staffName:""// 名称搜索框
       },
       auditflow: [],
       auditflow0: {},
+
 
       a:{},
       b:{},
@@ -345,33 +347,77 @@ export default {
               this.tableData1 = response.data.data.records;
               this.pageInfo1.total = response.data.data.total;
             }
-
           })
           .catch(function (error) {
             console.log(error);
           })
     },
+    //转正审批 修改状态
+    updateAuditflowdetai(id,state) {
+      this.axios({
+        url: 'http://localhost:8010/provider/auditflowdetail/updateAuditflowdetail',
+        method: 'put',
+        data:{
+          auditflowdetailId:id,
+          auditflowdetaiState:state
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectAuditflow(1) // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //转正审批 修改状态
+    updateAuditflow(id,state) {
+      this.axios({
+        url: 'http://localhost:8010/provider/updateAuditflow',
+        method: 'put',
+        data:{
+          auditflowId:id,
+          auditflowState:state
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectAuditflow(1) // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
 
     //
     selectById(row) {
       //打开抽屉
       this.drawer = true
-      //更具id查询
+      //根据id查询
       this.axios
           .get("http://localhost:8010/provider/findSelectPageById/" + row.auditflowId)
           .then((response) => {
             console.log(response);
             this.auditflow = response.data.data;
             this.auditflow0 = this.auditflow[0]
-
             this.activeVal()
-
           })
           .catch(function (error) {
             console.log(error);
           })
     },
-
     activeVal(){
       this.a = this.auditflow[0]
       this.b = this.auditflow[1]
@@ -389,13 +435,9 @@ export default {
     },
 
     // 点击通过确认按钮触发
-    through1() {
-      alert(1)
-    },
+
     // 点击驳回确认按钮触发
-    through2() {
-      alert(1)
-    }
+
   }, created() {
     this.selectAuditflow(1);
   }
