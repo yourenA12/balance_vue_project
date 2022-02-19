@@ -89,9 +89,8 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
-        <el-table-column prop="name" label="职位名称"/>
-        <el-table-column prop="department" label="所属部门"/>
-        <el-table-column prop="functionary" label="部门负责人" />
+        <el-table-column prop="positionName" label="职位名称"/>
+        <el-table-column prop="positionDescription" label="所属部门"/>
         <el-table-column prop="operate" label="操作">
           <template #default>
             <el-button type="text" size="small" @click="redact()">
@@ -131,8 +130,8 @@
           :total="pageInfo.total"
           :pager-count="5"
           background
-          @size-change="sele"
-          @current-change="sele"
+          @size-change="post"
+          @current-change="post"
       >
       </el-pagination>
     </div>
@@ -266,7 +265,24 @@ export default {
       this.radio1= ref('1'),
           this.drawer = false
     },
-  }
+    //分页查询
+    post(){
+      this.axios
+          .get("http://localhost:8010/provider/position/Po/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+          .then((response)=>{
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error){
+            console.log(error);
+          })
+    },
+  },
+  created() {
+    this.post();
+  },
 };
 </script>
 

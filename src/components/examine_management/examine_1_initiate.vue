@@ -909,9 +909,9 @@ export default defineComponent({
       //转正表单
       become_1: {
         //名称
-        name: "ss",
+        name: "将香烟",
         //部门
-        dept: "ss",
+        dept: "湘北",
         //类型
         type_1: "",
         //备注
@@ -922,20 +922,20 @@ export default defineComponent({
       //异动表单
       Change_1: {
         //名称
-        name: "",
+        name: "将香烟",
         //类型
         type_1: "",
         //部门
-        dept: "",
+        dept: "湘北",
         //部门二
         dept_1: "",
       },
       //调薪表单
       salary_1: {
         //名称
-        name: "",
+        name: "将香烟",
         //部门
-        dept: "",
+        dept: "湘北",
         //调薪后基本工资
         qjbgz: "",
         //调薪前岗位工资
@@ -952,9 +952,9 @@ export default defineComponent({
       //离职表单
       quit_1: {
         //名称
-        name: "",
+        name: "将香烟",
         //部门
-        dept: "",
+        dept: "湘北",
         //原因
         type_1: "",
         //备注
@@ -1037,6 +1037,20 @@ export default defineComponent({
       ]),
       //存放获取的数据
       auditflow1:null,
+
+      // 审批主表数据
+      auditflowVal:"",
+
+      // 审批明细表数据
+      auditflowDetailVal:"",
+
+      // 转正表数据
+      workerVal:"",
+
+      //leave 请假表数据
+      leave:"",
+
+
     };
   },
   setup() {
@@ -1085,14 +1099,114 @@ export default defineComponent({
       } else if (this.become_1.date1.length === 0) {
         ElMessage("日期不能为空");
       } else {
-        alert(1);
+       this.workerVal1()
       }
     },
+
+
+    // 转正取值
+    workerVal1(){
+
+      // 审批主表数据
+      this.auditflowVal={
+        auditflowTitle:"转正审批",
+        auditflowType:"提前转正",
+        staffId:6,
+        staffName:"将香烟"
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ]
+      // 转正表数据
+      this.workerVal={
+        staffId:6,
+        staffName:"将香烟",
+        deptId:1,
+        workerType:"提前转正",
+        workerRemarks:this.become_1.remarks_1,
+        workerDate:this.become_1.date1
+      }
+      this.add()
+    },
+    leaveqj(){
+      //请假表数据
+      this.leave={
+        staffId:6,
+        staffName:"将香烟",
+        deptId:1,
+        leaveMatter:this.sick_1.remarks_1,//请假备注
+        leaveSdate:this.sick_1.date1,//请假开始时间
+        leaveEdate:this.sick_1.date2,//请假结束时间
+        leaveTotaLdate:this.sick_1.date3,//请假总时长
+      }
+      this.leaveadd()
+    },
+
+    // 转正添加
+    add(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertAuditflow',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          Worker: this.workerVal
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+    leaveadd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertleave',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          Leave:this.leave,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '申请成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('申请失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
     // 转正取消
     cancel_1() {
       this.become_1 = {
-        name: "",
-        dept: "",
+        // name: "",
+        // dept: "",
         type_1: "",
         remarks_1: "",
         date1: "",
@@ -1264,6 +1378,7 @@ export default defineComponent({
       this.travel_1.date3 = "";
     },
     // 提交请假
+
     submitForm_8() {
       if (this.sick_1.remarks_1.length === 0) {
         ElMessage("请输入请假事由");
@@ -1272,7 +1387,7 @@ export default defineComponent({
       } else if (this.sick_1.date2.length === 0) {
         ElMessage("请选择结束时间");
       } else {
-        alert(1);
+        this.leaveqj();
       }
     },
     // 取消请假

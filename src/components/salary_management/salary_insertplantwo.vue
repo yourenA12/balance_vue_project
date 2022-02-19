@@ -14,53 +14,28 @@
               <div style="margin-left: 150px">
                 <el-form
                     ref="ruleForm"
-                    :model="ruleForm"
+                    :model="attendandceForm"
                     :rules="rules"
                     label-width="150px"
                     class="demo-ruleForm"
                 >
-                  <el-form-item label="方案名称：" prop="schemename" style="width:370px">
-                    <el-input v-model="ruleForm.schemename" style="width: 207px"></el-input>
+                  <el-form-item label="方案名称：" prop="attendandceName" style="width:370px">
+                    <el-input v-model="attendandceForm.attendandceName" style="width: 207px"></el-input>
                   </el-form-item>
 
 
 
                   <el-form-item label="迟到：" prop="late">
-                    <el-select v-model="ruleForm.late" placeholder="请选择">
-                      <el-option label="按固定金额扣款" value="latebyfixed" style="margin-left: 20px;"></el-option>
-                      <el-option label="按迟到时长扣款" value="latebyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按迟到次数扣款" value="latebynumber" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="ruleForm.late" placeholder="请选择">-->
+<!--                      <el-option label="按固定金额扣款" value="latebyfixed" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按迟到时长扣款" value="latebyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按迟到次数扣款" value="latebynumber" style="margin-left: 20px;"></el-option>-->
+<!--                    </el-select>-->
+                    <el-input v-model="attendandceForm.late" style="width:210px" value=""></el-input>
+
                   </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-if="ruleForm.late=='latebyfixed'">
-                    <el-input-number
-                        v-model="num"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元/月</span>
-                  </el-form-item>
-
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else-if="ruleForm.late=='latebyhour'">
-                    <el-input-number
-                        v-model="num"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x迟到的分钟数</span>
-                  </el-form-item>
-
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else="ruleForm.late=='latebynumber'">
+                  <el-form-item label="扣款："  style="width:500px">
                     <el-input-number
                         v-model="num"
                         :min="0"
@@ -75,41 +50,17 @@
 
 
                   <el-form-item label="早退：" prop="early">
-                    <el-select v-model="ruleForm.early" placeholder="请选择">
-                      <el-option label="按固定金额扣款" value="earlybyfixed" style="margin-left: 20px;"></el-option>
-                      <el-option label="按早退时长扣款" value="earlybyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按早退次数扣款" value="earlybynumber" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="ruleForm.early" placeholder="请选择">-->
+<!--                      <el-option label="按固定金额扣款" value="earlybyfixed" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按早退时长扣款" value="earlybyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按早退次数扣款" value="earlybynumber" style="margin-left: 20px;"></el-option>-->
+<!--                    </el-select>-->
+                    <el-input v-model="attendandceForm.early" style="width:210px" value=""></el-input>
+
                   </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-if="ruleForm.early=='earlybyfixed'">
-                    <el-input-number
-                        v-model="num2"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元/月</span>
-                  </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else-if="ruleForm.early=='earlybyhour'">
-                    <el-input-number
-                        v-model="num2"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x早退的分钟数</span>
-                  </el-form-item>
-
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else="ruleForm.early=='earlybynumber'">
+                  <el-form-item label="扣款："  style="width:500px">
                     <el-input-number
                         v-model="num2"
                         :min="0"
@@ -125,41 +76,18 @@
 
 
                   <el-form-item label="未签到：" prop="notsignin">
-                    <el-select v-model="ruleForm.notsignin" placeholder="请选择">
-                      <el-option label="按固定金额扣款" value="inbyfixed" style="margin-left: 20px;"></el-option>
-                      <el-option label="按未签到时长扣款" value="inbyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按未签到次数扣款" value="inbynumber" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="ruleForm.notsignin" placeholder="请选择">-->
+<!--                      <el-option label="按固定金额扣款" value="inbyfixed" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按未签到时长扣款" value="inbyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按未签到次数扣款" value="inbynumber" style="margin-left: 20px;"></el-option>-->
+<!--                    </el-select>-->
+                    <el-input v-model="attendandceForm.notsignin" style="width:210px" value=""></el-input>
+
                   </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-if="ruleForm.notsignin=='inbyfixed'">
-                    <el-input-number
-                        v-model="num3"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元/月</span>
-                  </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else-if="ruleForm.notsignin=='inbyhour'">
-                    <el-input-number
-                        v-model="num3"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x未签到的分钟数</span>
-                  </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else="ruleForm.notsignin=='inbynumber'">
+                  <el-form-item label="扣款："  style="width:500px">
                     <el-input-number
                         v-model="num3"
                         :min="0"
@@ -174,41 +102,17 @@
 
 
                   <el-form-item label="未签退：" prop="notsignback">
-                    <el-select v-model="ruleForm.notsignback" placeholder="请选择">
-                      <el-option label="按固定金额扣款" value="backbyfixed" style="margin-left: 20px;"></el-option>
-                      <el-option label="按未签退时长扣款" value="backbyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按未签退次数扣款" value="backbynumber" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="ruleForm.notsignback" placeholder="请选择">-->
+<!--                      <el-option label="按固定金额扣款" value="backbyfixed" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按未签退时长扣款" value="backbyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按未签退次数扣款" value="backbynumber" style="margin-left: 20px;"></el-option>-->
+<!--                    </el-select>-->
+                    <el-input v-model="attendandceForm.notsignback" style="width:210px" value=""></el-input>
+
                   </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-if="ruleForm.notsignback=='backbyfixed'">
-                    <el-input-number
-                        v-model="num4"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元/月</span>
-                  </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else-if="ruleForm.notsignback=='backbyhour'">
-                    <el-input-number
-                        v-model="num4"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x未签退的分钟数</span>
-                  </el-form-item>
-
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-else="ruleForm.notsignback=='backbynumber'">
+                  <el-form-item label="扣款："  style="width:500px">
                     <el-input-number
                         v-model="num4"
                         :min="0"
@@ -224,14 +128,15 @@
 
 
                   <el-form-item label="旷工：" prop="absent">
-                    <el-select v-model="ruleForm.absent" placeholder="请选择">
-                      <el-option label="按小时工资比例扣款" value="absentbyhour" style="margin-left: 20px;"></el-option>
-                      <el-option label="按月累计旷工时长扣款" value="absentbytime" style="margin-left: 20px;"></el-option>
-                    </el-select>
+<!--                    <el-select v-model="ruleForm.absent" placeholder="请选择">-->
+<!--                      <el-option label="按小时工资比例扣款" value="absentbyhour" style="margin-left: 20px;"></el-option>-->
+<!--                      <el-option label="按月累计旷工时长扣款" value="absentbytime" style="margin-left: 20px;"></el-option>-->
+<!--                    </el-select>-->
+                    <el-input v-model="attendandceForm.absent" style="width:210px" value=""></el-input>
+
                   </el-form-item>
 
-                  <el-form-item label="扣款："  style="width:500px"
-                                v-if="ruleForm.absent=='absentbytime'">
+                  <el-form-item label="扣款："  style="width:500px">
                     <el-input-number
                         v-model="num5"
                         :min="1"
@@ -243,54 +148,9 @@
                     <span>元 × 旷工折算的小时数</span>
                   </el-form-item>
 
-                  <el-form-item label="扣款：小时工资 X"  style="width:500px"
-                                v-else="">
-                    <el-input-number
-                        v-model="num5"
-                        :min="1"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>% × 旷工折算的小时数</span>
-                  </el-form-item>
-
-
-
-
-
-
-                  <el-form-item label="适用对象" prop="suitableusers">
-                    <el-select v-model="ruleForm.suitableusers" placeholder="请选择">
-                      <el-option label="1" value="suitableusers1" style="margin-left: 20px;"></el-option>
-                      <el-option label="111" value="suitableusers2" style="margin-left: 20px;"></el-option>
-                    </el-select>
-                  </el-form-item>
-
-
-                  <el-form-item label="职位" prop="post">
-                    <el-select v-model="ruleForm.post" placeholder="请选择">
-                      <el-option label="212" value="post1" style="margin-left: 20px;"></el-option>
-                      <el-option label="22222" value="post2" style="margin-left: 20px;"></el-option>
-                    </el-select>
-                  </el-form-item>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                   <el-form-item label="备注" prop="remark" style="width:500px">
-                    <el-input v-model="ruleForm.remark" type="textarea"></el-input>
+                    <el-input v-model="attendandceForm.attendandceRemark" type="textarea"></el-input>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" style="width: 60px;" @click="submitForm('ruleForm')"
@@ -320,64 +180,37 @@ export default {
   data() {
 
     return {
-      ruleForm: {
-        schemename: '',
-        late: '',
-        early: '',
-        notsignin: '',
-        notsignback: '',
-        absent: '',
-        suitableusers: '',
-        post: '',
-        remark: '',
+      attendandceForm: {
+        //考勤方案名称
+        attendandceName: '',
+
+        late: '按迟到次数扣款',
+        early: '按早退次数扣款',
+        notsignin: '按未签到次数扣款',
+        notsignback: '按未签退次数扣款',
+        absent: '按小时工资比例扣款',
+        //
+        attendandceRemark: '',
       },
+      //存考勤扣款信息
+      AttendandceMsg:[],
+      //迟到金额
       num: '0',
+      //早退金额
       num2:'0',
+      //未签到
       num3:'0',
+      //未签退
       num4:'0',
+      //旷工
       num5:'300',
       rules: {
-        schemename:[
+        attendandceName:[
           {
             required: true,
             message: '请输入方案名称',
             trigger: 'blur',
           }
-        ],
-        late: [
-          {
-            required: true,
-            message: '请选择迟到规则',
-            trigger: 'change',
-          },
-        ],
-        early: [
-          {
-            required: true,
-            message: '请选择早退规则',
-            trigger: 'change',
-          },
-        ],
-        notsignin: [
-          {
-            required: true,
-            message: '请选择未签到规则',
-            trigger: 'change',
-          },
-        ],
-        notsignback: [
-          {
-            required: true,
-            message: '请选择未签退规则',
-            trigger: 'change',
-          },
-        ],
-        absent: [
-          {
-            required: true,
-            message: '请选择旷工规则',
-            trigger: 'change',
-          },
         ],
 
       }
@@ -390,13 +223,126 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          if(this.$route.query.name='新增'){
+            this.insertAttendandce();
+          }else{
+            this. updateAttendandce()
+          }
+
+
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
+    //新增考勤扣款方案
+    insertAttendandce(){
+      alert(this.attendandceForm.attendandceName)
+      this.axios({
+        url: 'http://localhost:8010/provider/attendandce/insertAttendandce',
+        method: 'post',
+        data:{
+
+          // 考勤扣款方案名称
+          attendandceName:this.attendandceForm.attendandceName,
+          //迟到一次金额
+          attendandceLitemoney:this.num,
+          //早退一次金额
+          attendandceLeavemoney:this.num2,
+          //未签到一次金额
+          attendandceDidnotmoney:this.num3,
+          //未签退一次金额
+          attendandceDidbackmoney:this.num4,
+          //旷工一天金额
+          attendandceAbscntmoney:this.num5,
+          //备注
+          attendandceRemark:this.attendandceForm.attendandceRemark,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //根据id查询考勤扣款方案信息
+    selectAttendandceId() {
+      alert(this.$route.query.id)
+      this.axios
+          .get("http://localhost:8010/provider/attendandce/selectAttendandceId/" + this.$route.query.id)
+          .then((response) => {
+            console.log(response);
+            this.AttendandceMsg = response.data.data;
+
+            // 考勤扣款方案名称
+            this.attendandceForm.attendandceName=this.AttendandceMsg.attendandceName,
+                //迟到一次金额
+                this.num=this.AttendandceMsg.attendandceLitemoney,
+                //早退一次金额
+                this.num2=this.AttendandceMsg.attendandceLeavemoney,
+                //未签到一次金额
+                this.num3=this.AttendandceMsg.attendandceDidnotmoney,
+                //未签退一次金额
+                this.num4=this.AttendandceMsg.attendandceDidbackmoney,
+                //旷工一天金额
+                this.num5=this.AttendandceMsg.attendandceAbscntmoney,
+                //备注
+                this.attendandceForm.attendandceRemark=this.AttendandceMsg.attendandceRemark
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //修改考勤扣款信息
+    updateAttendandce(){
+      this.axios({
+        url: 'http://localhost:8010/provider/attendandce/updateAttendandce',
+        method: 'put',
+        data: {
+          //出差方案id
+          businessId:this.$route.query.id,
+          // 考勤扣款方案名称
+          attendandceName:this.attendandceForm.attendandceName,
+          //迟到一次金额
+          attendandceLitemoney:this.num,
+          //早退一次金额
+          attendandceLeavemoney:this.num2,
+          //未签到一次金额
+          attendandceDidnotmoney:this.num3,
+          //未签退一次金额
+          attendandceDidbackmoney:this.num4,
+          //旷工一天金额
+          attendandceAbscntmoney:this.num5,
+          //备注
+          attendandceRemark:this.attendandceForm.attendandceRemark,
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  },created() {
+    if(this.$route.query.name=='编辑'){
+      this.selectAttendandceId()
+    }
   }
 }
 </script>

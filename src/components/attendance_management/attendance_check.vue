@@ -124,16 +124,7 @@ export default {
         total: 0,
       },
       tableData: [],
-      options: ref([
-        {
-          value: 0,
-          label: '启用',
-        },
-        {
-          value: 1,
-          label: '禁用',
-        }
-      ]),
+
       value: ref(''),
     }
   },
@@ -197,10 +188,7 @@ export default {
           .then((response)=>{
             console.log(response)
            if (response.data.data === "成功"){
-             ElMessage({
-               message: '删除成功',
-               type: 'success'
-             });
+             ElMessage.error("删除成功")
              this.check() // 删除完成后，查询一次
            }else {
               ElMessage.error("删除失败")

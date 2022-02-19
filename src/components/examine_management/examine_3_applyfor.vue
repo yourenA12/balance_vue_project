@@ -36,11 +36,11 @@
             ]"
               :filter-method="filterHandler"
           />
-          <el-table-column prop="auditflowdetailId" label="审批编号" width="100"/>
+          <el-table-column prop="auditflowId" label="审批编号" width="100"/>
           <el-table-column prop="auditflowTitle" label="流程" width="100"/>
 
-          <el-table-column prop="staffName2" label="申请人" width="100"/>
-          <el-table-column prop="auditflowdetaiState" label="状态" width="100">
+          <el-table-column prop="staffName" label="申请人" width="100"/>
+          <el-table-column prop="auditflowState" label="状态" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
@@ -66,7 +66,7 @@
             </template>
 
           </el-table-column>
-          <el-table-column prop="staffName1" label="当前审批人" width="100"/>
+
           <el-table-column prop="updatedTime" label="最近处理" width="100"/>
           <el-table-column label="操作">
             <template #default="scope">
@@ -129,7 +129,7 @@ export default {
   },
   data() {
     return {
-      tableData: [],
+      tableData:[],
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -139,6 +139,19 @@ export default {
     };
   },
   methods: {
+    Auditflow(){
+
+      this.axios
+          .get("http://localhost:8010/provider/findSelectId/6/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+
+    },
     //重置过滤
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
@@ -157,28 +170,16 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
-    // 查询待审批加班数据
-     selectAuditflow() {
-      this.axios
-       .get("http://localhost:8010/provider/findSelectPage/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
-       .then((response)=>{
-          console.log(response);
-          this.tableData = response.data.data.records;
-          this.pageInfo.total = response.data.data.total;
-       })
-       .catch(function (error){
-         console.log(error);
-       })
-    },
+    //更具员工id查询 员工的申请
+
 
     // 点击撤销确认按钮触发
     through1() {
       alert(1)
-    },
-  },
-  created() {
-    this.selectAuditflow();
-  },
+    }
+  }, created() {
+  this.Auditflow();
+}
 
 };
 </script>

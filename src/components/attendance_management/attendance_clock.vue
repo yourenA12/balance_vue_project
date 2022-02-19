@@ -180,7 +180,7 @@ export default {
   },
   methods: {
     // 点击删除确认按钮触发
-    through1(row) {
+     through1(row) {
       /*alert(row.clockRecordId)*/
       this.deletedk(row);
     },

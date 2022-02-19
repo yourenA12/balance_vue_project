@@ -13,12 +13,12 @@
             width="30%"
             :close-on-click-modal="false">
 
-          <div>
-            <el-radio @click="compensationPost=true,compensationStaff=false" v-model="radio1" label="1" size="large">给职位设置薪酬组</el-radio>&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-radio @click="compensationStaff=true,compensationPost=false" v-model="radio1" label="2" size="large">给员工设置薪酬组</el-radio>
-          </div>
+<!--          <div>-->
+<!--            <el-radio  v-model="radio1" label="1" size="large">给职位设置薪酬组</el-radio>&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--            <el-radio @click="compensationStaff=true,compensationPost=false" v-model="radio1" label="2" size="large">给员工设置薪酬组</el-radio>-->
+<!--          </div>-->
 <!--          -->
-          <el-form v-show="compensationPost"
+          <el-form
               ref="ruleFormRef"
               :model="compensationForm"
               :rules="rules"
@@ -30,19 +30,21 @@
               <el-input v-model="compensationForm.compensationName" style="width:240px"></el-input>
             </el-form-item>
 
+            <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">
+            <div> <el-input @click="StaffBecome=true" v-model="compensationForm.name" style="width:240px"></el-input></div>
+            </el-form-item>
 
+<!--            <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">-->
+<!--              <div class="name_tb" >-->
+<!--                <span style="margin-left: 10px;"></span>-->
+<!--                <span @click="become = true"><i  class="iconfont" style="position: absolute;left:210px; cursor:pointer;width:30px">&#xe629;</i></span>-->
+<!--              </div>-->
+<!--              -->
+<!--            </el-form-item>-->
 
-            <el-form-item label="试用部门：" style="margin-top: 20px;">
-<!--              <el-select  placeholder="请选择试用部门" multiple v-model="citysDept" style="width:240px">-->
-<!--                <el-option-->
-<!--                    v-for="item in deptNameAll"-->
-<!--                    :key="item.deptId"-->
-<!--                    :label="item.deptName"-->
-<!--                    :value="item.deptId" />-->
-
-<!--              </el-select>-->
-              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
-                <el-option hidden></el-option>
+            <el-form-item label="适用部门：" style="margin-top: 20px;">
+              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()" style="width:240px">
+                <el-option hidden ></el-option>
                 <el-option
                     class="xxx"
                     v-for="item in dept"
@@ -62,7 +64,7 @@
             </el-form-item>
 
 
-            <el-form-item label="试用职位：" style="margin-top: 20px;">
+            <el-form-item label="适用职位：" style="margin-top: 20px;">
               <el-select  placeholder="请选择试用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
                 <el-option
                     v-for="item in positionAll"
@@ -77,37 +79,62 @@
               <el-input v-model="compensationForm.compensationRemark" style="width:240px"></el-input>
             </el-form-item>
 
-            <el-button style="width:80px;margin-top: 30px;margin-left: 120px">取消</el-button>
-            <el-button type="primary" style="width:80px" @click="compensationSalary()">提交</el-button>
+            <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false">取消</el-button>
+            <el-button type="primary" style="width:80px" @click="compensationSalary(),become=false">提交</el-button>
 
           </el-form>
 
-          <el-form v-show="compensationStaff"
-              ref="ruleFormRef"
-              :model="compensationStaffForm"
-              :rules="rules"
-              label-width="120px"
-              class="demo-ruleForm"
-              :size="formSize"
-          >
-            <el-form-item label="组名称：" prop="name" style="margin-top: 20px;">
-              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>
-            </el-form-item>
+<!--          <el-form v-show="compensationStaff"-->
+<!--              ref="ruleFormRef"-->
+<!--              :model="compensationStaffForm"-->
+<!--              :rules="rules"-->
+<!--              label-width="120px"-->
+<!--              class="demo-ruleForm"-->
+<!--              :size="formSize"-->
+<!--          >-->
+<!--            <el-form-item label="组名称：" prop="name" style="margin-top: 20px;">-->
+<!--              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>-->
+<!--            </el-form-item>-->
 
-            <el-form-item label="试用员工：" prop="name" style="margin-top: 20px;">
-              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>
-            </el-form-item>
+<!--           -->
 
 
-            <el-form-item label="备注：" prop="name" style="margin-top: 20px;">
-              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>
-            </el-form-item>
+<!--            <el-form-item label="备注：" prop="name" style="margin-top: 20px;">-->
+<!--              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>-->
+<!--            </el-form-item>-->
 
-            <el-button style="width:80px;margin-top: 30px;margin-left: 120px">取消</el-button>
-            <el-button type="primary" style="width:80px">提交</el-button>
+<!--            <el-button style="width:80px;margin-top: 30px;margin-left: 120px">取消</el-button>-->
+<!--            <el-button type="primary" style="width:80px">提交</el-button>-->
 
-          </el-form>
+<!--          </el-form>-->
 
+
+        </el-dialog>
+      </div>
+
+<!--      点击选择员工弹出框-->
+      <div>
+        <el-dialog
+            v-model="StaffBecome"
+            title="选择员工"
+            width="50%"
+            :close-on-click-modal="false">
+        <el-table>
+          <el-table-column
+              prop="staffName"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="deptName"
+              label="部门"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="positionName"
+              label="职位">
+          </el-table-column>
+          </el-table>
 
         </el-dialog>
       </div>
@@ -184,6 +211,8 @@ export default {
       positionAll:[],
       //存选中的部门
       citysDept:[],
+
+      StaffBecome:false,
 
       //薪酬组
       compensationVal:null,
@@ -345,6 +374,14 @@ export default {
 
 .xxx{
   display: none;
+}
+.name_tb{
+  width:240px;
+  height:40px;
+  border:1px solid silver;
+  border-radius: 3px;
+  background: white;
+  position: relative;
 }
 
 .mainContent {

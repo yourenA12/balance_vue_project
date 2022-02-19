@@ -6,11 +6,15 @@
 <!--      <span style="font-size: 14px;">1、选择一个部门</span>&nbsp;-->
       <!--选择部门的下拉框-->
       <el-form>
-      <el-form-item label="1、选择一个部门：" prop="dept">
-        <el-select v-model="ruleForm.dept" placeholder="请选择部门" style="width:240px;">
-          <el-option label="11" value="dept1" style="margin-left: 20px;"></el-option>
-          <el-option label="02465" value="dept2" style="margin-left: 20px;"></el-option>
-          <el-option label="333" value="dept3" style="margin-left: 20px;"></el-option>
+      <el-form-item label="1、选择一个薪酬组：" prop="dept">
+        <el-select v-model="ruleForm.compensationName" @change="selectWorkschemeId()" placeholder="请选择一个薪酬组" style="width: 200px;margin-left: 15px">
+          <el-option
+              v-for="item in CompensationNameAll"
+              :key="item.compensationId"
+              :label="item.compensationName"
+              :value="item.compensationId"
+          >
+          </el-option>
         </el-select>
       </el-form-item>
       </el-form><br>
@@ -53,6 +57,22 @@
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">加班工资</h3>
               <span class="span_1_zhe" >【加项】针对员工工作日、休息日、节假日加班工资，可设置加班工资方案  <router-link :to="{path:this.callbackpay,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+
+<!--            <el-input  style="width:200px;margin-left: 150px;"></el-input>-->
+            <el-form style="display: inline-block;margin-left: 235px;">
+              <el-form-item label="加班方案：" prop="dept">
+                <el-select v-model="overtimeForm.workschemeId" placeholder="请选择一个加班方案" style="width: 200px;">
+                  <el-option
+                      v-for="item in overtimeAll"
+                      :key="item.workschemeId"
+                      :label="item.workschemeName"
+                      :value="item.workschemeId"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+
           </div>
           <br />
 
@@ -60,6 +80,21 @@
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">考勤扣款</h3>
               <span class="span_1_zhe" >【减项】该部分工资，系统根据考勤扣款方案自动核算数据，可针对每项设置扣款方案  <router-link :to="{path:this.attendanceplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+
+            <el-form style="display: inline-block;margin-left: 165px;">
+              <el-form-item label="考勤方案：" prop="dept">
+                <el-select v-model="attendanceForm.attendandceId"  placeholder="请选择一个考勤方案" style="width: 200px;">
+                  <el-option
+                      v-for="item in attendanceAll"
+                      :key="item.attendandceId"
+                      :label="item.attendandceName"
+                      :value="item.attendandceId"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+
           </div>
 
           <br/>
@@ -67,17 +102,35 @@
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">出差工资</h3>
               <span class="span_1_zhe" >【加项】针对员工出差，可设置出差方案 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+
+            <el-form style="display: inline-block;margin-left: 445px;">
+              <el-form-item label="出差方案：" prop="dept">
+                <el-select v-model="evectionForm.businessId"  placeholder="请选择一个出差方案" style="width: 200px;">
+                  <el-option
+                      v-for="item in evectionAll"
+                      :key="item.businessId"
+                      :label="item.businessName"
+                      :value="item.businessId"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+
           </div>
           <br/>
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
             <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">社保</h3>
             <span class="span_1_zhe" style="margin-left:155px">【减项】针对员工社保缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
           </div>
+
+<!--          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">-->
+<!--            <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">公积金</h3>-->
+<!--            <span class="span_1_zhe" style="margin-left:140px">【减项】针对员工公积金缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>-->
+<!--          </div>-->
+          <el-button style="width:150px;margin-top: 30px;margin-left:400px" >取消</el-button>
+          <el-button type="primary" style="width:150px" >确定</el-button>
           <br/>
-          <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
-            <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">公积金</h3>
-            <span class="span_1_zhe" style="margin-left:140px">【减项】针对员工公积金缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>
-          </div>
 
         </el-collapse>
       </div>
@@ -107,11 +160,111 @@ export default defineComponent({
 
       checkList:'',
       activeNames:'',
+      //存薪酬组名称
+      CompensationNameAll:[],
       ruleForm:{
-        dept:'',
+        compensationId:'',
+        compensationName:'',
+      },
+
+      //存加班方案名称
+      overtimeAll:[],
+      //加班方案
+      overtimeForm:{
+        workschemeId:'',
+        workschemeName:'',
+      },
+      //存考勤扣款方案
+      attendanceAll:[],
+      //考勤扣款
+      attendanceForm:{
+        attendandceId:'',
+        attendandceName:'',
+      },
+
+      //存出差方案
+      evectionAll:[],
+      //出差
+      evectionForm:{
+        businessId:'',
+        businessName:'',
       }
 
     }
+  },methods:{
+      //查询薪酬组名称
+    selectCompensationName() {
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectCompensationName")
+          .then((response) => {
+            console.log(response);
+            this.CompensationNameAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询出差方案名称
+    selectBusinessName() {
+      this.axios
+          .get("http://localhost:8010/provider/business/selectBusinessName")
+          .then((response) => {
+            console.log(response);
+            this.evectionAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询考勤扣款方案名称
+    selectAttendandceName() {
+      this.axios
+          .get("http://localhost:8010/provider/attendandce/selectAttendandceName")
+          .then((response) => {
+            console.log(response);
+            this.attendanceAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询加班方案名称
+    selectWorkschemeName() {
+      this.axios
+          .get("http://localhost:8010/provider/workscheme/selectWorkschemeName")
+          .then((response) => {
+            console.log(response);
+            this.overtimeAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //根据id查询薪酬组数据
+    //根据id查询加班方案信息
+    selectWorkschemeId() {
+
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectCompensationId/" + this.ruleForm.compensationName)
+          .then((response) => {
+            console.log(response);
+            this.overtimeForm.workschemeId=response.data.data.workschemeId
+            this.attendanceForm.attendandceId=response.data.data.attendandceId
+            this.evectionForm.businessId=response.data.data.businessId
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectCompensationName()
+    this.selectBusinessName()
+    this.selectWorkschemeName()
+    this.selectAttendandceName()
   },
   setup() {
     const checkList = ref(['selected and disabled', 'Option A'])
