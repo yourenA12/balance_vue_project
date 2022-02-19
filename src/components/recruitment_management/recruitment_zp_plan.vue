@@ -65,7 +65,7 @@
                 <router-link :to="{path:this.two,query:{path:this.$route.query.path,recruitmentPlanName:scope.row.recruitmentPlanName}}">{{scope.row.recruitmentPlanName}}</router-link>
               </template>
             </el-table-column>
-            <el-table-column prop="postName" label="招聘职位" width="200"/>
+            <el-table-column prop="positionName" label="招聘职位" width="200"/>
             <el-table-column prop="deptName" label="需求部门" width="200"/>
             <el-table-column prop="recruitmentPlanNumber" label="招聘人数" width="200"/>
             <el-table-column prop="recruitmentPlanStartTime" label="发布时间" width="200"/>

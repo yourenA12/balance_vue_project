@@ -36,14 +36,14 @@
 
           <!--搜索框-->
           <div style="float: right;">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
 
               <el-form-item>
-                <el-input v-model="formInline.user" placeholder="姓名、招聘计划名称" clearable></el-input>
+                <el-input v-model="pageInfo.resumeName" placeholder="姓名、招聘计划名称" clearable></el-input>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
+                <el-button type="primary" @click="selectresume_plan()" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -72,7 +72,7 @@
 <!--            </router-link>-->
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="招聘职位" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="招聘职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -91,18 +91,19 @@
 <!--          </el-table-column>-->
           <el-table-column label="状态" width="140">
             <template #default="scope">
-              <span v-if="scope.row.resumeZt==0">候选人</span>
-              <span v-if="scope.row.resumeZt==1">已邀约</span>
-              <span v-if="scope.row.resumeZt==2">已淘汰</span>
-              <span v-if="scope.row.resumeZt==3">面试中</span>
-              <span v-if="scope.row.resumeZt==4">面试通过</span>
-              <span v-if="scope.row.resumeZt==5">复试中</span>
-              <span v-if="scope.row.resumeZt==6">待接受</span>
-              <span v-if="scope.row.resumeZt==7">已接受</span>
-              <span v-if="scope.row.resumeZt==8">已入职</span>
-              <span v-if="scope.row.resumeZt==9">已拒绝</span>
-              <span v-if="scope.row.resumeZt==10">放弃入职</span>
-              <span v-if="scope.row.resumeZt==11">已离职</span>
+              <span v-if="scope.row.resumeZt==0">新简历</span>
+              <span v-if="scope.row.resumeZt==1">候选人</span>
+              <span v-if="scope.row.resumeZt==2">已邀约</span>
+              <span v-if="scope.row.resumeZt==3">已淘汰</span>
+              <span v-if="scope.row.resumeZt==4">面试中</span>
+              <span v-if="scope.row.resumeZt==5">面试通过</span>
+              <span v-if="scope.row.resumeZt==6">复试中</span>
+              <span v-if="scope.row.resumeZt==7">待接受</span>
+              <span v-if="scope.row.resumeZt==8">已接受</span>
+              <span v-if="scope.row.resumeZt==9">已入职</span>
+              <span v-if="scope.row.resumeZt==10">已拒绝</span>
+              <span v-if="scope.row.resumeZt==11">放弃入职</span>
+              <span v-if="scope.row.resumeZt==12">已离职</span>
             </template>
           </el-table-column>
 
@@ -167,6 +168,8 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        //名称
+        resumeName:"",
       },
       //筛选框显示隐藏
       icons: false,
@@ -240,9 +243,10 @@ export default {
       })
     },
 
+    //查询
   selectresume_plan(){
     this.axios
-        .get("http://localhost:8010/provider/ResumeVo/ResumePage/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+        .get("http://localhost:8010/provider/ResumeVo/ResumePage/",{params:this.pageInfo})
         .then((response) => {
           console.log(response);
           this.tableData = response.data.data.records;
