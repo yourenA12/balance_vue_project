@@ -108,13 +108,51 @@
             </el-card>
           </el-col>
 
+
+
           <div class="right_float_gg">
-            <el-tabs type="card" @tab-click="handleClick">
-              <el-tab-pane label="公司公告"></el-tab-pane>
-              <el-tab-pane label="Config">Config</el-tab-pane>
-              <el-tab-pane label="Role">Role</el-tab-pane>
-              <el-tab-pane label="Task">Task</el-tab-pane>
-            </el-tabs>
+            <div class="noticeV">
+              <h3>公司公告:</h3>
+
+            </div>
+            <div style="border-bottom: 1px solid #dddddd;"></div>
+
+
+            <div v-for="(item,index) in tableData1" class="noticeV">
+
+              {{item.noticeTitle}}
+
+              <el-button class="button_left_xq" type="text"  @click="drawer = true">详情</el-button>
+
+            </div>
+
+
+            <div style="border-bottom: 1px solid #dddddd;"></div>
+
+
+
+            <el-drawer v-model="drawer" :with-header="false" title="I am the title" v-for="item in tableData1">
+              <div>
+                <h1>公告内容：</h1>
+              </div>
+              <br>
+              <div style="margin: 30px">
+                {{item.noticeMatter}}
+              </div>
+              <el-form :model="item" label-width="">
+                <el-form-item label="公告发起人 :">
+                  <el-input v-model="item.noticePeople" disabled></el-input>
+                </el-form-item>
+                <br>
+                <el-form-item label="公告类型 :">
+                  <el-input v-model="item.noticeTitle" disabled></el-input>
+                </el-form-item>
+              </el-form>
+              <br>
+              <br>
+              <el-button type="primary" @click="" >&nbsp;&nbsp; 确定收到&nbsp;&nbsp;</el-button>
+              <el-button style="display: none" type="primary" @click="" disabled >&nbsp;&nbsp; 已确认 &nbsp;&nbsp;</el-button>
+            </el-drawer>
 
           </div>
 
@@ -157,14 +195,15 @@
     <br>
 
 
-      <div class="tong_left" id="main1">
+    <div class="tong_left" id="main1">
 
-      </div>
+    </div>
 
     <div id="main2" class="tong_left">
 
     </div>
   </div>
+
 
 </template>
 
@@ -199,6 +238,21 @@
 .el-calendar-table{
   background: #ddd;
 }
+/* 公司公告 */
+.noticeV{
+  padding: 10px;
+  margin: 10px;
+  font-size: 14px;
+  /*这里要显示的设置宽度*/
+  overflow:hidden;
+  white-space:nowrap;
+  /*文字超出宽度则显示ellipsis省略号*/
+  text-overflow:ellipsis;
+  /* background: #0c9c6e;*/
+}
+.button_left_xq{
+  float: right;
+}
 </style>
 
 <script>
@@ -215,14 +269,31 @@ export default {
     return {
       calendar,
       selectDate,
+
     }
   },
   data() {
     return {
       activeName: 'first',
+      tableData1:[],
+      drawer:false,
+
     }
   },
+  //根据员工id查询员工公告
   methods: {
+    selectById() {
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findNoticeVo/1/3/1")
+          .then((response) => {
+            console.log(response);
+            this.tableData1 = response.data.data.records;
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     handleClick(tab, event) {
       console.log(tab, event)
     },
@@ -516,6 +587,8 @@ export default {
     };
     option && myChart.setOption(option);
     option1 && myChart1.setOption(option1);
+  },created() {
+    this.selectById(1);
   }
 }
 

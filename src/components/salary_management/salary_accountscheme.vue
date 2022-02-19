@@ -31,7 +31,7 @@
             </el-form-item>
 
             <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">
-            <div @click=""> <el-input v-model="compensationForm.name" style="width:240px"></el-input></div>
+            <div> <el-input @click="StaffBecome=true" v-model="compensationForm.name" style="width:240px"></el-input></div>
             </el-form-item>
 
 <!--            <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">-->
@@ -119,95 +119,22 @@
             title="选择员工"
             width="50%"
             :close-on-click-modal="false">
-
-          <div style="display: inline-block;margin-left: 290px">
-            <span style="font-weight:bold">部门 </span>
-
-            <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
-              <el-option hidden></el-option>
-              <el-option
-                  class="xxx"
-                  v-for="item in dept"
-                  :key="item.deptId"
-                  :label="item.deptName"
-                  :value="item.deptId"
-              >
-              </el-option>
-              <el-tree :data="deptlists"
-                       show-checkbox
-                       :default-expand-all=true
-                       :check-on-click-node=true
-                       node-key="deptId"
-                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
-            </el-select>
-          </div>
-          <el-button @click="selectStaffXX()" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
-            <el-icon>
-              <i-search/>
-            </el-icon>
-            搜索
-          </el-button>
-          <el-button @click="replacement()" style="width: 80px;" >
-            <el-icon>
-              <i-refresh/>
-            </el-icon>
-            重置
-          </el-button>
-
-
-
-          <el-table
-              :data="deptData"
-              height="250"
-              style="width: 100%;margin-top: 20px;"
-              :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
-              :cell-style="{textAlign: 'center'}">
-
-            <el-table-column width="60">
-              <template #default="scope">
-                <el-radio :label="scope.row.staffId" v-model="radioStaff" @change.native="getCurrentRow(scope.row)">
-                  <!-- 以为有Label的原因，所以添加&nbsp以空格显示 -->
-                  &nbsp;
-                </el-radio>
-              </template>
-
-            </el-table-column>
-
-            <el-table-column
-                prop="staffName"
-                label="姓名"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="deptName"
-                label="部门"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="positionName"
-                label="职位">
-            </el-table-column>
+        <el-table>
+          <el-table-column
+              prop="staffName"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="deptName"
+              label="部门"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="positionName"
+              label="职位">
+          </el-table-column>
           </el-table>
-
-          <div class="demo-pagination-block">
-            <el-pagination
-                v-model:currentPage="pageInfo1.currenPage"
-                :page-sizes="[3, 5, 10, 50]"
-                v-model:page-size="pageInfo1.pagesize"
-                :default-page-size="pageInfo1.pagesize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="pageInfo1.total"
-                :pager-count="5"
-                background
-                @size-change="selectStaffXX()"
-                @current-change="selectStaffXX()"
-            >
-            </el-pagination>
-          </div>
-
-          <div style="margin-top: 30px;margin-left:280px">
-            <el-button @click="become=false" style="width: 80px;">取消</el-button>
-            <el-button type="primary" style="width: 80px;" @click="staffRow()">确定</el-button></div>
 
         </el-dialog>
       </div>
@@ -284,6 +211,8 @@ export default {
       positionAll:[],
       //存选中的部门
       citysDept:[],
+
+      StaffBecome:false,
 
       //薪酬组
       compensationVal:null,
