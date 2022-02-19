@@ -1141,6 +1141,29 @@ export default defineComponent({
       this.add()
     },
     leaveqj(){
+
+      this.auditflowVal={
+        auditflowTitle:"请假审批",
+        auditflowType:"请假",
+        staffId:6,
+        staffName:"将香烟"
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ]
+
       //请假表数据
       this.leave={
         staffId:6,
@@ -1151,6 +1174,7 @@ export default defineComponent({
         leaveEdate:this.sick_1.date2,//请假结束时间
         leaveTotaLdate:this.sick_1.date3,//请假总时长
       }
+
       this.leaveadd()
     },
 
