@@ -72,7 +72,7 @@
 <!--            </router-link>-->
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="招聘职位" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="招聘职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -91,18 +91,19 @@
 <!--          </el-table-column>-->
           <el-table-column label="状态" width="140">
             <template #default="scope">
-              <span v-if="scope.row.resumeZt==0">候选人</span>
-              <span v-if="scope.row.resumeZt==1">已邀约</span>
-              <span v-if="scope.row.resumeZt==2">已淘汰</span>
-              <span v-if="scope.row.resumeZt==3">面试中</span>
-              <span v-if="scope.row.resumeZt==4">面试通过</span>
-              <span v-if="scope.row.resumeZt==5">复试中</span>
-              <span v-if="scope.row.resumeZt==6">待接受</span>
-              <span v-if="scope.row.resumeZt==7">已接受</span>
-              <span v-if="scope.row.resumeZt==8">已入职</span>
-              <span v-if="scope.row.resumeZt==9">已拒绝</span>
-              <span v-if="scope.row.resumeZt==10">放弃入职</span>
-              <span v-if="scope.row.resumeZt==11">已离职</span>
+              <span v-if="scope.row.resumeZt==0">新简历</span>
+              <span v-if="scope.row.resumeZt==1">候选人</span>
+              <span v-if="scope.row.resumeZt==2">已邀约</span>
+              <span v-if="scope.row.resumeZt==3">已淘汰</span>
+              <span v-if="scope.row.resumeZt==4">面试中</span>
+              <span v-if="scope.row.resumeZt==5">面试通过</span>
+              <span v-if="scope.row.resumeZt==6">复试中</span>
+              <span v-if="scope.row.resumeZt==7">待接受</span>
+              <span v-if="scope.row.resumeZt==8">已接受</span>
+              <span v-if="scope.row.resumeZt==9">已入职</span>
+              <span v-if="scope.row.resumeZt==10">已拒绝</span>
+              <span v-if="scope.row.resumeZt==11">放弃入职</span>
+              <span v-if="scope.row.resumeZt==12">已离职</span>
             </template>
           </el-table-column>
 
