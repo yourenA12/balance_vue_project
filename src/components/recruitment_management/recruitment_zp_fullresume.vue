@@ -36,14 +36,14 @@
 
           <!--搜索框-->
           <div style="float: right;">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
 
               <el-form-item>
-                <el-input v-model="formInline.user" placeholder="姓名、招聘计划名称" clearable></el-input>
+                <el-input v-model="pageInfo.resumeName" placeholder="姓名、招聘计划名称" clearable></el-input>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
+                <el-button type="primary" @click="selectresume_plan()" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -168,6 +168,8 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        //名称
+        resumeName:"",
       },
       //筛选框显示隐藏
       icons: false,
@@ -241,9 +243,10 @@ export default {
       })
     },
 
+    //查询
   selectresume_plan(){
     this.axios
-        .get("http://localhost:8010/provider/ResumeVo/ResumePage/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+        .get("http://localhost:8010/provider/ResumeVo/ResumePage/",{params:this.pageInfo})
         .then((response) => {
           console.log(response);
           this.tableData = response.data.data.records;
