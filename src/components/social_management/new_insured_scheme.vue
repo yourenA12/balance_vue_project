@@ -300,7 +300,7 @@
 
             <el-form-item label="适用员工：" style="margin-top: 20px;">
 
-              <el-select ref="vueSelect" @click="become=true,staffSelect()" v-model="compensationForm.staffs"  placeholder="请选择适用员工" multiple style="width:240px">
+              <el-select ref="vueSelect1" @click="become=true,staffSelect()" v-model="compensationForm.staffs"  placeholder="请选择适用员工" multiple style="width:240px">
                 <el-option
                     class="xxx"
                     v-for="item in tableVal"
@@ -395,67 +395,94 @@
     </div>
   </div>
 
+  <!--      点击选择员工弹出框-->
   <div>
     <el-dialog
         v-model="become"
         title="选择员工"
         width="50%">
 
-      <!--          &lt;!&ndash;搜索输入框&ndash;&gt;-->
-      <!--          <el-row style="width: 200px;margin-left:528px;">-->
-      <!--          请选择一个部门:<el-input v-model="seek2" placeholder="搜索">-->
-      <!--              <template #suffix @click="become = true">-->
-      <!--                <el-icon class="el-input__icon"><i-search /></el-icon>-->
-      <!--              </template>-->
-      <!--            </el-input>-->
-      <!--          </el-row>-->
-
-      <div style="display: inline-block;margin-left: 490px">
+      <div style="display: inline-block;margin-left: 290px">
         <span style="font-weight:bold">部门 </span>
 
-        <!--            <el-select v-model="pageInfo.deptSearch" placeholder="请输入部门名称" style="width: 200px;">-->
-        <!--              <el-option-->
-        <!--                  v-for="item in positionAll"-->
-        <!--                  :key="item.positionId"-->
-        <!--                  :label="item.positionName"-->
-        <!--                  :value="item.positionId"-->
-        <!--              >-->
-        <!--              </el-option>-->
-        <!--            </el-select>-->
+        <el-select v-model="deptIdy" multiple ref="vueSelect" @change="onchangey()" @click="onclicksy()">
+          <el-option hidden></el-option>
+          <el-option
+              class="xxx"
+              v-for="item in depty"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId"
+          >
+          </el-option>
+          <el-tree :data="deptlists"
+                   show-checkbox
+                   :default-expand-all=true
+                   :check-on-click-node=true
+                   node-key="deptId"
+                   :props="defaultProps" ref="treey" @check-change="handleCheckChangey()" />
+        </el-select>
+      </div>
+      <el-button @click="selectStaffXX()" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
+        <el-icon>
+          <i-search/>
+        </el-icon>
+        搜索
+      </el-button>
+      <el-button @click="replacement1()" style="width: 80px;">
+        <el-icon>
+          <i-refresh/>
+        </el-icon>
+        重置
+      </el-button>
 
+
+      <el-table
+          :data="staffData"
+          ref="staffsTable"
+          @selection-change="staffAll"
+          height="250"
+          style="width: 100%;margin-top: 20px;"
+          :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
+          :cell-style="{textAlign: 'center'}">
+
+        <!-- 全选操作按钮 -->
+        <el-table-column type="selection" width="90" />
+
+        <el-table-column
+            prop="staffName"
+            label="姓名"
+            width="180">
+        </el-table-column>
+        <el-table-column
+            prop="deptName"
+            label="部门"
+            width="180">
+        </el-table-column>
+        <el-table-column
+            prop="positionName"
+            label="职位">
+        </el-table-column>
+      </el-table>
+
+      <div class="demo-pagination-block">
+        <el-pagination
+            v-model:currentPage="pageInfo1.currenPage"
+            :page-sizes="[3, 5, 10, 50]"
+            v-model:page-size="pageInfo1.pagesize"
+            :default-page-size="pageInfo1.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageInfo1.total"
+            :pager-count="5"
+            background
+            @size-change="selectStaffXX()"
+            @current-change="selectStaffXX()"
+        >
+        </el-pagination>
       </div>
 
-                <el-table
-                    :data="staffData"
-                    @selection-change="staffAll"
-                    height="250"
-                    style="width: 100%;margin-top: 20px;"
-                    :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
-                    :cell-style="{textAlign: 'center'}">
-
-                  <!-- 全选操作按钮 -->
-                  <el-table-column type="selection" width="90" />
-
-                  <el-table-column
-                      prop="staffName"
-                      label="姓名"
-                      width="180">
-                  </el-table-column>
-                  <el-table-column
-                      prop="deptName"
-                      label="部门"
-                      width="180">
-                  </el-table-column>
-                  <el-table-column
-                      prop="positionName"
-                      label="职位">
-                  </el-table-column>
-                </el-table>
-
-<!--                <div style="margin-top: 30px;margin-left:280px">-->
-<!--                  <el-button @click="become=false" style="width: 80px;">取消</el-button>-->
-<!--                  <el-button type="primary" style="width: 80px;" @click="staffRow()">确定</el-button>-->
-<!--                </div>-->
+      <div style="margin-top: 60px;margin-left:280px">
+      </div>
 
     </el-dialog>
   </div>
@@ -466,14 +493,16 @@
 <script>
 import {ref, defineComponent} from "vue";
 import {ElMessage} from "element-plus";
+import qs from "qs";
 
 export default {
+
   methods: {
 
-    verify(){
+    verify() {
 
       // 验证参保方案名称
-      if(this.schemeName=="" || this.schemeName==null ){
+      if (this.schemeName == "" || this.schemeName == null) {
         ElMessage({
           message: '参保方案名称不能为空！！',
           type: 'warning',
@@ -481,7 +510,7 @@ export default {
         return
       }
 
-      if( this.security_cardinal_lower >= this.security_cardinal_upper && this.security_cardinal_upper!=0 ){
+      if (this.security_cardinal_lower >= this.security_cardinal_upper && this.security_cardinal_upper != 0) {
         ElMessage({
           message: '基数上限要大于基数下限！！',
           type: 'warning',
@@ -489,24 +518,24 @@ export default {
         return
       }
 
-      for( let i=0; i<this.social_tableData.length; i++ ){
+      for (let i = 0; i < this.social_tableData.length; i++) {
 
-        for( let j=0; j<this.social_tableData.length; j++ ){
-            if( this.social_tableData[i].defSchemeType == this.social_tableData[j].defSchemeType && i!=j ){
-              ElMessage({
-                message: '险种名称重复！！',
-                type: 'warning',
-              })
-              return
-            }
+        for (let j = 0; j < this.social_tableData.length; j++) {
+          if (this.social_tableData[i].defSchemeType == this.social_tableData[j].defSchemeType && i != j) {
+            ElMessage({
+              message: '险种名称重复！！',
+              type: 'warning',
+            })
+            return
+          }
         }
 
       }
 
-      for( let i=0; i<this.accumulation_tableData.length; i++ ){
+      for (let i = 0; i < this.accumulation_tableData.length; i++) {
 
-        for( let j=0; j<this.accumulation_tableData.length; j++ ){
-          if( this.accumulation_tableData[i].defSchemeType == this.accumulation_tableData[j].defSchemeType && i!=j ){
+        for (let j = 0; j < this.accumulation_tableData.length; j++) {
+          if (this.accumulation_tableData[i].defSchemeType == this.accumulation_tableData[j].defSchemeType && i != j) {
             ElMessage({
               message: '公积金名称重复！！',
               type: 'warning',
@@ -522,30 +551,30 @@ export default {
     },
 
     //新增参保方案
-    insertcompensation(){
+    insertcompensation() {
       this.axios({
         url: 'http://localhost:8010/provider/defInsured/insertDefInsured',
         method: 'post',
-        data:{
+        data: {
           // 默认参保方案
-          defInsured:{
-            defInsuredName:this.schemeName
+          defInsured: {
+            defInsuredName: this.schemeName
           },
           // 社保 方案
-          defScheme1:this.social_tableData,
+          defScheme1: this.social_tableData,
           // 公积金 方案
-          defScheme2:this.accumulation_tableData,
+          defScheme2: this.accumulation_tableData,
           // 基数上限
-          upper:this.security_cardinal_upper,
+          upper: this.security_cardinal_upper,
           // 基数下限
-          lower:this.security_cardinal_lower,
+          lower: this.security_cardinal_lower,
 
           //取部门信息
-          deptIds:this.$refs.tree.getCheckedKeys(),
+          deptIds: this.$refs.tree.getCheckedKeys(),
           //取职位信息
-          postIds:this.compensationForm.citysPost,
+          postIds: this.compensationForm.citysPost,
           //取员工信息
-          staffIds:this.compensationForm.staffs
+          staffIds: this.compensationForm.staffs
         }
       }).then(response => {
         console.log(response);
@@ -600,7 +629,7 @@ export default {
     },
 
     // 当文本框值发生变化时调用的方法
-    onchange(){
+    onchange() {
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys(this.deptId, false)
     },
@@ -646,6 +675,56 @@ export default {
         x = 0
       }
     },
+
+    // 当文本框值发生变化时调用的方法
+    onchangey() {
+      // 将值赋值到选择器中
+      this.$refs.treey.setCheckedKeys(this.deptIdy, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicksy() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1y = this.$refs.treey.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChangey(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.resy = this.$refs.treey.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2y = this.$refs.treey.getCheckedKeys()
+
+      // 清空部门
+      this.depty = []
+      // 清空选中的部门
+      this.deptIdy = []
+      let x = 0
+      for (let i = 0; i < this.resy.length; i++) {
+
+        for (let j = 0; j < this.resy.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.resy[i].deptPid != this.resy[j].deptId) {
+            //并且是最后一个
+            if (j == this.resy.length - 1 && x == 0) {
+              // 加入数据
+              this.depty.push(this.resy[i])
+              // 赋值到文本框
+              this.deptIdy.push(this.resy[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
+
+
     //查询部门名称
     selectDeptName() {
       this.axios
@@ -673,45 +752,95 @@ export default {
           });
     },
 
-    // 查询员工
-    selectStaff() {
+    //查询员工的信息 姓名 部门 职位
+    selectStaffXX() {
+
+      let params = {
+
+        currenPage: this.pageInfo1.currenPage,
+        pagesize: this.pageInfo1.pagesize,
+        deptIds: this.res2y.length == 0 ? '' : this.res2y,
+
+      }
+
       this.axios
-          .get("http://localhost:8010/provider/staff/selectStaffXX")
+          .get("http://localhost:8010/provider/staff/selectStaffXX?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
-            this.staffData = response.data.data;
+            this.staffData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo1.total = response.data.data.total;
+
           })
           .catch(function (error) {
             console.log(error);
           });
+
+    },
+
+    //搜索框重置
+    replacement1() {
+      this.res2y = ""
+      // 将值赋值到选择器中
+      this.$refs.treey.setCheckedKeys([], false)
+
+      this.selectStaffXX()
+
     },
 
     // 选中员工的值
     // 多选删除按钮是否被禁用
-    staffAll(val){
+    staffAll(val) {
       // 选中的值
-      this.tableVal=val
+      this.tableVal = val
       // 清空选中 id
-      this.compensationForm.staffs=[]
+      this.compensationForm.staffs = []
 
       // 循环获取选中行的id
-      for(let i=0;i<val.length;i++){
-        this.compensationForm.staffs.push( val[i].staffId )
+      for (let i = 0; i < val.length; i++) {
+        this.compensationForm.staffs.push(val[i].staffId)
       }
     },
 
     // 点击时 关闭 下拉框
-    staffSelect(){
+    staffSelect() {
       // 关闭选择器
-      this.$refs.vueSelect.blur();
+      this.$refs.vueSelect1.blur();
+
+      // 清空表格选中
+      this.$nextTick(() => {
+        this.$refs.staffsTable.clearSelection()
+      })
+
+      //
+      let a = {
+        // staffId: 3,
+        staffName: '五哈',
+        deptName:"湘中",
+        positionName:"员工"
+
+      }
+
+      // 将值赋值上表格
+      this.$nextTick(() => {
+        this.$refs.staffsTable.toggleRowSelection(a)
+      })
+
+
     },
 
+
   },
+
+
   created() {
     this.selectPositionName();
     this.selectDeptName();
-    this.selectStaff();
+    this.selectStaffXX();
+
+
   },
+
   data() {
     // 格式
     const defaultProps = {
@@ -720,6 +849,15 @@ export default {
       value:'deptId'
     }
     return {
+
+      //弹出框(员工)的分页
+      pageInfo1: {
+        // 分页参数
+        currenPage: 1, //当前页
+        pagesize: 3, // 页大小
+        total: 0, // 总页数
+      },
+
       // 多选时 数据
       tableVal:[],
       // // 选中时 员工id
@@ -760,6 +898,16 @@ export default {
       deptlists: [],
       //存储部门职位名称
       positionAll:[],
+
+
+      resy:"",
+      // 选中值1
+      res1y:"",
+      // 选中值2
+      res2y:"",
+      // 部门  文本框的值
+      depty:[],
+      deptIdy:[],
 
       // 员工弹出框
       become:false,
@@ -990,5 +1138,11 @@ export default {
 }
 .xxx{
   display: none;
+}
+
+/* 分页的样式 */
+/deep/ .demo-pagination-block {
+  float: right;
+  margin: 20px;
 }
 </style>
