@@ -301,16 +301,23 @@
           <el-form-item label="原部门">
             <el-input v-model="Change_1.dept" disabled></el-input>
           </el-form-item>
-          <el-form-item label="异动后部门">
-            <el-select v-model="Change_1.dept_1" placeholder="部门名称">
-              <el-option
-                  v-for="item in dept"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              ></el-option>
+          <div style="margin-left: 81px;">
+            <span style="">部门 &nbsp;&nbsp;</span>
+
+            <el-select v-model="depto" ref="vueSelecto" @click="onclickso()" placeholder="请选择部门"
+                       style="width: 240px;">
+              <el-option hidden></el-option>
+              <el-tree :data="deptlists"
+                       show-checkbox
+                       :default-expand-all=true
+                       :check-on-click-node=true
+                       :check-strictly=true
+                       node-key="deptId"
+                       :props="defaultProps" ref="treeo" @check-change="handleCheckChangeo()"/>
+
             </el-select>
-          </el-form-item>
+          </div>
+          <br>
           <!-- 头像 -->
           <el-form-item label="审批人">
             <el-col :span="12">
@@ -759,7 +766,7 @@
             ></el-date-picker>
           </el-form-item>
           <!-- 出差总时长 -->
-          <el-form-item label="请假总时长">
+          <el-form-item label="出差   总时长">
             <el-input v-model="travel_1.date3" disabled></el-input>
           </el-form-item>
           <!-- 头像（审批人） -->
@@ -797,6 +804,7 @@
             <el-button type="primary" @click="submitForm_7">确定</el-button>
             <el-button @click="cancel_7">取消</el-button>
           </span>
+<!--          <el-button @click="addq()">sss</el-button>-->
         </template>
       </el-dialog>
       <!-- 请假弹出框 -->
@@ -852,7 +860,7 @@
             </el-col>
           </el-form-item>
           <!-- 总时长 -->
-          <el-form-item label="出差总时长">
+          <el-form-item label="请假总时长">
             <el-input v-model="sick_1.date3" disabled></el-input>
           </el-form-item>
           <!-- 头像（审批人） -->
@@ -895,6 +903,7 @@
       </el-dialog>
     </div>
   </div>
+
 </template>
 
 <script lang="js">
@@ -903,7 +912,28 @@ import {ElMessage} from "element-plus";
 import {regionData, CodeToText} from "element-china-area-data"; //地址选择器导入
 export default defineComponent({
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value: 'deptId'
+    }
     return {
+
+      deptId: [],
+// 格式
+      defaultProps,
+//存放部门信息
+
+      reso: "",
+// 选中值1
+      res1o: "",
+// 选中值2
+      res2o: "",
+// 部门  文本框的值
+      depto: "",
+
+      deptlists: [],
       options: regionData,
       selectedOptions: [],
       //转正表单
@@ -1022,10 +1052,10 @@ export default defineComponent({
         //结束时间
         date2: "",
         //请假总时长
-        date3: "",
+        date3: "小时",
       },
       // 异动后查部门
-      dept: ref([
+    /*  dept: ref([
         {
           value: '部门1',
           label: '部门1',
@@ -1034,7 +1064,7 @@ export default defineComponent({
           value: '部门2',
           label: '部门2',
         }
-      ]),
+      ]),*/
       //存放获取的数据
       auditflow1:null,
 
@@ -1050,7 +1080,7 @@ export default defineComponent({
       //leave 请假表数据
       leave:"",
 
-
+      sb:"",
     };
   },
   setup() {
@@ -1083,9 +1113,43 @@ export default defineComponent({
       travel,
       sick,
       ...toRefs(state),
+
     };
+
   },
   methods: {
+    onclickso() {
+      // 点击文本框时调用的方法
+      // 取当前选择器中的复选框选项id
+      this.res1o = this.$refs.treeo.getCheckedKeys()
+    },
+
+//节点选中状态发生变化时的回调
+    handleCheckChangeo(data, checked, indeterminate) {
+
+      // 节点选中状态发生变化
+      // 取当前选择器中的复选框选项id
+      this.res2o = this.$refs.treeo.getCheckedKeys()
+
+      // 取差集
+      let a = new Set(this.res1o);
+      let b = new Set(this.res2o);
+      let arr = Array.from(new Set([...b].filter(x => !a.has(x))));
+
+      // 将差集赋值上选择器
+      this.$refs.treeo.setCheckedKeys([arr], false)
+
+      //获取所有选中的节点 start
+      this.reso = this.$refs.treeo.getCheckedNodes()
+      this.reso.forEach((item) => {
+        // 赋值到文本框
+        this.depto = item.deptName
+        this.Change_1.dept_1 = item.deptId
+        // 关闭选择器
+        this.$refs.vueSelecto.blur();
+      })
+    },
+
     //获取转正表单里的数据
     getWorker(){
       become_1
@@ -1162,14 +1226,17 @@ export default defineComponent({
           staffId:4,
           staffName:"周刘奇4"
         }
-      ]
+      ],
+
 
       //请假表数据
       this.leave={
         staffId:6,
         staffName:"将香烟",
         deptId:1,
-        leaveMatter:this.sick_1.remarks_1,//请假备注
+        leaveRemarks:this.sick_1.remarks_1,//请假备注
+        leaveType:"请假",//
+        leaveMatter:this.sick_1.remarks_1,
         leaveSdate:this.sick_1.date1,//请假开始时间
         leaveEdate:this.sick_1.date2,//请假结束时间
         leaveTotaLdate:this.sick_1.date3,//请假总时长
@@ -1202,6 +1269,7 @@ export default defineComponent({
       });
 
     },
+
     leaveadd(){
       this.axios({
         url: 'http://localhost:8010/provider/insertleave',
@@ -1224,6 +1292,19 @@ export default defineComponent({
         console.log(error);
       });
 
+    },
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/dept/selectAll")
+          .then((response) => {
+            console.log(response);
+            this.deptlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     },
 
     // 转正取消
@@ -1624,7 +1705,7 @@ export default defineComponent({
           });
           this.cancel_date3();
         } else {
-          this.sick_1.date3 = hours + "小时";
+          this.sick_1.date3 = hours;
         }
       }
     },
@@ -1681,7 +1762,9 @@ export default defineComponent({
     cancel_date7() {
       this.become_1.date1 = "";
     },
-  },
+  },created() {
+    this.selectDeptName();
+  }
 });
 </script>
 
