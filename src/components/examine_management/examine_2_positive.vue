@@ -121,7 +121,7 @@
       <el-drawer v-model="drawer" :with-header="false" title="I am the title">
         <span>
 
-          <el-form :model="auditflow0" label-width="">
+          <el-form :model="auditflow0" label-width="" >
             <el-form-item label="员工名称 :">
               <el-input v-model="auditflow0.staffName1" disabled></el-input>
             </el-form-item>
@@ -151,6 +151,7 @@
           <!--              -->
           <!--            <el-input   disabled></el-input>-->
           <!--          </el-form-item>-->
+
         </span>
       </el-drawer>
       <!-- 已办申请页面 -->
@@ -302,8 +303,7 @@ export default {
       },
       auditflow: [],
       auditflow0: {},
-
-
+      //那几个审批人
       a:{},
       b:{},
       c:{}
@@ -399,8 +399,6 @@ export default {
       });
     },
 
-
-
     //
     selectById(row) {
       //打开抽屉
@@ -418,6 +416,23 @@ export default {
             console.log(error);
           })
     },
+   /* selectByIdName(row) {
+      //打开抽屉
+      this.drawer = true
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectPageByIdName/" + row.auditflowId)
+          .then((response) => {
+            console.log(response);
+            this.auditflow = response.data.data;
+            this.auditflow0 = this.auditflow[0]
+            this.activeVal()
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },*/
+
     activeVal(){
       this.a = this.auditflow[0]
       this.b = this.auditflow[1]

@@ -231,141 +231,66 @@ export default {
   data() {
     return {
       // 待办转正审批列表
-      tableData: [
-        {
-          date: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData: [],
       // 已办转正审批列表
-      tableData1: [
-        {
-          date1: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "补打卡审批",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData1: [],
 
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        // 当前审批类型
+        auditflowTitle:"补打卡申请",
+        // 当前审批状态
+        auditflowdetaiState:"待办",
+        // 名称搜索框
+        staffName:""
+
+      },
+      pageInfo1: {
+        // 分页参数
+        currentPage: 1, //当前页
+        pagesize: 3, // 页大小
+        total: 0, // 总页数
+
+        // 当前审批类型
+        auditflowTitle:"补打卡申请",
+        // 当前审批状态
+        auditflowdetaiState:"已办",
+        // 名称搜索框
+        staffName:"",
+
       },
     };
   },
   methods: {
+    selectAuditflow(val) {
+      // 待办
+      if(val==1){
+        this.paramsVal=this.pageInfo
+      }else{ // 已办
+        this.paramsVal=this.pageInfo1
+      }
+      this.axios
+          .get("http://localhost:8010/provider/findSelectPageWorker",{params:this.paramsVal})
+          .then((response) => {
+            console.log(response);
+            if(val==1){ // 待办
+              this.tableData = response.data.data.records;
+              this.pageInfo.total = response.data.data.total;
+            }else{ // 已办
+              console.log(response);
+              this.tableData1 = response.data.data.records;
+              this.pageInfo1.total = response.data.data.total;
+            }
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     // 重置日期过滤
     resetDateFilter1() {
       this.$refs.filterTable1.clearFilter("date1");
