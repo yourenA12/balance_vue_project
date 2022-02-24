@@ -267,7 +267,7 @@
                    :size="formSize"
           >
 
-            <el-form-item label="试用部门：" style="margin-top: 20px;">
+            <el-form-item label="适用部门：" style="margin-top: 20px;">
               <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
                 <el-option hidden></el-option>
                 <el-option
@@ -288,8 +288,8 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="试用职位：" style="margin-top: 20px;">
-              <el-select  placeholder="请选择试用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
+            <el-form-item label="适用职位：" style="margin-top: 20px;">
+              <el-select  placeholder="请选择适用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
                 <el-option
                     v-for="item in positionAll"
                     :key="item.positionId"

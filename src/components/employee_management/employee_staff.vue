@@ -238,6 +238,7 @@
                       v-model="departure_data.dimisiondate"
                       type="date"
                       placeholder="请选择日期"
+                      disabled
                       style="width: 100%"
                   ></el-date-picker>
                 </el-form-item>
@@ -328,7 +329,7 @@ export default {
         state: "",
         cause: "",
         workdate: '',
-        dimisiondate: '',
+        dimisiondate: new Date(),
         remark: "",
         deptId: "",
       },
