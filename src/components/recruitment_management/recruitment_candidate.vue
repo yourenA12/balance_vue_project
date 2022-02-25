@@ -7,11 +7,11 @@
           <!-- 批量设为候选人 -->
 <!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">-->
 <!--            <span>批量邀约面试</span>-->
-<!--          </button>-->
-          <el-button  size="small" type="warning" plain >
-            <el-icon><i-download /></el-icon>
-            批量邀约面试
-          </el-button>
+<!--&lt;!&ndash;          </button>&ndash;&gt;-->
+<!--          <el-button  size="small" type="warning" plain >-->
+<!--            <el-icon><i-download /></el-icon>-->
+<!--            批量邀约面试-->
+<!--          </el-button>-->
 
           <!--筛选框-->
 
@@ -46,7 +46,7 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="投递职位" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="投递职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -74,10 +74,10 @@
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="scope">
             <div style="width: 140px">
-              <el-button type="text" size="small" @click="">邀约面试</el-button>
-              <el-button type="text" size="small" @click="">淘汰/放弃</el-button>
+              <el-button type="text" size="small" @click="YYxiugai(scope.row)">邀约面试</el-button>
+              <el-button type="text" size="small" @click="TTxiugai(scope.row)">淘汰/放弃</el-button>
             </div>
 
           </template>
@@ -113,10 +113,20 @@
 import {
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
     return {
+      //修改状态
+      fo:{
+        resumeId:"",
+        resumeZt:2,
+      },
+      Tfo:{
+        resumeId:"",
+        resumeZt:3,
+      },
       //路由地址 ：简历详情页面
       details:'/recruitment/resume/details',
       pageInfo: {
@@ -158,7 +168,45 @@ export default {
           .catch(function (error){
             console.log(error);
           })
-    }
+    },
+    //设为邀约面试
+    YYxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectcandidate_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+    //淘汰
+    TTxiugai(row){
+
+      this.Tfo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.Tfo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectcandidate_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
   }, created() {
     this.selectcandidate_plan();
   }
