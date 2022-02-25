@@ -417,7 +417,7 @@ export default defineComponent({
       //弹出框存储数据
       deptData: [],
       //调动记录
-      transferVal: null,
+      /*transferVal: null,*/
       staffVal: null
     }
   },

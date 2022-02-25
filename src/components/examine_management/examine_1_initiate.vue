@@ -27,7 +27,7 @@
           <div
               title="异动"
               class="link-list-item"
-              v-on:click="this.Change_1.type_1 = '调岗'"
+              @click="Change_1.type_1 = '调岗'"
           >
             <el-button
                 type="text"
@@ -289,7 +289,7 @@
           title="异动"
           width="50%"
           :close-on-click-modal="false"
-          @close="cancel_2"
+          @close="cancel_2()"
       >
         <el-form ref="form_2" :model="Change_1" label-width="120px">
           <el-form-item label="员工名称">
@@ -351,7 +351,7 @@
         <template #footer>
           <span class="dialog-footer">
             <el-button type="primary" @click="submitForm_2">确定</el-button>
-            <el-button @click="cancel_2">取消</el-button>
+            <el-button @click="cancel_2()">取消</el-button>
           </span>
         </template>
       </el-dialog>
@@ -730,6 +730,8 @@
             <div id="app">
               <div>
                 <el-cascader
+                    ref="aaa"
+                    id="xxxx"
                     size="large"
                     :options="options"
                     v-model="travel_1.remarks_1"
@@ -766,7 +768,7 @@
             ></el-date-picker>
           </el-form-item>
           <!-- 出差总时长 -->
-          <el-form-item label="出差   总时长">
+          <el-form-item label="出差总时长">
             <el-input v-model="travel_1.date3" disabled></el-input>
           </el-form-item>
           <!-- 头像（审批人） -->
@@ -919,7 +921,7 @@ export default defineComponent({
       value: 'deptId'
     }
     return {
-
+      addres:"",
       deptId: [],
 // 格式
       defaultProps,
@@ -954,7 +956,7 @@ export default defineComponent({
         //名称
         name: "将香烟",
         //类型
-        type_1: "",
+        type_1: "调岗",
         //部门
         dept: "湘北",
         //部门二
@@ -967,7 +969,7 @@ export default defineComponent({
         //部门
         dept: "湘北",
         //调薪后基本工资
-        qjbgz: "",
+        qjbgz: 1111,
         //调薪前岗位工资
         qgwgz: "",
         //调薪后基本工资
@@ -1023,9 +1025,9 @@ export default defineComponent({
       //出差表单
       travel_1: {
         //名称
-        name: "",
+        name: "儿子6",
         //部门
-        dept: "",
+        dept: "湘南",
         //出差地点
         remarks_1: "",
         //出差事由
@@ -1040,11 +1042,11 @@ export default defineComponent({
       //请假表单
       sick_1: {
         //名称
-        name: "",
+        name: "儿子6",
         //部门
-        dept: "",
+        dept: "湘北",
         //请假类型
-        type_1: "",
+        type_1: "病假",
         //请假事由
         remarks_1: "",
         //开始日期
@@ -1076,11 +1078,18 @@ export default defineComponent({
 
       // 转正表数据
       workerVal:"",
-
+      //存放出差表数据
+      tracelVal:"",
       //leave 请假表数据
       leave:"",
+      //调薪表数据
+      SalaryVal:"",
 
       sb:"",
+
+      //存放异动数据
+      transferVal:{},
+
     };
   },
   setup() {
@@ -1202,13 +1211,13 @@ export default defineComponent({
         workerRemarks:this.become_1.remarks_1,
         workerDate:this.become_1.date1
       }
-      this.add()
+      this.workeradd()
     },
+    //存放请假表数据
     leaveqj(){
-
       this.auditflowVal={
         auditflowTitle:"请假审批",
-        auditflowType:"请假",
+        auditflowType:this.sick_1.type_1,// 2请假类型
         staffId:6,
         staffName:"将香烟"
       }
@@ -1227,26 +1236,178 @@ export default defineComponent({
           staffName:"周刘奇4"
         }
       ],
-
-
       //请假表数据
       this.leave={
         staffId:6,
         staffName:"将香烟",
         deptId:1,
         leaveRemarks:this.sick_1.remarks_1,//请假备注
-        leaveType:"请假",//
+        leaveType:this.sick_1.type_1,//类型
         leaveMatter:this.sick_1.remarks_1,
         leaveSdate:this.sick_1.date1,//请假开始时间
         leaveEdate:this.sick_1.date2,//请假结束时间
         leaveTotaLdate:this.sick_1.date3,//请假总时长
       }
-
       this.leaveadd()
+    },
+    //存放出差表数据方法
+    tracelcc(){
+      this.auditflowVal={
+        auditflowTitle:"出差审批",
+        auditflowType:"出差",// 2请假类型
+        staffId:6,
+        staffName:"儿子6"
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ],
+       //存放出差表数据
+      this.tracelVal={
+        staffId:6,
+        staffName:"儿子6",
+        deptId:2,//出差人的部门
+        addres:this.travel_1.remarks_1,//出差地址
+        travelPlace:this.travel_1.remarks_1,//出差地址
+        travelMatter:this.travel_1.remarks_2,//出差事由
+        travelSDate:this.travel_1.date1,//出差开始时间
+        travelEdate:this.travel_1.date2,//出差结束时间
+        travelTotaLdate:this.travel_1.date3//出差总小时
+      }
+      this.traveladd()
+    },
+    //存放 异动表数
+    transfer(){
+      this.auditflowVal={
+        auditflowTitle:"异动审批",
+        auditflowType:"调岗",
+        staffId:6,
+        staffName:"将香烟"
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ],
+      this.transferVal={
+        staffId:6,
+        //异动类型
+        transferType:this.Change_1.type_1,
+        //异动钱部门
+        createdDeptId:1,//变动前部门名称
+        //异动后部门
+        updatedDeptid:this.Change_1.dept_1,//变动后部门名称
+        takeEffectDate:new Date(),
+
+      }
+      this.transferadd()
+    },
+    //存放调薪表数据
+    Saralytx(){
+      this.auditflowVal={
+        auditflowTitle:"调薪审批",
+        auditflowType:"调薪",
+        staffId:6,
+        staffName:"将香烟"
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ],
+      //请假数据
+      this.SalaryVal={
+        staffId:6,
+        staffName:"将香烟",
+        salaryCause:this.salary_1.remarks_1,//调薪备注
+        frontSalary:this.salary_1.qjbgz,//调薪前基本工资
+        afterSalary:this.salary_1.hjbgz,//调薪后基本工资
+        takeEffectDate:this.salary_1.date1,//期望时间
+      }
+      this.SalaryAdd()
+    },
+    //调薪添加
+    SalaryAdd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/SalaryInsert',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          salary: this.SalaryVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
+    //出差添加
+    traveladd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertTravel',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          travel: this.tracelVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
 
     // 转正添加
-    add(){
+    workeradd(){
       this.axios({
         url: 'http://localhost:8010/provider/insertAuditflow',
         method: 'post',
@@ -1267,9 +1428,32 @@ export default defineComponent({
       }).catch(function (error) {
         console.log(error);
       });
-
+    },
+    //异动添加
+    transferadd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertTransefer',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          Transfer: this.transferVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
 
+    //请假添加
     leaveadd(){
       this.axios({
         url: 'http://localhost:8010/provider/insertleave',
@@ -1323,17 +1507,15 @@ export default defineComponent({
       if (this.Change_1.dept_1.length === 0) {
         ElMessage("部门不能为空");
       } else {
-        alert(1);
+        this.transfer();
       }
     },
     // 异动取消
     cancel_2() {
-      this.Change_1 = {
-        name: "",
-        type_1: "",
-        dept: "",
-        dept_1: "",
-      };
+
+      this.Change_1.dept_1="";
+      this.depto=""
+
       this.Change = false;
     },
     // 提交调薪
@@ -1345,7 +1527,7 @@ export default defineComponent({
       } else if (this.salary_1.date1.length === 0) {
         ElMessage("请选择日期");
       } else {
-        alert(1);
+        this.Saralytx()
       }
     },
     // 取消调薪
@@ -1460,7 +1642,9 @@ export default defineComponent({
       } else if (this.travel_1.date2.length === 0) {
         ElMessage("请选择结束时间");
       } else {
-        alert(1);
+        this.travel_1.remarks_1=this.addres;
+        alert(this.travel_1.remarks_1);
+       this.tracelcc();
       }
     },
     // 取消出差
@@ -1497,22 +1681,17 @@ export default defineComponent({
     },
     // 取消请假
     cancel_8() {
-      this.sick_1 = {
-        //名称
-        name: "",
-        //部门
-        dept: "",
-        //请假类型
-        type_1: "",
+      this.sick_1.remarks_1="",
+
         //请假事由
-        remarks_1: "",
+          this.sick_1.remarks_1="",
         //开始日期
-        date1: "",
+          this.sick_1.date1="",
         //结束时间
-        date2: "",
+          this.sick_1.date2="",
         //请假总时长
-        date3: "",
-      };
+          this.sick_1.date3="",
+
       this.sick = false;
     },
     // 时间
@@ -1522,11 +1701,28 @@ export default defineComponent({
       this.sick_1.date3 = "";
     },
     // 地址选择器
-    handleChange() {
+  /*  handleChange() {
       for (let i = 0; i < this.selectedOptions.length; i++) {
-        this.travel_1.remarks_1 += CodeToText[this.selectedOptions[i]];
+        this.travel_1.remarks_1 = CodeToText[this.selectedOptions[i]];
       }
+    },*/
+    // 地址选择器
+    handleChange(value) {
+      if (value[1] != null && value[2] != null) {
+        var dz = CodeToText[value[0]] + '/' + CodeToText[value[1]] + '/' + CodeToText[value[2]]
+        this.addres = value[2]
+      } else {
+        if (value[1] != null) {
+          dz = CodeToText[value[0]] + '/' + CodeToText[value[1]]
+          this.addres = value[1]
+        } else {
+          dz = CodeToText[value[0]]
+          this.addres = value[0]
+        }
+      }
+      this.addres = dz
     },
+
     // 判断加班开始时间
     difference1_1: function (beginTime) {
       var jbtype = this.overtime_1.type_1; //获取加班类型
@@ -1661,7 +1857,7 @@ export default defineComponent({
           });
           this.cancel_date2();
         } else {
-          this.travel_1.date3 = hours + "小时";
+          this.travel_1.date3 = hours;
         }
       }
     },
@@ -1763,9 +1959,9 @@ export default defineComponent({
       this.become_1.date1 = "";
     },
   },created() {
-    this.selectDeptName();
-  }
-});
+  this.selectDeptName();
+}
+})
 </script>
 
 <style scoped>
