@@ -9,10 +9,10 @@
 <!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">-->
 <!--            <span>批量签到</span>-->
 <!--          </button>-->
-          <el-button size="small" type="warning" plain >
-            <el-icon><i-download /></el-icon>
-            批量签到
-          </el-button>
+<!--          <el-button size="small" type="warning" plain >-->
+<!--            <el-icon><i-download /></el-icon>-->
+<!--            批量签到-->
+<!--          </el-button>-->
 
           <!--筛选框-->
 
@@ -47,7 +47,7 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="投递职位" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="投递职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -76,24 +76,25 @@
         </el-table-column>
 
         <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="scope">
             <div style="width: 110px">
-              <el-button type="text" size="small" @click="">填写评论</el-button>
-              <el-row class="block-col-2" style="float: right;">
-                <el-col :span="8">
-                  <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                  <el-button type="text" size="small">更多<i class="iconfont" style="font-size: 10px">&#xe772;</i></el-button>
-                </span>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item >面试签到</el-dropdown-item>
-                        <el-dropdown-item >淘汰/放弃</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
-                </el-col>
-              </el-row>
+              <el-button type="text" size="small" @click="Zxiugai(scope.row)">签到</el-button>
+              <el-button type="text" size="small" @click="Txiugai(scope.row)">淘汰/放弃</el-button>
+<!--              <el-row class="block-col-2" style="float: right;">-->
+<!--                <el-col :span="8">-->
+<!--                  <el-dropdown trigger="click">-->
+<!--                <span class="el-dropdown-link">-->
+<!--                  <el-button type="text" size="small">更多<i class="iconfont" style="font-size: 10px">&#xe772;</i></el-button>-->
+<!--                </span>-->
+<!--                    <template #dropdown>-->
+<!--                      <el-dropdown-menu>-->
+<!--                        <el-dropdown-item >面试签到</el-dropdown-item>-->
+<!--                        <el-dropdown-item >淘汰/放弃</el-dropdown-item>-->
+<!--                      </el-dropdown-menu>-->
+<!--                    </template>-->
+<!--                  </el-dropdown>-->
+<!--                </el-col>-->
+<!--              </el-row>-->
             </div>
 
           </template>
@@ -129,10 +130,20 @@
 import {
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
     return {
+      //修改状态
+      fo:{
+        resumeId:"",
+        resumeZt:4,
+      },
+      Tfo:{
+        resumeId:"",
+        resumeZt:3,
+      },
       //路由地址 ：简历详情页面
       details:'/recruitment/resume/details',
       pageInfo: {
@@ -174,7 +185,45 @@ export default {
           .catch(function (error){
             console.log(error);
           })
-    }
+    },
+    //转入面试中
+    Zxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectInvited_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+    //转入淘汰
+    Txiugai(row){
+
+      this.Tfo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.Tfo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectInvited_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
   },
   created() {
   this.selectInvited_plan();

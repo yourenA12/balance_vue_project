@@ -245,7 +245,7 @@ export default {
       // 选中值1
       res1: "",
       // 选中值2
-      res2: "",
+      res2: [],
       // 部门  文本框的值
       dept: [],
       deptId: [],
@@ -308,7 +308,7 @@ export default {
         //薪酬组名称
         compensationName: "",
         //员工名称
-        name:'',
+        name:[],
         //部门
         dept: "",
         //存选中的职位
