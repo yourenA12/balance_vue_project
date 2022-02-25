@@ -8,7 +8,7 @@
           <el-tab-pane>
             <template #label>
               <router-link :to="{path:this.daiInterview,query:{path:this.$route.query.path}}">
-                <span v-bind:class="{sactive:isActive1}">面试中 (99)</span>
+                <span v-bind:class="{sactive:isActive1}">面试中</span>
               </router-link>
             </template>
             <router-view/>
@@ -17,7 +17,7 @@
             <el-tab-pane>
             <template #label>
               <router-link :to="{path:this.daiSecondInterview,query:{path:this.$route.query.path}}">
-                <span v-bind:class="{sactive:isActive3}">复试中 (99)</span>
+                <span v-bind:class="{sactive:isActive3}">复试中</span>
               </router-link>
             </template>
             <router-view/>
@@ -26,7 +26,7 @@
             <el-tab-pane>
             <template #label>
               <router-link :to="{path:this.interviewPass,query:{path:this.$route.query.path}}">
-                <span v-bind:class="{sactive:isActive2}">面试通过 (99)</span>
+                <span v-bind:class="{sactive:isActive2}">面试通过</span>
               </router-link>
             </template>
             <router-view/>

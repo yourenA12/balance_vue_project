@@ -5,24 +5,24 @@
       <div class="ant-spin-container">
         <div class="mt-20 ml-20 mr-20">
           <!-- 新增招聘计划按钮 -->
-          <a style="margin-top: 4px;">
+<!--          <a style="margin-top: 4px;">
             <router-link :to="{path:this.addresume,query:{path:this.$route.query.path}}">
               <el-button size="small" type="primary" plain>
                 <el-icon><i-plus/></el-icon>
                 新增
               </el-button>
             </router-link>
-          </a>
+          </a>-->
           <!-- 批量导入按钮 -->
           &nbsp;
-          <el-button size="small" type="warning" plain >
+<!--          <el-button size="small" type="warning" plain >
             <el-icon><i-download /></el-icon>
             批量导入
-          </el-button>
+          </el-button>-->
           <!-- 批量批量删除按钮 -->
-          <el-button size="small" type="danger" plain> <el-icon><i-delete /></el-icon>批量删除</el-button>
-          <!-- 批量设为候选人 -->
-          <el-button size="small" type="info"  plain >批量设为候选人</el-button>
+<!--          <el-button size="small" type="danger" plain> <el-icon><i-delete /></el-icon>批量删除</el-button>
+          &lt;!&ndash; 批量设为候选人 &ndash;&gt;
+          <el-button size="small" type="info"  plain >批量设为候选人</el-button>-->
 <!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt" >-->
 <!--            <span>批量设为候选人</span>-->
 <!--          </button>-->
@@ -31,7 +31,7 @@
           <!--筛选框-->
 
           <!--搜索框-->
-          <div style="float: right;">
+<!--          <div style="float: right;">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
 
               <el-form-item>
@@ -42,7 +42,7 @@
                 <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
               </el-form-item>
             </el-form>
-          </div>
+          </div>-->
 
         </div>
       </div>
@@ -62,7 +62,7 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="投递职位" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="投递职位" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -97,15 +97,15 @@
 
 
           <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="scope">
             <div style="width: 110px">
 <!--              <el-button type="text" size="small" @click="" style="color: #ea7c99;">删除</el-button>-->
-              <el-popconfirm title="是否确认删除?" @confirm="confirmsc()" @cancel="cancelsc()">
+              <el-popconfirm title="是否确认删除?" @confirm="confirmsc(scope.row)" @cancel="cancelsc()">
                 <template #reference>
                   <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
                 </template>
               </el-popconfirm>
-              <el-button type="text" size="small" @click="">移出</el-button>
+<!--              <el-button type="text" size="small" @click="">移出</el-button>-->
             </div>
 
           </template>
@@ -146,6 +146,11 @@ import {ElMessage} from "element-plus";
 export default {
   data() {
     return {
+      //修改状态
+      fo:{
+        resumeId:"",
+        resumeZt:3,
+      },
       //路由地址
       details:'/recruitment/resume/details',
       addresume:'/recruitment/recruit/addresume',
@@ -191,11 +196,13 @@ export default {
       })
     },
     //消息提示框确认按钮事件
-    confirmsc(){
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-      })
+    confirmsc(row){
+
+      this.TTxiugai(row)
+      // ElMessage({
+      //   message: '操作成功',
+      //   type: 'success',
+      // })
     },
     //消息提示框取消按钮事件
     cancelsc(){
@@ -216,7 +223,26 @@ export default {
           .catch(function (error){
             console.log(error);
           })
-    }
+    },
+    //设为已淘汰
+    TTxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectcandidate_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
   }, created() {
     this.selectcandidate_plan();
   }
