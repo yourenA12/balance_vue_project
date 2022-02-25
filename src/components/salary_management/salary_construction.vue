@@ -129,7 +129,7 @@
 <!--            <span class="span_1_zhe" style="margin-left:140px">【减项】针对员工公积金缴纳，在自主社保模块设置数据 <router-link :to="{path:this.evectionplan,query:{path: this.$route.query.path}}">去设置</router-link> </span>-->
 <!--          </div>-->
           <el-button style="width:150px;margin-top: 30px;margin-left:400px" >取消</el-button>
-          <el-button type="primary" style="width:150px" >确定</el-button>
+          <el-button type="primary" style="width:150px" @click="updateCompensation()">确定</el-button>
           <br/>
 
         </el-collapse>
@@ -145,6 +145,7 @@ import {
   defineComponent,
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default defineComponent({
   data() {
@@ -192,6 +193,38 @@ export default defineComponent({
 
     }
   },methods:{
+    //修改薪酬组数据
+    updateCompensation(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/compensation/updateCompensation',
+        method: 'put',
+        data: {
+          //薪酬组id
+          compensationId:this.ruleForm.compensationName,
+          //加班工资方案id
+          workschemeId:this.overtimeForm.workschemeId,
+          //考勤扣款方案id
+          attendandceId:this.attendanceForm.attendandceId,
+         //出差方案id
+          businessId:this.evectionForm.businessId
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
       //查询薪酬组名称
     selectCompensationName() {
       this.axios

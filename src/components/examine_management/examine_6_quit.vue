@@ -3,7 +3,6 @@
   <div class="body_1">
     <el-tabs type="border-card">
       <!-- 待办申请页面 -->
-      <!-- 待办申请页面 -->
       <el-tab-pane>
         <template #label>
           <span @click="selectAuditflow(1)">待办申请</span>
@@ -103,7 +102,7 @@
                 </template>
               </el-popconfirm>
 
-              <el-button type="text"   @click="">详情 </el-button>
+              <el-button type="text"   @click="selectById(scope.row)">详情 </el-button>
 
             </template>
           </el-table-column>
@@ -125,9 +124,41 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <!-- 点击详情，弹出抽屉-->
-      <el-drawer v-model="drawer" title="I am the title" :with-header="false">
-        <span>Hi there!</span>
+      <!-- 点击详情弹出抽屉-->
+      <el-drawer v-model="drawer" :with-header="false" title="I am the title">
+        <span>
+
+          <el-form :model="auditflow0" label-width="">
+            <el-form-item label="员工名称 :">
+              <el-input v-model="auditflow0.staffName1" disabled></el-input>
+            </el-form-item>
+             <el-form-item label="审核人名称 :">
+              <el-input v-model="auditflow0.staffName2" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="申请离职时间 :">
+              <el-input v-model="auditflow0.applyQuitDate" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="离职部门 :">
+              <el-input v-model="auditflow0.deptName" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="离职原因 :">
+              <el-input v-model="auditflow0.quitExplain" disabled></el-input>
+            </el-form-item>
+
+          </el-form>
+
+          <!-- process-status="error" -->
+        <el-steps align-center :space="200" :active="active" finish-status="success">
+          <el-step :title="a.staffName2" ></el-step>
+          <el-step :title="b.staffName2" ></el-step>
+          <el-step :title="c.staffName2"></el-step>
+        </el-steps>
+
+          <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
+          <!--              -->
+          <!--            <el-input   disabled></el-input>-->
+          <!--          </el-form-item>-->
+        </span>
       </el-drawer>
       <!-- 已办申请页面 -->
       <el-tab-pane>
@@ -263,6 +294,12 @@ export default {
         auditflowdetaiState:"已办", // 当前审批状态
         staffName:""// 名称搜索框
       },
+      auditflow: [],
+      auditflow0: {},
+      //那几个审批人
+      a:{},
+      b:{},
+      c:{}
     };
   },
   methods: {
@@ -289,6 +326,38 @@ export default {
           .catch(function (error) {
             console.log(error);
           })
+    },
+    //更具id查询离职详情
+    selectById(row) {
+      //打开抽屉
+      this.drawer = true
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectByid/" + row.auditflowId)
+          .then((response) => {
+            console.log(response);
+            this.auditflow = response.data.data;
+            this.auditflow0 = this.auditflow[0]
+            this.activeVal()
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    activeVal(){
+      this.a = this.auditflow[0]
+      this.b = this.auditflow[1]
+      this.c = this.auditflow[2]
+
+      if(this.a.auditflowdetaiState==1)
+        this.active=0
+      if(this.b.auditflowdetaiState==1)
+        this.active=1
+      if(this.c.auditflowdetaiState==1)
+        this.active=2
+      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2)
+        this.active=3
+
     },
     // 重置日期过滤
     resetDateFilter1() {

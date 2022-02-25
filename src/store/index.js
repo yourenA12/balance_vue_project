@@ -209,7 +209,7 @@ const store = createStore({
                         MENU_LEAF: 1,//是否有叶子 0有 1没有
                     }, {
                         MENU_ID: 3.12,//菜单编号
-                        MENU_NAME: '历史花名册',//菜单名称
+                        MENU_NAME: '离职花名册',//菜单名称
                         PICTURE_ADDRESS: '&#xe64c;',//图片地址historyEmp
                         MENU_ROUTE: '/employee/message/history_roster',//路由地址
                         MENU_MODULE: 'employee_management/employee_history',//组件地址
@@ -966,35 +966,35 @@ const store = createStore({
                             MENU_LEAF: 1,//是否有叶子 0有 1没有
                         }]
                     },
-                    {
-                        MENU_ID: 8,//菜单编号
-                        MENU_NAME: '日志管理',//菜单名称
-                        PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                        MENU_ROUTE: '/system/log_management',//路由地址
-                        MENU_MODULE: 'menu_skip',//组件地址
-                        MENU_STATE: 0,//是否启用 0启用 1禁用
-                        MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                        MENU_LEAF: 0,//是否有叶子 0有 1没有
-                        son: [{
-                            MENU_ID: 8,//菜单编号
-                            MENU_NAME: '登录日志',//菜单名称
-                            PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                            MENU_ROUTE: '/system/log_management/register_log',//路由地址
-                            MENU_MODULE: 'system_management/system_login_log',//组件地址
-                            MENU_STATE: 0,//是否启用 0启用 1禁用
-                            MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                            MENU_LEAF: 1,//是否有叶子 0有 1没有
-                        }, {
-                            MENU_ID: 9,//菜单编号
-                            MENU_NAME: '操作日志',//菜单名称
-                            PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                            MENU_ROUTE: '/system/log_management/operation_log',//路由地址
-                            MENU_MODULE: 'system_management/system_operate_log',//组件地址
-                            MENU_STATE: 0,//是否启用 0启用 1禁用
-                            MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                            MENU_LEAF: 1,//是否有叶子 0有 1没有
-                        }]
-                    }
+                    // {
+                    //     MENU_ID: 8,//菜单编号
+                    //     MENU_NAME: '日志管理',//菜单名称
+                    //     PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                    //     MENU_ROUTE: '/system/log_management',//路由地址
+                    //     MENU_MODULE: 'menu_skip',//组件地址
+                    //     MENU_STATE: 0,//是否启用 0启用 1禁用
+                    //     MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                    //     MENU_LEAF: 0,//是否有叶子 0有 1没有
+                    //     son: [{
+                    //         MENU_ID: 8,//菜单编号
+                    //         MENU_NAME: '登录日志',//菜单名称
+                    //         PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                    //         MENU_ROUTE: '/system/log_management/register_log',//路由地址
+                    //         MENU_MODULE: 'system_management/system_login_log',//组件地址
+                    //         MENU_STATE: 0,//是否启用 0启用 1禁用
+                    //         MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                    //         MENU_LEAF: 1,//是否有叶子 0有 1没有
+                    //     }, {
+                    //         MENU_ID: 9,//菜单编号
+                    //         MENU_NAME: '操作日志',//菜单名称
+                    //         PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                    //         MENU_ROUTE: '/system/log_management/operation_log',//路由地址
+                    //         MENU_MODULE: 'system_management/system_operate_log',//组件地址
+                    //         MENU_STATE: 0,//是否启用 0启用 1禁用
+                    //         MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                    //         MENU_LEAF: 1,//是否有叶子 0有 1没有
+                    //     }]
+                    // }
                 ]
 
             }

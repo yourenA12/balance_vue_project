@@ -90,7 +90,7 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-              v-model:currenPage="pageInfo.currentPage"
+              v-model:currentPage="pageInfo.currenPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"

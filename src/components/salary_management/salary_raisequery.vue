@@ -40,19 +40,24 @@
 
           </div>
 
-          <el-table :data="tableData" style="width: 100%"
+          <el-table :data="salaryData" style="width: 100%"
                     :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
-            <el-table-column fixed prop="date" label="姓名" width="150"/>
-            <el-table-column prop="city" label="部门" width="150"/>
-            <el-table-column prop="name" label="调薪前工资" width="150"/>
-            <el-table-column prop="state" label="调薪后工资" width="150"/>
-            <el-table-column prop="address" label="调薪生效日期" width="150"/>
-            <el-table-column prop="zip" label="调整原因" width="150"/>
-            <el-table-column prop="zip" label="备注" width="150"/>
+            <el-table-column fixed prop="staffName" label="姓名" width="150"/>
+            <el-table-column prop="deptName" label="部门" width="150"/>
+            <el-table-column prop="frontSalary" label="调薪前工资" width="150"/>
+            <el-table-column prop="afterSalary" label="调薪后工资" width="150"/>
+            <el-table-column prop="takeEffectDate" label="调薪生效日期" width="150"/>
+            <el-table-column prop="salaryCause" label="调整原因" width="150"/>
+            <el-table-column prop="salaryRemarks" label="备注" width="150"/>
             <el-table-column prop="zip" label="操作人" width="150"/>
-            <el-table-column prop="zip" label="操作日期" width="150"/>
-            <el-table-column prop="zip" label="状态" width="150"/>
+            <el-table-column prop="createdTime" label="操作日期" width="150"/>
+            <el-table-column prop="salaryState" label="状态" width="150">
+              <template #default="scope">
+                <span v-if="scope.row.salaryState==0" style="color: red">不同意</span>
+                <span v-if="scope.row.salaryState==1" style="color:#6ba1e0;">同意</span>
+              </template>
+            </el-table-column>
 
 
           </el-table>
@@ -112,43 +117,8 @@ export default {
         pagesize: 3, // 页大小
         total: 0, // 总页数
       },
-      tableData: [{
-        date: '2016-05-03',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: '11111111',
-        zip: 'CA 90036',
-        tag: 'Home',
-      },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: '11111111',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: '11111111',
-          zip: 'CA 90036',
-          tag: 'Home',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: '11111111',
-          zip: 'CA 90036',
-          tag: 'Office',
-        },
-      ]
+      //存查询调薪记录信息
+      salaryData: []
     }
   },
   methods: {
@@ -212,7 +182,24 @@ export default {
           type: 'warning',
         })
       }
-    }
+    },
+    //查询调薪记录信息
+    selectSalary() {
+
+      this.axios
+          .get("http://localhost:8010/provider/salary/selectSalary/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.salaryData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectSalary()
   }
 }
 </script>
