@@ -9,10 +9,10 @@
             <router-link :to="{path:this.addresume,query:{path:this.$route.query.path}}">
 
 
-              <el-button size="small" type="primary" plain>
-                <el-icon><i-plus/></el-icon>
-                新增
-              </el-button>
+<!--              <el-button size="small" type="primary" plain>-->
+<!--                <el-icon><i-plus/></el-icon>-->
+<!--                新增-->
+<!--              </el-button>-->
 
               <!--                <button type="button" class="ant-btn ant-btn-primary"-->
 <!--                        style="color: #1890ff;-->
@@ -25,14 +25,14 @@
           </a>
           &nbsp;
           <!-- 批量导入按钮 -->
-          <el-button  size="small" type="warning" plain >
-            <el-icon><i-download /></el-icon>
-            批量导入
-          </el-button>
-          <!-- 批量批量删除按钮 -->
-          <el-button size="small" type="danger" plain> <el-icon><i-delete /></el-icon>批量删除</el-button>
-          <!-- 批量设为候选人 -->
-          <el-button size="small" type="info"  plain >批量设为候选人</el-button>
+<!--          <el-button  size="small" type="warning" plain >-->
+<!--            <el-icon><i-download /></el-icon>-->
+<!--            批量导入-->
+<!--          </el-button>-->
+<!--          &lt;!&ndash; 批量批量删除按钮 &ndash;&gt;-->
+<!--          <el-button size="small" type="danger" plain> <el-icon><i-delete /></el-icon>批量删除</el-button>-->
+<!--          &lt;!&ndash; 批量设为候选人 &ndash;&gt;-->
+<!--          <el-button size="small" type="info"  plain >批量设为候选人</el-button>-->
 <!--          <button style="margin-top: 4px; margin-left: 10px;" type="button" class="ant-btn abt">-->
 <!--            <span>批量设为候选人</span>-->
 <!--          </button>-->
@@ -41,18 +41,18 @@
           <!--筛选框-->
 
           <!--搜索框-->
-          <div style="float: right;">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+<!--          <div style="float: right;">-->
+<!--            <el-form :inline="true" :model="formInline" class="demo-form-inline">-->
 
-              <el-form-item>
-                <el-input v-model="formInline.user" placeholder="姓名、招聘计划名称" clearable></el-input>
-              </el-form-item>
+<!--              <el-form-item>-->
+<!--                <el-input v-model="formInline.user" placeholder="姓名、招聘计划名称" clearable></el-input>-->
+<!--              </el-form-item>-->
 
-              <el-form-item>
-                <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+<!--              <el-form-item>-->
+<!--                <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>-->
+<!--              </el-form-item>-->
+<!--            </el-form>-->
+<!--          </div>-->
 
         </div>
       </div>
@@ -107,9 +107,10 @@
 
 
         <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="scope">
             <div style="width: 110px">
-              <el-button type="text" size="small" @click="">设为候选人</el-button>
+              <el-button type="text" size="small" @click="Hxiugai(scope.row)">设为候选人</el-button>
+
               <el-row class="block-col-2" style="float: right;">
                 <el-col :span="8">
                   <el-dropdown trigger="click">
@@ -119,9 +120,8 @@
                     <template #dropdown>
                       <el-dropdown-menu>
 
-                        <el-dropdown-item style="color: #f88d9c;">删除</el-dropdown-item>
+                        <el-dropdown-item style="color: #f88d9c;"  @click="Txiugai(scope.row)">删除</el-dropdown-item>
 
-                        <el-dropdown-item >转入淘汰库</el-dropdown-item>
                       </el-dropdown-menu>
                     </template>
                   </el-dropdown>
@@ -162,6 +162,7 @@
 import {
   ref
 } from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -174,6 +175,16 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+      },
+      //修改状态
+      fo:{
+        resumeId:"",
+        resumeZt:1,
+      },
+      //转入淘汰库
+      Tfo:{
+        resumeId: "",
+        resumeZt: 3,
       },
       //筛选框显示隐藏
       icons:false,
@@ -196,6 +207,7 @@ export default {
     }
   },
   methods:{
+
     selectnewresume_plan(){
       this.axios
           .get("http://localhost:8010/provider/ResumeVo/ResumePage_a/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
@@ -208,7 +220,46 @@ export default {
           .catch(function (error){
             console.log(error);
           })
-    }
+    },
+    //设为候选人
+    Hxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectnewresume_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+    //转入淘汰库
+    Txiugai(row){
+
+      this.Tfo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/updatexin",this.Tfo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectnewresume_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
+
   },
   created() {
     this.selectnewresume_plan();

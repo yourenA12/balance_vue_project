@@ -37,7 +37,7 @@
             <router-link :to="{path:this.details,query:{path:this.$route.query.path,resumeName:scope.row.resumeName}}">{{scope.row.resumeName}}</router-link>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="postName" label="投递部门" width="140"/>
+        <el-table-column fixed="left" prop="positionName" label="投递部门" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -67,14 +67,74 @@
 
 
         <el-table-column fixed="right" label="操作" width="220">
-          <template #default>
+          <template #default="scope">
             <div style="width: 200px">
-              <el-button type="text" size="small" @click="">填写评价</el-button>
-              <el-button type="text" size="small" @click="">录用</el-button>
-              <el-button type="text" size="small" @click="">淘汰/放弃</el-button>
+
+              <el-button type="text"  size="small"  @click="drawer = true">
+                录用
+              </el-button>
+              <el-drawer v-model="drawer">
+
+                <!--入职时间-->
+                <el-form
+                    ref="ruleForm"
+                    :model="ruleForm"
+                    :rules="rules"
+                    label-width="120px"
+                    class="demo-ruleForm">
+                  <el-form-item label="入职时间：" prop="Data" style="margin-left: -30px">
+                    <el-date-picker v-model="ruleForm.Data" type="date" placeholder="Pick a day" >
+                    </el-date-picker>
+                  </el-form-item>
+
+                <!--  试用期-->
+
+                  <el-form-item label="试用期：" prop="syq" style="margin-left: -30px">
+                    <el-input v-model="ruleForm.syq" disabled style="width: 300px"></el-input>
+
+                  </el-form-item>
+
+                  <!--试用期月薪 -->
+                  <el-form-item label="试用期月薪：" prop="syyx" style="margin-left: -30px">
+                    <el-input-number v-model="ruleForm.syyx" min="1" clearable style="width: 300px" ></el-input-number>
+
+                  </el-form-item>
+
+<!--                  转正月薪-->
+                  <el-form-item label="转正月薪：" prop="zzyx" style="margin-left: -30px">
+                    <el-input-number v-model="ruleForm.zzyx" min="1" clearable style="width: 300px" ></el-input-number>
+
+                  </el-form-item>
+
+<!--                  备注-->
+
+                  <el-input
+                      v-model="ruleForm.bz"
+                      maxlength="200"
+                      placeholder="填写评价"
+                      show-word-limit
+                      type="textarea"
+                  />
+
+
+                  <el-form-item>
+                    <el-button style="width: 100px;"  type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button  style="margin-left: 30px; width: 100px" @click="goback()">取消</el-button>
+                  </el-form-item>
+                  </el-form>
+
+              </el-drawer>
+
+
+              <el-button type="text" size="small" @click="Txiugai(scope.row)">淘汰/放弃</el-button>
             </div>
 
           </template>
+
+
+
+
+
         </el-table-column>
       </el-table>
 
@@ -103,39 +163,73 @@
 
 </template>
 
-<script>
+<script >
 import {
   ref
 } from 'vue'
-
+import {ElMessage} from "element-plus";
+const drawer = ref(false)
+const text = ref('')
+const textarea = ref('')
 export default {
   data() {
     return {
-      details:'/recruitment/resume/details',
+      details: '/recruitment/resume/details',
       pageInfo: {
         currenPage: 1,
         /* 当前的页 */
         pagesize: 3,
         total: 0,
       },
+      //修改状态
+      fo:{
+      resumeId:"",
+      resumeZt:3
+    },
+
+      ruleForm: {
+        syq: '三个月',
+        Data: '',
+        syyx: '',
+        zzyx: '',
+        bz: ''
+      },
+      drawer: false,
       //筛选框显示隐藏
-      icons:false,
+      icons: false,
       //搜索框
       input: "",
       //表格数据
-      tableData: [
-        ],
+      tableData: [],
       //筛选框数据
-      formInline:{
-        vlues1:'',
-        vlues2:'',
-        vlues3:'',
-        vlues4:'',
-        user:''
+      formInline: {
+        vlues1: '',
+        vlues2: '',
+        vlues3: '',
+        vlues4: '',
+        user: ''
 
+      },
+      rules: {
+        Data: [{
+          required: true,
+          message: '入职时间不能为空!!!',
+          trigger: 'blur',
+        },
+        ],
+        syyx: [{
+          required: true,
+          message: '试用工资不能为空!!!',
+          trigger: 'blur',
+        },
+        ],
+        zzyx: [{
+          required: true,
+          message: '转正月薪不能为空!!!',
+          trigger: 'blur',
+        },
+        ],
       }
-
-
     }
   },
   methods:{
@@ -151,7 +245,42 @@ export default {
           .catch(function (error){
             console.log(error);
           })
-    }
+    },
+
+    //提交按钮
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('提交成功!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    //取消：跳转上一级目录
+    goback(){
+      this.$router.go('-1');
+    },
+    //淘汰
+    Txiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectinterviewPass_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
   }, created() {
     this.selectinterviewPass_plan();
   }

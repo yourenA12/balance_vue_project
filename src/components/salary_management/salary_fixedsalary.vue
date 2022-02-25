@@ -172,7 +172,7 @@
               </div>
 
 
-              <el-button @click="selectHistorical()" type="primary" style="width: 80px;margin-left:25px">
+              <el-button @click="selectFixedsalary()" type="primary" style="width: 80px;margin-left:25px">
                 <el-icon>
                   <i-search/>
                 </el-icon>
@@ -247,11 +247,35 @@ import {
   ref
 } from 'vue'
 import {ElMessage} from "element-plus";
-
+import qs from "qs";
 
 export default {
+
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value:'deptId'
+    }
     return {
+      res:"",
+      // 选中值1
+      res1:"",
+      // 选中值2
+      res2:"",
+      // 部门  文本框的值
+      dept:[],
+      deptId:[],
+      // 格式
+      defaultProps,
+      //存放部门信息
+      deptlists: [],
+
+
+
+      //存储职位名称
+      positionAll:[],
       // disly: false,
       disly_1: false,
       activeName: 'first',
@@ -278,6 +302,13 @@ export default {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        // 员工名称
+        staffNameSearch: '',
+        // 部门名称
+        deptSearch: '',
+        //部门职位名称
+        postSearch:'',
       },
 
       salaryVal:null,
@@ -287,6 +318,20 @@ export default {
     }
   },
   methods: {
+    //搜索框重置
+    replacement() {
+      this.pageInfo.currentPage = 1,
+          this.pageInfo.staffNameSearch = '',
+          this.res2=""
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys([], false)
+      this.pageInfo.postSearch = '',
+
+          this.selectFixedsalary()
+
+    },
+
+
     handleClick(tab, event) {
       console.log(tab, event)
 
@@ -351,8 +396,16 @@ export default {
     //查询固定工资信息
     selectFixedsalary() {
 
+      let params= {
+
+        currentPage:this.pageInfo.currentPage,
+        pagesize:this.pageInfo.pagesize,
+        staffNameSearch: this.pageInfo.staffNameSearch,
+        deptIds:this.res2.length==0?'':this.res2,
+        postSearch:this.pageInfo.postSearch,
+      }
       this.axios
-          .get("http://localhost:8010/provider/fixedwage/selectFixedwage/"+this.pageInfo.currentPage+"/"+this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/fixedwage/selectFixedwage?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
           .then((response) => {
             console.log(response);
             this.fixedData = response.data.data.records;
@@ -412,22 +465,6 @@ export default {
       this.axios({
         url: 'http://localhost:8010/provider/salary/insertSalary',
         method: 'post',
-        /*data:{
-          //员工编号
-          staffId:this.staffId,
-          //调薪原因
-          salaryCause:this.cause,
-          //调薪前基本工资
-          frontSalary:this.afterpay,
-          //调薪后基本工资
-          afterSalary:this.increasepay,
-          //生效日期
-          takeEffectDate:this.takedate,
-          //备注
-          salaryRemarks:this.remark2,
-          //状态
-          salaryState:1
-        }*/
         data:{
           Salary:this.salaryVal,
           Fixedwage:this.fixedwageVal
@@ -448,11 +485,86 @@ export default {
       });
 
     },
+    // 当文本框值发生变化时调用的方法
+    onchange(){
 
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys(this.deptId, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicks() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1 = this.$refs.tree.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChange(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.res = this.$refs.tree.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2 = this.$refs.tree.getCheckedKeys()
+      // 清空部门
+      this.dept = []
+      // 清空选中的部门
+      this.deptId = []
+      let x = 0
+      for (let i = 0; i < this.res.length; i++) {
+
+        for (let j = 0; j < this.res.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.res[i].deptPid != this.res[j].deptId) {
+            //并且是最后一个
+            if (j == this.res.length - 1 && x == 0) {
+              // 加入数据
+              this.dept.push(this.res[i])
+              // 赋值到文本框
+              this.deptId.push(this.res[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
+
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/dept/selectAll")
+          .then((response) => {
+            console.log(response);
+            this.deptlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    //查询职位名称
+    selectPositionName() {
+      this.axios
+          .get("http://localhost:8010/provider/staff/selectPositionName")
+          .then((response) => {
+            console.log(response);
+            this.positionAll = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
 
 
   },created() {
     this.selectFixedsalary()
+    this.selectPositionName()
+    this.selectDeptName()
   }
 }
 </script>
@@ -476,6 +588,9 @@ export default {
   position: relative;
   padding: 0 24px;
   color: rgba(0, 0, 0, 0.65);
+}
+.xxx{
+  display: none;
 }
 
 /deep/ .body_2 {

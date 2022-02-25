@@ -88,11 +88,24 @@
                   </el-select>
                 </el-form-item>
 
-                <el-form-item label="招聘计划：" prop="plan">
-                  <el-select v-model="formInline.zpplan" placeholder="请选择">
-                    <el-option label="Hr人力资源专员" value="Hr人力资源专员"></el-option>
+<!--                <el-form-item label="招聘计划：" prop="plan">-->
+<!--                  <el-select v-model="formInline.zpplan" placeholder="请选择">-->
+<!--                    <el-option label="Hr人力资源专员" value="Hr人力资源专员"></el-option>-->
+<!--                  </el-select>-->
+<!--                </el-form-item>-->
+                <el-form-item label="招聘计划:" prop="plan">
+                  <el-select v-model="formInline.recruitmentPlanId" placeholder="请选择" style="width: 240px;">
+                    <el-option
+                        v-for="item in zpjhlists"
+                        :key="item.recruitmentPlanId"
+                        :label="item.recruitmentPlanName"
+                        :value="item.recruitmentPlanId"
+                    >
+                    </el-option>
+
                   </el-select>
                 </el-form-item>
+
               </div>
             </el-form>
 
@@ -229,6 +242,7 @@ import {ref} from 'vue'
 export default {
   data() {
     return {
+      zpjhlists:[],
       src: '',
       isShow: false,
       formInline: {
@@ -240,7 +254,7 @@ export default {
         Location:'',
         education:'',
         politics:'',
-        zpplan:'',
+        recruitmentPlanId:'',
         school:'',
         major:'',
         start:'',
@@ -298,6 +312,19 @@ export default {
         _this.isShow = true;
       }
     },
+    //查询招聘计划名称
+    selectzpjh() {
+      this.axios
+          .get("http://localhost:8010/provider/recruitmentPlan/selectzpjh")
+          .then((response) => {
+            console.log(response);
+            this.zpjhlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
 
     forkImage() {
       this.src = '';
@@ -323,7 +350,9 @@ export default {
       });
     },
 
-  },
+  },created() {
+    this.selectzpjh()
+  }
 
 }
 

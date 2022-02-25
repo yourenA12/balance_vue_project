@@ -13,11 +13,11 @@
             width="30%"
             :close-on-click-modal="false">
 
-<!--          <div>-->
-<!--            <el-radio  v-model="radio1" label="1" size="large">给职位设置薪酬组</el-radio>&nbsp;&nbsp;&nbsp;&nbsp;-->
-<!--            <el-radio @click="compensationStaff=true,compensationPost=false" v-model="radio1" label="2" size="large">给员工设置薪酬组</el-radio>-->
-<!--          </div>-->
-<!--          -->
+          <!--          <div>-->
+          <!--            <el-radio  v-model="radio1" label="1" size="large">给职位设置薪酬组</el-radio>&nbsp;&nbsp;&nbsp;&nbsp;-->
+          <!--            <el-radio @click="compensationStaff=true,compensationPost=false" v-model="radio1" label="2" size="large">给员工设置薪酬组</el-radio>-->
+          <!--          </div>-->
+          <!--          -->
           <el-form
               ref="ruleFormRef"
               :model="compensationForm"
@@ -31,30 +31,25 @@
             </el-form-item>
 
             <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">
-            <div>
-              <el-select ref="vueSelects" @click="staffBecome=true,staffSelect()" v-model="compensationForm.name"  placeholder="请选择适用员工" multiple style="width:240px">
-                <el-option
-                    class="xxx"
-                    v-for="item in tableVal"
-                    :key="item.staffId"
-                    :label="item.staffName"
-                    :value="item.staffId" />
-              </el-select>
+              <div>
+                <el-select ref="vueSelects" @click="staffBecome=true,staffSelect()" v-model="compensationForm.name"
+                           placeholder="请选择适用员工" multiple style="width:240px">
+                  <el-option
+                      class="xxx"
+                      v-for="item in tableVal"
+                      :key="item.staffId"
+                      :label="item.staffName"
+                      :value="item.staffId"/>
+                </el-select>
 
-            </div>
+              </div>
             </el-form-item>
 
-<!--            <el-form-item label="适用员工：" prop="name" style="margin-top: 20px;">-->
-<!--              <div class="name_tb" >-->
-<!--                <span style="margin-left: 10px;"></span>-->
-<!--                <span @click="become = true"><i  class="iconfont" style="position: absolute;left:210px; cursor:pointer;width:30px">&#xe629;</i></span>-->
-<!--              </div>-->
-<!--              -->
-<!--            </el-form-item>-->
 
             <el-form-item label="适用部门：" style="margin-top: 20px;">
-              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()" style="width:240px">
-                <el-option hidden ></el-option>
+              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()"
+                         style="width:240px">
+                <el-option hidden></el-option>
                 <el-option
                     class="xxx"
                     v-for="item in dept"
@@ -69,18 +64,18 @@
                          :check-on-click-node=true
                          node-key="deptId"
 
-                         :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                         :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
               </el-select>
             </el-form-item>
 
 
             <el-form-item label="适用职位：" style="margin-top: 20px;">
-              <el-select  placeholder="请选择试用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
+              <el-select placeholder="请选择试用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
                 <el-option
                     v-for="item in positionAll"
                     :key="item.positionId"
                     :label="item.positionName"
-                    :value="item.positionId" />
+                    :value="item.positionId"/>
 
               </el-select>
             </el-form-item>
@@ -89,40 +84,16 @@
               <el-input v-model="compensationForm.compensationRemark" style="width:240px"></el-input>
             </el-form-item>
 
-            <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false">取消</el-button>
-            <el-button type="primary" style="width:80px" @click="compensationSalary(),become=false">提交</el-button>
+            <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false,replacement()">取消</el-button>
+            <el-button type="primary" style="width:80px" @click="compensationSalary()">提交</el-button>
 
           </el-form>
-
-<!--          <el-form v-show="compensationStaff"-->
-<!--              ref="ruleFormRef"-->
-<!--              :model="compensationStaffForm"-->
-<!--              :rules="rules"-->
-<!--              label-width="120px"-->
-<!--              class="demo-ruleForm"-->
-<!--              :size="formSize"-->
-<!--          >-->
-<!--            <el-form-item label="组名称：" prop="name" style="margin-top: 20px;">-->
-<!--              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>-->
-<!--            </el-form-item>-->
-
-<!--           -->
-
-
-<!--            <el-form-item label="备注：" prop="name" style="margin-top: 20px;">-->
-<!--              <el-input v-model="compensationStaffForm.name" style="width:240px"></el-input>-->
-<!--            </el-form-item>-->
-
-<!--            <el-button style="width:80px;margin-top: 30px;margin-left: 120px">取消</el-button>-->
-<!--            <el-button type="primary" style="width:80px">提交</el-button>-->
-
-<!--          </el-form>-->
 
 
         </el-dialog>
       </div>
 
-<!--      点击选择员工弹出框-->
+      <!--      点击选择员工弹出框-->
       <div>
         <el-dialog
             v-model="staffBecome"
@@ -173,7 +144,7 @@
               :cell-style="{textAlign: 'center'}">
 
             <!-- 全选操作按钮 -->
-            <el-table-column type="selection" width="90" />
+            <el-table-column type="selection" width="90"/>
 
             <el-table-column
                 prop="staffName"
@@ -213,22 +184,25 @@
         </el-dialog>
       </div>
 
-    <el-button @click="become=true,selectDeptName(),selectPositionName()" size="small" type="primary" plain style="width: 80px">
-      <el-icon><i-plus/></el-icon>
-      新增
-    </el-button>
+      <el-button @click="become=true,selectDeptName(),selectPositionName()" size="small" type="primary" plain
+                 style="width: 80px">
+        <el-icon>
+          <i-plus/>
+        </el-icon>
+        新增
+      </el-button>
 
       <div style="margin-top:30px;">
         <el-table :data="tableData" style="width: 100%"
                   :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                   :cell-style="{textAlign: 'center'}">
 
-          <el-table-column  prop="staffName" label="薪酬组" width="200"/>
+          <el-table-column prop="staffName" label="薪酬组" width="200"/>
           <el-table-column prop="staffBirthday" label="试用部门" width="220"/>
           <el-table-column prop="deptName" label="试用人员" width="220"/>
           <el-table-column prop="postName" label="职位" width="220"/>
           <el-table-column prop="staffPhone" label="备注" width="220"/>
-          <el-table-column  label="操作" width="180">
+          <el-table-column label="操作" width="180">
             <template #default="scope">
               <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
               >编辑
@@ -246,9 +220,9 @@
   &nbsp;
 </template>
 
-<script >
+<script>
 
-import { ref } from 'vue'
+import {ref} from 'vue'
 import {ElMessage} from "element-plus";
 import qs from "qs";
 
@@ -263,32 +237,32 @@ export default {
     const defaultProps = {
       children: 'children',
       label: 'deptName',
-      value:'deptId'
+      value: 'deptId'
     }
     return {
 
-      res:"",
+      res: "",
       // 选中值1
-      res1:"",
+      res1: "",
       // 选中值2
-      res2:"",
+      res2: [],
       // 部门  文本框的值
-      dept:[],
-      deptId:[],
+      dept: [],
+      deptId: [],
       // 格式
       defaultProps,
       //存放部门信息
       deptlists: [],
 
 
-      resy:"",
+      resy: "",
       // 选中值1
-      res1y:"",
+      res1y: "",
       // 选中值2
-      res2y:"",
+      res2y: "",
       // 部门  文本框的值
-      depty:[],
-      deptIdy:[],
+      depty: [],
+      deptIdy: [],
 
       //弹出框(员工)的分页
       pageInfo1: {
@@ -306,44 +280,61 @@ export default {
       radioStaff: "",
 
       //存储部门名称
-      deptNameAll:[],
+      deptNameAll: [],
       //存储部门职位名称
-      positionAll:[],
+      positionAll: [],
       //存选中的部门
-      citysDept:[],
+      citysDept: [],
 
       // 员工多选时的值
-      tableVal:"",
+      tableVal: "",
 
-      staffBecome:false,
+      staffBecome: false,
+
+      CompensationNameAll: [],
 
       //薪酬组
-      compensationVal:null,
+      compensationVal: null,
       //薪酬组部门职位
-      compensationDeptPost:null,
+      compensationDeptPost: null,
 
 
-      radio1 :'1',
-      become:false,
-      compensationPost:true,
-      compensationStaff:false,
+      radio1: '1',
+      become: false,
+      compensationPost: true,
+      compensationStaff: false,
       //
-      compensationForm:{
+      compensationForm: {
         //薪酬组名称
-        compensationName:"",
+        compensationName: "",
+        //员工名称
+        name:[],
         //部门
-        dept:"",
+        dept: "",
         //存选中的职位
-        citysPost:[],
+        citysPost: [],
         //备注
-        compensationRemark:'',
+        compensationRemark: '',
 
       },
-      compensationStaffForm:{
-        name:"",
-      }
+
     }
-  },methods:{
+  }, methods: {
+
+    //弹出框重置
+    replacement() {
+     this.compensationForm.compensationName=''
+      this.compensationForm.compensationRemark=''
+      this.compensationForm.name='',
+      this.compensationForm.citysPost = ''
+      // this.res2=""
+      // // 将值赋值到选择器中
+      // this.$refs.tree.setCheckedKeys([], false)
+
+
+
+
+    },
 
     //搜索框重置
     replacement1() {
@@ -352,7 +343,7 @@ export default {
       this.$refs.treey.setCheckedKeys([], false)
 
       // 取消单选框选中状态
-      this.radioStaff=""
+      this.radioStaff = ""
 
       this.selectStaffXX()
 
@@ -361,26 +352,26 @@ export default {
 
     // 选中员工的值
     // 选中值发生变化时调用的方法
-    staffAll(val){
+    staffAll(val) {
       // 选中的值
-      this.tableVal=val
+      this.tableVal = val
       // 清空选中 id
-      this.compensationForm.name=[]
+      this.compensationForm.name = []
 
       // 循环获取选中行的id
-      for(let i=0;i<val.length;i++){
-        this.compensationForm.name.push( val[i].staffId )
+      for (let i = 0; i < val.length; i++) {
+        this.compensationForm.name.push(val[i].staffId)
       }
     },
 
 // 点击时 关闭 下拉框
-    staffSelect(){
+    staffSelect() {
       // 关闭选择器
       this.$refs.vueSelects.blur();
     },
 
     // 当文本框值发生变化时调用的方法
-    onchange(){
+    onchange() {
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys(this.deptId, false)
     },
@@ -429,7 +420,7 @@ export default {
 
 
     // 当文本框值发生变化时调用的方法
-    onchangey(){
+    onchangey() {
       // 将值赋值到选择器中
       this.$refs.treey.setCheckedKeys(this.deptIdy, false)
     },
@@ -527,53 +518,91 @@ export default {
 
     },
     //取薪酬组input文本里面的值
-    compensationSalary(){
+    compensationSalary() {
 
       //薪酬组数据
-      this.compensationVal={
+      this.compensationVal = {
         //取薪酬组名称
-        compensationName:this.compensationForm.compensationName,
+        compensationName: this.compensationForm.compensationName,
         //备注
-        compensationRemark:this.compensationForm.compensationRemark,
+        compensationRemark: this.compensationForm.compensationRemark,
       }
 
-      console.log( this.$refs.tree.getCheckedKeys() )
-      console.log( this.compensationForm.citysPost )
+      console.log(this.$refs.tree.getCheckedKeys())
+      console.log(this.compensationForm.citysPost)
 
       this.insertcompensation()
 
     },
     //添加薪酬组
-    insertcompensation(){
+    insertcompensation() {
       this.axios({
         url: 'http://localhost:8010/provider/compensation/insertcompensation',
         method: 'post',
-        data:{
-          Compensation:this.compensationVal,
+        data: {
+          Compensation: this.compensationVal,
           //取部门信息
-          deptIds:this.$refs.tree.getCheckedKeys(),
+          deptIds: this.res2,
           //取职位信息
-          postIds:this.compensationForm.citysPost
+          postIds: this.compensationForm.citysPost,
+          //获取员工id
+          staffIds :this.compensationForm.name
         }
       }).then(response => {
         console.log(response);
-        if (response.data.data > 0) {
+        if (response.data.data == "添加成功") {
           ElMessage({
             message: '添加成功',
             type: 'success',
           })
-          this.selectEmps() // 修改完成后调用查询方法
-        } else {
+          this.become=false
+          this.replacement() // 添加完情况文本框
+
+        } else if(response.data.data == "添加失败"){
           ElMessage.error('添加失败')
+        }else{
+          ElMessage.warning(response.data.data)
         }
       }).catch(function (error) {
         console.log(error);
       });
 
     },
+    //根据薪酬组名称查询数据
+    // selectCompensationNames() {
+    //
+    //   this.axios({
+    //     url: 'http://localhost:8010/provider/compensation/insertcompensation',
+    //     method: 'post',
+    //     data: {
+    //       Compensation: this.compensationVal,
+    //       //取部门信息
+    //       deptIds: this.$refs.tree.getCheckedKeys(),
+    //       //取职位信息
+    //       postIds: this.compensationForm.citysPost,
+    //       //获取员工id
+    //       staffId :this.compensationForm.name
+    //     }
+    //   }).then(response => {
+    //     console.log(response);
+    //     if (response.data.data > 0) {
+    //       ElMessage({
+    //         message: '添加成功',
+    //         type: 'success',
+    //       })
+    //       this.selectEmps() // 修改完成后调用查询方法
+    //     } else {
+    //       ElMessage.error('添加失败')
+    //     }
+    //   }).catch(function (error) {
+    //     console.log(error);
+    //   });
+    //
+    // },
 
-  },created() {
+  }, created() {
     this.selectStaffXX()
+    // this.selectCompensationNames()
   }
 }
 </script>
@@ -582,13 +611,14 @@ export default {
 @import url("../../css/navigation.css");
 @import url("../../css/Salary.css");
 
-.xxx{
+.xxx {
   display: none;
 }
-.name_tb{
-  width:240px;
-  height:40px;
-  border:1px solid silver;
+
+.name_tb {
+  width: 240px;
+  height: 40px;
+  border: 1px solid silver;
   border-radius: 3px;
   background: white;
   position: relative;
