@@ -11,7 +11,7 @@
               <el-tab-pane>
                 <template #label>
                   <router-link :to="{path:this.one,query:{path:this.$route.query.path}}">
-                    <span>全部简历 (99) &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>全部简历&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   </router-link>
                 </template>
                 <router-view/>
@@ -20,7 +20,7 @@
               <el-tab-pane>
                 <template #label>
                   <router-link :to="{path:this.two,query:{path:this.$route.query.path}}">
-                    <span v-bind:class="{sactive:isActive2}">新简历 (99)&nbsp;&nbsp;</span>
+                    <span v-bind:class="{sactive:isActive2}">新简历&nbsp;&nbsp;</span>
                   </router-link>
                 </template>
                 <router-view/>
@@ -29,7 +29,7 @@
               <el-tab-pane>
                 <template #label>
                   <router-link :to="{path:this.three,query:{path:this.$route.query.path}}">
-                    <span v-bind:class="{sactive:isActive3}">候选人 (99)&nbsp;&nbsp;&nbsp;</span>
+                    <span v-bind:class="{sactive:isActive3}">候选人&nbsp;&nbsp;&nbsp;</span>
                   </router-link>
                 </template>
                 <router-view/>
@@ -38,7 +38,7 @@
               <el-tab-pane>
                 <template #label>
                   <router-link :to="{path:this.foue,query:{path:this.$route.query.path}}">
-                    <span v-bind:class="{sactive:isActive4}">淘汰库 (99)&nbsp;&nbsp;&nbsp;</span>
+                    <span v-bind:class="{sactive:isActive4}">淘汰库&nbsp;&nbsp;&nbsp;</span>
                   </router-link>
                 </template>
                 <router-view/>

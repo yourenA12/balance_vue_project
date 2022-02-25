@@ -44,22 +44,22 @@
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowdetaiState=='2'" >
+              <div v-if="scope.row.auditflowState=='2'" >
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
-              <div v-if="scope.row.auditflowdetaiState=='3'" >
+              <div v-if="scope.row.auditflowState=='3'" >
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
 
-              <div v-if="scope.row.auditflowdetaiState=='0'" >
+              <div v-if="scope.row.auditflowState=='0'" >
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待审</span>
               </div>
 
-              <div v-if="scope.row.auditflowdetaiState=='1'" >
+              <div v-if="scope.row.auditflowState=='1'" >
                 <div class="if_cx"></div>
                 &nbsp;&nbsp;<span>撤销</span>
               </div>
@@ -102,8 +102,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectAuditflow"
-              @current-change="selectAuditflow"
+              @size-change="Auditflow()"
+              @current-change="Auditflow()"
           >
           </el-pagination>
         </div>
@@ -140,12 +140,12 @@ export default {
   },
   methods: {
     Auditflow(){
-
       this.axios
           .get("http://localhost:8010/provider/findSelectId/6/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;
+            this.pageInfo.total=response.data.data.total;
           })
           .catch(function (error) {
             console.log(error);

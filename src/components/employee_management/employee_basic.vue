@@ -525,7 +525,6 @@ export default defineComponent({
 
     //根据id查询员工信息
     selectStaffVoId() {
-      alert(this.$store.state.staffId_Msg)
       this.axios
           .get("http://localhost:8010/provider/staff/selectStaffId/" + this.$store.state.staffId_Msg)
           .then((response) => {

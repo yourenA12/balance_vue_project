@@ -42,10 +42,11 @@
 
             <!--搜索输入框-->
             &nbsp;&nbsp;&nbsp;
-            <el-input style="width: 200px;border-radius: 30%;" v-model="input" placeholder="状态 \ 部门名称 \ 招聘计划" clearable/>
+            <el-input style="width: 200px;border-radius: 30%;" v-model="pageInfo.recruitmentPlanName" placeholder="状态 \ 部门名称 \ 招聘计划" clearable/>
             <!--搜索按钮-->
             &nbsp;&nbsp;&nbsp;
-            <el-button style="background-color: #ffffff;border-radius: 30%;" size="small">
+            <el-button @click="selectrecruitment_plan()" style="background-color: #ffffff;border-radius: 30%;" size="small">
+
               <el-icon><i-search />
 
               </el-icon>
@@ -77,23 +78,14 @@
             <el-table-column fixed="right" label="操作" width="180">
               <template #default="scope">
                 <div v-if="tableData[scope.$index].recruitmentZt==0">
-                  <router-link :to="{path:this.one,query:{path:this.$route.query.path,name: '修改'}}">
-                  <el-button type="text" size="small" >编辑</el-button>
-                  </router-link>
+
+                  <el-button type="text" size="small" @click="updateRecruitment(scope.row.recruitmentPlanId)" >编辑</el-button>
+
                   &nbsp;
-                  <el-popconfirm title="是否确定关闭?" @confirm="confirmgb()" @cancel="cancelgb()">
+                  <el-popconfirm title="是否确定关闭?" @confirm="confirmgb(scope.row)" @cancel="cancelsc()">
                     <template #reference>
                       <el-button type="text" size="small" >关闭</el-button>
-                    </template>
-                  </el-popconfirm>
 
-                </div>
-                <div v-else-if="tableData[scope.$index].recruitmentZt!=0">
-                  <el-button type="text" size="small" @click="">查看</el-button>
-
-                  <el-popconfirm title="是否确认删除该招聘计划?" @confirm="confirmsc()" @cancel="cancelsc()">
-                    <template #reference>
-                       <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
                     </template>
                   </el-popconfirm>
 
@@ -139,7 +131,13 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 3,
+        recruitmentPlanName:"",
+        recruitmentPlanId:""
       },
+      w:{
+        recruitmentPlanId:"",
+      },
+
       //下拉选择器
       options1: [
         {value: '人力资源师', label: '人力资源师'},
@@ -169,11 +167,8 @@ export default {
   },
   methods:{
     //消息提示框确认按钮事件
-    confirmgb(){
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-      })
+    confirmgb(row){
+      this.deletejh(row)
     },
     //消息提示框取消按钮事件
     cancelgb(){
@@ -183,11 +178,12 @@ export default {
       })
     },
     //消息提示框确认按钮事件
-    confirmsc(){
-      ElMessage({
+    confirmsc(row){
+
+      /*ElMessage({
         message: '操作成功',
         type: 'success',
-      })
+      })*/
     },
     //消息提示框取消按钮事件
     cancelsc(){
@@ -198,7 +194,7 @@ export default {
     },
     selectrecruitment_plan(){
       this.axios
-      .get("http://localhost:8010/provider/recruitmentPlanVo/queryPage/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+      .get("http://localhost:8010/provider/recruitmentPlanVo/queryPage",{params:this.pageInfo})
       .then((response) => {
         console.log(response);
         this.tableData = response.data.data.records;
@@ -208,7 +204,28 @@ export default {
       .catch(function (error){
         console.log(error);
       })
-    }
+    },
+    //删除
+    deletejh(row){
+        this.axios
+            .delete("http://localhost:8010/provider/recruitmentPlan/jihua/" + row.recruitmentPlanId)
+            .then((response) => {
+              console.log(response)
+              if (response.data.data === "成功") {
+                ElMessage.success("删除成功")
+                this.selectrecruitment_plan()
+              } else {
+                ElMessage.error("删除失败")
+              }
+            })
+
+
+    },
+    //修改招聘计划
+    updateRecruitment(row){
+      //跳转页面路径
+      this.$router.push({path:this.one,query:{path:this.$route.query.path,name: '修改',id:row}})
+  }
 
   },
   created() {

@@ -144,7 +144,7 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-              v-model:currenPage="pageInfo.currentPage"
+              v-model:currentPage="pageInfo.currenPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
@@ -541,7 +541,7 @@ export default defineComponent({
           //部门
       this.positiveTK.deptName=row.deptName,
           //职位
-      this.positiveTK.postName=row.postName,
+      this.positiveTK.postName=row.positionName,
           //入职日职
       this.positiveTK.staffHiredate=row.staffHiredate,
           //原定计划转正日期

@@ -6,7 +6,7 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 新增参保方案按钮 -->
-          <router-link :to="{path:this.path,query:{path:this.$route.query.path,name:'新增'}}">
+          <router-link :to="{path:this.path,query:{path:this.$route.query.path,name:'新增',id:''}}">
             <el-button style="width:75px" size="mini" type="primary" plain> +新增</el-button>
           </router-link>
 
@@ -64,7 +64,7 @@
             <el-table-column label="操作">
               <template #default="scope"
               >
-                <router-link :to="{path:this.path,query:{path:this.$route.query.path,name:'修改'}}">
+                <router-link :to="{path:this.path,query:{path:this.$route.query.path,name:'修改',id:scope.row.defInsuredId}}">
                   <el-button size="small" type="text">
                     编辑
                   </el-button>

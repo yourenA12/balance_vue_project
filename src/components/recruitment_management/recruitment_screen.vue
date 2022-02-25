@@ -9,7 +9,7 @@
             <el-tab-pane>
               <template #label>
                 <router-link :to="{path:this.one,query:{path:this.$route.query.path}}">
-                  <span v-bind:class="{sactive:isActive1}">候选人 (99)</span>
+                  <span v-bind:class="{sactive:isActive1}">候选人</span>
                 </router-link>
               </template>
               <router-view/>
@@ -21,7 +21,7 @@
             <el-tab-pane>
               <template #label>
                 <router-link :to="{path:this.two,query:{path:this.$route.query.path}}">
-                  <span v-bind:class="{sactive:isActive2}">已邀约 (99)</span>
+                  <span v-bind:class="{sactive:isActive2}">已邀约</span>
                 </router-link>
               </template>
               <router-view/>

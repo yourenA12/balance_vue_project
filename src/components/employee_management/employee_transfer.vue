@@ -4,42 +4,39 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
         <span></span>
-        <br />
+        <br/>
         <div style="width:95%;background: #e8edf2;padding-top: 30px;margin: auto;" v-show="changesadd">
           <div style="width: 90%;margin: auto;">
-            <h2 >
+            <h2>
               <span>人事异动</span>
               -
               <span>添加</span>
             </h2>
             <div style="width: 80%;margin: auto;margin-top: 30px;position: relative;padding-bottom:30px ">
 
-              <el-form :model="mobilizeForm" :rules="rules" ref="mobilizeForm" label-width="100px" class="demo-ruleForm">
+              <el-form :model="mobilizeForm" :rules="rules" ref="mobilizeForm" label-width="100px"
+                       class="demo-ruleForm">
                 <div style="display: inline-block;">
 
                   <el-form-item label="姓名：" prop="name">
-                    <div class="name_tb" >
-                      <span style="margin-left: 10px;">{{mobilizeForm.staffName}}</span>
-                      <span @click="become = true,selectStaffXX()"><i  class="iconfont" style="position: absolute;left:210px; cursor:pointer;">&#xe629;</i></span>
+                    <div class="name_tb">
+                      <span style="margin-left: 10px;">{{ mobilizeForm.staffName }}</span>
+                      <span @click="become = true,selectStaffXX()"><i class="iconfont"
+                                                                      style="position: absolute;left:210px; cursor:pointer;">&#xe629;</i></span>
                     </div>
-                  </el-form-item><br/>
+                  </el-form-item>
+                  <br/>
 
                   <el-form-item label="调动前部门:" prop="dept">
-                    <el-select v-model="mobilizeForm.createdDeptId" placeholder="请选择惩罚类型" style="width: 240px;" disabled>
-                      <el-option
-                          v-for="item in deptNameAll"
-                          :key="item.deptId"
-                          :label="item.deptName"
-                          :value="item.deptId"
-                      >
-                      </el-option>
+                    <el-select v-model="mobilizeForm.createdDeptName" style="width: 240px;" disabled>
 
                     </el-select>
-                  </el-form-item><br/>
+                  </el-form-item>
+                  <br/>
 
 
                   <el-form-item label="调动前职位:" prop="position">
-                    <el-select v-model="mobilizeForm.transferRawpostId" placeholder="请选择惩罚类型" style="width: 240px;" disabled>
+                    <el-select v-model="mobilizeForm.transferRawpostId" style="width: 240px;" disabled>
                       <el-option
                           v-for="item in positionAll"
                           :key="item.positionId"
@@ -49,41 +46,46 @@
                       </el-option>
 
                     </el-select>
-                  </el-form-item><br/>
-
+                  </el-form-item>
+                  <br/>
 
 
                   <el-form-item label="生效日期：" prop="takeEffectDate">
                     <el-col :span="11">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="mobilizeForm.takeEffectDate" style="width: 240px;"></el-date-picker>
+                      <el-date-picker type="date" placeholder="选择日期" disabled v-model="mobilizeForm.takeEffectDate"
+                                      style="width: 240px;"></el-date-picker>
                     </el-col>
                   </el-form-item>
                 </div>
-                <div style="display: inline-block;position: absolute;left:500px;" >
+                <div style="display: inline-block;position: absolute;left:500px;">
                   <el-form-item label="异动类型：" prop="type">
                     <el-select v-model="mobilizeForm.transferType" placeholder="请选择活动区域" style="width:240px;">
-                      <el-option label="调岗" value="调岗" ></el-option>
-                      <el-option label="普升" value="普升" ></el-option>
-                      <el-option label="降职" value="降职" ></el-option>
+                      <el-option label="调岗" value="调岗"></el-option>
+                      <el-option label="普升" value="普升"></el-option>
+                      <el-option label="降职" value="降职"></el-option>
                     </el-select>
-                  </el-form-item><br/>
+                  </el-form-item>
+                  <br/>
 
                   <el-form-item label="调动后部门:" prop="dept">
-                    <el-select v-model="mobilizeForm.deptId" placeholder="请选择惩罚类型" style="width: 240px;">
-                      <el-option
-                          v-for="item in deptNameAll"
-                          :key="item.deptId"
-                          :label="item.deptName"
-                          :value="item.deptId"
-                      >
-                      </el-option>
+                    <el-select v-model="depto" ref="vueSelecto" @click="onclickso()" placeholder="请选择部门"
+                               style="width: 240px;">
+                      <el-option hidden></el-option>
+                      <el-tree :data="deptlists"
+                               show-checkbox
+                               :default-expand-all=true
+                               :check-on-click-node=true
+                               :check-strictly=true
+                               node-key="deptId"
+                               :props="defaultProps" ref="treeo" @check-change="handleCheckChangeo()"/>
 
                     </el-select>
-                  </el-form-item><br/>
+                  </el-form-item>
+                  <br/>
 
 
                   <el-form-item label="调动后职位:" prop="position">
-                    <el-select v-model="mobilizeForm.postId" placeholder="请选择惩罚类型" style="width: 240px;">
+                    <el-select v-model="mobilizeForm.postId" placeholder="请选择职位" style="width: 240px;">
                       <el-option
                           v-for="item in positionAll"
                           :key="item.positionId"
@@ -93,14 +95,15 @@
                       </el-option>
 
                     </el-select>
-                  </el-form-item><br/>
+                  </el-form-item>
+                  <br/>
 
 
                 </div>
 
                 <div style="width:25%;height: 50px;margin: auto;margin-top: 20px;">
-                  <el-button @click="changesadd=false" style="width: 80px;">取消</el-button>
-                  <el-button  type="primary" style="width: 80px;" @click="transfer_staff()">提交</el-button>
+                  <el-button @click="changesadd=false,emptyForm()" style="width: 80px;">取消</el-button>
+                  <el-button type="primary" style="width: 80px;" @click="transfer_staff()">提交</el-button>
                 </div>
 
               </el-form>
@@ -110,13 +113,14 @@
         </div>
         <div style="width:100%;height: 100px;position: relative  ">
 
-<!--          添加按钮-->
-           <el-button @click="changesadd=true,selectDeptName(),selectPositionName()" size="small" type="primary" plain style="width:80px;position: absolute;top:30px;left:30px;">
-          <el-icon><i-plus/></el-icon>
-          新增
+          <!--          添加按钮-->
+          <el-button @click="changesadd=true,selectDeptName(),selectPositionName()" size="small" type="primary" plain
+                     style="width:80px;position: absolute;top:30px;left:30px;">
+            <el-icon>
+              <i-plus/>
+            </el-icon>
+            新增
           </el-button>
-
-
 
 
           <!--搜索输入框-->
@@ -163,7 +167,7 @@
             <el-table-column prop="deptName2" label="变动后部门" width="180"/>
             <el-table-column prop="positionName" label="原职位" width="180"/>
             <el-table-column prop="positionName2" label="变动后职位" width="180"/>
-            <el-table-column prop="takeEffectDate" label="生效时间" width="180" />
+            <el-table-column prop="takeEffectDate" label="生效时间" width="180"/>
           </el-table>
         </div>
       </div>
@@ -210,22 +214,21 @@
                        :default-expand-all=true
                        :check-on-click-node=true
                        node-key="deptId"
-                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
             </el-select>
           </div>
-            <el-button @click="selectStaffXX()" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
-              <el-icon>
-                <i-search/>
-              </el-icon>
-              搜索
-            </el-button>
-            <el-button @click="replacement()" style="width: 80px;" >
-              <el-icon>
-                <i-refresh/>
-              </el-icon>
-              重置
-            </el-button>
-
+          <el-button @click="selectStaffXX()" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
+            <el-icon>
+              <i-search/>
+            </el-icon>
+            搜索
+          </el-button>
+          <el-button @click="replacement1()" style="width: 80px;">
+            <el-icon>
+              <i-refresh/>
+            </el-icon>
+            重置
+          </el-button>
 
 
           <el-table
@@ -278,8 +281,9 @@
           </div>
 
           <div style="margin-top: 30px;margin-left:280px">
-            <el-button @click="become=false" style="width: 80px;">取消</el-button>
-            <el-button type="primary" style="width: 80px;" @click="staffRow()">确定</el-button></div>
+            <el-button @click="become=false,replacement1()" style="width: 80px;">取消</el-button>
+            <el-button type="primary" style="width: 80px;" @click="staffRow()">确定</el-button>
+          </div>
 
         </el-dialog>
       </div>
@@ -290,15 +294,16 @@
 
 <script>
 // import {ref} from "vue/dist/vue";
-import { defineComponent, ref } from 'vue'
+import {defineComponent, ref} from 'vue'
 import {ElMessage} from "element-plus";
 import qs from "qs";
+
 export default defineComponent({
-  data(){
+  data() {
     const one = (rule, value, callback) => {
-      if (new Date()>value){
+      if (new Date() > value) {
         callback(new Error("生效日期不能小于当前时间"));
-      }else{
+      } else {
         callback();
       }
 
@@ -307,36 +312,46 @@ export default defineComponent({
     const defaultProps = {
       children: 'children',
       label: 'deptName',
-      value:'deptId'
+      value: 'deptId'
     }
-    return{
-      res:"",
+    return {
+      res: "",
       // 选中值1
-      res1:"",
+      res1: "",
       // 选中值2
-      res2:"",
+      res2: "",
       // 部门  文本框的值
-      dept:[],
-      deptId:[],
+      dept: [],
+      deptId: [],
       // 格式
       defaultProps,
       //存放部门信息
       deptlists: [],
 
+      reso: "",
+      // 选中值1
+      res1o: "",
+      // 选中值2
+      res2o: "",
+      // 部门  文本框的值
+      depto: "",
+      // //存放部门信息
+      // deptlistso:[],
+
       //部门名称
-      deptNameAll:[],
+      deptNameAll: [],
       //部门职位
-      positionAll:[],
+      positionAll: [],
       // 单选框选择员工
-      radioStaff:"",
+      radioStaff: "",
       // 单选框选中的员工信息
-      information:{},
-      become:false,
-      tableData:[],
+      information: {},
+      become: false,
+      tableData: [],
 
 
       //隐藏input文本框
-      changesadd:false,
+      changesadd: false,
       pageInfo: {
         // 分页参数
         currenPage: 1, //当前页
@@ -346,7 +361,7 @@ export default defineComponent({
         // 员工名称
         staffNameSearch: '',
         //异动类型
-        moveTypeSearch:'',
+        moveTypeSearch: '',
       },
       //弹出框的分页
       pageInfo1: {
@@ -356,25 +371,27 @@ export default defineComponent({
         total: 0, // 总页数
 
         //部门
-        deptSearch:'',
+        deptSearch: '',
       },
       mobilizeForm: {
         //员工编号
-        staffId:'',
+        staffId: '',
         //员工姓名
         staffName: '',
         //异动类型
-        transferType:'',
-        //调动前部门
-        createdDeptId:'',
+        transferType: '',
+        //调动前部门id
+        createdDeptId: '',
+        // 调动前部门名称
+        createdDeptName: '',
         //调动后部门
-        deptId:'',
+        deptId: '',
         //调动前职位
-        transferRawpostId:'',
+        transferRawpostId: '',
         //调动后职位
-        postId:'',
+        postId: '',
         //生效日职
-        takeEffectDate:'',
+        takeEffectDate: new Date(),
 
       },
       rules: {
@@ -388,53 +405,80 @@ export default defineComponent({
         //     validator: one, trigger: "change"
         //   }
         // ],
-        type:[
+        type: [
           {
-            required:true,
-            message:'请选择异动类型',
-            trigger:'bulr',
+            required: true,
+            message: '请选择异动类型',
+            trigger: 'bulr',
           }
         ]
       },
-      radio:"",
+      radio: "",
       //弹出框存储数据
       deptData: [],
       //调动记录
-      transferVal:null,
-      staffVal:null
+      transferVal: null,
+      staffVal: null
     }
   },
   methods: {
 
     //搜索框重置
     replacement() {
-      this.pageInfo.currentPage = 1,
-          this.pageInfo.staffNameSearch = '',
-          this.pageInfo1.moveTypeSearch = '',
-          this.res2=""
-      // 将值赋值到选择器中
-      this.$refs.tree.setCheckedKeys([], false)
+      this.pageInfo.currentPage = 1
+      this.pageInfo.staffNameSearch = ''
+      this.pageInfo.moveTypeSearch = ''
 
       this.selectTransfer()
 
     },
 
+    //搜索框重置
+    replacement1() {
+      this.res2 = ""
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys([], false)
+
+      // 取消单选框选中状态
+      this.radioStaff=""
+
+      this.selectStaffXX()
+
+    },
+
+    // 清空调动表单
+    emptyForm(){
+      this.mobilizeForm={}
+      this.replacement1()
+    },
+
     //获取单选框选中数据 (选中某个员工进行‘调动‘)
-    getCurrentRow(row){
-      this.information=row
+    getCurrentRow(row) {
+      this.information = row
     },
     //把单选框里的值点出来
-    staffRow(){
-      //员工id
-      this.mobilizeForm.staffId=this.information.staffId;
-      //员工姓名
-      this.mobilizeForm.staffName=this.information.staffName;
-      //调动前部门
-      this.mobilizeForm.createdDeptId=this.information.deptId;
-      //调动前职位
-      this.mobilizeForm.transferRawpostId=this.information.positionId;
+    staffRow() {
 
-      this.become=false;
+      if(this.radioStaff==""){
+        ElMessage({
+          message: '请选择员工',
+          type: 'warning',
+        })
+        return
+      }
+
+      //员工id
+      this.mobilizeForm.staffId = this.information.staffId;
+      //员工姓名
+      this.mobilizeForm.staffName = this.information.staffName;
+      //调动前部门id
+      this.mobilizeForm.createdDeptId = this.information.deptId;
+      //调动前部门名称
+      this.mobilizeForm.createdDeptName = this.information.deptName;
+      //调动前职位
+      this.mobilizeForm.transferRawpostId = this.information.positionId;
+
+      this.become = false;
 
     },
     //查询部门名称
@@ -466,7 +510,7 @@ export default defineComponent({
     //查询调动记录
     selectTransfer() {
       this.axios
-          .get("http://localhost:8010/provider/transfer/selectTransfer",{params: this.pageInfo})
+          .get("http://localhost:8010/provider/transfer/selectTransfer", {params: this.pageInfo})
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records
@@ -478,33 +522,33 @@ export default defineComponent({
           });
     },
     //添加调动记录表和修改员工职位、部门
-    transfer_staff(){
+    transfer_staff() {
       //添加调动记录
-      this.transferVal={
+      this.transferVal = {
         //员工id
-        staffId:this.mobilizeForm.staffId,
+        staffId: this.mobilizeForm.staffId,
         //异动类型
-        transferType:this.mobilizeForm.transferType,
+        transferType: this.mobilizeForm.transferType,
         //原部门名称
-        createdDeptId:this.mobilizeForm.createdDeptId,
+        createdDeptId: this.mobilizeForm.createdDeptId,
         //状态
-        transferState:1,
+        transferState: 1,
         //调动后部门名称
-        updatedDeptId:this.mobilizeForm.deptId,
+        updatedDeptId: this.mobilizeForm.deptId,
         //原职位名称
-        transferRawpostId:this.mobilizeForm.transferRawpostId,
+        transferRawpostId: this.mobilizeForm.transferRawpostId,
         //调动后职位名称
-        transferAfterpostId:this.mobilizeForm.postId,
+        transferAfterpostId: this.mobilizeForm.postId,
         //生效日期
-        takeEffectDate:this.mobilizeForm.takeEffectDate,
+        takeEffectDate: this.mobilizeForm.takeEffectDate,
       }
 
       //修改员工职位、部门
-      this.staffVal={
+      this.staffVal = {
         //员工id
-        staffId:this.mobilizeForm.staffId,
+        staffId: this.mobilizeForm.staffId,
         //职位编号
-        positionId:this.mobilizeForm.postId,
+        positionId: this.mobilizeForm.postId,
         //部门编号
         deptId: this.mobilizeForm.deptId,
       }
@@ -514,14 +558,14 @@ export default defineComponent({
 
     },
     //添加调动记录表
-    insertTransfer(){
+    insertTransfer() {
 
       this.axios({
         url: 'http://localhost:8010/provider/transfer/insertTransfer',
         method: 'post',
-        data:{
-          Transfer:this.transferVal,
-          Staff:this.staffVal
+        data: {
+          Transfer: this.transferVal,
+          Staff: this.staffVal
         }
       }).then(response => {
         if (response.data.data > 0) {
@@ -529,7 +573,8 @@ export default defineComponent({
             message: '添加成功',
             type: 'success',
           })
-          this.changesadd=false // 添加完成关闭input框
+          this.changesadd = false // 添加完成关闭input框
+          this.emptyForm() // 清空表单
           this.selectTransfer()
         } else {
           ElMessage.error('添加失败')
@@ -540,13 +585,13 @@ export default defineComponent({
 
     },
     //把表格里的值赋在input文本上
-    TransferXX(row){
-      this.changesadd=true;
-      this.mobilizeForm.staffName=row.staffName;
-      this.mobilizeForm.createdDeptId=row.deptName;
-      this.mobilizeForm.transferRawpostId=row.postName;
-      this.mobilizeForm.transferType=row.transferType;
-      this.mobilizeForm.takeEffectDate=row.takeEffectDate;
+    TransferXX(row) {
+      this.changesadd = true;
+      this.mobilizeForm.staffName = row.staffName;
+      this.mobilizeForm.createdDeptId = row.deptName;
+      this.mobilizeForm.transferRawpostId = row.postName;
+      this.mobilizeForm.transferType = row.transferType;
+      this.mobilizeForm.takeEffectDate = row.takeEffectDate;
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -559,7 +604,7 @@ export default defineComponent({
       })
     },
     // 当文本框值发生变化时调用的方法
-    onchange(){
+    onchange() {
 
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys(this.deptId, false)
@@ -607,18 +652,51 @@ export default defineComponent({
     },
 
 
+    onclickso() {
+      // 点击文本框时调用的方法
+      // 取当前选择器中的复选框选项id
+      this.res1o = this.$refs.treeo.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时的回调
+    handleCheckChangeo(data, checked, indeterminate) {
+
+      // 节点选中状态发生变化
+      // 取当前选择器中的复选框选项id
+      this.res2o = this.$refs.treeo.getCheckedKeys()
+
+      // 取差集
+      let a = new Set(this.res1o);
+      let b = new Set(this.res2o);
+      let arr = Array.from(new Set([...b].filter(x => !a.has(x))));
+
+      // 将差集赋值上选择器
+      this.$refs.treeo.setCheckedKeys([arr], false)
+
+      //获取所有选中的节点 start
+      this.reso = this.$refs.treeo.getCheckedNodes()
+      this.reso.forEach((item) => {
+        // 赋值到文本框
+        this.depto = item.deptName
+        this.mobilizeForm.deptId = item.deptId
+        // 关闭选择器
+        this.$refs.vueSelecto.blur();
+      })
+    },
+
+
     //查询员工的信息 姓名 部门 职位
     selectStaffXX() {
 
-      let params= {
+      let params = {
 
-        currenPage:this.pageInfo1.currenPage,
-        pagesize:this.pageInfo1.pagesize,
-        deptIds:this.res2.length==0?'':this.res2,
+        currenPage: this.pageInfo1.currenPage,
+        pagesize: this.pageInfo1.pagesize,
+        deptIds: this.res2.length == 0 ? '' : this.res2,
 
       }
       this.axios
-          .get("http://localhost:8010/provider/staff/selectStaffXX?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .get("http://localhost:8010/provider/staff/selectStaffXX?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
             this.deptData = response.data.data.records;
@@ -631,12 +709,11 @@ export default defineComponent({
 
     },
 
-  },created() {
+  }, created() {
 
     this.selectTransfer();
 
   },
-
 
 
 })
@@ -645,26 +722,28 @@ export default defineComponent({
 
 <style scoped>
 /*@import url("../../css/navigation.css");*/
-/deep/.mainContent .sub-Content__primary {
+/deep/ .mainContent .sub-Content__primary {
   padding: 12px 24px;
   background: #fff;
   border-radius: 4px;
 }
-/deep/.cell {
+
+/deep/ .cell {
   padding-left: 10px;
   text-align: center;
   color: black;
 }
+
 /* 分页的样式 */
-/deep/.demo-pagination-block {
+/deep/ .demo-pagination-block {
   float: right;
   margin: 20px;
 }
 
-.name_tb{
-  width:240px;
-  height:40px;
-  border:1px solid silver;
+.name_tb {
+  width: 240px;
+  height: 40px;
+  border: 1px solid silver;
   border-radius: 3px;
   background: white;
   position: relative;
@@ -686,6 +765,11 @@ export default defineComponent({
   src: url('//at.alicdn.com/t/font_2982823_fi6h9uqcpu6.woff2?t=1639378694122') format('woff2'),
   url('//at.alicdn.com/t/font_2982823_fi6h9uqcpu6.woff?t=1639378694122') format('woff'),
   url('//at.alicdn.com/t/font_2982823_fi6h9uqcpu6.ttf?t=1639378694122') format('truetype');
+}
+
+
+.xxx{
+  display: none;
 }
 
 </style>

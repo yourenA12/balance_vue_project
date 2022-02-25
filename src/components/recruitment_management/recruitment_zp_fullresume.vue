@@ -14,36 +14,36 @@
             </router-link>
           </a>
 
-          <!--          批量删除-->
-          &nbsp;
-          <el-button size="small" type="danger" plain>
-            <el-icon><i-delete /></el-icon>
-            批量删除
-          </el-button>
+<!--          &lt;!&ndash;          批量删除&ndash;&gt;-->
+<!--          &nbsp;-->
+<!--          <el-button size="small" type="danger" plain>-->
+<!--            <el-icon><i-delete /></el-icon>-->
+<!--            批量删除-->
+<!--          </el-button>-->
 
-          <!-- 批量导入按钮 -->
+<!--          &lt;!&ndash; 批量导入按钮 &ndash;&gt;-->
 
-          <el-button  size="small" type="warning" plain >
-            <el-icon><i-download /></el-icon>
-            批量导入
-          </el-button>
+<!--          <el-button  size="small" type="warning" plain >-->
+<!--            <el-icon><i-download /></el-icon>-->
+<!--            批量导入-->
+<!--          </el-button>-->
 
-          <!-- 批量设为候选人 -->
-          <el-button size="small" type="info"  plain >批量设为候选人</el-button>
+<!--          &lt;!&ndash; 批量设为候选人 &ndash;&gt;-->
+<!--          <el-button size="small" type="info"  plain >批量设为候选人</el-button>-->
 
 
           <!--筛选框-->
 
           <!--搜索框-->
           <div style="float: right;">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
 
               <el-form-item>
-                <el-input v-model="formInline.user" placeholder="姓名、招聘计划名称" clearable></el-input>
+                <el-input v-model="pageInfo.resumeName" placeholder="姓名、招聘计划名称" clearable></el-input>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
+                <el-button type="primary" @click="selectresume_plan()" size="mini"><i class="iconfont">&#xeafe;</i></el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -72,7 +72,7 @@
 <!--            </router-link>-->
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="positionName" label="招聘职位" width="140"/>
+        <el-table-column fixed="left" prop="deptName" label="招聘部门" width="140"/>
         <el-table-column prop="resumeSex" label="性别" width="140"/>
         <el-table-column prop="resumeEducation" label="学历" width="140"/>
         <el-table-column prop="resumePhone" label="手机号" width="140"/>
@@ -110,12 +110,12 @@
 
 
           <el-table-column fixed="right" label="操作" width="180">
-          <template #default>
+          <template #default="scope">
             <div style="width: 110px">
               <el-button type="text" size="small" @click="">设为候选人</el-button>
 
 <!--              <el-button type="text" size="small" @click="open()" style="color: #ea7c99;">删除</el-button>-->
-              <el-popconfirm title="是否确认删除?" @confirm="confirmsc()" @cancel="cancelsc()">
+              <el-popconfirm title="是否确认删除?" @confirm="confirmsc(scope.row)" @cancel="cancelsc()">
                 <template #reference>
                   <el-button type="text" size="small" style="color: #f10c36;">删除</el-button>
                 </template>
@@ -168,7 +168,14 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        //名称
+        resumeName:"",
       },
+      fo:{
+        resumeId:"",
+        resumeZt:3,
+      },
+
       //筛选框显示隐藏
       icons: false,
       //搜索框
@@ -227,11 +234,13 @@ export default {
       })
     },
     //消息提示框确认按钮事件
-    confirmsc(){
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-      })
+    confirmsc(row){
+
+      this.Ztxiugai(row)
+      // ElMessage({
+      //   message: '操作成功',
+      //   type: 'success',
+      // })
     },
     //消息提示框取消按钮事件
     cancelsc(){
@@ -241,9 +250,10 @@ export default {
       })
     },
 
+    //查询
   selectresume_plan(){
     this.axios
-        .get("http://localhost:8010/provider/ResumeVo/ResumePage/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
+        .get("http://localhost:8010/provider/ResumeVo/ResumePage/",{params:this.pageInfo})
         .then((response) => {
           console.log(response);
           this.tableData = response.data.data.records;
@@ -254,6 +264,25 @@ export default {
           console.log(error);
         })
   },
+    //修改
+    Ztxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectresume_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
     empMsg(resumeId){
       this.$router.push({path:this.details,query:{path:this.$route.query.path,resumeId:resumeId}})
     }
