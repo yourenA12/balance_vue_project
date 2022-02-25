@@ -199,9 +199,8 @@
 
 /* 导入i-font的图标 */
 @font-face {
-    font-family: 'iconfont';
-    /* Project id 3056280 */
-    src: url('//at.alicdn.com/t/font_3056280_t3jpgha7u3.woff2?t=1640331248331') format('woff2'),
-    url('//at.alicdn.com/t/font_3056280_t3jpgha7u3.woff?t=1640331248331') format('woff'),
-    url('//at.alicdn.com/t/font_3056280_t3jpgha7u3.ttf?t=1640331248331') format('truetype');
+    font-family: 'iconfont';  /* Project id 3056280 */
+    src: url('//at.alicdn.com/t/font_3056280_mab7s1phc2.woff2?t=1645413163045') format('woff2'),
+    url('//at.alicdn.com/t/font_3056280_mab7s1phc2.woff?t=1645413163045') format('woff'),
+    url('//at.alicdn.com/t/font_3056280_mab7s1phc2.ttf?t=1645413163045') format('truetype');
 }

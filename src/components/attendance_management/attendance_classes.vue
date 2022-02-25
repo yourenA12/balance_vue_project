@@ -130,16 +130,10 @@ export default {
           .then((response) => {
 
             if( response.data.data ==="成功" ){
-              ElMessage({
-                message: '添加成功',
-                type: 'success',
-              });
+              ElMessage.success('添加成功')
               this.$router.go(-1);
             }else{
-              ElMessage({
-                message: '添加失败',
-                type: 'error',
-              })
+              ElMessage.success('添加失败')
             }
 
 
