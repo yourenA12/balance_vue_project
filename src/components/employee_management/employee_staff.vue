@@ -8,35 +8,35 @@
 
         <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe614;</i>
         <div class="staff_div_5_text">
-          <span>在职</span><br/><span>2</span>
+          <span>在职</span><br/><span>{{zz==null?0:zz}}</span>
         </div>
       </div>
 
       <div class="staff_div_5 div_5_margin">
         <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60b;</i>
         <div class="staff_div_5_text">
-          <span>本月离职</span><br/><span>2</span>
+          <span>本月离职</span><br/><span>{{bylz==null?0:bylz}}</span>
         </div>
       </div>
 
       <div class="staff_div_5 div_5_margin">
         <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60c;</i>
         <div class="staff_div_5_text">
-          <span>正式</span><br/><span>2</span>
+          <span>正式</span><br/><span>{{zs==null?0:zs}}</span>
         </div>
       </div>
 
       <div class="staff_div_5 div_5_margin">
         <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>
         <div class="staff_div_5_text">
-          <span>实习</span><br/><span>2</span>
+          <span>试用</span><br/><span>{{sy==null?0:sy}}</span>
         </div>
       </div>
 
       <div class="staff_div_5 div_5_margin">
         <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
         <div class="staff_div_5_text">
-          <span>本月新入职</span><br/><span>2</span>
+          <span>本月新入职</span><br/><span>{{byxrz==null?0:byxrz}}</span>
         </div>
       </div>
     </div>
@@ -319,6 +319,11 @@ export default {
       //存放部门信息
       deptlists: [],
 
+      zz:0,// 在职
+      zs:0,// 正式
+      sy:0,// 试用
+      bylz:0,// 本月离职
+      byxrz:0,// 本月新入职
 
       //员工花名册
       book: '/employee/message/employee_roster/book',
@@ -643,11 +648,38 @@ export default {
       });
 
     },
+    //统计离职、在职、试用的员工人数
+    selectCountStaff(state1) {
+      this.axios
+          .get(" http://localhost:8010/provider/staff/selectCountStaff/"+state1)
+          .then((response) => {
+            console.log(response);
+            if(state1==3) this.zs=response.data.data; // 正式
+
+            if(state1==2) this.sy=response.data.data; // 试用
+
+            if(state1==1) this.bylz=response.data.data; // 本月离职
+
+            if(state1=="x") this.byxrz=response.data.data; // 本月新入职
+
+            this.zz=this.zs+this.sy // 在职
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
 
 
   }, created() {
     this.selectStaff();
     this.selectDeptName()
+    //查询统计离职、正式、试用的员工人数
+    this.selectCountStaff(1);
+    this.selectCountStaff(2);
+    this.selectCountStaff(3);
+    this.selectCountStaff("x");
+
   },
 }
 
