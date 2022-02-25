@@ -1,5 +1,5 @@
 <template>
-<!-- 新增修改方案 -->
+  <!-- 新增修改方案 -->
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
@@ -284,29 +284,30 @@
                          :check-on-click-node=true
                          node-key="deptId"
 
-                         :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                         :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
               </el-select>
             </el-form-item>
 
             <el-form-item label="适用职位：" style="margin-top: 20px;">
-              <el-select  placeholder="请选择适用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
+              <el-select placeholder="请选择适用职位" multiple v-model="compensationForm.citysPost" style="width:240px">
                 <el-option
                     v-for="item in positionAll"
                     :key="item.positionId"
                     :label="item.positionName"
-                    :value="item.positionId" />
+                    :value="item.positionId"/>
               </el-select>
             </el-form-item>
 
             <el-form-item label="适用员工：" style="margin-top: 20px;">
 
-              <el-select ref="vueSelect1" @click="become=true,staffSelect()" v-model="compensationForm.staffs"  placeholder="请选择适用员工" multiple style="width:240px">
+              <el-select ref="vueSelect1" @click="become=true,staffSelect()" v-model="compensationForm.staffs"
+                         placeholder="请选择适用员工" multiple style="width:240px">
                 <el-option
                     class="xxx"
                     v-for="item in tableVal"
                     :key="item.staffId"
                     :label="item.staffName"
-                    :value="item.staffId" />
+                    :value="item.staffId"/>
               </el-select>
 
             </el-form-item>
@@ -420,7 +421,7 @@
                    :default-expand-all=true
                    :check-on-click-node=true
                    node-key="deptId"
-                   :props="defaultProps" ref="treey" @check-change="handleCheckChangey()" />
+                   :props="defaultProps" ref="treey" @check-change="handleCheckChangey()"/>
         </el-select>
       </div>
       <el-button @click="selectStaffXX()" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
@@ -447,7 +448,7 @@
           :cell-style="{textAlign: 'center'}">
 
         <!-- 全选操作按钮 -->
-        <el-table-column type="selection" width="90" />
+        <el-table-column type="selection" width="90"/>
 
         <el-table-column
             prop="staffName"
@@ -545,7 +546,7 @@ export default {
         }
 
       }
-
+      // 添加
       this.insertcompensation();
 
     },
@@ -558,6 +559,7 @@ export default {
         data: {
           // 默认参保方案
           defInsured: {
+            defInsuredId: this.$route.query.id,
             defInsuredName: this.schemeName
           },
           // 社保 方案
@@ -570,7 +572,7 @@ export default {
           lower: this.security_cardinal_lower,
 
           //取部门信息
-          deptIds: this.$refs.tree.getCheckedKeys(),
+          deptIds: this.res2,
           //取职位信息
           postIds: this.compensationForm.citysPost,
           //取员工信息
@@ -578,14 +580,18 @@ export default {
         }
       }).then(response => {
         console.log(response);
-        if (response.data.data > 0) {
+        if (response.data.data == "添加成功") {
           ElMessage({
-            message: '添加成功',
+            message: '操作成功',
             type: 'success',
           })
-          this.selectEmps() // 修改完成后调用查询方法
+
+          this.$router.go('-1');
+
+        } else if (response.data.data == "添加失败") {
+          ElMessage.error('操作失败')
         } else {
-          ElMessage.error('添加失败')
+          ElMessage.warning(response.data.data)
         }
       }).catch(function (error) {
         console.log(error);
@@ -812,54 +818,197 @@ export default {
         this.$refs.staffsTable.clearSelection()
       })
 
-      //
-      let a = {
-        // staffId: 3,
-        staffName: '五哈',
-        deptName:"湘中",
-        positionName:"员工"
-
-      }
-
-      // 将值赋值上表格
-      this.$nextTick(() => {
-        this.$refs.staffsTable.toggleRowSelection(a)
+      this.tableVal.forEach(item => {
+        // 将值赋值上表格
+        this.$nextTick(() => {
+          this.$refs.staffsTable.toggleRowSelection(item)
+        })
       })
-
 
     },
 
 
-  },
+    // 按参保方案id查询参保方案
+    selectDefInsuredById() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectDefInsuredById/" + this.$route.query.id)
+          .then((response) => {
 
+            console.log("按参保方案id查询参保方案", response);
+
+            // 默认参保方案名称
+            this.schemeName = response.data.data.defInsuredName;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按参保方案id查询方案
+    selectDefSchemeById() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectDefSchemeById/" + this.$route.query.id)
+          .then((response) => {
+
+            console.log("按参保方案id查询方案", response);
+
+            this.accumulation_tableData = []
+            this.social_tableData = []
+
+            response.data.data.forEach(item => {
+              if (item.defSchemeType == "公积金") {// 公积金 方案
+                this.accumulation_tableData.push(item)
+                // 基数下限
+                this.security_cardinal_lower = item.defSchemeMin
+                // 基数上限
+                this.security_cardinal_upper = item.defSchemeMax
+              } else {// 社保 方案
+                this.social_tableData.push(item)
+              }
+            })
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按参保方案id查询部门id
+    selectDeptId() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectDeptId/" + this.$route.query.id)
+          .then((response) => {
+
+            console.log("按参保方案id查询部门id", response);
+            if(response.data.data==null) return
+
+            // 将值赋值到选择器中
+            this.$refs.tree.setCheckedKeys(response.data.data, false)
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按参保方案id查询职位id
+    selectPostId() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectPostId/" + this.$route.query.id)
+          .then((response) => {
+
+            console.log("按参保方案id查询职位id", response);
+            if(response.data.data==null) return
+
+            // 职位选择器
+            this.compensationForm.citysPost = response.data.data
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按参保方案id查询员工
+    selectStaffId() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectStaffId/" + this.$route.query.id)
+          .then((response) => {
+
+            console.log("按参保方案id查询员工", response);
+
+            // 清空选中值
+            this.tableVal = []
+            // 清空选中 id
+            this.compensationForm.staffs = []
+
+            // 循环员工id
+            response.data.data.forEach(item => {
+              // 循环员工数据
+              this.staffData.forEach(item1 => {
+
+                // 如果员工id 等于数据中的员工id
+                if (item.staffId == item1.staffId) {
+
+                  // 选中的值
+                  this.tableVal.push(item1)
+                  // 将员工id赋值上
+                  this.compensationForm.staffs.push(item.staffId)
+
+                }
+
+              })
+
+            })
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    // 按参保方案id删除
+    deleteInsuredById() {
+      this.axios
+          .delete("http://localhost:8010/provider/defInsured/deleteById/" + this.$route.query.id)
+          .then((response) => {
+
+            console.log("按参保方案id删除", response);
+            if (!response.data.data > 0) {
+              ElMessage({
+                message: '出错了，请稍后重试',
+                type: 'error',
+              })
+              return
+            }
+            // 添加
+            this.insertcompensation();
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+
+
+  },
 
   created() {
     this.selectPositionName();
     this.selectDeptName();
     this.selectStaffXX();
 
+    if (this.$route.query.name == "修改") {
+
+      this.selectDefInsuredById();
+      this.selectDefSchemeById();
+      this.selectDeptId();
+      this.selectPostId();
+      this.selectStaffId();
+
+    }
 
   },
+
 
   data() {
     // 格式
     const defaultProps = {
       children: 'children',
       label: 'deptName',
-      value:'deptId'
+      value: 'deptId'
     }
     return {
-
       //弹出框(员工)的分页
       pageInfo1: {
         // 分页参数
         currenPage: 1, //当前页
-        pagesize: 3, // 页大小
+        pagesize: 10, // 页大小
         total: 0, // 总页数
       },
 
       // 多选时 数据
-      tableVal:[],
+      tableVal: [],
       // // 选中时 员工id
       // staffIds:[],
       path: "/social/basic_setup/insured_scheme",
@@ -876,43 +1025,43 @@ export default {
       // 缴纳明细表 (显示/隐藏)
       payment_detail: false,
       // 参保组织
-      compensationForm:{
+      compensationForm: {
         //部门
-        dept:"",
+        dept: "",
         //存选中的职位
-        citysPost:[],
+        citysPost: [],
         // 存放员工
-        staffs:[],
+        staffs: [],
       },
-      res:"",
+      res: "",
       // 选中值1
-      res1:"",
+      res1: "",
       // 选中值2
-      res2:"",
+      res2: [],
       // 部门  文本框的值
-      dept:[],
-      deptId:[],
+      dept: [],
+      deptId: [],
       // 格式
       defaultProps,
       //存放部门信息
       deptlists: [],
       //存储部门职位名称
-      positionAll:[],
+      positionAll: [],
 
 
-      resy:"",
+      resy: "",
       // 选中值1
-      res1y:"",
+      res1y: "",
       // 选中值2
-      res2y:"",
+      res2y: "",
       // 部门  文本框的值
-      depty:[],
-      deptIdy:[],
+      depty: [],
+      deptIdy: [],
 
       // 员工弹出框
-      become:false,
+      become: false,
       // 员工数据
-      staffData:[],
+      staffData: [],
 
 
       // 社保缴纳项目
@@ -1136,7 +1285,8 @@ export default {
   url('//at.alicdn.com/t/font_2990377_1cwdx3n4atr.woff?t=1639139822080') format('woff'),
   url('//at.alicdn.com/t/font_2990377_1cwdx3n4atr.ttf?t=1639139822080') format('truetype');
 }
-.xxx{
+
+.xxx {
   display: none;
 }
 
