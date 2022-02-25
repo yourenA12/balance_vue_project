@@ -2,37 +2,23 @@
   <div id="background">
     <div class="container">
       <br>
-      <h1 style="color:#707070;font-family: inherit;
-    font-weight: 500;
-    line-height: 1.1;">Login</h1>
+      <h1>Login</h1>
       <div class="form">
         <div class="item">
-<!--          <label style="color:#707070;">手机号:</label>-->
-          <el-input type="text"  v-model="rsFrom.staffPhone"  placeholder="请输入用户名" style="width: 323px;">
-            <template #prefix>
-            <el-icon style="margin-top:13px"><i-user-filled /></el-icon>
-            </template>
-          </el-input>
+          <label>手机号:</label>
+          <el-input type="text" size="small" v-model="rsFrom.staffPhone"  placeholder="请输入用户名" style="width: 323px;"/>
           <br/>
         </div>
         <div class="item">
-          <el-input
-              v-model="rsFrom.staffPass"
-              type="password"
-              placeholder="请输入密码"
-              show-password
-              style="width: 323px">
-            <template #prefix>
-              <el-icon style="margin-top:13px"><i-unlock /></el-icon>
-            </template>
-          </el-input>
+          <label>密&nbsp;&nbsp;&nbsp;码:</label>
+          <el-input type="password" size="small" v-model="rsFrom.staffPass" placeholder="请输入密码" style="width: 323px;"/>
           <br/>
         </div>
       </div>
       <div class="e9login-element" style="padding-top: 0px;top: 238px;left: 80px;width: 324px;height: 45px;position: absolute;">
         <div class="e9login-form-submit e9login-submit" style="width: 324px; height: 45px;">
-          <el-button @click="toLogin()" :loading="loading"  style="width: 323px; height: 25px;background:#1890ff;  font-size: 18px; border-radius: 6px;margin-left: -80px " type="button" >
-            <span style="    font-size: 14px;color: white">登 录</span>
+          <el-button @click="toLogin()" :loading="loading"  style="width: 324px; height: 45px; color: rgb(186, 205, 224); background-color: rgb(11, 26, 50); font-size: 18px; border-radius: 0px; opacity: 1;border: none;" type="button" class="ant-btn ant-btn-primary e9login-form-submit-btn">
+            <span>登 录</span>
           </el-button>
         </div>
       </div>
@@ -42,9 +28,6 @@
 
 <script>
 import {ElMessage } from 'element-plus'
-// import { Calendar, Unlock } from '@element-plus/icons-vue'
-import { ref } from 'vue'
-const input = ref('')
 export default {
   data(){
     return{
@@ -90,35 +73,31 @@ export default {
 .ant-btn:hover{
   color: #000;
 }
-/*!*按钮悬浮*!*/
-/*.ant-btn:hover {*/
-/*  background: #126c9e !important;*/
-/*  color: white !important;*/
-/*  border-color: #01a8f9 !important;*/
-/*}*/
+/*按钮悬浮*/
+.ant-btn:hover {
+  background: #126c9e !important;
+  color: white !important;
+  border-color: #01a8f9 !important;
+}
 
 #background{
   width: 100%;
   height: 100%;
-  background: url("../assets/1234567.jpg");
+  background: url("../../assets/1234567.jpg");
   background-size:100% 100%;
   position: fixed;
   top: 0;
   left: 0;
 }
 .container{
-  width: 400px;
+  width: 480px;
   height: 330px;
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background:white;
+  background:#00000090;
   text-align: center;
-  border-radius: 7px;
-  /*filter:alpha(opacity=60);*/
-  /*-moz-opacity:0.6;*/
-  /*opacity:0.60;*/
 }
 .container h1{
   color: aliceblue;
