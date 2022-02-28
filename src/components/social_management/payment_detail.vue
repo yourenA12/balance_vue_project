@@ -322,7 +322,7 @@ export default {
           });
     },
 
-    // 查询所有参保方案
+    // 查询所有参保方案分页
     selectAllPage() {
       let params= {
 
@@ -342,10 +342,29 @@ export default {
             this.tableData = response.data.data.records
             this.pageInfo.total=response.data.data.total
 
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 查询本月所有参保方案
+    selectAll() {
+      let params= {
+        currenPage:1,
+        pagesize:999,
+        staffNameSearch: "",
+        deptIds:"",
+        stateSearch: ""
+      }
+
+      this.axios
+          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .then((response) => {
+            console.error(response);
+
             // 本月参保人数
             this.insuredPeople=response.data.data.total
-
-            /* 点击搜索会变*/
 
             // 遍历表格数据
             this.tableData.forEach(item=>{
@@ -362,10 +381,12 @@ export default {
             console.log(error);
           });
     },
+
   },
   created() {
     this.selectAllPage()
     this.selectDeptName()
+    this.selectAll()
   }
 };
 </script>
