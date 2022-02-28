@@ -17,9 +17,9 @@
           >
             <el-option
                 v-for="item in insured_scheme"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.defInsuredId"
+                :label="item.defInsuredName"
+                :value="item.defInsuredId"
             >
             </el-option>
           </el-select>
@@ -37,8 +37,8 @@
           <br/><br/>
 
           <!-- 填写基本参数的表单 -->
-          <div style="text-align: center">
-            <!-- left -->
+<!--          <div style="text-align: center">
+            &lt;!&ndash; left &ndash;&gt;
             <div class="form-div">
               <el-switch
                   class="form-seitch"
@@ -75,7 +75,7 @@
               </el-form>
             </div>
 
-            <!-- right -->
+            &lt;!&ndash; right &ndash;&gt;
             <div class="form-div">
               <el-switch
                   class="form-seitch"
@@ -110,7 +110,7 @@
                 </el-form-item>
               </el-form>
             </div>
-          </div>
+          </div>-->
         </div>
 
         <!-- 表格按钮部分 -->
@@ -196,13 +196,7 @@ export default {
       // 参保方案
       scheme_name: null,
       // 参保方案下拉选择器值
-      insured_scheme: [
-        {value: "1", label: "方案1"},
-        {value: "2", label: "方案2"},
-        {value: "3", label: "方案3"},
-        {value: "4", label: "方案4"},
-        {value: "5", label: "方案5"},
-      ],
+      insured_scheme: [],
       name: "",
       // 分页参数
       pageInfo: {
@@ -277,6 +271,29 @@ export default {
       }
     };
   },
+  methods:{
+    // 查询所有参保方案
+    selectAllPage() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectAllPage",{params:{
+              // 分页参数
+              currentPage: 1, //当前页
+              pagesize: 999, // 页大小
+              input: "",// 参保方案名称搜索框的值
+              state: 0,// 参保方案状态下拉框的值
+            },})
+          .then((response) => {
+            console.log(response);
+            this.insured_scheme =response.data.data.records
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },
+  created() {
+    this.selectAllPage()
+  }
 };
 </script>
 
