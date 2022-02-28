@@ -1,38 +1,39 @@
 <template>
-<!--社保缴费明细-->
+  <!--社保缴费明细-->
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
         <!-- 计薪月份 -->
         <div class="month-div">
-          <span class="month_span">2021-12</span><br /><br />
-          计薪月份<br /><br />
+          <span class="month_span">2021-12</span><br/><br/>
+          计薪月份<br/><br/>
           <el-button type="primary" size="small">重新核算</el-button>
           <el-button type="primary" size="small" style="width: 80px"
-            >归档</el-button
+          >归档
+          </el-button
           >
         </div>
 
         <!-- 月金额统计 -->
         <div class="month_sum">
           <div>
-            <span>参保人数</span><br />
-            <span>1</span><br /><br /><br />
+            <span>参保人数</span><br/>
+            <span>{{ insuredPeople }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>个人缴费</span><br />
-            <span>2</span><br /><br /><br />
+            <span>个人缴费</span><br/>
+            <span>{{ personPay }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>企业缴费</span><br />
-            <span>3</span><br /><br /><br />
+            <span>企业缴费</span><br/>
+            <span>{{ firmPay }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>合计缴费</span><br />
-            <span>4</span><br /><br /><br />
+            <span>合计缴费</span><br/>
+            <span>{{ totalPay }}</span><br/><br/><br/>
           </div>
         </div>
 
@@ -41,20 +42,25 @@
         <div class="mt-20 ml-20 mr-20">
           <!-- 按钮 -->
           <el-button size="small"
-            ><i class="iconfont">&#xe6a2;</i>批量导出</el-button
+          ><i class="iconfont">&#xe6a2;</i>批量导出
+          </el-button
           >
           <el-button size="small"
-            ><i class="iconfont">&#xe639;</i>批量导入</el-button
+          ><i class="iconfont">&#xe639;</i>批量导入
+          </el-button
           >
           <el-button size="small" type="danger" plain
-            ><i class="iconfont">&#xe608;</i>批量删除</el-button
+          ><i class="iconfont">&#xe608;</i>批量删除
+          </el-button
           >
 
           <!-- 输入框 -->
           <div class="resume-operation">
             <el-input v-model="empName_search" placeholder="员工姓名">
               <template #suffix>
-                <el-icon class="el-input__icon"><i-search /></el-icon>
+                <el-icon class="el-input__icon">
+                  <i-search/>
+                </el-icon>
               </template>
             </el-input>
           </div>
@@ -63,10 +69,10 @@
           <div class="resume-operation">
             <el-select clearable size="small" v-model="empState" placeholder="员工状态">
               <el-option
-                v-for="item in empState_options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                  v-for="item in empState_options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
               >
               </el-option>
             </el-select>
@@ -76,10 +82,10 @@
           <div class="resume-operation">
             <el-select clearable v-model="dept_name" multiple placeholder="选择部门">
               <el-option
-                v-for="item in depts"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                  v-for="item in depts"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
               >
               </el-option>
             </el-select>
@@ -92,24 +98,17 @@
                     :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
             <!-- 多选框 -->
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="date" label="编号" />
-            <el-table-column prop="name" label="姓名" />
-            <el-table-column prop="address" label="参保方案" />
-            <el-table-column prop="state" label="社保缴纳月份" width="100" />
-            <el-table-column prop="address" label="社保个人缴费" width="100" />
-            <el-table-column prop="address" label="社保企业缴费" width="100" />
-            <el-table-column prop="state" label="公积金缴纳月份" width="110" />
-            <el-table-column
-              prop="address"
-              label="公积金个人缴费"
-              width="110"
-            />
-            <el-table-column prop="state" label="公积金企业缴费" width="110" />
-            <el-table-column prop="state" label="操作">
+            <el-table-column type="selection" width="55"/>
+            <el-table-column prop="staffName" label="姓名"/>
+            <el-table-column prop="defInsuredName" label="参保方案" />
+            <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费" />
+            <el-table-column prop="insDetailSocialFirmPay" label="社保企业缴费" />
+            <el-table-column prop="insDetailFundPersonPay" label="公积金个人缴费" />
+            <el-table-column prop="insDetailFundFirmPay" label="公积金企业缴费"/>
+            <el-table-column label="操作">
               <template #default>
                 <router-link :to="{path:this.path,query:{path:this.$route.query.path}}">
-                  <el-button type="text" size="small">查看 </el-button>
+                  <el-button type="text" size="small">查看</el-button>
                 </router-link>
               </template>
             </el-table-column>
@@ -119,16 +118,16 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-            v-model:currentPage="pageInfo.currentPage"
-            :page-sizes="[3, 5, 10, 50]"
-            v-model:page-size="pageInfo.pagesize"
-            :default-page-size="pageInfo.pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageInfo.total"
-            :pager-count="5"
-            background
-            @size-change="selectUsers"
-            @current-change="selectUsers"
+              v-model:currentPage="pageInfo.currentPage"
+              :page-sizes="[3, 5, 10, 50]"
+              v-model:page-size="pageInfo.pagesize"
+              :default-page-size="pageInfo.pagesize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="pageInfo.total"
+              :pager-count="5"
+              background
+              @size-change="selectUsers"
+              @current-change="selectUsers"
           >
           </el-pagination>
         </div>
@@ -139,14 +138,23 @@
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
+import {ref, defineComponent} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
     return {
-      path:"/social/social_payment/someone_insured_particulars",
+      path: "/social/social_payment/someone_insured_particulars",
       // 部门名称
       dept_name: null,
+      // 参保人数
+      insuredPeople:0,
+      // 个人缴费
+      personPay:0,
+      // 公司缴费
+      firmPay:0,
+      // 合计缴费
+      totalPay:0,
       // 选择部门 下拉选择器
       depts: [
         {value: "1", label: "部门1"},
@@ -154,69 +162,70 @@ export default {
         {value: "3", label: "部门3"},
       ],
       // 员工姓名搜索框
-      empName_search:"",
+      empName_search: "",
       //员工状态下拉选择器
       empState_options: [
-        { value: "0", label: "试用期" },
-        { value: "1", label: "在职" },
-        { value: "2", label: "离职" },
+        {value: "0", label: "试用期"},
+        {value: "1", label: "在职"},
+        {value: "2", label: "离职"},
       ],
-      empState:"",//员工状态下拉选择器的值
+      empState: "",//员工状态下拉选择器的值
       // 分页参数
       pageInfo: {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
       },
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Home",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Office",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Home",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Office",
-        },
-      ],
+      tableData: [],
     };
   },
-  methods:{
+  methods: {
     // 查询所有参保方案
     selectAllPage() {
-      alert(111)
       this.axios
           .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail")
           .then((response) => {
             console.log(response);
-            this.tableData =response.data.data.records
+            // 表格数据
+            this.tableData = response.data.data
+
+            // 本月参保人数
+            this.insuredPeople=response.data.data.length
+
+            // 遍历表格数据
+            this.tableData.forEach(item=>{
+              // 本月个人缴费
+              this.personPay+=item.insDetailSocialPersonPay+item.insDetailFundPersonPay
+              // 本月公司缴费
+              this.firmPay+=item.insDetailSocialFirmPay+item.insDetailFundFirmPay
+            })
+
+            // 合计缴费
+            this.totalPay=this.personPay+this.firmPay
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 向后台传输多个id 进行删除
+    deleteInsuredDetail(ids) {
+
+      this.axios
+          .delete("http://localhost:8010/provider/notice/deleteNotices/" +  this.deleteNoticeIds)
+          .then((response) => {
+            console.log(response);
+            if(response.data.data>0){
+              ElMessage({
+                type: 'success',
+                message: '删除成功！！',
+              })
+              // 调用查询
+              this.selectAllPage()
+            }else{
+              ElMessage('删除失败！！')
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -232,7 +241,7 @@ export default {
 <style scoped>
 
 /*表格*/
-.sub-Content__primary{
+.sub-Content__primary {
   margin-top: 20px;
 }
 
@@ -305,10 +314,12 @@ export default {
   margin-top: 8px;
   min-height: 100%;
 }
+
 .j-card:hover {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: transparent;
 }
+
 .j-card-bordered {
   border: 1px solid #e9e9e9;
   border-top-color: rgb(233, 233, 233);
@@ -316,6 +327,7 @@ export default {
   border-bottom-color: rgb(233, 233, 233);
   border-left-color: rgb(233, 233, 233);
 }
+
 .j-card {
   background: #fff;
   border-radius: 4px;
@@ -327,8 +339,8 @@ export default {
   min-height: 100%;
 }
 
-.j-card-body{
-  padding:0 2%;
+.j-card-body {
+  padding: 0 2%;
 }
 
 @font-face {
