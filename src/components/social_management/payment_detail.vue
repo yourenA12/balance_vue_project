@@ -16,23 +16,23 @@
         <!-- 月金额统计 -->
         <div class="month_sum">
           <div>
-            <span>参保人数</span><br />
-            <span>1</span><br /><br /><br />
+            <span>参保人数</span><br/>
+            <span>{{ insuredPeople }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>个人缴费</span><br />
-            <span>2</span><br /><br /><br />
+            <span>个人缴费</span><br/>
+            <span>{{ personPay }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>企业缴费</span><br />
-            <span>3</span><br /><br /><br />
+            <span>企业缴费</span><br/>
+            <span>{{ firmPay }}</span><br/><br/><br/>
           </div>
 
           <div>
-            <span>合计缴费</span><br />
-            <span>4</span><br /><br /><br />
+            <span>合计缴费</span><br/>
+            <span>{{ totalPay }}</span><br/><br/><br/>
           </div>
         </div>
 
@@ -135,21 +135,14 @@
                     :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
             <!-- 多选框 -->
-            <el-table-column type="selection" width="55" />
-            <el-table-column prop="date" label="编号" />
-            <el-table-column prop="name" label="姓名" />
-            <el-table-column prop="address" label="参保方案" />
-            <el-table-column prop="state" label="社保缴纳月份" width="100" />
-            <el-table-column prop="address" label="社保个人缴费" width="100" />
-            <el-table-column prop="address" label="社保企业缴费" width="100" />
-            <el-table-column prop="state" label="公积金缴纳月份" width="110" />
-            <el-table-column
-              prop="address"
-              label="公积金个人缴费"
-              width="110"
-            />
-            <el-table-column prop="state" label="公积金企业缴费" width="110" />
-            <el-table-column prop="state" label="操作">
+            <el-table-column type="selection" width="55"/>
+            <el-table-column prop="staffName" label="姓名"/>
+            <el-table-column prop="defInsuredName" label="参保方案" />
+            <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费" />
+            <el-table-column prop="insDetailSocialFirmPay" label="社保企业缴费" />
+            <el-table-column prop="insDetailFundPersonPay" label="公积金个人缴费" />
+            <el-table-column prop="insDetailFundFirmPay" label="公积金企业缴费"/>
+            <el-table-column label="操作">
               <template #default>
                 <router-link :to="{path:this.path,query:{path:this.$route.query.path}}">
                   <el-button type="text" size="small">查看 </el-button>
@@ -162,7 +155,7 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-            v-model:currentPage="pageInfo.currentPage"
+            v-model:currentPage="pageInfo.currenPage"
             :page-sizes="[3, 5, 10, 50]"
             v-model:page-size="pageInfo.pagesize"
             :default-page-size="pageInfo.pagesize"
@@ -183,6 +176,7 @@
 
 <script>
 import { ref, defineComponent } from "vue";
+import {ElMessage} from "element-plus";
 import qs from 'qs'
 
 export default {
@@ -212,6 +206,14 @@ export default {
       path:"/social/social_payment/someone_insured_particulars",
       // 部门名称
       dept_name: null,
+      // 参保人数
+      insuredPeople:0,
+      // 个人缴费
+      personPay:0,
+      // 公司缴费
+      firmPay:0,
+      // 合计缴费
+      totalPay:0,
       // 选择部门 下拉选择器
       depts: [
         {value: "1", label: "部门1"},
@@ -229,7 +231,7 @@ export default {
       empState:"",//员工状态下拉选择器的值
       // 分页参数
       pageInfo: {
-        currentPage: 1, //当前页
+        currenPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
 
@@ -240,44 +242,7 @@ export default {
         //员工状态
         stateSearch:'',
       },
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Home",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Office",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Home",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          state: "California",
-          city: "Los Angeles",
-          address: "No. 189, Grove St, Los Angeles",
-          zip: "CA 90036",
-          tag: "Office",
-        },
-      ],
+      tableData: [],
     };
   },
   methods:{
@@ -369,12 +334,28 @@ export default {
 
       }
 
-      alert(111)
       this.axios
           .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
           .then((response) => {
             console.log(response);
-            this.tableData =response.data.data.records
+            // 表格数据
+            this.tableData = response.data.data.records
+
+            // 本月参保人数
+            this.insuredPeople=response.data.data.total
+
+            /* 点击搜索会变*/
+
+            // 遍历表格数据
+            this.tableData.forEach(item=>{
+              // 本月个人缴费
+              this.personPay+=item.insDetailSocialPersonPay+item.insDetailFundPersonPay
+              // 本月公司缴费
+              this.firmPay+=item.insDetailSocialFirmPay+item.insDetailFundFirmPay
+            })
+
+            // 合计缴费
+            this.totalPay=this.personPay+this.firmPay
           })
           .catch(function (error) {
             console.log(error);
