@@ -70,8 +70,7 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowdetailId,2),
-                  updateAuditflow(scope.row.auditflowId,2)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
               >
                 <template #reference>
                   <el-button type="text">通过</el-button>
@@ -83,8 +82,7 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowdetailId,3),
-                  updateAuditflow(scope.row.auditflowId,3)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
               >
                 <template #reference>
                   <el-button type="text">驳回</el-button>
@@ -141,10 +139,10 @@
           </el-form>
 
         <!-- process-status="error" -->
-        <el-steps align-center :space="200" :active="active" finish-status="success">
-          <el-step :title="a.staffName2" ></el-step>
-          <el-step :title="b.staffName2" ></el-step>
-          <el-step :title="c.staffName2"></el-step>
+        <el-steps align-center :space="200" :active="active">
+          <el-step :status="statusa" :title="a.staffName2" ></el-step>
+          <el-step :status="statusb" :title="b.staffName2" ></el-step>
+          <el-step :status="statusc" :title="c.staffName2"></el-step>
         </el-steps>
 
           <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
@@ -270,6 +268,7 @@ export default {
     return {
       // 详情中的步骤条
       active:"",
+      processStatus:"success",
       // 待办转正审批列表
       tableData: [],
       // 已办转正审批列表
@@ -306,7 +305,11 @@ export default {
       //那几个审批人
       a:{},
       b:{},
-      c:{}
+      c:{},
+      statusa:"",
+      statusb:"",
+      statusc:"",
+
 
     }
   },
@@ -353,12 +356,13 @@ export default {
           })
     },
     //转正审批 修改状态
-    updateAuditflowdetai(id,state) {
+    updateAuditflowdetai(id,mxid,state) {
       this.axios({
         url: 'http://localhost:8010/provider/auditflowdetail/updateAuditflowdetail',
         method: 'put',
         data:{
-          auditflowdetailId:id,
+          auditflowId:id,
+          auditflowdetailId:mxid,
           auditflowdetaiState:state
         }
       }).then(response => {
@@ -375,29 +379,7 @@ export default {
         console.log(error);
       });
     },
-    //转正审批 修改状态
-    updateAuditflow(id,state) {
-      this.axios({
-        url: 'http://localhost:8010/provider/updateAuditflow',
-        method: 'put',
-        data:{
-          auditflowId:id,
-          auditflowState:state
-        }
-      }).then(response => {
-        if (response.data.data > 0) {
-          ElMessage({
-            message: '操作成功',
-            type: 'success',
-          })
-          this.selectAuditflow(1) // 修改完成后调用查询方法
-        } else {
-          ElMessage.error('操作失败')
-        }
-      }).catch(function (error) {
-        console.log(error);
-      });
-    },
+
 
     //
     selectById(row) {
@@ -410,6 +392,7 @@ export default {
             console.log(response);
             this.auditflow = response.data.data;
             this.auditflow0 = this.auditflow[0]
+            this.auditflow0.staffName2=row.staffName2//绑定当前审批人
             this.activeVal()
           })
           .catch(function (error) {
@@ -438,14 +421,38 @@ export default {
       this.b = this.auditflow[1]
       this.c = this.auditflow[2]
 
-      if(this.a.auditflowdetaiState==1)
+      if(this.a.auditflowdetaiState==1){
         this.active=0
-      if(this.b.auditflowdetaiState==1)
+      }
+
+      if(this.b.auditflowdetaiState==1){
         this.active=1
-      if(this.c.auditflowdetaiState==1)
+        this.statusa="success"
+      }
+
+      if(this.c.auditflowdetaiState==1){
         this.active=2
-      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2)
-      this.active=3
+        this.statusa="success"
+        this.statusb="success"
+      }
+
+      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2){
+        this.active=3
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="success"
+      }
+
+      if(this.a.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="error"
+      }else if(this.b.auditflowdetaiState==3){
+        this.active=2
+        this.statusb="error"
+      }else if(this.c.auditflowdetaiState==3){
+        this.active=3
+        this.statusc="error"
+      }
 
     },
 

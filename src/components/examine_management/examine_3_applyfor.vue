@@ -39,7 +39,7 @@
           <el-table-column prop="auditflowId" label="审批编号" width="100"/>
           <el-table-column prop="auditflowTitle" label="流程" width="100"/>
 
-          <el-table-column prop="staffName" label="申请人" width="100"/>
+          <el-table-column prop="staffName1" label="申请人" width="100"/>
           <el-table-column prop="auditflowState" label="状态" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
@@ -141,7 +141,7 @@ export default {
   methods: {
     Auditflow(){
       this.axios
-          .get("http://localhost:8010/provider/findSelectId/6/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/findByIdUser/6/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;

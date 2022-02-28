@@ -10,115 +10,101 @@
         <el-button @click="resetDateFilter1">重置日期过滤</el-button>
         &nbsp;
         <el-input
-            placeholder="输入名称搜索"
             v-model="pageInfo.staffName"
+            placeholder="输入名称搜索"
             style="width: 200px"
         />
-        &nbsp;
-        <el-button type="success" plain style="margin-bottom: 20px" @click="selectAuditflow(1)">搜索</el-button>
+
+        <el-button plain style="margin-bottom: 20px" @click="selectAuditflow(1)" type="success">搜索</el-button>
         <!--  表格 -->
         <el-table
             ref="filterTable1"
-            row-key="date1"
-            :data="tableData"
-            style="width: 100%"
-            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
+            :data="tableData"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            row-key="date1"
+            style="width: 100%"
 
         >
           <el-table-column
-              prop="createdTime"
-              label="日期"
-              sortable
-              width="140"
-              column-key="date1"
+              :filter-method="filterHandler"
               :filters="[
               { text: '2016-05-01', value: '2016-05-01' },
               { text: '2016-05-02', value: '2016-05-02' },
               { text: '2016-05-03', value: '2016-05-03' },
               { text: '2016-05-04', value: '2016-05-04' },
             ]"
-              :filter-method="filterHandler"
+              column-key="date1"
+              label="日期"
+              prop="createdTime"
+              sortable
+              width="140"
           />
-          <el-table-column prop="auditflowId" label="审批编号" width="100"/>
-          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
-          <el-table-column prop="staffName1" label="申请人" width="150"/>
+          <el-table-column label="审批编号" prop="auditflowId" width="100"/>
+          <el-table-column label="流程" prop="auditflowTitle" width="100"/>
+          <el-table-column label="申请人" prop="staffName1" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="auditflowState" label="状态" width="100">
+          <el-table-column label="状态" prop="auditflowState" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowdetaiState=='0'">
-                <div class="if_spz"></div>
-                &nbsp;&nbsp;<span>待审</span>
-              </div>
-              <div v-if="scope.row.auditflowdetaiState=='1'">
+              <div v-if="scope.row.auditflowState=='0'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待我审批</span>
               </div>
 
-
-              <div v-if="scope.row.auditflowdetaiState=='2'">
-                <div class="if_tg"></div>
-                &nbsp;&nbsp;<span>通过</span>
-              </div>
-
-              <div v-if="scope.row.auditflowdetaiState=='3'">
-                <div class="if_bh"></div>
-                &nbsp;&nbsp;<span>驳回</span>
-              </div>
-
-
             </template>
 
           </el-table-column>
-          <el-table-column prop="staffName2" label="当前审批人" width="150"/>
-          <el-table-column prop="updatedTime" label="最近处理" width="150"/>
+          <el-table-column label="当前审批人" prop="staffName2" width="150"/>
+          <el-table-column label="最近处理" prop="updatedTime" width="150"/>
 
           <el-table-column label="操作">
             <template #default="scope">
               <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
                   :icon="InfoFilled"
+                  cancel-button-text="取消"
+                  confirm-button-text="确定"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="through1()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
               >
                 <template #reference>
-                  <el-button type="text">通过 </el-button>
+                  <el-button type="text">通过</el-button>
                 </template>
               </el-popconfirm>
               <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
                   :icon="InfoFilled"
+                  cancel-button-text="取消"
+                  confirm-button-text="确定"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="through2()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
               >
                 <template #reference>
-                  <el-button type="text">驳回 </el-button>
+                  <el-button type="text">驳回</el-button>
                 </template>
               </el-popconfirm>
 
-              <el-button type="text"   @click="selectById(scope.row)">详情 </el-button>
+              <el-button type="text" @click="selectById(scope.row)">详情</el-button>
 
             </template>
           </el-table-column>
+
+
         </el-table>
         <!-- 分页插件 -->
         <br>
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
-              :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo.total"
+              :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
+              :total="pageInfo.total"
               background
+              layout="total, sizes, prev, pager, next, jumper"
               @size-change="selectAuditflow(1)"
               @current-change="selectAuditflow(1)"
           >
@@ -166,7 +152,8 @@
         </span>
       </el-drawer>
       <!-- 已办申请页面 -->
-      <el-tab-pane>
+      <!-- 已办申请页面 -->
+      <el-tab-pane >
         <template #label>
           <span @click="selectAuditflow(2)">已办申请</span>
         </template>
@@ -178,77 +165,82 @@
             style="width: 200px"
         />
         &nbsp;
-        <el-button type="success" plain style="margin-bottom: 20px">搜索</el-button>
+        <el-button plain style="margin-bottom: 20px"  @click="selectAuditflow(2)" type="success">搜索</el-button>
 
         <el-table
             ref="filterTable"
-            row-key="date"
-            :data="tableData1"
-            style="width: 100%"
-            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
             :cell-style="{textAlign: 'center'}"
+            :data="tableData1"
+            :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
+            row-key="date"
+            style="width: 100%"
 
         >
           <el-table-column
-              prop="createdTime"
-              label="日期"
-              sortable
-              width="140"
-              column-key="date"
+              :filter-method="filterHandler"
               :filters="[
               { text: '2016-05-01', value: '2016-05-01' },
               { text: '2016-05-02', value: '2016-05-02' },
               { text: '2016-05-03', value: '2016-05-03' },
               { text: '2016-05-04', value: '2016-05-04' },
             ]"
-              :filter-method="filterHandler"
+              column-key="date"
+              label="日期"
+              prop="createdTime"
+              sortable
+              width="140"
           />
-          <el-table-column prop="auditflowId" label="审批编号" width="100"/>
-          <el-table-column prop="auditflowTitle" label="流程" width="100"/>
-          <el-table-column prop="staffName1" label="申请人" width="150"/>
+          <el-table-column label="审批编号" prop="auditflowId" width="100"/>
+          <el-table-column label="流程" prop="auditflowTitle" width="100"/>
+          <el-table-column label="申请人" prop="staffName1" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column prop="auditflowdetaiState" label="状态" width="100">
+          <el-table-column label="状态" prop="auditflowdetaiState" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowdetaiState=='2'" >
-                <div class="if_tg"></div>
-                &nbsp;&nbsp;<span>通过</span>
+              <div v-if="scope.row.auditflowdetaiState=='0'">
+                <div class="if_spz"></div>
+                &nbsp;&nbsp;<span>待审</span>
               </div>
-
-              <div v-if="scope.row.auditflowdetaiState=='3'" >
-                <div class="if_bh"></div>
-                &nbsp;&nbsp;<span>驳回</span>
-              </div>
-
-              <div v-if="scope.row.auditflowdetaiState=='1'" >
+              <div v-if="scope.row.auditflowdetaiState=='1'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待我审批</span>
               </div>
 
+
+              <div v-if="scope.row.auditflowdetaiState=='2'">
+                <div class="if_tg"></div>
+                &nbsp;&nbsp;<span>通过</span>
+              </div>
+
+              <div v-if="scope.row.auditflowdetaiState=='3'">
+                <div class="if_bh"></div>
+                &nbsp;&nbsp;<span>驳回</span>
+              </div>
+
             </template>
 
           </el-table-column>
-          <el-table-column prop="updatedTime" label="最近处理" width="140"/>
+          <el-table-column label="最近处理" prop="updatedTime" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text"  @click="selectById(scope.row)">详情</el-button>
+              <el-button type="text" @click="selectById(scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
+
         <!-- 分页插件 -->
         <br>
-
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo1.currentPage"
-              :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo1.pagesize"
               :default-page-size="pageInfo1.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo1.total"
+              :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
+              :total="pageInfo1.total"
               background
+              layout="total, sizes, prev, pager, next, jumper"
               @size-change="selectAuditflow(2)"
               @current-change="selectAuditflow(2)"
           >
@@ -361,6 +353,7 @@ export default {
             console.log(response);
             this.auditflow = response.data.data;
             this.auditflow0 = this.auditflow[0]
+            this.auditflow0.staffName2=row.staffName2//绑定当前审批人
             this.activeVal()
           })
           .catch(function (error) {

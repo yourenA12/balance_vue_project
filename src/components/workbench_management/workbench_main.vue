@@ -1,8 +1,8 @@
 <template>
   <!-- 页面背景以及页面主身体 -->
 
-  <div class="body_backgrund" >
-    <div class="body_2" >
+  <div class="body_backgrund">
+    <div class="body_2">
       <div>
         <!-- 欢迎卡片 -->
         <div>
@@ -12,9 +12,56 @@
 
             </div>
             <!-- 欢迎语句 -->
-            <div class="text_left_crld" style="display: inline-block;">
+            <div class="text_left_crld" style="display: inline-block;width: 570px">
               <h3>欢迎你：XXX，祝你工作顺利<br>
+                <el-popover
+                    ref="popover"
+                    placement="right"
+                    :width="400"
+                    trigger="click"
+                >
+
+                  <div>
+                    <span>  <i class="iconfont">&#xe67f;</i> <b
+                        style="position: absolute;top: 29px;">{{ getdates() }}</b></span>
+                    <div>
+                      <el-timeline>
+                        <el-timeline-item timestamp="上班时间" placement="top">
+                          <el-button @click="cardadd()" v-show="this.staffClock.mornClock==null"
+                                     style="float: right;width: 80px;margin-right: 43px;margin-top: -25px;"
+                                     type="primary">上班打卡
+                          </el-button>
+                          <div>
+                            <span style="font-size: 12px;padding-right: 10px;">打卡时间 : {{ staffClock.mornClock }}</span>
+                            <p>&nbsp;</p>
+
+                          </div>
+                        </el-timeline-item>
+
+                        <el-timeline-item timestamp="下班时间" placement="top">
+                          <el-button @click="amend()" v-show="this.staffClock.afternoonClock==null"
+                                     style="float: right;width: 80px;margin-right: 43px;margin-top: -25px;"
+                                     type="primary">下班打卡
+                          </el-button>
+                          <div>
+                            <span style="font-size: 12px;padding-right: 10px;">打卡时间 : {{
+                                staffClock.afternoonClock
+                              }}</span>
+                            <span style="font-size: 12px"></span>
+                          </div>
+                        </el-timeline-item>
+
+                      </el-timeline>
+                    </div>
+
+                  </div>
+
+                  <template #reference>
+                    <el-button style="width: 100px; float:right" type="primary" plain>打卡</el-button>
+                  </template>
+                </el-popover>
                 <span class="font_xu">公司的 | 超级大 | boss</span></h3>
+
             </div>
           </div>
           <!-- 待办事项div -->
@@ -23,7 +70,7 @@
             <div class="hp_crld_ringht_dpsx">
 							<span>
 								<el-icon class="i_con_svg" style="display: inline-block">
-									<i-tickets />
+									<i-tickets/>
 								</el-icon>
                 <h4 style="display: inline-block">待办事项</h4>
 							</span>
@@ -61,16 +108,16 @@
         </div>
         <!-- 便捷入口div -->
         <el-icon class="i_con_svg" style="display: inline-block;margin-left: 20px;">
-          <i-tickets />
+          <i-tickets/>
 
         </el-icon>
         <h3 style="display: inline-block">便捷入口</h3>
         <div class="body_center_bjrk">
 
           <el-col :span="8">
-            <el-card shadow="hover" class="body_col_1" >
+            <el-card shadow="hover" class="body_col_1">
               <el-icon>
-                <i-avatar class="i_icon_svg" />
+                <i-avatar class="i_icon_svg"/>
               </el-icon>
               <span class="right_font">审批管理</span>
             </el-card>
@@ -78,7 +125,7 @@
           <el-col :span="8">
             <el-card shadow="hover" class="body_col_2">
               <el-icon>
-                <i-avatar class="i_icon_svg" />
+                <i-avatar class="i_icon_svg"/>
               </el-icon>
               <span class="right_font">用户</span>
             </el-card>
@@ -86,7 +133,7 @@
           <el-col :span="8">
             <el-card shadow="hover" class="body_col_3">
               <el-icon>
-                <i-avatar class="i_icon_svg" />
+                <i-avatar class="i_icon_svg"/>
               </el-icon>
               <span class="right_font">用户</span>
             </el-card>
@@ -94,7 +141,7 @@
           <el-col :span="8">
             <el-card shadow="hover" class="body_col_4">
               <el-icon>
-                <i-avatar class="i_icon_svg" />
+                <i-avatar class="i_icon_svg"/>
               </el-icon>
               <span class="right_font">用户</span>
             </el-card>
@@ -102,12 +149,11 @@
           <el-col :span="8">
             <el-card shadow="hover" class="body_col_5">
               <el-icon>
-                <i-avatar class="i_icon_svg" />
+                <i-avatar class="i_icon_svg"/>
               </el-icon>
               <span class="right_font">用户</span>
             </el-card>
           </el-col>
-
 
 
           <div class="right_float_gg">
@@ -120,15 +166,14 @@
 
             <div v-for="(item,index) in tableData1" class="noticeV">
 
-              {{item.noticeTitle}}
+              {{ item.noticeTitle }}
 
-              <el-button class="button_left_xq" type="text"  @click="drawer = true">详情</el-button>
+              <el-button class="button_left_xq" type="text" @click="drawer = true">详情</el-button>
 
             </div>
 
 
             <div style="border-bottom: 1px solid #dddddd;"></div>
-
 
 
             <el-drawer v-model="drawer" :with-header="false" title="I am the title" v-for="item in tableData1">
@@ -137,7 +182,7 @@
               </div>
               <br>
               <div style="margin: 30px">
-                {{item.noticeMatter}}
+                {{ item.noticeMatter }}
               </div>
               <el-form :model="item" label-width="">
                 <el-form-item label="公告发起人 :">
@@ -150,13 +195,12 @@
               </el-form>
               <br>
               <br>
-              <el-button type="primary" @click="" >&nbsp;&nbsp; 确定收到&nbsp;&nbsp;</el-button>
-              <el-button style="display: none" type="primary" @click="" disabled >&nbsp;&nbsp; 已确认 &nbsp;&nbsp;</el-button>
+              <el-button type="primary" @click="">&nbsp;&nbsp; 确定收到&nbsp;&nbsp;</el-button>
+              <el-button style="display: none" type="primary" @click="" disabled>&nbsp;&nbsp; 已确认 &nbsp;&nbsp;
+              </el-button>
             </el-drawer>
 
           </div>
-
-
 
 
         </div>
@@ -171,17 +215,21 @@
           <span>{{ date }}</span>
           <el-button-group>
             <el-button size="mini" @click="selectDate('prev-year')"
-            >上一年</el-button
+            >上一年
+            </el-button
             >
             <el-button size="mini" @click="selectDate('prev-month')"
-            >上一月</el-button
+            >上一月
+            </el-button
             >
             <el-button size="mini" @click="selectDate('today')">今天</el-button>
             <el-button size="mini" @click="selectDate('next-month')"
-            >下一月</el-button
+            >下一月
+            </el-button
             >
             <el-button size="mini" @click="selectDate('next-year')"
-            >下一年</el-button
+            >下一年
+            </el-button
             >
           </el-button-group>
         </template>
@@ -214,50 +262,59 @@
 <style scoped>
 /*导入主界面外部样式*/
 @import url("../../css/work_min.css");
-.body_col_1{
+
+.body_col_1 {
   background: rgb(35, 102, 167);
   color: #fff;
 }
-.body_col_2{
+
+.body_col_2 {
   background: #E6A23C;
   color: #fff;
 }
-.body_col_3{
+
+.body_col_3 {
   background: #409EFF;
   color: #fff;
 }
-.body_col_4{
+
+.body_col_4 {
   background: #909399;
   color: #fff;
 }
-.body_col_5{
+
+.body_col_5 {
   background: #F56C6C;
   color: #fff;
 }
+
 /*日历样式*/
-.el-calendar-table{
+.el-calendar-table {
   background: #ddd;
 }
+
 /* 公司公告 */
-.noticeV{
+.noticeV {
   padding: 10px;
   margin: 10px;
   font-size: 14px;
   /*这里要显示的设置宽度*/
-  overflow:hidden;
-  white-space:nowrap;
+  overflow: hidden;
+  white-space: nowrap;
   /*文字超出宽度则显示ellipsis省略号*/
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   /* background: #0c9c6e;*/
 }
-.button_left_xq{
+
+.button_left_xq {
   float: right;
 }
 </style>
 
 <script>
 import * as echarts from 'echarts';
-import { defineComponent, ref } from 'vue'
+import {defineComponent, ref} from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   setup() {
@@ -269,14 +326,32 @@ export default {
     return {
       calendar,
       selectDate,
+      // staffClock:{},
+
 
     }
   },
   data() {
     return {
       activeName: 'first',
-      tableData1:[],
-      drawer:false,
+      tableData1: [],
+      drawer: false,
+
+      id: 1,
+
+      staffClock: {
+        clockRecordId:'',
+        mornClock: null,
+        afternoonClock: null
+      },
+
+      clockVal: {
+        mornClock: new Date(),
+        // afternoonClock: new Date(),
+        deptId: 1,
+        staffId: 1,
+        clockRecordId:11,
+      }
 
     }
   },
@@ -297,7 +372,96 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event)
     },
+    //获取当前年月日
+    getdates() {
+      var date = new Date();
+      var seperator1 = "-";
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      var currentdate = year + " 年 " + month + " 月 " + strDate + "日";
+      return currentdate;
+    },
+    //查询员工打卡
+    card() {
+      this.axios
+          .get("http://localhost:8010/provider/card/" + 1)
+          .then((response) => {
+            if (response.data.data == null) {
+              return
+            }
+            this.staffClock = response.data.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    //添加打卡
+    cardadd() {
+      this.axios
+          .post("http://localhost:8010/provider/add", this.clockVal)
+          .then((response) => {
+
+            if (response.data.data === "成功") {
+              ElMessage.success("打卡成功")
+              this.card()
+            } else {
+              ElMessage.error("打卡失败")
+            }
+          }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    //修改打卡
+    // amend(){
+    //
+    //   this.axios
+    //       .put("http://localhost:8010/provider/amend")
+    //       .then((response) => {
+    //         data:{
+    //           clockRecordId:this.staffClock.clockRecordId;
+    //           afternoonClock:this.staffClock.afternoonClock;
+    //
+    //         }
+    //         if( response.data.data ==="成功" ){
+    //           ElMessage.success('打卡成功')
+    //         }else{
+    //           ElMessage.error('打卡失败')
+    //         }
+    //       }).catch(function (error){
+    //     console.log(error);
+    //   })
+    // }
+    amend() {
+      this.axios({
+        url: 'http://localhost:8010/provider/amend',
+        method: 'put',
+        data: {
+          clockRecordId: this.staffClock.clockRecordId,
+          afternoonClock: new Date(),
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data === "成功") {
+          ElMessage.success("打卡成功")
+          this.card()
+        } else {
+          ElMessage.error("打卡失败")
+        }
+
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
   },
+
   mounted() {
     var chartDom = document.getElementById('main1');
     var myChart = echarts.init(chartDom);
@@ -587,11 +751,15 @@ export default {
     };
     option && myChart.setOption(option);
     option1 && myChart1.setOption(option1);
-  },created() {
+  }
+  , created() {
     this.selectById(1);
+
+    // 分页查询
+    this.card();
+
   }
 }
-
 
 
 </script>

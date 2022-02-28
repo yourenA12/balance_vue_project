@@ -23,7 +23,7 @@
 
     <!--新增按钮-->
     <div class="head-surface">
-      <el-button size="small" type="primary" plain @click="submitType='新增',drawer = true,this.fo={},this.fo.deptPid=1,this.fo.deptPName='无'">
+      <el-button size="small" type="primary" plain @click="submitType='新增',drawer = true,this.fo={},this.fo.deptPid=0,this.fo.deptPName='无',this.fo.deptState=1">
         <el-icon>
           <i-plus/>
         </el-icon>
@@ -314,7 +314,7 @@ export default {
         deptPName:"",
         staffId: "",
         staffName: "",
-        deptState: "1",
+        deptState: "",
       },
 
       //分页
@@ -361,7 +361,7 @@ export default {
       optionss: ref([
 
       ]),
-      values: ref(''),
+
       deptData: [],
       //验证
       rules: {
