@@ -138,6 +138,9 @@
             <el-table-column type="selection" width="55"/>
             <el-table-column prop="staffName" label="姓名"/>
             <el-table-column prop="defInsuredName" label="参保方案" />
+            <el-table-column prop="defInsuredName" label="部门" />
+            <el-table-column prop="defInsuredName" label="职位" />
+            <el-table-column prop="defInsuredName" label="状态" />
             <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费" />
             <el-table-column prop="insDetailSocialFirmPay" label="社保企业缴费" />
             <el-table-column prop="insDetailFundPersonPay" label="公积金个人缴费" />

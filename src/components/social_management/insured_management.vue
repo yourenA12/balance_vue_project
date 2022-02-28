@@ -224,6 +224,7 @@
 <script>
 import {ref, defineComponent} from "vue";
 import qs from "qs";
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -328,8 +329,26 @@ export default {
 
     // 提交，新增参保方案员工中间表
     submitAdd(){
-
-
+      this.axios({
+        url: 'http://localhost:8010/provider//socialStaffVo/insertsocial',
+        method: 'post',
+        data:{
+          zbId:this.scheme_name,
+          staffIds:this.xzStaffIds
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectEmps() // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
 
 
     },
