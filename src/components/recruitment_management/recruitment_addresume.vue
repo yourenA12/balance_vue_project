@@ -42,7 +42,7 @@
                   <el-option label="女" value="女"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="出生日期：" prop="birthday">
+              <el-form-item label="出生日期：" prop="day">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="formInline.day"
@@ -52,6 +52,12 @@
                   ></el-date-picker>
                 </el-col>
               </el-form-item>
+              <el-form-item label="年 龄：" prop="adg">
+                <el-input v-model="formInline.adg"></el-input>
+              </el-form-item>
+              <el-form-item label="毕业学校：" prop="byschool">
+                <el-input v-model="formInline.byschool"></el-input>
+              </el-form-item>
 
               <div style="display: block;">
                 <el-form-item label="手机号：" prop="phone">
@@ -60,7 +66,7 @@
                 <el-form-item label="邮 箱：" prop="mailbox">
                   <el-input v-model="formInline.mailbox"></el-input>
                 </el-form-item>
-                <el-form-item label="所在地：" prop="location">
+                <el-form-item label="所在地：" prop="Location">
                   <el-input v-model="formInline.Location"></el-input>
                 </el-form-item>
               </div>
@@ -93,7 +99,7 @@
 <!--                    <el-option label="Hr人力资源专员" value="Hr人力资源专员"></el-option>-->
 <!--                  </el-select>-->
 <!--                </el-form-item>-->
-                <el-form-item label="招聘计划:" prop="plan">
+                <el-form-item label="招聘计划:" prop="recruitmentPlanId">
                   <el-select v-model="formInline.recruitmentPlanId" placeholder="请选择" style="width: 240px;">
                     <el-option
                         v-for="item in zpjhlists"
@@ -121,17 +127,17 @@
               <br>
             </span>
 
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form :inline="true" :rules="rules" ref="formInline1" :model="formInline" class="demo-form-inline">
 
-              <el-form-item label="学校名称：">
+              <el-form-item label="学校名称：" prop="school">
                 <el-input v-model="formInline.school"></el-input>
               </el-form-item>
 
-              <el-form-item label="所学专业：">
+              <el-form-item label="所学专业：" prop="major">
                 <el-input v-model="formInline.major"></el-input>
               </el-form-item>
 
-              <el-form-item label="开始时间：">
+              <el-form-item label="开始时间：" prop="start">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="formInline.start"
@@ -142,7 +148,7 @@
                 </el-col>
               </el-form-item>
 
-              <el-form-item label="结束时间：">
+              <el-form-item label="结束时间：" prop="end">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="formInline.end"
@@ -153,7 +159,7 @@
                 </el-col>
               </el-form-item>
 
-              <el-form-item label="是否全日制：">
+              <el-form-item label="是否全日制：" prop="full_time">
                 <el-radio-group v-model="formInline.full_time">
                   <el-radio :label="0">是</el-radio>
                   <el-radio :label="1">否</el-radio>
@@ -174,17 +180,17 @@
             </span>
 
 
-            <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="公司名称：">
+            <el-form :inline="true" :rules="rules" ref="formInline2" :model="formInline" class="demo-form-inline">
+              <el-form-item label="公司名称：" prop="company">
                 <el-input v-model="formInline.company"></el-input>
               </el-form-item>
 
-              <el-form-item label="职位名称：">
+              <el-form-item label="职位名称：" prop="position">
                 <el-input v-model="formInline.position"></el-input>
               </el-form-item>
 
 
-              <el-form-item label="开始时间：">
+              <el-form-item label="开始时间：" prop="start1">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="formInline.start1"
@@ -195,7 +201,7 @@
                 </el-col>
               </el-form-item>
 
-              <el-form-item label="结束时间：">
+              <el-form-item label="结束时间：" prop="end1">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="formInline.end1"
@@ -206,11 +212,11 @@
                 </el-col>
               </el-form-item>
 
-              <el-form-item label="所属行业：">
+              <el-form-item label="所属行业：" prop="industry">
                 <el-input v-model="formInline.industry"></el-input>
               </el-form-item>
 
-              <el-form-item label="税前月薪：">
+              <el-form-item label="税前月薪：" prop="salary">
                 <el-input v-model="formInline.salary"></el-input>
               </el-form-item>
 
@@ -223,7 +229,7 @@
               </el-form-item>
             </el-form>
 
-            <el-button type="primary" @click="submitForm('formInline')">提交</el-button>
+            <el-button type="primary" @click="submitForm('formInline','formInline1','formInline2')">提交</el-button>
             <el-button  @click="resetForm('formInline')">重置</el-button>
             <el-button @click="goblack()">取消</el-button>
 
@@ -238,10 +244,13 @@
 
 <script>
 import {ref} from 'vue'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
     return {
+
+
       zpjhlists:[],
       src: '',
       isShow: false,
@@ -249,10 +258,12 @@ export default {
         name:'',
         sex: '',
         day:'',
+        adg:'',
         phone:'',
         mailbox:'',
         Location:'',
         education:'',
+        byschool:'',
         politics:'',
         recruitmentPlanId:'',
         school:'',
@@ -268,6 +279,7 @@ export default {
         salary:'',
         radio: ref(0),
         describe: ref(''),
+
       },
 
       rules: {
@@ -278,7 +290,7 @@ export default {
         sex: [
           { required: true, message: '请选择性别', trigger: 'change' }
         ],
-        birthday: [
+        day: [
           { type: 'date', required: true, message: '请选择出生日期', trigger: 'change' }
         ],
         phone: [
@@ -288,19 +300,207 @@ export default {
         mailbox: [
           { required: true, message: '请输入邮箱', trigger: 'change' }
         ],
-        location: [
+        Location: [
           { required: true, message: '请输入户口所在地', trigger: 'change' }
         ],
         education: [
-          { required: true, message: '请选择你的学历', trigger: 'blur' }
+          { required: true, message: '请选择你的学历', trigger: 'change' }
         ],
-        plan:[
-          { required: true, message:'请选择招聘计划' , trigger:'blur'}
+        recruitmentPlanId:[
+          {  required: true,
+            message: '招聘计划名称不能为空!!!',
+            trigger: 'change',}
+        ],
+        adg:[
+          {
+            required:true,
+            message:'年龄不能为空',
+            trigger:'change'
+          }
+        ],
+        byschool: [
+          {
+            required:true,
+            message:'学校不能为空',
+            trigger:'change'
+          }
+        ],
+
+        school:[
+          {
+            required:true,
+            message:'学校名称不能为空！！',
+            trigger:'change'
+          }
+        ],
+        major:[
+          {
+            required:true,
+            message:'专业不能为空！！',
+            trigger:'change'
+          }
+        ],
+        start:[
+          {
+            required:true,
+            message:'开始时间不能为空！！',
+            trigger:'change'
+          }
+        ],
+        end:[
+          {
+            required:true,
+            message:'结束时间不能为空！！',
+            trigger:'change'
+          }
+        ],
+        full_time:[
+          {
+            required:true,
+            message:'是否全日制不能为空！！',
+            trigger:'change'
+          }
+        ],
+
+        company:[
+          {
+            required:true,
+            message:'公司名称不能为空！！',
+            trigger:'change'
+          }
+        ],
+        position:[
+          {
+            required:true,
+            message:'职位名称不能为空！！',
+            trigger:'change'
+          }
+        ],
+        start1:[
+          {
+            required:true,
+            message:'开始时间不能为空！！',
+            trigger:'change'
+          }
+        ],
+        end1:[
+          {
+            required:true,
+            message:'结束时间不能为空！！',
+            trigger:'change'
+          }
+        ],
+        industry:[
+          {
+            required:true,
+            message:'所属行业不能为空！！',
+            trigger:'change'
+          }
+        ],
+        salary:[
+          {
+            required:true,
+            message:'税前月薪不能为空！！',
+            trigger:'change'
+          }
         ]
-      }
+
+      },
+
+      resumeVal:null,
+      workVal:null,
+      educationVal:null,
     }
   },
   methods: {
+    //取值
+    reVal(){
+
+      //简历表基本信息
+      let resumes={
+        // 姓名
+        resumeName: this.formInline.name,
+        //性别
+        resumeSex: this.formInline.sex,
+        // 出生日期
+        resumeBirthday: this.formInline.day,
+        //手机号
+        resumePhone: this.formInline.phone,
+        //年龄
+        resumeAge: this.formInline.adg,
+        //邮箱
+        resumeMailbox: this.formInline.mailbox,
+        // 所在地
+        resumeResidence: this.formInline.Location,
+        //毕业学校
+        resumeScoller:this.formInline.byschool,
+        //学历
+        resumeEducation: this.formInline.education,
+        //政治面貌
+        resumePoliticalOutlook: this.formInline.politics,
+        //招聘计划
+        recruitmentPlanId: this.formInline.recruitmentPlanId,
+      }
+      let educations={
+        // 学校名称
+        educationStudentname: this.formInline.school,
+        //所学专业
+        educationMajor: this.formInline.major,
+        // 开始时间
+        educationStartTime: this.formInline.start,
+        //结束时间
+        educationEndTime: this.formInline.end,
+        //是否全日制
+        educationFullTime: this.formInline.full_time,
+      }
+      let work={
+        // 公司名称
+        companyName: this.formInline.company,
+        //职位名称
+        positionName: this.formInline.position,
+        // 开始时间
+        workStareTime: this.formInline.start1,
+        //结束时间
+        workEndTime: this.formInline.end1,
+        //所属行业
+        positionIndustry: this.formInline.industry,
+        //税前月薪
+        positionSqmonthly: this.formInline.salary,
+        //工作描述
+        positionDescribe: this.formInline.describe,
+
+      }
+      this.insertResume(resumes,educations,work)
+
+    },
+
+    //添加简历
+    insertResume(resumes,educations,work){
+      this.axios({
+        url: 'http://localhost:8010/provider/resume/resumes',
+        method: 'post',
+        data:{
+          Resume:resumes,
+          WorkExperiencess:work,
+          Educationss:educations
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
+
     uploadImg(e) {
       let _this = this;
       let files = e.target.files[0];
@@ -339,15 +539,39 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    submitForm(formName) {
+    submitForm(formName,formName1,formName2) {
+
+      let submits=0
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          submits++
         } else {
           console.log('error submit!!');
           return false;
         }
       });
+
+      this.$refs[formName1].validate((valid) => {
+        if (valid) {
+          submits++
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+
+      this.$refs[formName2].validate((valid) => {
+        if (valid) {
+          submits++
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+
+      if (submits==3) this.reVal()
+
     },
 
   },created() {
