@@ -116,7 +116,7 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 提交按钮 -->
-          <el-button style="width:75px" size="small" type="primary" plain>提交 </el-button>
+          <el-button style="width:75px" v-bind:disabled="disableds" size="small" type="primary" @click="xzpl()" plain>提交 </el-button>
 
           <!-- 搜索框 -->
 <!--          <el-input v-model="search" size="small" class="resume-operation" placeholder="搜索">-->
@@ -177,6 +177,7 @@
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
           <el-table :data="emps_table" style="width: 100%"
+                    @selection-change="deletepl"
                     :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}"
           >
@@ -245,6 +246,15 @@ export default {
       //存放部门信息
       deptlists: [],
 
+      //选中的员工id
+      xzStaffIds:[],
+      // 多选时 数据
+      tableVal:[],
+
+
+      //按钮是否被禁用
+      disableds:true,
+
 
 
       path: "/social/basic_setup/insured_scheme",
@@ -288,6 +298,31 @@ export default {
     };
   },
   methods:{
+
+    // 多选删除按钮是否被禁用
+    xzpl(val){
+      // 选中的值
+      this.tableVal=val
+      // 清空选中 id
+      this.xzStaffIds=[]
+
+      // 循环获取选中行的id
+      for(let i=0;i<val.length;i++){
+        this.xzStaffIds.push( val[i].staffId )
+      }
+
+      // 如果没有选中 将删除按钮禁用
+      if(this.tableVal != ''&&this.scheme_name!=''){
+        this.disableds=false
+      }else {
+        this.disableds=true
+      }
+    },
+
+    aa(){
+      alert(this.scheme_name)
+    },
+
     //搜索框重置
     replacement() {
       this.pageInfo.currentPage = 1,
