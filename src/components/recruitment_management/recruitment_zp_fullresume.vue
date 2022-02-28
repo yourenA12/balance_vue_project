@@ -112,7 +112,7 @@
           <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
             <div style="width: 110px">
-              <el-button type="text" size="small" @click="">设为候选人</el-button>
+              <el-button type="text" size="small" @click="">编辑</el-button>
 
 <!--              <el-button type="text" size="small" @click="open()" style="color: #ea7c99;">删除</el-button>-->
               <el-popconfirm title="是否确认删除?" @confirm="confirmsc(scope.row)" @cancel="cancelsc()">
@@ -285,7 +285,26 @@ export default {
     },
     empMsg(resumeId){
       this.$router.push({path:this.details,query:{path:this.$route.query.path,resumeId:resumeId}})
-    }
+    },
+    //设为候选人
+    Hxiugai(row){
+
+      this.fo.resumeId=row.resumeId
+
+      this.axios
+          .put("http://localhost:8010/provider/resume/resume/zeliminate",this.fo)
+          .then((response) => {
+
+            if( response.data.data ==="成功" ){
+              ElMessage.success('修改成功')
+              this.selectnewresume_plan()
+            }else{
+              ElMessage.error('修改失败')
+            }
+          }).catch(function (error){
+        console.log(error);
+      })
+    },
 
 },
   created(){
