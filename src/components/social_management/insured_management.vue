@@ -478,6 +478,10 @@ export default {
   margin-left: 135px;
 }
 
+.xxx{
+  display: none;
+}
+
 /* 开关 */
 .form-seitch {
   padding: 40px 0 40px 0;
