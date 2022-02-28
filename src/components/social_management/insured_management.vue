@@ -119,31 +119,59 @@
           <el-button style="width:75px" size="small" type="primary" plain>提交 </el-button>
 
           <!-- 搜索框 -->
-          <el-input v-model="search" size="small" class="resume-operation" placeholder="搜索">
-            <template #suffix>
-              <el-icon class="el-input__icon">
-                <i-search/>
-              </el-icon>
-            </template>
-          </el-input>
+<!--          <el-input v-model="search" size="small" class="resume-operation" placeholder="搜索">-->
+<!--            <template #suffix>-->
+<!--              <el-icon class="el-input__icon">-->
+<!--                <i-search/>-->
+<!--              </el-icon>-->
+<!--            </template>-->
+<!--          </el-input>-->
+
+
+
+          <el-input style="width: 200px;margin-left: 390px;" size="small" v-model="pageInfo.staffNameSearch" placeholder="请输入用户名称"/>
 
           <!-- 下拉选择器 -->
-          <div style="width: 200px" class="resume-operation">
-            <el-select
-                size="small"
-                v-model="dept_name"
-                clearable
-                placeholder="选择部门"
-            >
+<!--          <div style="width: 200px" class="resume-operation">-->
+
+            <el-select v-model="deptId" size="small" multiple ref="vueSelect" @change="onchange()" @click="onclicks()"  placeholder="选择部门" style="margin-left: 15px">
+              <el-option hidden></el-option>
               <el-option
-                  v-for="item in depts"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  class="xxx"
+                  v-for="item in dept"
+                  :key="item.deptId"
+                  :label="item.deptName"
+                  :value="item.deptId"
               >
               </el-option>
+              <el-tree :data="deptlists"
+                       show-checkbox
+                       :default-expand-all=true
+                       :check-on-click-node=true
+                       node-key="deptId"
+                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
             </el-select>
-          </div>
+
+          <el-select placeholder="请选择状态" size="small" v-model="pageInfo.stateSearch" style="margin-left: 15px;">
+            <el-option label="正式" value="3" style="margin-left: 15px"></el-option>
+            <el-option label="试用" value="2" style="margin-left: 15px"></el-option>
+          </el-select>
+<!--          </div>-->
+
+          <el-button @click="selectsocialStaffPage()" size="small" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
+            <el-icon>
+              <i-search/>
+            </el-icon>
+            搜索
+          </el-button>
+          <el-button @click="replacement()" size="small"  style="width: 80px;" >
+            <el-icon>
+              <i-refresh/>
+            </el-icon>
+            重置
+          </el-button>
+
+
         </div>
 
         <!-- 表格内容部分 -->
@@ -154,20 +182,25 @@
           >
             <!-- 多选框 -->
             <el-table-column type="selection" width="55"/>
-            <el-table-column prop="id" label="编号"/>
-            <el-table-column prop="name" label="姓名"/>
-            <el-table-column prop="dept" label="部门"/>
-            <el-table-column prop="post" label="职位"/>
-            <el-table-column prop="phone" label="电话号码"/>
-            <el-table-column prop="hiredate" label="入职日期"/>
-            <el-table-column prop="positive_dates" label="转正日期"/>
+            <el-table-column prop="staffName" label="姓名"/>
+            <el-table-column prop="deptName" label="部门"/>
+            <el-table-column prop="staffState" label="状态">
+              <template #default="scope">
+              <span style="color:#fa8c16;" v-if="scope.row.staffState==2">试用</span>
+              <span style="color: #13c2c2;" v-if="scope.row.staffState==3">正式</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="positionName" label="职位"/>
+            <el-table-column prop="staffPhone" label="电话号码"/>
+            <el-table-column prop="staffHiredate" label="入职日期"/>
+            <el-table-column prop="workerDate" label="转正日期"/>
           </el-table>
         </div>
 
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-              v-model:currentPage="pageInfo.currentPage"
+              v-model:currentPage="pageInfo.currenPage"
               :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
@@ -175,8 +208,8 @@
               :total="pageInfo.total"
               :pager-count="5"
               background
-              @size-change="selectUsers"
-              @current-change="selectUsers"
+              @size-change="selectsocialStaffPage"
+              @current-change="selectsocialStaffPage"
           >
           </el-pagination>
         </div>
@@ -188,10 +221,32 @@
 
 <script>
 import {ref, defineComponent} from "vue";
+import qs from "qs";
 
 export default {
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value:'deptId'
+    }
     return {
+      res:"",
+      // 选中值1
+      res1:"",
+      // 选中值2
+      res2:"",
+      // 部门  文本框的值
+      dept:[],
+      deptId:[],
+      // 格式
+      defaultProps,
+      //存放部门信息
+      deptlists: [],
+
+
+
       path: "/social/basic_setup/insured_scheme",
       // 参保方案
       scheme_name: null,
@@ -200,9 +255,16 @@ export default {
       name: "",
       // 分页参数
       pageInfo: {
-        currentPage: 1, //当前页
+        currenPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
+
+        // 员工名称
+        staffNameSearch: '',
+        // 部门名称
+        deptSearch: '',
+        //员工状态
+        stateSearch:'',
       },
       // 部门名称
       dept_name: null,
@@ -215,53 +277,7 @@ export default {
       // 表格上的 搜索框
       search: null,
       // 未参保人员表数据
-      emps_table: [
-        {
-          id: 1, // 员工id
-          name: "员工1", // 员工名称
-          dept: "部门1", // 员工所属部门
-          post: "职位1", // 员工职位
-          phone: "11111", // 员工手机号
-          hiredate: "1999-12-11", // 员工入职日期
-          positive_dates: "2000-02-11", // 员工转正日期
-        },
-        {
-          id: 2, // 员工id
-          name: "Tom", // 员工名称
-          dept: "California", // 员工所属部门
-          post: "2", // 员工职位
-          phone: "2", // 员工手机号
-          hiredate: "2", // 员工入职日期
-          positive_dates: "2", // 员工转正日期
-        },
-        {
-          id: 3, // 员工id
-          name: "3", // 员工名称
-          dept: "3", // 员工所属部门
-          post: "3", // 员工职位
-          phone: "3", // 员工手机号
-          hiredate: "3", // 员工入职日期
-          positive_dates: "3", // 员工转正日期
-        },
-        {
-          id: 4, // 员工id
-          name: "4", // 员工名称
-          dept: "4", // 员工所属部门
-          post: "4", // 员工职位
-          phone: "4", // 员工手机号
-          hiredate: "4", // 员工入职日期
-          positive_dates: "4", // 员工转正日期
-        },
-        {
-          id: 5, // 员工id
-          name: "5", // 员工名称
-          dept: "5", // 员工所属部门
-          post: "5", // 员工职位
-          phone: "5", // 员工手机号
-          hiredate: "5", // 员工入职日期
-          positive_dates: "5", // 员工转正日期
-        },
-      ],
+      emps_table: [],
       // 表单验证
       rules: {
         name: [
@@ -272,6 +288,110 @@ export default {
     };
   },
   methods:{
+    //搜索框重置
+    replacement() {
+      this.pageInfo.currentPage = 1,
+          this.pageInfo.staffNameSearch = '',
+          this.pageInfo.deptSearch = '',
+          this.res2=""
+          this.pageInfo.stateSearch='',
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys([], false)
+
+
+      this.selectsocialStaffPage()
+
+    },
+
+    // 当文本框值发生变化时调用的方法
+    onchange(){
+
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys(this.deptId, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicks() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1 = this.$refs.tree.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChange(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.res = this.$refs.tree.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2 = this.$refs.tree.getCheckedKeys()
+      // 清空部门
+      this.dept = []
+      // 清空选中的部门
+      this.deptId = []
+      let x = 0
+      for (let i = 0; i < this.res.length; i++) {
+
+        for (let j = 0; j < this.res.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.res[i].deptPid != this.res[j].deptId) {
+            //并且是最后一个
+            if (j == this.res.length - 1 && x == 0) {
+              // 加入数据
+              this.dept.push(this.res[i])
+              // 赋值到文本框
+              this.deptId.push(this.res[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/dept/selectAll")
+          .then((response) => {
+            console.log(response);
+            this.deptlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    //查询全部员工
+    selectsocialStaffPage() {
+
+      let params= {
+
+        currenPage:this.pageInfo.currenPage,
+        pagesize:this.pageInfo.pagesize,
+        staffNameSearch: this.pageInfo.staffNameSearch,
+        deptIds:this.res2.length==0?'':this.res2,
+        stateSearch: this.pageInfo.stateSearch,
+
+      }
+
+      this.axios
+          .get("http://localhost:8010/provider/socialStaffVo/selectsocialPage?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .then((response) => {
+            console.log(1111111111111);
+            console.log(response);
+            this.emps_table = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+
     // 查询所有参保方案
     selectAllPage() {
       this.axios
@@ -293,6 +413,8 @@ export default {
   },
   created() {
     this.selectAllPage()
+    this.selectDeptName()
+    this.selectsocialStaffPage()
   }
 };
 </script>
