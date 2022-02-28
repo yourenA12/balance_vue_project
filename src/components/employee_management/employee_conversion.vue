@@ -7,22 +7,22 @@
         <br/>
         <!--搜索输入框-->
 
-<!--        <div style="width:100%;height: 100px;margin: auto;padding: 12px 24px;">-->
-<!--          <div class="staff_div_2" style="float:left;">-->
+        <!--        <div style="width:100%;height: 100px;margin: auto;padding: 12px 24px;">-->
+        <!--          <div class="staff_div_2" style="float:left;">-->
 
-<!--            <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>-->
-<!--            <div class="staff_div_2_text">-->
-<!--              <span>实习期人员</span><br/><span>2</span>-->
-<!--            </div>-->
-<!--          </div>-->
+        <!--            <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>-->
+        <!--            <div class="staff_div_2_text">-->
+        <!--              <span>实习期人员</span><br/><span>2</span>-->
+        <!--            </div>-->
+        <!--          </div>-->
 
-<!--          <div class="staff_div_2 " style="float: right">-->
-<!--            <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe617;</i>-->
-<!--            <div class="staff_div_2_text">-->
-<!--              <span>转正已生效</span><br/><span>2</span>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--          <div class="staff_div_2 " style="float: right">-->
+        <!--            <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe617;</i>-->
+        <!--            <div class="staff_div_2_text">-->
+        <!--              <span>转正已生效</span><br/><span>2</span>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
         <div style="margin-top:10px;">
           <!--搜索输入框-->
@@ -51,7 +51,7 @@
                        :default-expand-all=true
                        :check-on-click-node=true
                        node-key="deptId"
-                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                       :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
             </el-select>
 
 
@@ -200,7 +200,7 @@
 
             <el-form-item label="转正备注 :">
               <el-input
-                  v-model="positiveTK.remarks"
+                  v-model="positiveTK.workerRemarks"
                   type="textarea"
                   maxlength="500"
                   show-word-limit
@@ -210,39 +210,42 @@
 
 
           </div>
-        <div style="display: inline-block;width:50%;position: relative;top:-60px">
-        <el-form-item label="部门名称 :" prop="dept">
-          <el-input v-model="positiveTK.deptName" disabled style="width:240px;"></el-input>
-        </el-form-item>
+          <div style="display: inline-block;width:50%;position: relative;top:-60px">
+            <el-form-item label="部门名称 :" prop="dept">
+              <el-input v-model="positiveTK.deptName" disabled style="width:240px;"></el-input>
+            </el-form-item>
 
-        <el-form-item label="入职日期 :">
-          <el-input v-model="positiveTK.staffHiredate" disabled style="width:240px;"></el-input>
-        </el-form-item>
+            <el-form-item label="入职日期 :">
+              <el-input v-model="positiveTK.staffHiredate" disabled style="width:240px;"></el-input>
+            </el-form-item>
 
-        <el-form-item label="转正类型" prop="workerType" style="width:600px">
-          <el-select
-              v-model="positiveTK.workerType"
-              placeholder="请选择" style="width:240px;"
-          >
-            <el-option label="转正" value="转正" ></el-option>
-            <el-option label="提前转正" value="提前转正" ></el-option>
-            <el-option label="延迟转正" value="延迟转正" ></el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="转正类型" prop="workerType" style="width:600px">
+              <el-select
+                  v-model="positiveTK.workerType"
+                  placeholder="请选择" style="width:240px;"
+                  disabled
+              >
+                <el-option label="转正" value="转正"></el-option>
+                <el-option label="提前转正" value="提前转正"></el-option>
+                <el-option label="延迟转正" value="延迟转正"></el-option>
 
-          <el-form-item label="转正日期 :" prop="workersDates">
-            <el-date-picker
-                v-model="positiveTK.workersDates"
-                type="date"
-                placeholder="选择时间" style="width:240px;"
-            >
-            </el-date-picker>
-          </el-form-item>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="转正日期 :" prop="workersDates">
+              <el-date-picker
+                  v-model="positiveTK.workersDates"
+                  type="date"
+                  placeholder="选择时间" style="width:240px;"
+                  disabled
+              >
+              </el-date-picker>
+            </el-form-item>
 
 
-        </div>
+          </div>
           <div style="margin-left: 310px;margin-top: 30px">
-            <el-button  @click="become=false" style="width:80px">取消</el-button>
+            <el-button @click="become=false" style="width:80px">取消</el-button>
             <el-button type="primary" style="width:80px" @click="insertWorker_Staff()">确定</el-button>
 
           </div>
@@ -256,15 +259,16 @@
   </div>
 </template>
 
-<script >
+<script>
 import {defineComponent, ref} from 'vue'
 import {ElMessage} from "element-plus/es";
 import qs from "qs";
+
 export default defineComponent({
 
   data() {
     const one = (rule, value, callback) => {
-      if (new Date() > value) {
+      if (this.positiveTK.workerType == '延迟转正' && (this.positiveTK.workerDate > value)) {
         callback(new Error("转正日期不能小于当前时间"));
       } else {
         callback();
@@ -275,20 +279,20 @@ export default defineComponent({
     const defaultProps = {
       children: 'children',
       label: 'deptName',
-      value:'deptId'
+      value: 'deptId'
     }
 
 
     return {
 
-      res:"",
+      res: "",
       // 选中值1
-      res1:"",
+      res1: "",
       // 选中值2
-      res2:"",
+      res2: "",
       // 部门  文本框的值
-      dept:[],
-      deptId:[],
+      dept: [],
+      deptId: [],
       // 格式
       defaultProps,
       //存放部门信息
@@ -298,9 +302,9 @@ export default defineComponent({
       // 入职日期 时间段
       hiredateSearch: [],
       //存储部门名称
-      deptNameAll:[],
+      deptNameAll: [],
       //存储职位名称
-      positionAll:[],
+      positionAll: [],
       //时间选择
       shortcuts: [
         {
@@ -335,9 +339,9 @@ export default defineComponent({
       seek: "",
       positiveTK: {
         //员工编号
-        staffId:'',
+        staffId: '',
         //部门编号
-        deptId:'',
+        deptId: '',
         //员工姓名
         staffName: '',
         //部门
@@ -347,15 +351,15 @@ export default defineComponent({
         //入职日职
         staffHiredate: '',
         //试用期限
-        TrialPeriod:'3个月',
+        TrialPeriod: '3个月',
         //转正类型
-        workerType:'',
+        workerType: '',
         //原定计划转正日期
-        workerDate:'',
+        workerDate: '',
         //转正日期
-        workersDates:'',
+        workersDates: new Date(),
         //备注
-        workerRemarks:'',
+        workerRemarks: '',
       },
       pageInfo: {
         // 分页参数
@@ -369,9 +373,9 @@ export default defineComponent({
         // 部门名称
         deptSearch: '',
         //部门职位名称
-        postSearch:'',
+        postSearch: '',
         //快转正员工
-        stateSearch:'',
+        stateSearch: '',
 
         // 入职日期  开始时间
         clockTimeStart: '',
@@ -386,17 +390,17 @@ export default defineComponent({
             trigger: 'change',
           },
         ],
-        becomedate: [
-          {
-            required: true,
-            message: '请选择转正日期',
-            trigger: 'change'
-          },
-          {
-            validator: one, trigger: "change"
-          },
-        ],
-        workerDate: [
+        // becomedate: [
+        //   {
+        //     required: true,
+        //     message: '请选择转正日期',
+        //     trigger: 'change'
+        //   },
+        //   {
+        //     validator: one, trigger: "change"
+        //   },
+        // ],
+        workersDates: [
           {
             required: true,
             message: '请选择转正日期',
@@ -408,8 +412,8 @@ export default defineComponent({
         ],
       },
       //转正
-      workerVal:null,
-      staffVal:null,
+      workerVal: null,
+      staffVal: null,
     };
   },
   setup() {
@@ -419,9 +423,32 @@ export default defineComponent({
     }
   },
   methods: {
+    zz() {
+      let date= new Date();
+      let y=date.getFullYear()
+      let m= (date.getMonth()+1) <10 ? "0"+(date.getMonth()+1) : ""+(date.getMonth()+1)
+      let d= date.getDate()
+      let x = y+"-"+m+"-"+d
+
+      let a = new Date(this.positiveTK.workerDate)
+      let b = new Date(x)
+
+      if (a > b) {
+        alert("!a")
+        this.positiveTK.workerType = '提前转正'
+      } else if (a < b) {
+        alert("!c")
+        this.positiveTK.workerType = '延迟转正'
+      }else {
+        alert("!b")
+        this.positiveTK.workerType = '转正'
+      }
+    },
+
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // this.insertWorker_Staff()
           alert('submit!')
         } else {
           console.log('error submit!!')
@@ -433,7 +460,7 @@ export default defineComponent({
     replacement() {
       this.pageInfo.currentPage = 1,
           this.pageInfo.staffNameSearch = '',
-          this.res2=""
+          this.res2 = ""
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys([], false)
       this.pageInfo.postSearch = '',
@@ -441,12 +468,12 @@ export default defineComponent({
           this.pageInfo.clockTimeStart = '',
           this.pageInfo.clockTimeEnd = ''
 
-          this.selectProbation()
+      this.selectProbation()
 
     },
 
     // 当文本框值发生变化时调用的方法
-    onchange(){
+    onchange() {
 
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys(this.deptId, false)
@@ -504,21 +531,21 @@ export default defineComponent({
         this.pageInfo.clockTimeEnd = this.hiredateSearch[1]
       }
 
-      let params= {
+      let params = {
 
-        currenPage:this.pageInfo.currenPage,
-        pagesize:this.pageInfo.pagesize,
+        currenPage: this.pageInfo.currenPage,
+        pagesize: this.pageInfo.pagesize,
         staffNameSearch: this.pageInfo.staffNameSearch,
-        deptIds:this.res2.length==0?'':this.res2,
-        postSearch:this.pageInfo.postSearch,
-        stateSearch:this.pageInfo.stateSearch,
-        clockTimeStart:this.pageInfo.clockTimeStart,
-        clockTimeEnd:this.pageInfo.clockTimeEnd,
+        deptIds: this.res2.length == 0 ? '' : this.res2,
+        postSearch: this.pageInfo.postSearch,
+        stateSearch: this.pageInfo.stateSearch,
+        clockTimeStart: this.pageInfo.clockTimeStart,
+        clockTimeEnd: this.pageInfo.clockTimeEnd,
 
       }
 
       this.axios
-          .get("http://localhost:8010/provider/staff/selectProbation?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .get("http://localhost:8010/provider/staff/selectProbation?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;
@@ -530,65 +557,68 @@ export default defineComponent({
           });
     },
     //获取转正管理数据 赋在弹出框上
-    positive(row){
-      this.become=true;
+    positive(row) {
+      this.become = true;
       //员工编号
-      this.positiveTK.staffId=row.staffId,
-      //部门编号
-      this.positiveTK.deptId=row.deptId,
-      //员工姓名
-      this.positiveTK.staffName=row.staffName,
+      this.positiveTK.staffId = row.staffId,
+          //部门编号
+          this.positiveTK.deptId = row.deptId,
+          //员工姓名
+          this.positiveTK.staffName = row.staffName,
           //部门
-      this.positiveTK.deptName=row.deptName,
+          this.positiveTK.deptName = row.deptName,
           //职位
-      this.positiveTK.postName=row.positionName,
+          this.positiveTK.postName = row.positionName,
           //入职日职
-      this.positiveTK.staffHiredate=row.staffHiredate,
+          this.positiveTK.staffHiredate = row.staffHiredate,
           //原定计划转正日期
-      this.positiveTK.workerDate=row.workerDate
+          this.positiveTK.workerDate = row.workerDate
+
+      this.zz()
 
     },
     //添加转正表和修改员工信息
-    insertWorker_Staff(){
+    insertWorker_Staff() {
       //获取弹出框上的值加入到转正表
-      this.workerVal={
+      this.workerVal = {
         //员工编号
-       staffId:this.positiveTK.staffId,
+        staffId: this.positiveTK.staffId,
         //员工名称
-        staffName:this.positiveTK.staffName,
+        staffName: this.positiveTK.staffName,
         //部门编号
-        deptId:this.positiveTK.deptId,
+        deptId: this.positiveTK.deptId,
         //转正类型
-        workerType:this.positiveTK.workerType,
+
+        workerType: this.positiveTK.workerType,
         //备注
-        workerRemarks:this.positiveTK.workerRemarks,
+        workerRemarks: this.positiveTK.workerRemarks,
         //状态
-        workerState:1,
+        workerState: 1,
         //转正时间
-        workerDate:this.positiveTK.workersDates
+        workerDate: this.positiveTK.workersDates
       }
 
       //修改员工表状态和转正日期
-      this.staffVal={
+      this.staffVal = {
         //员工编号
-        staffId:this.positiveTK.staffId,
+        staffId: this.positiveTK.staffId,
         //转正时间
-        workerDate:this.positiveTK.workersDates,
+        workerDate: this.positiveTK.workersDates,
         //员工状态
-        staffState:3
+        staffState: 3
       }
       //调用添加转正
       this.insertWorker()
 
     },
     //添加转正表
-    insertWorker(){
+    insertWorker() {
       this.axios({
         url: 'http://localhost:8010/provider/worker/insertWorker',
         method: 'post',
-        data:{
-          Worker:this.workerVal,
-          Staff:this.staffVal,
+        data: {
+          Worker: this.workerVal,
+          Staff: this.staffVal,
         }
       }).then(response => {
         if (response.data.data > 0) {
@@ -597,7 +627,7 @@ export default defineComponent({
             type: 'success',
           })
           this.selectProbation() // 修改完成后调用查询方法
-          this.become=false
+          this.become = false
         } else {
           ElMessage.error('添加失败')
         }
@@ -632,7 +662,7 @@ export default defineComponent({
             console.log(error);
           });
     },
-  },created() {
+  }, created() {
     this.selectProbation();
     this.selectDeptName();
     this.selectPositionName();

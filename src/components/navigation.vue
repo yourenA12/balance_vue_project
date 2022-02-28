@@ -51,15 +51,58 @@
                   </span>
                   <template #dropdown>
                     <el-dropdown-menu>
+
                       <el-dropdown-item>账户信息</el-dropdown-item>
                       <el-dropdown-item>SAAS PC</el-dropdown-item>
-                       <el-dropdown-item>修改账号密码</el-dropdown-item>
                       <el-dropdown-item>退出</el-dropdown-item>
+
+                       <el-dropdown-item @click="drawer = true">修改账号密码</el-dropdown-item>
+
+
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
 					</span>
         </div>
+
+<!--        <div>-->
+
+<!--          <el-dialog-->
+<!--              v-model="drawer"-->
+<!--              title="选择员工"-->
+<!--              width="50%">-->
+
+<!--          </el-dialog>-->
+
+<!--        </div>-->
+
+<!--          修改密码抽屉-->
+        <el-drawer v-model="drawer" title="I am the title" :with-header="false">
+          <h2>修改登录密码</h2>
+          <hr/>
+
+          <el-form :model="accountFrom" >
+            <br/>
+           <div style="margin-left: 27px">
+               <el-form-item label="原密码:" prop="service">
+                <el-input v-model="accountFrom.yPass"  style="width:300px;" ></el-input>
+              </el-form-item>
+              <el-form-item label="新密码:" prop="service">
+                <el-input v-model="accountFrom.xPass"  style="width:300px;" ></el-input>
+              </el-form-item>
+           </div>
+            <el-form-item label="确认新密码:" prop="service">
+              <el-input v-model="accountFrom.qrPass"  style="width:300px;" ></el-input>
+            </el-form-item>
+
+            <el-button style="margin-left: 110px" @click="empty(),drawer=false">取消</el-button>
+            <el-button type="primary" @click="selectStaffAccountPass()">确认</el-button>
+
+          </el-form>
+        </el-drawer>
+
+
+
         <!--  导航栏: 消息  -->
         <div class="ant-col header_2_s header-notice__event">
           <div>
@@ -230,6 +273,8 @@
     <!-- 显示视图 -->
     <router-view/>
   </div>
+
+
 </template>
 
 <script>
@@ -237,6 +282,8 @@
 export default {
   data() {
     return {
+      drawer:false,
+
       true: true,
       //默认激活的路由
       activate_router: this.$store.state.activate_router,
@@ -245,9 +292,41 @@ export default {
       memuList1: this.$store.getters.menus_outer,
       //更多之内的菜单
       memuList2: this.$store.getters.menus_within,
+
+      accountFrom:{
+        yPass:'',
+        xPass:'',
+        qrPass:''
+      },
+      passMsg:[],
     }
   },
   methods: {
+    //抽屉清空
+    empty(){
+      this.accountFrom.yPass='';
+      this.accountFrom.xPass='';
+      this.accountFrom.qrPass='';
+
+
+    },
+
+    //根据id查询出差方案信息
+    selectStaffAccountPass() {
+
+      this.axios
+          .post("http://localhost:8010/provider/staff/selectStaffId/1" + this.accountFrom.yPass)
+          .then((response) => {
+            console.log(response);
+            this.passMsg = response.data.data;
+
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
     handleClick(tab, event) {
       console.log(tab, event)
     },

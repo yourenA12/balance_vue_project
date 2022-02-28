@@ -1052,11 +1052,7 @@ export default {
 
     // 工作经历删除按钮
      workDelete(){
-      /*
-       splice（i,n） : 按照下标删除数组里的元素 从i开始删除n个元素
-       i: 下标
-       n: 删除个数
-       */
+
 
        // 当工作经历信息删除为空时(数组长度为0时)
        if(this.workAll.length==0){
@@ -1167,7 +1163,7 @@ export default {
     // 惩罚表单取消按钮
     punishmentCancel(){
 
-      if(this.punishmentAll.length==0){ // 没有惩罚信息时
+      if( this.punishmentAll=="" || this.punishmentAll.length==0){ // 没有惩罚信息时
         this.addPunishment=true // 显示 添加惩罚
       }
 
@@ -1517,7 +1513,7 @@ export default {
       this.axios
           .get("http://localhost:8010/provider/Punish/selectPunishId/" + this.$store.state.staffId_Msg)
           .then((response) => {
-            console.log(response);
+
             this.punishmentAll = response.data.data;
             this.childrenWork();
 
