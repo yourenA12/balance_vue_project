@@ -340,6 +340,7 @@ export default {
             console.log(response);
             // 表格数据
             this.tableData = response.data.data.records
+            this.pageInfo.total=response.data.data.total
 
             // 本月参保人数
             this.insuredPeople=response.data.data.total
@@ -374,6 +375,10 @@ export default {
 /*表格*/
 .sub-Content__primary{
   margin-top: 20px;
+}
+
+.xxx{
+  display:none
 }
 
 /* 月统计金额下的div下的span */
