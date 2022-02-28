@@ -6,7 +6,8 @@
       <!--标题-->
       <div class="j-card-head">
         <div class="j-card-head-title">
-          <span>新增简历</span>
+
+          <span >{{ this.$route.query.name }}简历</span>
         </div>
       </div>
       <!--内容-->
@@ -230,7 +231,7 @@
             </el-form>
 
             <el-button type="primary" @click="submitForm('formInline','formInline1','formInline2')">提交</el-button>
-            <el-button  @click="resetForm('formInline')">重置</el-button>
+            <el-button  @click="resetForm('formInline','formInline1','formInline2')">重置</el-button>
             <el-button @click="goblack()">取消</el-button>
 
           </div>
@@ -249,12 +250,18 @@ import {ElMessage} from "element-plus";
 export default {
   data() {
     return {
-
+//储存简历
+      resumesMsg:[],
+      educationssMsg:[],
+      workMsg:[],
 
       zpjhlists:[],
       src: '',
       isShow: false,
       formInline: {
+        resumeId:'',
+        educationssId:'',
+        workExperiencessId:'',
         name:'',
         sex: '',
         day:'',
@@ -410,14 +417,138 @@ export default {
       resumeVal:null,
       workVal:null,
       educationVal:null,
+
+
+
     }
   },
   methods: {
+/*    // 修改简历
+    updateResumes(){
+      alert(this.$route.query.id)
+      this.axios({
+        url: 'http://localhost:8010/provider/resume/updateResume',
+        method: 'put',
+        data: {
+          //简历id
+          resumeId: this.formInline.resumeId,
+          //姓名
+          resumeName: this.formInline.name,
+          // 性别
+          resumeSex: this.formInline.sex,
+          //出生日期
+          resumeBirthday: this.formInline.day,
+          //年龄
+          resumeAge: this.formInline.adg,
+          //毕业学校
+          resumeScoller:this.formInline.byschool,
+          //手机号
+         resumePhone: this.formInline.phone,
+          //邮箱
+         resumeMailbox: this.formInline.mailbox,
+          //所在地
+          resumeResidence: this.formInline.Location,
+          //学历
+          resumeEducation:this.formInline.education,
+          //政治面貌
+          resumePoliticalOutlook:this.formInline.politics,
+          //招聘计划
+          recruitmentPlanId:this.formInline.recruitmentPlanId,
+
+
+        }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    // 修改教育经历
+    updateEducations(){
+      this.axios({
+        url: 'http://localhost:8010/provider/educationss/updateEducationss',
+        method: 'put',
+        data: {
+          //教育经历id
+          educationssId: this.formInline.educationssId,
+          //学校名称
+          educationStudentname: this.formInline.school,
+          //所学专业
+          educationMajor: this.formInline.major,
+          //开始时间
+          resumeBirthdayeducationStartTime: this.formInline.start,
+          //结束时间
+          educationEndTime: this.formInline.end,
+          //是否全日制
+          educationFullTime:this.formInline.full_time,
+                  }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    // 修改工作经历
+    updateWorks(){
+      this.axios({
+        url: 'http://localhost:8010/provider/workExperiencess/updateWork',
+        method: 'put',
+        data: {
+          //工作经历id
+          workExperiencessId: this.formInline.workExperiencessId,
+          //公司名称
+          companyName: this.formInline.company,
+          // 开始时间
+          workStareTime: this.formInline.start1,
+          //结束时间
+          workEndTime: this.formInline.end1,
+          //所属行业
+          positionIndustry: this.formInline.industry,
+          //税前月薪
+          positionSqmonthly:this.formInline.salary,
+          //工作描述
+          positionDescribe: this.formInline.describe,
+                  }
+      }).then(response => {
+        console.log(response)
+        if (response.data.data >0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },*/
     //取值
     reVal(){
 
       //简历表基本信息
       let resumes={
+        //简历id
+        resumeId: this.formInline.resumeId,
         // 姓名
         resumeName: this.formInline.name,
         //性别
@@ -442,6 +573,8 @@ export default {
         recruitmentPlanId: this.formInline.recruitmentPlanId,
       }
       let educations={
+        //教育经历id
+        educationssId: this.formInline.educationssId,
         // 学校名称
         educationStudentname: this.formInline.school,
         //所学专业
@@ -454,6 +587,8 @@ export default {
         educationFullTime: this.formInline.full_time,
       }
       let work={
+        //工作经历id
+        workExperiencessId: this.formInline.workExperiencessId,
         // 公司名称
         companyName: this.formInline.company,
         //职位名称
@@ -469,6 +604,10 @@ export default {
         //工作描述
         positionDescribe: this.formInline.describe,
 
+      }
+      if(this.$route.query.name=="修改"){
+        this.updateResume(resumes,educations,work)
+        return
       }
       this.insertResume(resumes,educations,work)
 
@@ -497,6 +636,124 @@ export default {
       }).catch(function (error) {
         console.log(error);
       });
+
+    },
+    //添加简历
+    updateResume(resumes,educations,work){
+      this.axios({
+        url: 'http://localhost:8010/provider/resume/updateResume',
+        method: 'put',
+        data:{
+          Resume:resumes,
+          WorkExperiencess:work,
+          Educationss:educations
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$router.go('-1');
+        } else {
+          ElMessage.error('修改失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
+    //根据id查简历
+    selectResumes(){
+      this.axios
+          .get("http://localhost:8010/provider/resume/selectResumes/" + this.$route.query.id)
+          .then((response) => {
+            console.log("1111111111")
+            console.log(response);
+            this.resumesMsg = response.data.data;
+            this.formInline.resumeId=this.resumesMsg.resumeId
+            //姓名
+            this.formInline.name=this.resumesMsg.resumeName
+            //性别
+            this.formInline.sex=this.resumesMsg.resumeSex
+            // 出生日期
+            this.formInline.day=this.resumesMsg.resumeBirthday
+            //年龄
+            this.formInline.adg= this.resumesMsg.resumeAge
+            //毕业学校
+            this.formInline.byschool=this.resumesMsg.resumeScoller
+            //手机号
+            this.formInline.phone=this.resumesMsg.resumePhone
+            //邮箱
+            this.formInline.mailbox=this.resumesMsg.resumeMailbox
+            //所在地
+            this.formInline.Location=this.resumesMsg.resumeResidence
+            //学历
+            this.formInline.education=this.resumesMsg.resumeEducation
+            //政治面貌
+            this.formInline.politics=this.resumesMsg.resumePoliticalOutlook
+            //招聘计划
+            this.formInline.recruitmentPlanId=this.resumesMsg.recruitmentPlanId
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //根据id查教育经历
+    selectEducationss(){
+      this.axios
+          .get("http://localhost:8010/provider/educationss/selectEducationss/" + this.$route.query.id)
+          .then((response) => {
+            console.log("222222222")
+            console.log(response);
+            this.educationssMsg = response.data.data;
+            this.formInline.educationssId=this.educationssMsg.educationssId
+            //学校名称
+            this.formInline.school=this.educationssMsg.educationStudentname
+            //所学专业
+            this.formInline.major=this.educationssMsg.educationMajor
+            //开始时间
+            this.formInline.start=this.educationssMsg.educationStartTime
+            //结束时间
+            this.formInline.end= this.educationssMsg.educationEndTime
+            //是否全日制
+            this.formInline.full_time=this.educationssMsg.educationFullTime
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    //根据id查工作经历
+    selectWork(){
+      this.axios
+          .get("http://localhost:8010/provider/workExperiencess/selectWork/" + this.$route.query.id)
+          .then((response) => {
+            console.log("3333333333")
+            console.log(response);
+            this.workMsg = response.data.data;
+            this.formInline.workExperiencessId=this.workMsg.workExperiencessId
+            //公司名称
+            this.formInline.company=this.workMsg.companyName
+            //职位名称
+            this.formInline.position=this.workMsg.positionName
+            // 开始时间
+            this.formInline.start1=this.workMsg.workStareTime
+            //结束时间
+            this.formInline.end1= this.workMsg.workEndTime
+            //所属行业
+            this.formInline.industry=this.workMsg.positionIndustry
+            //税前月薪
+            this.formInline.salary=this.workMsg.positionSqmonthly
+            //工作描述
+            this.formInline.describe=this.workMsg.positionDescribe
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
     },
 
@@ -536,8 +793,11 @@ export default {
     goblack(){
       this.$router.go('-1');
     },
-    resetForm(formName) {
+    resetForm(formName,formName1,formName2) {
       this.$refs[formName].resetFields();
+      this.$refs[formName1].resetFields();
+      this.$refs[formName2].resetFields();
+
     },
     submitForm(formName,formName1,formName2) {
 
@@ -572,10 +832,19 @@ export default {
 
       if (submits==3) this.reVal()
 
+
+
     },
 
   },created() {
     this.selectzpjh()
+    if(this.$route.query.name=="修改"){
+      this.selectResumes()
+      this.selectEducationss()
+      this.selectWork()
+    }
+
+
   }
 
 }
