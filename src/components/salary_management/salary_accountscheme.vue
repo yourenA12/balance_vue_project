@@ -80,7 +80,7 @@
             </el-form-item>
 
             <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false,replacement()">取消</el-button>
-            <el-button type="primary" style="width:80px" @click="compensationSalary()">提交</el-button>
+            <el-button type="primary" style="width:80px" @click="submit()">提交</el-button>
 
           </el-form>
 
@@ -369,6 +369,7 @@ export default {
             this.become = false;
             if (this.dialogTitle == "addData") {
               console.log(this.form);
+              this.compensationSalary();
               alert("向服务器发送添加的请求！");
             } else {
               console.log(this.form);
