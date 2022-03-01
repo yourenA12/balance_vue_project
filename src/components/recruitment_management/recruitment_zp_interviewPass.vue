@@ -70,7 +70,7 @@
           <template #default="scope">
             <div style="width: 200px">
 
-              <el-button type="text"  size="small"  @click="drawer = true">
+              <el-button type="text"  size="small"  @click="insertEmpIds(scope.row)">
                 录用
               </el-button>
               <el-drawer v-model="drawer">
@@ -168,7 +168,7 @@ import {
   ref
 } from 'vue'
 import {ElMessage} from "element-plus";
-const drawer = ref(false)
+// const drawer = ref(false)
 const text = ref('')
 const textarea = ref('')
 export default {
@@ -188,12 +188,19 @@ export default {
     },
 
       ruleForm: {
+        resumeId:'',
         syq: '三个月',
         Data: '',
         syyx: '',
         zzyx: '',
         bz: ''
       },
+
+      //简历
+      resumeVul:null,
+      employmentTableVul:null,
+
+
       drawer: false,
       //筛选框显示隐藏
       icons: false,
@@ -233,6 +240,8 @@ export default {
     }
   },
   methods:{
+
+
     selectinterviewPass_plan(){
       this.axios
           .get("http://localhost:8010/provider/ResumeVo/ResumePage_T/"+this.pageInfo.currenPage+"/"+this.pageInfo.pagesize)
@@ -246,12 +255,76 @@ export default {
             console.log(error);
           })
     },
+    insertEmpIds(row){
+      this.drawer=true;
+      this.ruleForm.resumeId=row.resumeId
+    },
+
+    //添加录用信息和修改简历状态
+    insertEmployment_resume(){
+      //添加录用表
+      this.employmentTableVul={
+        //简历编号
+        resumeId:this.ruleForm.resumeId,
+
+        //备注
+        remarks:this.ruleForm.bz,
+
+        //入职时间
+        hiredate:this.ruleForm.Data,
+        //使用期限
+        probation:this.ruleForm.syq,
+
+        //试用期月薪
+        probationary:this.ruleForm.syyx,
+
+        //转正月薪
+        positiveMonthly:this.ruleForm.zzyx,
+
+      }
+      //修改简历表状态
+      this.resumeVul={
+        resumeId:this.ruleForm.resumeId,
+        resumeZt: "8"
+      }
+      this.insertEmp()
+
+    },
+
+
+    //录用
+
+    insertEmp(){
+
+      this.axios({
+        url: 'http://localhost:8010/provider/employmentTable/insertEmploymentTable',
+        method: 'post',
+        data:{
+          Resume:this.resumeVul,
+          EmploymentTable:this.employmentTableVul,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.drawer=false
+          this.selectinterviewPass_plan()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
 
     //提交按钮
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('提交成功!')
+          this.insertEmployment_resume()
         } else {
           console.log('error submit!!')
           return false
