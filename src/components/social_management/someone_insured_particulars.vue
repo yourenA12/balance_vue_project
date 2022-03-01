@@ -77,16 +77,7 @@ export default {
       ],
     };
   },
-  methods:{
-    // 查询参保详情明细
-    selectAllPage() {
-      alert(this.$route.query.staffId)
 
-    },
-  },
-  created() {
-    this.selectAllPage()
-  }
 };
 </script>
 
