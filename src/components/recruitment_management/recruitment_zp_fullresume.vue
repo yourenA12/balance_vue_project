@@ -6,7 +6,7 @@
         <div class="mt-20 ml-20 mr-20">
           <!-- 新增招聘计划按钮 -->
           <a style="margin-top: 4px;">
-            <router-link :to="{path:this.addresume,query:{path:this.$route.query.path}}">
+            <router-link :to="{path:this.addresume,query:{path:this.$route.query.path,name:'新增'}}">
               <el-button size="small" type="primary" plain>
                 <el-icon><i-plus/></el-icon>
                 新增
@@ -112,7 +112,9 @@
           <el-table-column fixed="right" label="操作" width="180">
           <template #default="scope">
             <div style="width: 110px">
-              <el-button type="text" size="small" @click="">编辑</el-button>
+
+              <el-button type="text" size="small" @click="updateResumes(scope.row.resumeId)">编辑</el-button>
+
 
 <!--              <el-button type="text" size="small" @click="open()" style="color: #ea7c99;">删除</el-button>-->
               <el-popconfirm title="是否确认删除?" @confirm="confirmsc(scope.row)" @cancel="cancelsc()">
@@ -264,7 +266,7 @@ export default {
           console.log(error);
         })
   },
-    //修改
+    //修改状态
     Ztxiugai(row){
 
       this.fo.resumeId=row.resumeId
@@ -305,6 +307,11 @@ export default {
         console.log(error);
       })
     },
+    //修改招聘计划
+    updateResumes(row){
+      //跳转页面路径
+      this.$router.push({path:this.addresume,query:{path:this.$route.query.path,name:'修改',id:row}})
+    }
 
 },
   created(){
