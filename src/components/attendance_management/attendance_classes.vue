@@ -42,9 +42,9 @@
         </el-time-picker>
       </el-form-item>
 
-      <el-form-item label="班次状态：" style="margin-left: 20px">
-      <el-radio v-model="fo.classesState" label="0">启用</el-radio>
-      <el-radio v-model="fo.classesState" label="1">禁用</el-radio>
+      <el-form-item label="班次状态：" style="margin-left: 20px" >
+      <el-radio :disabled="dis" v-model="fo.classesState" label="0">启用</el-radio>
+      <el-radio :disabled="dis" v-model="fo.classesState" label="1">禁用</el-radio>
       </el-form-item>
 
 
@@ -77,6 +77,10 @@ import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
+
+      //状态禁用
+      dis:this.$route.query.way=='新增'?true:false,
+
       classesState: ref('1'),
       fo: {
         classesId: "",

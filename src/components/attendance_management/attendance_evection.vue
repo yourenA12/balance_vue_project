@@ -48,9 +48,10 @@
         导出
       </el-button>
 
-      <el-button type="success" plain size="small">
-        <i class="iconfont">&#xe645;</i>
-        导入
+
+      <el-button @click="reset()" type="primary" plain size="small" style="margin-left: 10px;">
+        <el-icon><i-refresh /></el-icon>
+        重置
       </el-button>
     </div>
     <!--表格-->
@@ -108,6 +109,8 @@
 <script lang="ts">
 import {ref, defineComponent} from "vue";
 import {ElMessage} from "element-plus/es";
+import {ElMessageBox} from "element-plus";
+import {export_json_to_excel} from '/src/excal/Export2Excel.js'
 export default {
   data() {
     return {
@@ -167,6 +170,13 @@ export default {
     };
   },
   methods: {
+    //重置按钮
+    reset(){
+      this.pageInfo.staffName=""
+      this.pageInfo.optionsDeptId=""
+      this.clockTime=""
+      this.Travelabout()
+    },
     //分页查询
     Travelabout(){
       // 首先清空
@@ -220,6 +230,42 @@ export default {
     through1(row) {
     /*  alert(row.travelId)*/
       this.Traveldelete(row)
+    },
+    // 点击导出操作
+    derive() {
+      ElMessageBox.confirm(
+          '此操作将导出excel文件, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(() => {
+        this.deriveExcel();
+      }).catch(() => {
+        ElMessage.success("取消成功")
+      })
+    },
+    // 导出方法
+    deriveExcel() {
+      var _this = this;
+      let tHeader = ["申请名称", "发起人部门", "出差地点", "出差事由", "出差开始时间","出差结束时间","出差时长"]; // 导出的表头名
+      let filterVal = ["staffName", "deptName", "travelPlace", "travelMatter", "travelSDate","travelEDate","travelTotalDate"];//导出其prop属性
+      ElMessageBox.prompt('请输入文件名', '提示', {
+        confirmButtonText: '生成',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        let data = _this.formatJson(filterVal, _this.tableData);
+        export_json_to_excel(tHeader, data, value);
+        ElMessage.success("生成成功")
+      })
+          .catch(() => {
+            ElMessage.success("失败成功")
+          })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
   },
   created() {

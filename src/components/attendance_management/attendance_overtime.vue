@@ -47,10 +47,11 @@
         导出
       </el-button>
 
-        <el-button type="success" plain size="small">
-          <i class="iconfont">&#xe645;</i>
-          导入
-        </el-button>
+
+      <el-button @click="reset()" type="primary" plain size="small" style="margin-left: 10px;">
+        <el-icon><i-refresh /></el-icon>
+        重置
+      </el-button>
     </div>
 
     <!--表格-->
@@ -175,6 +176,13 @@ export default {
     };
   },
   methods: {
+    //重置按钮
+    reset(){
+      this.pageInfo.staffName=""
+      this.pageInfo.optionsDeptId=""
+      this.clockTime=""
+      this.about()
+    },
     //分页查询
     about(){// 首先清空
       this.pageInfo.clockTimeStart=""

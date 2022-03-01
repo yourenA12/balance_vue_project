@@ -32,7 +32,7 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
-        <el-table-column prop="classesName" label="班次名称"/>
+        <el-table-column prop="classesName" sortable  label="班次名称"/>
         <el-table-column prop="classesBeginDate" label="上班时间" :formatter="dateFormat" />
         <el-table-column prop="classesEndDate" label="下班时间"  :formatter="dateFormat" />
         <el-table-column prop="classesState" label="状态">
@@ -114,6 +114,7 @@ import {ElMessage} from "element-plus";
 export default {
   data() {
     return {
+      //，名称
       input:"",
       // 新增路由地址
       one: '/attendance/check/classes/addclass',
@@ -122,6 +123,7 @@ export default {
         /* 当前的页 */
         pagesize: 3,
         total: 0,
+        classesId:"",
       },
       tableData: [],
 
@@ -188,7 +190,7 @@ export default {
           .then((response)=>{
             console.log(response)
            if (response.data.data === "成功"){
-             ElMessage.error("删除成功")
+             ElMessage.success("删除成功")
              this.check() // 删除完成后，查询一次
            }else {
               ElMessage.error("删除失败")
