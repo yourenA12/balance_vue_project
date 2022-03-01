@@ -194,7 +194,7 @@
                   :cell-style="{textAlign: 'center'}">
 
           <el-table-column prop="compensationName" label="薪酬组" />
-          <el-table-column prop="staffBirthday" label="薪酬组人数" />
+          <el-table-column prop="compensationNumber" label="薪酬组人数" />
           <el-table-column prop="compensationRemark" label="备注" />
           <el-table-column label="操作">
             <template #default="scope">
@@ -212,7 +212,7 @@
 
       <div class="demo-pagination-block">
         <el-pagination
-            v-model:currentPage="pageInfo.currenPage"
+            v-model:currentPage="pageInfo.currentPage"
             :page-sizes="[3, 5, 10, 50]"
             v-model:page-size="pageInfo.pagesize"
             :default-page-size="pageInfo.pagesize"
@@ -370,14 +370,14 @@ export default {
             this.compensationForm.compensationRemark=row.compensationRemark
           },
           submit(){
-            this.become = false;
+
             if (this.dialogTitle == "addData") {
               console.log(this.form);
               this.compensationSalary();
-              alert("向服务器发送添加的请求！");
+              // alert("向服务器发送添加的请求！");
             } else {
               console.log(this.form);
-              alert("向服务器发送修改的请求！");
+              // alert("向服务器发送修改的请求！");
             }
           },
     //编辑薪酬组
@@ -652,9 +652,9 @@ export default {
           //取部门信息
           deptIds: this.res2,
           //取职位信息
-          postIds: this.compensationForm.citysPost,
+          postIds: this.compensationForm.citysPost==null?[]:this.compensationForm.citysPost,
           //获取员工id
-          staffIds :this.compensationForm.name
+          staffIds :this.compensationForm.name==null?[]:this.compensationForm.name,
         }
       }).then(response => {
         console.log(response);

@@ -41,14 +41,14 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 按钮 -->
-          <el-button size="small"
-          ><i class="iconfont">&#xe6a2;</i>批量导出
-          </el-button
-          >
-          <el-button size="small"
-          ><i class="iconfont">&#xe639;</i>批量导入
-          </el-button
-          >
+<!--          <el-button size="small"-->
+<!--          ><i class="iconfont">&#xe6a2;</i>批量导出-->
+<!--          </el-button-->
+<!--          >-->
+<!--          <el-button size="small"-->
+<!--          ><i class="iconfont">&#xe639;</i>批量导入-->
+<!--          </el-button-->
+<!--          >-->
           <el-button :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
             <i class="iconfont">&#xe608;</i>批量删除
           </el-button>
