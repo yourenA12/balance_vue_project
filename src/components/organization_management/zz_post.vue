@@ -30,41 +30,42 @@
 
         <el-form-item prop="name">
           <template #label><b style="font-size:18px;">职位名称：</b></template>
-          <el-input v-model="fo.name" placeholder="请输入职位名称：" style="width:200px; margin-left: 20px">
+          <el-input v-model="fo.positionName" placeholder="请输入职位名称：" style="width:200px;">
           </el-input>
         </el-form-item>
         <!--选择框-->
-        <el-form-item prop="values1">
+        <el-form-item>
           <template #label><b style="font-size:18px;">所属部门：</b></template>
-          <el-select
-              v-model="fo.values1"
-              clearable
-              placeholder="请选择部门">
+          <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
+            <el-option hidden></el-option>
             <el-option
-                v-for="item in optionss"
-                :key="item.values"
-                :label="item.labels"
-                :value="item.values"
+                class="xxx"
+                v-for="item in dept"
+                :key="item.deptId"
+                :label="item.deptName"
+                :value="item.deptId"
             >
             </el-option>
+            <el-tree :data="deptlists"
+                     show-checkbox
+                     :default-expand-all=true
+                     :check-on-click-node=true
+                     node-key="deptId"
+                     :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
           </el-select>
         </el-form-item>
 
-        <!--选择框-->
-        <el-form-item prop="value2">
-          <template #label><b style="font-size:18px;">负责人：</b></template>
-          <el-select
-              v-model="fo.value2"
-              clearable
-              placeholder="请选择负责人">
-            <el-option
-                v-for="item in functionary"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            >
-            </el-option>
-          </el-select>
+        <!--输入框-->
+        <el-form-item prop="values2">
+          <template #label><b style="font-size:18px;">职位说明：</b></template>
+          <el-input
+              v-model="fo.positionDescription"
+              maxlength="30"
+              placeholder="职位说明"
+              show-word-limit
+              type="textarea"
+              style="margin-left: 10px"
+          />
         </el-form-item>
 
         <div class="an">
@@ -89,11 +90,19 @@
                 :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                 :cell-style="{textAlign: 'center'}"
       >
+                <el-table-column type="expand">
+                  <template #default="scope">
+
+                    <span style="margin-left: 50px">职位说明：{{ scope.row.positionDescription }}</span><br>
+
+                  </template>
+                </el-table-column>
+
         <el-table-column prop="positionName" label="职位名称"/>
-        <el-table-column prop="positionDescription" label="所属部门"/>
+        <el-table-column prop="deptNames" label="所属部门"/>
         <el-table-column prop="operate" label="操作">
-          <template #default>
-            <el-button type="text" size="small" @click="redact()">
+          <template #default="scope">
+            <el-button type="text" size="small" @click="drawer = true,updateRow(scope.row)">
               <el-icon><i-edit />
               </el-icon>
               修改
@@ -141,13 +150,35 @@
 
 <script lang="ts">
 import { ref, defineComponent } from "vue";
+import {ElMessage} from "element-plus";
+
 export default {
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value:'deptId'
+    }
     return {
+
+      res:"",
+      // 选中值1
+      res1:"",
+      // 选中值2
+      res2:[],
+      // 部门  文本框的值
+      dept:[],
+      deptId:[],
+      // 格式
+      defaultProps,
+      //存放部门信息
+      deptlists: [],
+
+
       fo:{
-        name:"",
-        values1:"",
-        value2:"",
+        positionName:"",
+        positionDescription:"",
 
       },
       //分页
@@ -160,65 +191,9 @@ export default {
 
       //抽屉
       drawer: ref(false),
-      tableData: [
+      tableData: [],
 
-        {
-          name: '经理',
-          department: '开发部',
-          functionary:'王鑫',
-        },
-        {
-          name: '董事长',
-          department: '开发部',
-          functionary:'大熊',
-        },
-        {
-          name: '秘书',
-          department: '开发部',
-          functionary:'静香',
-        },
-        {
-          name: '经理',
-          department: '开发部',
-          functionary:'王鑫',
-        },
-        {
-          name: '经理',
-          department: '开发部',
-          functionary:'王鑫',
-        },
-        {
-          name: '经理',
-          department: '开发部',
-          functionary:'王鑫',
-        },
 
-      ],
-
-      //部门
-      optionss: ref([
-        {
-          values: '大象',
-          label: '大象',
-        },
-        {
-          values: '老鼠',
-          label: '老鼠',
-        }
-      ]),
-      values: ref(''),
-
-      //负责人
-      functionary: ref([
-        {
-          value: '大象',
-          label: '大象',
-        },
-        {
-          value: '老鼠',
-          label: '老鼠',
-        }
-      ]),
       value2: ref(''),
       //验证
       rules:{
@@ -229,20 +204,7 @@ export default {
             trigger: "blur",
           },
         ],
-        values1:[
-          {
-            required: true,
-            message: "请选择该部门",
-            trigger: "change",
-          }
-        ],
-        value2:[
-          {
-            required: true,
-            message: "请选择该负责人",
-            trigger: "change",
-          }
-        ],
+
       }
 
     };
@@ -252,7 +214,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.insertPost()
+          this.fo.positionName=""
+          this.fo.positionDescription=""
+          this.deptId=""
         } else {
           console.log("error submit!!");
           return false;
@@ -261,9 +226,12 @@ export default {
     },
     //取消
     resetForm(formName) {
+      this.drawer = false
       this.$refs[formName].resetFields()
-      this.radio1= ref('1'),
-          this.drawer = false
+      this.fo.positionName=""
+      this.fo.positionDescription=""
+      this.deptId=""
+
     },
     //分页查询
     post(){
@@ -279,9 +247,101 @@ export default {
             console.log(error);
           })
     },
+    // 当文本框值发生变化时调用的方法
+    onchange(){
+
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys(this.deptId, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicks() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1 = this.$refs.tree.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChange(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.res = this.$refs.tree.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2 = this.$refs.tree.getCheckedKeys()
+      // 清空部门
+      this.dept = []
+      // 清空选中的部门
+      this.deptId = []
+      let x = 0
+      for (let i = 0; i < this.res.length; i++) {
+
+        for (let j = 0; j < this.res.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.res[i].deptPid != this.res[j].deptId) {
+            //并且是最后一个
+            if (j == this.res.length - 1 && x == 0) {
+              // 加入数据
+              this.dept.push(this.res[i])
+              // 赋值到文本框
+              this.deptId.push(this.res[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/dept/selectAll")
+          .then((response) => {
+            console.log(response);
+            this.deptlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    //新增职位
+    insertPost() {
+      this.axios({
+        url: 'http://localhost:8010/provider/deptPost/add',
+        method: 'post',
+        data: {
+          Post: {
+            positionName:this.fo.name,
+            positionDescription:this.fo.explain
+          },
+          DeptIds: this.res2,
+
+        }
+      }).then(response => {
+        if (response.data.data =="成功") {
+          ElMessage.success("添加成功")
+          this.post() //添加成功后，在查询一次
+          this.drawer=false
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //修改 提取当前行
+    updateRow(row){
+      this.fo=row
+    },
+
   },
   created() {
     this.post();
+    this.selectDeptName()
   },
 };
 </script>
@@ -316,6 +376,9 @@ table *{
   float: right;
   margin-top: 20px;
   margin-bottom: 30px;
+}
+.xxx{
+  display:none
 }
 </style>
 

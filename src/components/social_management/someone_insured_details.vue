@@ -30,22 +30,22 @@
       <div class="payment_project">
         <!-- 缴纳明细表 -->
         <el-table :data="tableData" size="mini">
-          <el-table-column prop="date" label="缴纳项目" />
-          <el-table-column prop="date" label="基数" />
-
-          <el-table-column label="公司缴纳">
-            <el-table-column prop="name" label="比例" />
-            <el-table-column prop="state" label="金额" />
-          </el-table-column>
-
-          <el-table-column prop="date" label="公司固定金额" />
+          <el-table-column prop="insuredPaymentType" label="缴纳项目" />
+          <el-table-column prop="insuredPaymentNumber" label="基数" />
 
           <el-table-column label="个人缴纳">
-            <el-table-column prop="name" label="比例" />
-            <el-table-column prop="state" label="金额" />
+            <el-table-column prop="insArchivePersonProp" label="比例" />
+            <el-table-column prop="insArchivePersonMoney" label="金额" />
           </el-table-column>
 
-          <el-table-column prop="date" label="个人固定金额" />
+          <el-table-column prop="insArchivePersonSum" label="个人固定金额" />
+
+          <el-table-column label="公司缴纳">
+            <el-table-column prop="insArchiveFirmProp" label="比例" />
+            <el-table-column prop="insArchiveFirmMoney" label="金额" />
+          </el-table-column>
+
+          <el-table-column prop="insArchiveFirmSum" label="公司固定金额" />
 
           <el-table-column prop="date" label="小计" />
         </el-table>
@@ -116,50 +116,30 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-      ],
+      tableData: [],
     };
   },
+  methods:{
+    // 查询参保详情明细
+    selectAllPage() {
+      // 从trore 中取出员工id进行查询
+
+        this.axios
+            .get("http://localhost:8010/provider/insuredDetailSon/selectDetailSonId/" + this.$store.state.staffId_Msg)
+            .then((response) => {
+              console.log(response);
+              this.tableData = response.data.data;
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+    },
+  },
+  created() {
+    this.selectAllPage()
+  }
 };
 </script>
 

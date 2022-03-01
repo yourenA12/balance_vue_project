@@ -268,7 +268,7 @@
           >
 
             <el-form-item label="适用部门：" style="margin-top: 20px;">
-              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
+              <el-select v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()" style="width:240px">
                 <el-option hidden></el-option>
                 <el-option
                     class="xxx"
@@ -300,7 +300,8 @@
 
             <el-form-item label="适用员工：" style="margin-top: 20px;">
 
-              <el-select ref="vueSelect1" @click="become=true,staffSelect()" v-model="compensationForm.staffs"
+              <el-select ref="vueSelect1" @click="become=true,staffSelect()"
+                         v-model="compensationForm.staffs"
                          placeholder="请选择适用员工" multiple style="width:240px">
                 <el-option
                     class="xxx"
@@ -511,7 +512,7 @@ export default {
         return
       }
 
-      if (this.security_cardinal_lower >= this.security_cardinal_upper && this.security_cardinal_upper != 0) {
+      if (this.security_cardinal_lower > this.security_cardinal_upper && this.security_cardinal_upper != 0) {
         ElMessage({
           message: '基数上限要大于基数下限！！',
           type: 'warning',
@@ -520,6 +521,14 @@ export default {
       }
 
       for (let i = 0; i < this.social_tableData.length; i++) {
+
+        if (this.social_tableData[i].defSchemeFloor > this.social_tableData[i].defSchemeUpper && this.social_tableData[i].defSchemeUpper != 0) {
+          ElMessage({
+            message: this.social_tableData[i].defSchemeType+',基数上限要大于基数下限！！',
+            type: 'warning',
+          })
+          return
+        }
 
         for (let j = 0; j < this.social_tableData.length; j++) {
           if (this.social_tableData[i].defSchemeType == this.social_tableData[j].defSchemeType && i != j) {
@@ -534,6 +543,14 @@ export default {
       }
 
       for (let i = 0; i < this.accumulation_tableData.length; i++) {
+
+        if (this.accumulation_tableData[i].defSchemeFloor > this.accumulation_tableData[i].defSchemeUpper && this.accumulation_tableData[i].defSchemeUpper != 0) {
+          ElMessage({
+            message: this.accumulation_tableData[i].defSchemeType+',基数上限要大于基数下限！！',
+            type: 'warning',
+          })
+          return
+        }
 
         for (let j = 0; j < this.accumulation_tableData.length; j++) {
           if (this.accumulation_tableData[i].defSchemeType == this.accumulation_tableData[j].defSchemeType && i != j) {
@@ -799,6 +816,7 @@ export default {
     staffAll(val) {
       // 选中的值
       this.tableVal = val
+
       // 清空选中 id
       this.compensationForm.staffs = []
 
@@ -810,6 +828,7 @@ export default {
 
     // 点击时 关闭 下拉框
     staffSelect() {
+
       // 关闭选择器
       this.$refs.vueSelect1.blur();
 
@@ -817,6 +836,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.staffsTable.clearSelection()
       })
+
 
       this.tableVal.forEach(item => {
         // 将值赋值上表格
@@ -827,6 +847,32 @@ export default {
 
     },
 
+   /* staffChange(){
+      this.x= this.compensationForm.staffs;
+      console.error(this.x)
+      return
+
+      this.tableVal=[]
+      // 循环员工id
+      this.compensationForm.staffs.forEach(item => {
+        // 循环员工数据
+        this.staffData.forEach(item1 => {
+
+          // 如果员工id 等于数据中的员工id
+          if (item.staffId == item1.staffId) {
+
+            // 选中的值
+            this.x.push(item1)
+            // 将员工id赋值上
+            this.compensationForm.staffs.push(item.staffId)
+
+          }
+
+        })
+
+      })
+
+    },*/
 
     // 按参保方案id查询参保方案
     selectDefInsuredById() {
@@ -881,10 +927,13 @@ export default {
           .then((response) => {
 
             console.log("按参保方案id查询部门id", response);
-            if(response.data.data==null) return
+            if (response.data.data == null) return
 
-            // 将值赋值到选择器中
-            this.$refs.tree.setCheckedKeys(response.data.data, false)
+            this.$nextTick(() => {
+              // 将值赋值到选择器中
+              this.$refs.tree.setCheckedKeys(response.data.data, false)
+            })
+
 
           })
           .catch(function (error) {
@@ -899,7 +948,7 @@ export default {
           .then((response) => {
 
             console.log("按参保方案id查询职位id", response);
-            if(response.data.data==null) return
+            if (response.data.data == null) return
 
             // 职位选择器
             this.compensationForm.citysPost = response.data.data
@@ -999,6 +1048,10 @@ export default {
       value: 'deptId'
     }
     return {
+
+      num:0,
+      x:[],
+
       //弹出框(员工)的分页
       pageInfo1: {
         // 分页参数
@@ -1048,7 +1101,6 @@ export default {
       //存储部门职位名称
       positionAll: [],
 
-
       resy: "",
       // 选中值1
       res1y: "",
@@ -1062,7 +1114,6 @@ export default {
       become: false,
       // 员工数据
       staffData: [],
-
 
       // 社保缴纳项目
       social_options: [
@@ -1092,10 +1143,6 @@ export default {
         {
           value: '公积金',
           label: '公积金',
-        },
-        {
-          value: '补充公积金',
-          label: '补充公积金',
         },
       ],
       // 社保缴纳表数据

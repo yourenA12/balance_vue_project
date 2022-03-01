@@ -162,12 +162,6 @@
         <el-radio v-model="fo.deptState" :label="1">禁用</el-radio>
         <div class="an">
 
-          <el-button @click="resetForm('ruleForm')">
-            <el-icon>
-              <i-close-bold/>
-            </el-icon>
-            <span>取消</span>
-          </el-button>
 
           <el-button type="primary" @click="submitForm('ruleForm')">
             <el-icon>
@@ -175,6 +169,14 @@
             </el-icon>
             <span>提交</span>
           </el-button>
+
+          <el-button @click="resetForm('ruleForm')">
+            <el-icon>
+              <i-close-bold/>
+            </el-icon>
+            <span>取消</span>
+          </el-button>
+
 
         </div>
       </el-form>
@@ -271,22 +273,6 @@
       </el-table>
     </div>
 
-    <!--分页-->
-    <div class="demo-pagination-block">
-      <el-pagination
-          v-model:currentPage="pageInfo.currenPage"
-          :page-sizes="[3, 5, 10, 50]"
-          v-model:page-size="pageInfo.pagesize"
-          :default-page-size="pageInfo.pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="pageInfo.total"
-          :pager-count="5"
-          background
-          @size-change="deptinquire"
-          @current-change="deptinquire"
-      >
-      </el-pagination>
-    </div>
 
   </div>
 </template>
@@ -358,9 +344,7 @@ export default {
 
 
       //部门负责人
-      optionss: ref([
-
-      ]),
+      optionss: ref([]),
 
       deptData: [],
       //验证
@@ -595,10 +579,5 @@ table * {
   margin-left: 1%;
 }
 
-.demo-pagination-block {
-  float: right;
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
 </style>
 
