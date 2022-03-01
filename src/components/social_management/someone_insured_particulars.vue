@@ -78,18 +78,10 @@ export default {
     };
   },
   methods:{
-    // 查询所有参保方案
+    // 查询参保详情明细
     selectAllPage() {
-      alert(111)
-      this.axios
-          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail")
-          .then((response) => {
-            console.log(response);
-            this.tableData =response.data.data.records
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+      alert(this.$route.query.staffId)
+
     },
   },
   created() {

@@ -1,15 +1,16 @@
 <template>
-<!--社保缴费明细-->
+  <!--社保缴费明细-->
   <div class="saas-main-content">
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
         <!-- 计薪月份 -->
         <div class="month-div">
-          <span class="month_span">2021-12</span><br /><br />
-          计薪月份<br /><br />
+          <span class="month_span">{{ currentDate }}</span><br/><br/>
+          计薪月份<br/><br/>
           <el-button type="primary" size="small">重新核算</el-button>
           <el-button type="primary" size="small" style="width: 80px"
-            >归档</el-button
+          >归档
+          </el-button
           >
         </div>
 
@@ -41,57 +42,26 @@
         <div class="mt-20 ml-20 mr-20">
           <!-- 按钮 -->
           <el-button size="small"
-            ><i class="iconfont">&#xe6a2;</i>批量导出</el-button
+          ><i class="iconfont">&#xe6a2;</i>批量导出
+          </el-button
           >
           <el-button size="small"
-            ><i class="iconfont">&#xe639;</i>批量导入</el-button
+          ><i class="iconfont">&#xe639;</i>批量导入
+          </el-button
           >
-          <el-button size="small" type="danger" plain
-            ><i class="iconfont">&#xe608;</i>批量删除</el-button
-          >
-
-<!--          &lt;!&ndash; 输入框 &ndash;&gt;-->
-<!--          <div class="resume-operation">-->
-<!--            <el-input v-model="empName_search" placeholder="员工姓名">-->
-<!--              <template #suffix>-->
-<!--                <el-icon class="el-input__icon"><i-search /></el-icon>-->
-<!--              </template>-->
-<!--            </el-input>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; 下拉选择器 &ndash;&gt;-->
-<!--          <div class="resume-operation">-->
-<!--            <el-select clearable size="small" v-model="empState" placeholder="员工状态">-->
-<!--              <el-option-->
-<!--                v-for="item in empState_options"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value"-->
-<!--              >-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; 部门 树形选择框 &ndash;&gt;-->
-<!--          <div class="resume-operation">-->
-<!--            <el-select clearable v-model="dept_name" multiple placeholder="选择部门">-->
-<!--              <el-option-->
-<!--                v-for="item in depts"-->
-<!--                :key="item.value"-->
-<!--                :label="item.label"-->
-<!--                :value="item.value"-->
-<!--              >-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--          </div>-->
+          <el-button :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
+            <i class="iconfont">&#xe608;</i>批量删除
+          </el-button>
 
 
-          <el-input style="width: 200px;margin-left: 150px;" size="small" v-model="pageInfo.staffNameSearch" placeholder="请输入用户名称"/>
+          <el-input style="width: 200px;margin-left: 150px;" size="small" v-model="pageInfo.staffNameSearch"
+                    placeholder="请输入用户名称"/>
 
           <!-- 下拉选择器 -->
           <!--          <div style="width: 200px" class="resume-operation">-->
 
-          <el-select v-model="deptId" size="small" multiple ref="vueSelect" @change="onchange()" @click="onclicks()"  placeholder="选择部门" style="margin-left: 15px">
+          <el-select v-model="deptId" size="small" multiple ref="vueSelect" @change="onchange()" @click="onclicks()"
+                     placeholder="选择部门" style="margin-left: 15px">
             <el-option hidden></el-option>
             <el-option
                 class="xxx"
@@ -106,7 +76,7 @@
                      :default-expand-all=true
                      :check-on-click-node=true
                      node-key="deptId"
-                     :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                     :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
           </el-select>
 
           <el-select placeholder="请选择状态" size="small" v-model="pageInfo.stateSearch" style="margin-left: 15px;">
@@ -115,13 +85,14 @@
           </el-select>
           <!--          </div>-->
 
-          <el-button @click="selectAllPage()" size="small" type="primary" style="width: 80px;margin-left:25px;margin-top: 20px">
+          <el-button @click="selectAllPage()" size="small" type="primary"
+                     style="width: 80px;margin-left:25px;margin-top: 20px">
             <el-icon>
               <i-search/>
             </el-icon>
             搜索
           </el-button>
-          <el-button @click="replacement()" size="small"  style="width: 80px;" >
+          <el-button @click="replacement()" size="small" style="width: 80px;">
             <el-icon>
               <i-refresh/>
             </el-icon>
@@ -132,23 +103,29 @@
         <!-- 表格内容部分 -->
         <div class="sub-Content__primary">
           <el-table size="small" :data="tableData" style="width: 100%"
+                    @selection-change="selectionData"
                     :header-cell-style="{textAlign: 'center',background:'#f0f0f0',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
             <!-- 多选框 -->
             <el-table-column type="selection" width="55"/>
             <el-table-column prop="staffName" label="姓名"/>
-            <el-table-column prop="defInsuredName" label="参保方案" />
-            <el-table-column prop="defInsuredName" label="部门" />
-            <el-table-column prop="defInsuredName" label="职位" />
-            <el-table-column prop="defInsuredName" label="状态" />
-            <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费" />
-            <el-table-column prop="insDetailSocialFirmPay" label="社保企业缴费" />
-            <el-table-column prop="insDetailFundPersonPay" label="公积金个人缴费" />
+            <el-table-column prop="deptName" label="部门"/>
+            <el-table-column prop="positionName" label="职位"/>
+            <el-table-column prop="staffState" label="状态">
+              <template #default="scope">
+                <span style="color:#fa8c16;" v-if="scope.row.staffState==2">试用</span>
+                <span style="color: #13c2c2;" v-if="scope.row.staffState==3">正式</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="defInsuredName" label="参保方案"/>
+            <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费"/>
+            <el-table-column prop="insDetailSocialFirmPay" label="社保企业缴费"/>
+            <el-table-column prop="insDetailFundPersonPay" label="公积金个人缴费"/>
             <el-table-column prop="insDetailFundFirmPay" label="公积金企业缴费"/>
             <el-table-column label="操作">
-              <template #default>
-                <router-link :to="{path:this.path,query:{path:this.$route.query.path}}">
-                  <el-button type="text" size="small">查看 </el-button>
+              <template #default="scope">
+                <router-link :to="{path:this.path,query:{path:this.$route.query.path,staffId:scope.row.staffId}}">
+                  <el-button type="text" size="small">查看</el-button>
                 </router-link>
               </template>
             </el-table-column>
@@ -158,16 +135,16 @@
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
           <el-pagination
-            v-model:currentPage="pageInfo.currenPage"
-            :page-sizes="[3, 5, 10, 50]"
-            v-model:page-size="pageInfo.pagesize"
-            :default-page-size="pageInfo.pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageInfo.total"
-            :pager-count="5"
-            background
-            @size-change="selectAllPage"
-            @current-change="selectAllPage"
+              v-model:currentPage="pageInfo.currenPage"
+              :page-sizes="[3, 5, 10, 50]"
+              v-model:page-size="pageInfo.pagesize"
+              :default-page-size="pageInfo.pagesize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="pageInfo.total"
+              :pager-count="5"
+              background
+              @size-change="selectAllPage"
+              @current-change="selectAllPage"
           >
           </el-pagination>
         </div>
@@ -178,8 +155,8 @@
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
-import {ElMessage} from "element-plus";
+import {ref, defineComponent} from "vue";
+import {ElMessage, ElMessageBox} from "element-plus";
 import qs from 'qs'
 
 export default {
@@ -189,49 +166,68 @@ export default {
     const defaultProps = {
       children: 'children',
       label: 'deptName',
-      value:'deptId'
+      value: 'deptId'
+    }
+
+    //批量删除提示框
+    const removeAll = () => {
+      ElMessageBox.confirm(
+          '确定删除！！！',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }
+      )
+          .then(() => {
+
+            // 批量删除方法
+            this.deleteAll()
+
+          })
+          .catch(() => {
+            ElMessage({
+              message: '取消',
+            })
+          })
     }
     return {
-      res:"",
+
+      removeAll,
+
+      //批量删除按钮
+      deleteAllButton: true,
+      // 当前年月
+      currentDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
+
+      res: "",
       // 选中值1
-      res1:"",
+      res1: "",
       // 选中值2
-      res2:"",
+      res2: "",
       // 部门  文本框的值
-      dept:[],
-      deptId:[],
+      dept: [],
+      deptId: [],
       // 格式
       defaultProps,
       //存放部门信息
       deptlists: [],
 
 
-      path:"/social/social_payment/someone_insured_particulars",
+      path: "/social/social_payment/someone_insured_particulars",
       // 部门名称
       dept_name: null,
       // 参保人数
-      insuredPeople:0,
+      insuredPeople: 0,
       // 个人缴费
-      personPay:0,
+      personPay: 0,
       // 公司缴费
-      firmPay:0,
+      firmPay: 0,
       // 合计缴费
-      totalPay:0,
-      // 选择部门 下拉选择器
-      depts: [
-        {value: "1", label: "部门1"},
-        {value: "2", label: "部门2"},
-        {value: "3", label: "部门3"},
-      ],
+      totalPay: 0,
       // 员工姓名搜索框
-      empName_search:"",
-      //员工状态下拉选择器
-      empState_options: [
-        { value: "0", label: "试用期" },
-        { value: "1", label: "在职" },
-        { value: "2", label: "离职" },
-      ],
-      empState:"",//员工状态下拉选择器的值
+      empName_search: "",
+      //员工状态下拉选择器的值
+      empState: "",
       // 分页参数
       pageInfo: {
         currenPage: 1, //当前页
@@ -243,29 +239,34 @@ export default {
         // 部门名称
         deptSearch: '',
         //员工状态
-        stateSearch:'',
+        stateSearch: '',
       },
+      // 表格数据
       tableData: [],
+      //表格选中数据
+      tableVal: [],
+      // 员工id
+      staffIds:[],
+
     };
   },
-  methods:{
+  methods: {
     //搜索框重置
     replacement() {
       this.pageInfo.currentPage = 1,
           this.pageInfo.staffNameSearch = '',
           this.pageInfo.deptSearch = '',
-          this.res2=""
-      this.pageInfo.stateSearch='',
+          this.res2 = ""
+      this.pageInfo.stateSearch = '',
           // 将值赋值到选择器中
           this.$refs.tree.setCheckedKeys([], false)
-
 
       this.selectAllPage()
 
     },
 
     // 当文本框值发生变化时调用的方法
-    onchange(){
+    onchange() {
 
       // 将值赋值到选择器中
       this.$refs.tree.setCheckedKeys(this.deptId, false)
@@ -325,25 +326,53 @@ export default {
           });
     },
 
+    // 表格选中值发生变化时调用此方法
+    selectionData(val){
+
+      // 当前表格选中数据
+      this.tableVal=val
+
+      // 清空选中员工id
+      this.staffIds=[]
+
+      // 遍历选中数据
+      this.tableVal.forEach(item=>{
+        // push 员工id
+        this.staffIds.push(item.staffId)
+      })
+
+      // 如果员工id不为空
+      if( this.staffIds.length!=0 ){
+        // 按钮启用
+        this.deleteAllButton=false
+        return // 返回
+      }
+
+      // 按钮禁用
+      this.deleteAllButton=true
+
+
+    },
+
     // 查询所有参保方案分页
     selectAllPage() {
-      let params= {
+      let params = {
 
-        currenPage:this.pageInfo.currenPage,
-        pagesize:this.pageInfo.pagesize,
+        currenPage: this.pageInfo.currenPage,
+        pagesize: this.pageInfo.pagesize,
         staffNameSearch: this.pageInfo.staffNameSearch,
-        deptIds:this.res2.length==0?'':this.res2,
+        deptIds: this.res2.length == 0 ? '' : this.res2,
         stateSearch: this.pageInfo.stateSearch,
 
       }
 
       this.axios
-          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
             // 表格数据
             this.tableData = response.data.data.records
-            this.pageInfo.total=response.data.data.total
+            this.pageInfo.total = response.data.data.total
 
           })
           .catch(function (error) {
@@ -353,36 +382,63 @@ export default {
 
     // 查询本月所有参保方案
     selectAll() {
-      let params= {
-        currenPage:1,
-        pagesize:999,
+      let params = {
+        currenPage: 1,
+        pagesize: 999,
         staffNameSearch: "",
-        deptIds:"",
+        deptIds: "",
         stateSearch: ""
       }
 
       this.axios
-          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?"+qs.stringify(params,{ arrayFormat: 'repeat' }))
+          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.error(response);
 
             // 本月参保人数
-            this.insuredPeople=response.data.data.total
+            this.insuredPeople = response.data.data.total
 
             // 遍历表格数据
-            this.tableData.forEach(item=>{
+            this.tableData.forEach(item => {
               // 本月个人缴费
-              this.personPay+=item.insDetailSocialPersonPay+item.insDetailFundPersonPay
+              this.personPay += item.insDetailSocialPersonPay + item.insDetailFundPersonPay
               // 本月公司缴费
-              this.firmPay+=item.insDetailSocialFirmPay+item.insDetailFundFirmPay
+              this.firmPay += item.insDetailSocialFirmPay + item.insDetailFundFirmPay
             })
 
             // 合计缴费
-            this.totalPay=this.personPay+this.firmPay
+            this.totalPay = this.personPay + this.firmPay
           })
           .catch(function (error) {
             console.log(error);
           });
+    },
+
+    // 批量删除
+    deleteAll(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insuredDetail/deleteInsuredAll/'+this.staffIds,
+        method: 'DELETE',
+        // data:{
+        //   staffIds:this.staffIds
+        // }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '删除成功',
+            type: 'success',
+          })
+          // 完成后调用查询方法
+          this.selectAllPage()
+          this.selectAll()
+
+        } else {
+          ElMessage.error('删除失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
     },
 
   },
@@ -397,12 +453,12 @@ export default {
 <style scoped>
 
 /*表格*/
-.sub-Content__primary{
+.sub-Content__primary {
   margin-top: 20px;
 }
 
-.xxx{
-  display:none
+.xxx {
+  display: none
 }
 
 /* 月统计金额下的div下的span */
@@ -474,10 +530,12 @@ export default {
   margin-top: 8px;
   min-height: 100%;
 }
+
 .j-card:hover {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: transparent;
 }
+
 .j-card-bordered {
   border: 1px solid #e9e9e9;
   border-top-color: rgb(233, 233, 233);
@@ -485,6 +543,7 @@ export default {
   border-bottom-color: rgb(233, 233, 233);
   border-left-color: rgb(233, 233, 233);
 }
+
 .j-card {
   background: #fff;
   border-radius: 4px;
@@ -496,8 +555,8 @@ export default {
   min-height: 100%;
 }
 
-.j-card-body{
-  padding:0 2%;
+.j-card-body {
+  padding: 0 2%;
 }
 
 @font-face {

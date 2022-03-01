@@ -117,7 +117,7 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 提交按钮 -->
-          <el-button style="width:75px" v-bind:disabled="disableds" size="small" type="primary" @click="submitAdd()" plain>提交 </el-button>
+          <el-button style="width:75px" v-bind:disabled="disableds" size="small" type="primary" @click="submitMsg" plain>提交 </el-button>
 
           <!-- 搜索框 -->
 <!--          <el-input v-model="search" size="small" class="resume-operation" placeholder="搜索">-->
@@ -224,7 +224,7 @@
 <script>
 import {ref, defineComponent} from "vue";
 import qs from "qs";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
   data() {
@@ -234,7 +234,30 @@ export default {
       label: 'deptName',
       value:'deptId'
     }
+
+    //提交提示框
+    const submitMsg = () => {
+      ElMessageBox.confirm(
+          '确定提交！！！',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }
+      )
+          .then(() => {
+
+            // 提交方法
+            this.submitAdd()
+
+          })
+          .catch(() => {
+            ElMessage({
+              message: '取消',
+            })
+          })
+    }
     return {
+      submitMsg,
       res:"",
       // 选中值1
       res1:"",
@@ -333,7 +356,7 @@ export default {
         url: 'http://localhost:8010/provider//socialStaffVo/insertsocial',
         method: 'post',
         data:{
-          zbId:this.scheme_name,
+          insuredId:this.scheme_name,
           staffIds:this.xzStaffIds
         }
       }).then(response => {
@@ -342,14 +365,13 @@ export default {
             message: '添加成功',
             type: 'success',
           })
-          this.selectEmps() // 修改完成后调用查询方法
+          this.selectsocialStaffPage() // 完成后调用查询方法
         } else {
           ElMessage.error('添加失败')
         }
       }).catch(function (error) {
         console.log(error);
       });
-
 
     },
 
