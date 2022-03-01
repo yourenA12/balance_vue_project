@@ -155,11 +155,12 @@
           </el-form>
 
           <!-- process-status="error" -->
-        <el-steps align-center :space="200" :active="active" finish-status="success">
-          <el-step :title="a.staffName2" ></el-step>
-          <el-step :title="b.staffName2" ></el-step>
-          <el-step :title="c.staffName2"></el-step>
+        <el-steps align-center :space="200" :active="active">
+          <el-step :status="statusa" :title="a" ></el-step>
+          <el-step :status="statusb" :title="b" ></el-step>
+          <el-step :status="statusc" :title="c"></el-step>
         </el-steps>
+
 
           <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
           <!--              -->
@@ -276,131 +277,9 @@ export default {
   data() {
     return {
       // 待办转正审批列表
-      tableData: [
-        {
-          date: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData: [],
       // 已办转正审批列表
-      tableData1: [
-        {
-          date1: "2016-05-02",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-03",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-04",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-        {
-          date1: "2016-05-05",
-          //审批编号
-          AUDITFLOW_ID: "0001",
-          //类型
-          AUDITFLOW_TYPE: "请假",
-          //申请人（员工名称）
-          STAFF_ID: "名字",
-          //审批状态
-          AUDITFLOW_STATE: "通过",
-          //审批人
-          STAFF_NAME: "管理员",
-          //最近处理
-          UPDATED_TIME: "2020-01-01",
-        },
-      ],
+      tableData1: [],
       active:"",
       auditflow0: {},
       auditflow: [],
@@ -431,7 +310,10 @@ export default {
       },
       a:{},
       b:{},
-      c:{}
+      c:{},
+      statusa:"",
+      statusb:"",
+      statusc:"",
     };
   },
   methods: {
@@ -477,18 +359,46 @@ export default {
           })
     },
     activeVal(){
-      this.a = this.auditflow[0]
-      this.b = this.auditflow[1]
-      this.c = this.auditflow[2]
-
-      if(this.a.auditflowdetaiState==1)
+      console.log("111111111111")
+      console.log(this.auditflow)
+      this.a = this.auditflow[0].staffName2
+      this.b = this.auditflow[1].staffName2
+      this.c = this.auditflow[2].staffName2
+      let q=this.auditflow[0]
+      let w=this.auditflow[1]
+      let e=this.auditflow[2]
+      if(q.auditflowdetaiState==1){
         this.active=0
-      if(this.b.auditflowdetaiState==1)
+      }
+      if(w.auditflowdetaiState==1){
         this.active=1
-      if(this.c.auditflowdetaiState==1)
+        this.statusa="success"
+      }
+      if(e.auditflowdetaiState==1){
         this.active=2
-      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2)
+        this.statusa="success"
+        this.statusb="success"
+      }
+      if(q.auditflowdetaiState==2 && w.auditflowdetaiState==2 && e.auditflowdetaiState==2){
         this.active=3
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="success"
+      }
+      if(q.auditflowdetaiState==3){
+        this.active=0
+        this.statusa="error"
+      }else if(w.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="success"
+        this.statusb="error"
+      }else if(e.auditflowdetaiState==3){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="error"
+      }
+      this.auditflow0.staffName2=aa
     },
     // 重置日期过滤
     resetDateFilter1() {

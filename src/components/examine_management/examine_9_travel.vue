@@ -113,8 +113,51 @@
         </div>
       </el-tab-pane>
       <!-- 点击详情，弹出抽屉-->
-      <el-drawer v-model="drawer" title="I am the title" :with-header="false">
-        <span>Hi there!</span>
+      <el-drawer v-model="drawer" :with-header="false" title="I am the title">
+        <span>
+
+          <el-form :model="auditflow0" label-width="" >
+            <el-form-item label="员工名称 :">
+              <el-input v-model="auditflow0.staffName1" disabled></el-input>
+            </el-form-item>
+             <el-form-item label="审核人名称 :">
+              <el-input v-model="auditflow0.staffName2" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="员工部门 :">
+              <el-input v-model="auditflow0.deptName" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="出差事由 :">
+              <el-input v-model="auditflow0.travelMatter" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="出差开始时间 :">
+              <el-input v-model="auditflow0.travelSDate" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="出差结束时间:">
+              <el-input v-model="auditflow0.travelEDate" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="出差总小时:">
+              <el-input v-model="auditflow0.travelTotalDate" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="出差地址:">
+              <el-input v-model="auditflow0.travelPlace" disabled></el-input>
+            </el-form-item>
+
+
+          </el-form>
+
+          <!-- process-status="error" -->
+        <el-steps align-center :space="200" :active="active">
+          <el-step :status="statusa" :title="a" ></el-step>
+          <el-step :status="statusb" :title="b" ></el-step>
+          <el-step :status="statusc" :title="c"></el-step>
+        </el-steps>
+
+          <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
+          <!--              -->
+          <!--            <el-input   disabled></el-input>-->
+          <!--          </el-form-item>-->
+
+        </span>
       </el-drawer>
       <!-- 已办申请页面 -->
       <el-tab-pane>
@@ -224,6 +267,15 @@ export default {
   },
   data() {
     return {
+      a:{},
+      b:{},
+      c:{},
+      statusa:"",
+      statusb:"",
+      statusc:"",
+      active:"",
+      auditflow:"",
+      auditflow0:{},
       // 待办转正审批列表
       tableData: [],
       // 已办转正审批列表
@@ -257,6 +309,69 @@ export default {
     };
   },
   methods: {
+    //根据id查询详情
+    selectById(row) {
+      //打开抽屉
+      this.drawer = true
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelecttravelById/" + row.auditflowId)
+          .then((response) => {
+            console.log(response);
+            this.auditflow0 = response.data.data[0]
+            // this.auditflow0.staffName2=row.staffName2//绑定当前审批人
+            this.auditflow = response.data.data;
+
+            this.activeVal(row.staffName2)
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+
+    activeVal(aa){
+      console.log("111111111111")
+      console.log(this.auditflow)
+      this.a = this.auditflow[0].staffName2
+      this.b = this.auditflow[1].staffName2
+      this.c = this.auditflow[2].staffName2
+      let q=this.auditflow[0]
+      let w=this.auditflow[1]
+      let e=this.auditflow[2]
+      if(q.auditflowdetaiState==1){
+        this.active=0
+      }
+      if(w.auditflowdetaiState==1){
+        this.active=1
+        this.statusa="success"
+      }
+      if(e.auditflowdetaiState==1){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+      }
+      if(q.auditflowdetaiState==2 && w.auditflowdetaiState==2 && e.auditflowdetaiState==2){
+        this.active=3
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="success"
+      }
+      if(q.auditflowdetaiState==3){
+        this.active=0
+        this.statusa="error"
+      }else if(w.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="success"
+        this.statusb="error"
+      }else if(e.auditflowdetaiState==3){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="error"
+      }
+      this.auditflow0.staffName2=aa
+    },
+
     selectAuditflow(val) {
       // 待办
       if(val==1){

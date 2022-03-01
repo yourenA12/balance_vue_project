@@ -70,7 +70,7 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2,3)"
               >
                 <template #reference>
                   <el-button type="text">通过</el-button>
@@ -82,7 +82,7 @@
                   confirm-button-text="确定"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3,666)"
               >
                 <template #reference>
                   <el-button type="text">驳回</el-button>
@@ -140,9 +140,9 @@
 
         <!-- process-status="error" -->
         <el-steps align-center :space="200" :active="active">
-          <el-step :status="statusa" :title="a.staffName2" ></el-step>
-          <el-step :status="statusb" :title="b.staffName2" ></el-step>
-          <el-step :status="statusc" :title="c.staffName2"></el-step>
+          <el-step :status="statusa" :title="a" ></el-step>
+          <el-step :status="statusb" :title="b" ></el-step>
+          <el-step :status="statusc" :title="c"></el-step>
         </el-steps>
 
           <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
@@ -194,26 +194,26 @@
           <el-table-column label="流程" prop="auditflowTitle" width="100"/>
           <el-table-column label="申请人" prop="staffName1" width="150"/>
           <!-- <el-table-column prop="name" label="操作人" width="100" /> -->
-          <el-table-column label="状态" prop="auditflowdetaiState" width="100">
+          <el-table-column label="状态" prop="auditflowState" width="100">
             <!-- 判断 prop的状态  -->
             <template #default="scope">
 
-              <div v-if="scope.row.auditflowdetaiState=='0'">
+              <div v-if="scope.row.auditflowState=='0'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待审</span>
               </div>
-              <div v-if="scope.row.auditflowdetaiState=='1'">
+              <div v-if="scope.row.auditflowState=='1'">
                 <div class="if_spz"></div>
                 &nbsp;&nbsp;<span>待我审批</span>
               </div>
 
 
-              <div v-if="scope.row.auditflowdetaiState=='2'">
+              <div v-if="scope.row.auditflowState=='2'">
                 <div class="if_tg"></div>
                 &nbsp;&nbsp;<span>通过</span>
               </div>
 
-              <div v-if="scope.row.auditflowdetaiState=='3'">
+              <div v-if="scope.row.auditflowState=='3'">
                 <div class="if_bh"></div>
                 &nbsp;&nbsp;<span>驳回</span>
               </div>
@@ -356,14 +356,15 @@ export default {
           })
     },
     //转正审批 修改状态
-    updateAuditflowdetai(id,mxid,state) {
+    updateAuditflowdetai(id,mxid,state,isStaffState) {
       this.axios({
         url: 'http://localhost:8010/provider/auditflowdetail/updateAuditflowdetail',
         method: 'put',
         data:{
           auditflowId:id,
           auditflowdetailId:mxid,
-          auditflowdetaiState:state
+          auditflowdetaiState:state,
+          isStaffState:isStaffState
         }
       }).then(response => {
         if (response.data.data > 0) {
@@ -380,7 +381,6 @@ export default {
       });
     },
 
-
     //
     selectById(row) {
       //打开抽屉
@@ -390,10 +390,11 @@ export default {
           .get("http://localhost:8010/provider/findSelectPageById/" + row.auditflowId)
           .then((response) => {
             console.log(response);
+            this.auditflow0 = response.data.data[0]
+            // this.auditflow0.staffName2=row.staffName2//绑定当前审批人
             this.auditflow = response.data.data;
-            this.auditflow0 = this.auditflow[0]
-            this.auditflow0.staffName2=row.staffName2//绑定当前审批人
-            this.activeVal()
+
+            this.activeVal(row.staffName2)
           })
           .catch(function (error) {
             console.log(error);
@@ -416,44 +417,47 @@ export default {
           })
     },*/
 
-    activeVal(){
-      this.a = this.auditflow[0]
-      this.b = this.auditflow[1]
-      this.c = this.auditflow[2]
-
-      if(this.a.auditflowdetaiState==1){
+    activeVal(aa){
+      console.log("111111111111")
+      console.log(this.auditflow)
+      this.a = this.auditflow[0].staffName2
+      this.b = this.auditflow[1].staffName2
+      this.c = this.auditflow[2].staffName2
+      let q=this.auditflow[0]
+      let w=this.auditflow[1]
+      let e=this.auditflow[2]
+      if(q.auditflowdetaiState==1){
         this.active=0
       }
-
-      if(this.b.auditflowdetaiState==1){
+      if(w.auditflowdetaiState==1){
         this.active=1
         this.statusa="success"
       }
-
-      if(this.c.auditflowdetaiState==1){
+      if(e.auditflowdetaiState==1){
         this.active=2
         this.statusa="success"
         this.statusb="success"
       }
-
-      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2){
+      if(q.auditflowdetaiState==2 && w.auditflowdetaiState==2 && e.auditflowdetaiState==2){
         this.active=3
         this.statusa="success"
         this.statusb="success"
         this.statusc="success"
       }
-
-      if(this.a.auditflowdetaiState==3){
-        this.active=1
+      if(q.auditflowdetaiState==3){
+        this.active=0
         this.statusa="error"
-      }else if(this.b.auditflowdetaiState==3){
-        this.active=2
+      }else if(w.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="success"
         this.statusb="error"
-      }else if(this.c.auditflowdetaiState==3){
-        this.active=3
+      }else if(e.auditflowdetaiState==3){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
         this.statusc="error"
       }
-
+      this.auditflow0.staffName2=aa
     },
 
     // 点击通过确认按钮触发
