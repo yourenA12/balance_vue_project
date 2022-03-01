@@ -929,8 +929,11 @@ export default {
             console.log("按参保方案id查询部门id", response);
             if (response.data.data == null) return
 
-            // 将值赋值到选择器中
-            this.$refs.tree.setCheckedKeys(response.data.data, false)
+            this.$nextTick(() => {
+              // 将值赋值到选择器中
+              this.$refs.tree.setCheckedKeys(response.data.data, false)
+            })
+
 
           })
           .catch(function (error) {
