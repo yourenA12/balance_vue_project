@@ -161,17 +161,12 @@ export default {
     };
   },
   methods:{
-    // 查询所有参保方案
+    // 查询参保详情明细
     selectAllPage() {
-      this.axios
-          .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail")
-          .then((response) => {
-            console.log(response);
-            this.tableData =response.data.data.records
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+      // 从trore 中取出员工id进行查询
+      alert(this.$store.state.staffId_Msg)
+
+
     },
   },
   created() {
