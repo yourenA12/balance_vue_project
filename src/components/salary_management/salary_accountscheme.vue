@@ -4,20 +4,15 @@
   <div style="width:100%;">
     <div style="width:95%;margin: auto">
 
-
+      <!--      title="新增薪酬组"-->
       <!--  弹框  -->
       <div>
         <el-dialog
             v-model="become"
-            title="新增薪酬组"
+            :title="titleMap[dialogTitle]"
             width="30%"
             :close-on-click-modal="false">
 
-          <!--          <div>-->
-          <!--            <el-radio  v-model="radio1" label="1" size="large">给职位设置薪酬组</el-radio>&nbsp;&nbsp;&nbsp;&nbsp;-->
-          <!--            <el-radio @click="compensationStaff=true,compensationPost=false" v-model="radio1" label="2" size="large">给员工设置薪酬组</el-radio>-->
-          <!--          </div>-->
-          <!--          -->
           <el-form
               ref="ruleFormRef"
               :model="compensationForm"
@@ -63,7 +58,6 @@
                          :default-expand-all=true
                          :check-on-click-node=true
                          node-key="deptId"
-
                          :props="defaultProps" ref="tree" @check-change="handleCheckChange()"/>
               </el-select>
             </el-form-item>
@@ -84,11 +78,11 @@
               <el-input v-model="compensationForm.compensationRemark" style="width:240px"></el-input>
             </el-form-item>
 
-            <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false,replacement()">取消</el-button>
+            <el-button style="width:80px;margin-top: 30px;margin-left: 120px" @click="become=false,replacement()">取消
+            </el-button>
             <el-button type="primary" style="width:80px" @click="compensationSalary()">提交</el-button>
 
           </el-form>
-
 
         </el-dialog>
       </div>
@@ -136,7 +130,8 @@
 
 
           <el-table
-              :data="deptData"
+              ref="staffsTable"
+              :data="staffData"
               @selection-change="staffAll"
               height="250"
               style="width: 100%;margin-top: 20px;"
@@ -184,7 +179,7 @@
         </el-dialog>
       </div>
 
-      <el-button @click="become=true,selectDeptName(),selectPositionName()" size="small" type="primary" plain
+      <el-button @click="addData()" size="small" type="primary" plain
                  style="width: 80px">
         <el-icon>
           <i-plus/>
@@ -193,27 +188,41 @@
       </el-button>
 
       <div style="margin-top:30px;">
-        <el-table :data="tableData" style="width: 100%"
+        <el-table :data="compensationData" style="width: 100%"
                   :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                   :cell-style="{textAlign: 'center'}">
 
-          <el-table-column prop="staffName" label="薪酬组" width="200"/>
-          <el-table-column prop="staffBirthday" label="试用部门" width="220"/>
-          <el-table-column prop="deptName" label="试用人员" width="220"/>
-          <el-table-column prop="postName" label="职位" width="220"/>
-          <el-table-column prop="staffPhone" label="备注" width="220"/>
-          <el-table-column label="操作" width="180">
+          <el-table-column prop="compensationName" label="薪酬组"/>
+          <el-table-column prop="compensationNumber" label="薪酬组人数"/>
+          <el-table-column prop="compensationRemark" label="备注"/>
+          <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text" size="small" @click="empMsg(scope.row.staffId)"
+              <el-button type="text" size="small" @click="updateData(scope.row)"
               >编辑
               </el-button>
               <!--                <router-link :to="{path:this.leave,query:{path: this.$route.query.path}}" style="text-decoration: none">-->
               &nbsp;
-              <el-button @click="departure(scope.row)" type="text" size="small">删除</el-button>
+              <el-button @click="deleteCompensationId(scope.row)" type="text" size="small">删除</el-button>
               <!--                </router-link>-->
             </template>
           </el-table-column>
         </el-table>
+      </div>
+
+      <div class="demo-pagination-block">
+        <el-pagination
+            v-model:currentPage="pageInfo.currentPage"
+            :page-sizes="[3, 5, 10, 50]"
+            v-model:page-size="pageInfo.pagesize"
+            :default-page-size="pageInfo.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageInfo.total"
+            :pager-count="5"
+            background
+            @size-change="selectCompensation()"
+            @current-change="selectCompensation()"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -222,9 +231,9 @@
 
 <script>
 
-import {ref} from 'vue'
 import {ElMessage} from "element-plus";
 import qs from "qs";
+import {ref} from "vue";
 
 // const activeName = ref('first')
 
@@ -253,6 +262,8 @@ export default {
       defaultProps,
       //存放部门信息
       deptlists: [],
+      //存放薪酬组信息
+      compensationData: [],
 
 
       resy: "",
@@ -264,18 +275,28 @@ export default {
       depty: [],
       deptIdy: [],
 
-      //弹出框(员工)的分页
-      pageInfo1: {
+      pageInfo: {
         // 分页参数
-        currenPage: 1, //当前页
+        currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
 
         //部门
         deptSearch: '',
       },
+
+      //弹出框(员工)的分页
+      pageInfo1: {
+        // 分页参数
+        currenPage: 1, //当前页
+        pagesize: 10, // 页大小
+        total: 0, // 总页数
+
+        //部门
+        deptSearch: '',
+      },
       //弹出框(员工)存储数据
-      deptData: [],
+      staffData: [],
       // 单选框选择员工
       radioStaff: "",
 
@@ -293,6 +314,16 @@ export default {
 
       CompensationNameAll: [],
 
+      //弹出框新增修改操作
+      titleMap: {
+        addData: "添加薪酬组",
+        updateData: "修改新酬组"
+      },
+      dialogTitle: "",
+
+      formLabelWidth: '120px',
+
+
       //薪酬组
       compensationVal: null,
       //薪酬组部门职位
@@ -305,10 +336,12 @@ export default {
       compensationStaff: false,
       //
       compensationForm: {
+        // 薪酬组id
+        compensationId: "",
         //薪酬组名称
         compensationName: "",
         //员工名称
-        name:[],
+        name: [],
         //部门
         dept: "",
         //存选中的职位
@@ -319,21 +352,87 @@ export default {
       },
 
     }
-  }, methods: {
+  },
+  methods: {
+
+    addData() {
+      this.compensationForm = {
+        // 薪酬组id
+        compensationId: "",
+        //薪酬组名称
+        compensationName: "",
+        //员工名称
+        name: [],
+        //部门
+        dept: "",
+        //存选中的职位
+        citysPost: [],
+        //备注
+        compensationRemark: '',
+
+      }
+
+      // 清空部门选中
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys([], false)
+      })
+
+
+      this.become = true; // 弹出框
+      this.dialogTitle = "addData"; // title 显示新增薪酬组
+    },
+    updateData(row) {
+      this.become = true;
+      this.dialogTitle = "updateData";
+      this.compensationForm.compensationId = row.compensationId
+      this.compensationForm.compensationName = row.compensationName
+      this.compensationForm.compensationRemark = row.compensationRemark
+      this.selectDeptId();
+      this.selectPostId();
+      this.selectStaffId();
+    },
+
+    //根据id删除薪酬组
+    deleteCompensationId(index) {
+      alert(index.compensationId)
+
+      this.axios
+          .delete("http://localhost:8010/provider/compensation/deleteCompensationId/" + index.compensationId)
+          .then((response) => {
+            console.log(response);
+
+            if (response.data.data > 0) {
+              ElMessage({
+                message: '删除成功',
+                type: 'success',
+              })
+              //调用查询工作经历
+              this.selectCompensation()
+
+
+            } else {
+              ElMessage.error('删除失败')
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+
 
     //弹出框重置
     replacement() {
-     this.compensationForm.compensationName=''
-      this.compensationForm.compensationRemark=''
-      this.compensationForm.name='',
-      this.compensationForm.citysPost = ''
-      // this.res2=""
-      // // 将值赋值到选择器中
-      // this.$refs.tree.setCheckedKeys([], false)
+      this.compensationForm.compensationId = ''
+      this.compensationForm.compensationName = ''
+      this.compensationForm.compensationRemark = ''
+      this.compensationForm.name = []
+      this.compensationForm.citysPost = []
 
-
-
-
+      // 重置员工弹出框选中
+      this.$nextTick(() => {
+        this.$refs.staffsTable.clearSelection()
+      })
     },
 
     //搜索框重置
@@ -368,6 +467,20 @@ export default {
     staffSelect() {
       // 关闭选择器
       this.$refs.vueSelects.blur();
+
+      // 清空表格选中
+      this.$nextTick(() => {
+        this.$refs.staffsTable.clearSelection()
+      })
+
+
+      this.tableVal.forEach(item => {
+        // 将值赋值上表格
+        this.$nextTick(() => {
+          this.$refs.staffsTable.toggleRowSelection(item)
+        })
+      })
+
     },
 
     // 当文本框值发生变化时调用的方法
@@ -508,7 +621,7 @@ export default {
           .get("http://localhost:8010/provider/staff/selectStaffXX?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
-            this.deptData = response.data.data.records;
+            this.staffData = response.data.data.records;
             console.log(response.data.data.records)
             this.pageInfo1.total = response.data.data.total;
           })
@@ -517,11 +630,29 @@ export default {
           });
 
     },
+    //查询薪酬组
+    selectCompensation() {
+
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectCompensation/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.compensationData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
     //取薪酬组input文本里面的值
     compensationSalary() {
 
       //薪酬组数据
       this.compensationVal = {
+        // 取薪酬组id
+        compensationId: this.compensationForm.compensationId,
         //取薪酬组名称
         compensationName: this.compensationForm.compensationName,
         //备注
@@ -544,9 +675,9 @@ export default {
           //取部门信息
           deptIds: this.res2,
           //取职位信息
-          postIds: this.compensationForm.citysPost,
+          postIds: this.compensationForm.citysPost == null ? [] : this.compensationForm.citysPost,
           //获取员工id
-          staffIds :this.compensationForm.name
+          staffIds: this.compensationForm.name == null ? [] : this.compensationForm.name,
         }
       }).then(response => {
         console.log(response);
@@ -555,12 +686,12 @@ export default {
             message: '添加成功',
             type: 'success',
           })
-          this.become=false
+          this.become = false
           this.replacement() // 添加完情况文本框
 
-        } else if(response.data.data == "添加失败"){
+        } else if (response.data.data == "添加失败") {
           ElMessage.error('添加失败')
-        }else{
+        } else {
           ElMessage.warning(response.data.data)
         }
       }).catch(function (error) {
@@ -568,41 +699,91 @@ export default {
       });
 
     },
-    //根据薪酬组名称查询数据
-    // selectCompensationNames() {
-    //
-    //   this.axios({
-    //     url: 'http://localhost:8010/provider/compensation/insertcompensation',
-    //     method: 'post',
-    //     data: {
-    //       Compensation: this.compensationVal,
-    //       //取部门信息
-    //       deptIds: this.$refs.tree.getCheckedKeys(),
-    //       //取职位信息
-    //       postIds: this.compensationForm.citysPost,
-    //       //获取员工id
-    //       staffId :this.compensationForm.name
-    //     }
-    //   }).then(response => {
-    //     console.log(response);
-    //     if (response.data.data > 0) {
-    //       ElMessage({
-    //         message: '添加成功',
-    //         type: 'success',
-    //       })
-    //       this.selectEmps() // 修改完成后调用查询方法
-    //     } else {
-    //       ElMessage.error('添加失败')
-    //     }
-    //   }).catch(function (error) {
-    //     console.log(error);
-    //   });
-    //
-    // },
 
-  }, created() {
-    this.selectStaffXX()
+    // 按薪酬组id查询部门id
+    selectDeptId() {
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectDeptId/" + this.compensationForm.compensationId)
+          .then((response) => {
+
+            console.log("按薪酬组id查询部门id", response);
+            if (response.data.data == null) return
+
+            this.$nextTick(() => {
+              // 将值赋值到选择器中
+              this.$refs.tree.setCheckedKeys(response.data.data, false)
+            })
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按薪酬组id查询职位id
+    selectPostId() {
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectPostId/" + this.compensationForm.compensationId)
+          .then((response) => {
+
+            console.log("按薪酬组id查询职位id", response);
+            if (response.data.data == null) return
+
+            // 职位选择器
+            this.compensationForm.citysPost = response.data.data
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+    // 按薪酬组id查询员工
+    selectStaffId() {
+      this.axios
+          .get("http://localhost:8010/provider/compensation/selectStaffId/" + this.compensationForm.compensationId)
+          .then((response) => {
+
+            console.log("按薪酬组id查询员工", response);
+
+            // 清空选中值
+            this.tableVal = []
+            // 清空选中 id
+            this.compensationForm.name = []
+
+            // 循环员工id
+            response.data.data.forEach(item => {
+              // 循环员工数据
+              this.staffData.forEach(item1 => {
+
+                // 如果员工id 等于数据中的员工id
+                if (item.staffId == item1.staffId) {
+
+                  // 选中的值
+                  this.tableVal.push(item1)
+                  // 将员工id赋值上
+                  this.compensationForm.name.push(item.staffId)
+
+                }
+
+              })
+
+            })
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+  },
+  created() {
+    this.selectStaffXX() // 查询弹出框员工
     // this.selectCompensationNames()
+    this.selectCompensation() // 查询薪酬组
+    this.selectDeptName() // 查询部门
+    this.selectPositionName() // 查询职位
+
   }
 }
 </script>

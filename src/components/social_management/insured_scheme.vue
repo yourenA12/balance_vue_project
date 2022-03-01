@@ -75,7 +75,7 @@
 
                 <!-- 删除行确认框 -->
                 <el-popconfirm v-if="scope.row.defInsuredState===1"
-                               @confirm="deleteRow(scope.$index, scheme_table)" title="删除此方案?">
+                               @confirm="deleteRow(scope.row.defInsuredId)" title="删除此方案?">
                   <template #reference>
                     <el-button style="color:red" type="text" size="small">删除</el-button>
                   </template>
@@ -141,7 +141,7 @@ export default {
     // 删除行
     deleteRow(id) {
       this.axios
-          .delete("http://localhost:8010/provider/notice/deleteNotices/" +  id)
+          .delete("http://localhost:8010/provider/defInsured/deleteDefInsured/" +  id)
           .then((response) => {
             console.log(response);
             if(response.data.data>0){
@@ -186,6 +186,16 @@ export default {
   created() {
     // 调用查询
     this.selectAllPage()
+
+    // let q=[1,2,3]
+    // let w=[1]
+    // q.forEach(e=>{
+    //   w.push(e)
+    //   alert(w)
+    // })
+
+
+
   },
   data() {
     return {

@@ -75,63 +75,52 @@
 
 
 
-                  <el-form-item label="未签到：" prop="notsignin">
-<!--                    <el-select v-model="ruleForm.notsignin" placeholder="请选择">-->
-<!--                      <el-option label="按固定金额扣款" value="inbyfixed" style="margin-left: 20px;"></el-option>-->
-<!--                      <el-option label="按未签到时长扣款" value="inbyhour" style="margin-left: 20px;"></el-option>-->
-<!--                      <el-option label="按未签到次数扣款" value="inbynumber" style="margin-left: 20px;"></el-option>-->
-<!--                    </el-select>-->
-                    <el-input v-model="attendandceForm.notsignin" style="width:210px" value=""></el-input>
+<!--                  <el-form-item label="未签到：" prop="notsignin">-->
 
-                  </el-form-item>
+<!--                    <el-input v-model="attendandceForm.notsignin" style="width:210px" value=""></el-input>-->
+
+<!--                  </el-form-item>-->
 
 
 
-                  <el-form-item label="扣款："  style="width:500px">
-                    <el-input-number
-                        v-model="num3"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x未签到次数</span>
-                  </el-form-item>
+<!--                  <el-form-item label="扣款："  style="width:500px">-->
+<!--                    <el-input-number-->
+<!--                        v-model="num3"-->
+<!--                        :min="0"-->
+<!--                        :max="10000"-->
+<!--                        controls-position="right"-->
+<!--                        @change="handleChange"-->
+<!--                        size="small"-->
+<!--                    />-->
+<!--                    <span>元x未签到次数</span>-->
+<!--                  </el-form-item>-->
 
 
 
-                  <el-form-item label="未签退：" prop="notsignback">
-<!--                    <el-select v-model="ruleForm.notsignback" placeholder="请选择">-->
-<!--                      <el-option label="按固定金额扣款" value="backbyfixed" style="margin-left: 20px;"></el-option>-->
-<!--                      <el-option label="按未签退时长扣款" value="backbyhour" style="margin-left: 20px;"></el-option>-->
-<!--                      <el-option label="按未签退次数扣款" value="backbynumber" style="margin-left: 20px;"></el-option>-->
-<!--                    </el-select>-->
-                    <el-input v-model="attendandceForm.notsignback" style="width:210px" value=""></el-input>
+<!--                  <el-form-item label="未签退：" prop="notsignback">-->
 
-                  </el-form-item>
+<!--                    <el-input v-model="attendandceForm.notsignback" style="width:210px" value=""></el-input>-->
+
+<!--                  </el-form-item>-->
 
 
-                  <el-form-item label="扣款："  style="width:500px">
-                    <el-input-number
-                        v-model="num4"
-                        :min="0"
-                        :max="10000"
-                        controls-position="right"
-                        @change="handleChange"
-                        size="small"
-                    />
-                    <span>元x未签退次数</span>
-                  </el-form-item>
+<!--                  <el-form-item label="扣款："  style="width:500px">-->
+<!--                    <el-input-number-->
+<!--                        v-model="num4"-->
+<!--                        :min="0"-->
+<!--                        :max="10000"-->
+<!--                        controls-position="right"-->
+<!--                        @change="handleChange"-->
+<!--                        size="small"-->
+<!--                    />-->
+<!--                    <span>元x未签退次数</span>-->
+<!--                  </el-form-item>-->
 
 
 
 
                   <el-form-item label="旷工：" prop="absent">
-<!--                    <el-select v-model="ruleForm.absent" placeholder="请选择">-->
-<!--                      <el-option label="按小时工资比例扣款" value="absentbyhour" style="margin-left: 20px;"></el-option>-->
-<!--                      <el-option label="按月累计旷工时长扣款" value="absentbytime" style="margin-left: 20px;"></el-option>-->
-<!--                    </el-select>-->
+
                     <el-input v-model="attendandceForm.absent" style="width:210px" value=""></el-input>
 
                   </el-form-item>
@@ -250,10 +239,10 @@ export default {
           attendandceLitemoney:this.num,
           //早退一次金额
           attendandceLeavemoney:this.num2,
-          //未签到一次金额
-          attendandceDidnotmoney:this.num3,
-          //未签退一次金额
-          attendandceDidbackmoney:this.num4,
+          // //未签到一次金额
+          // attendandceDidnotmoney:this.num3,
+          // //未签退一次金额
+          // attendandceDidbackmoney:this.num4,
           //旷工一天金额
           attendandceAbscntmoney:this.num5,
           //备注
@@ -288,10 +277,10 @@ export default {
                 this.num=this.AttendandceMsg.attendandceLitemoney,
                 //早退一次金额
                 this.num2=this.AttendandceMsg.attendandceLeavemoney,
-                //未签到一次金额
-                this.num3=this.AttendandceMsg.attendandceDidnotmoney,
-                //未签退一次金额
-                this.num4=this.AttendandceMsg.attendandceDidbackmoney,
+                // //未签到一次金额
+                // this.num3=this.AttendandceMsg.attendandceDidnotmoney,
+                // //未签退一次金额
+                // this.num4=this.AttendandceMsg.attendandceDidbackmoney,
                 //旷工一天金额
                 this.num5=this.AttendandceMsg.attendandceAbscntmoney,
                 //备注
@@ -315,10 +304,10 @@ export default {
           attendandceLitemoney:this.num,
           //早退一次金额
           attendandceLeavemoney:this.num2,
-          //未签到一次金额
-          attendandceDidnotmoney:this.num3,
-          //未签退一次金额
-          attendandceDidbackmoney:this.num4,
+          // //未签到一次金额
+          // attendandceDidnotmoney:this.num3,
+          // //未签退一次金额
+          // attendandceDidbackmoney:this.num4,
           //旷工一天金额
           attendandceAbscntmoney:this.num5,
           //备注

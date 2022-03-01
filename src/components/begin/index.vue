@@ -32,7 +32,7 @@
       <div class="e9login-element" style="padding-top: 0px;top: 238px;left: 80px;width: 324px;height: 45px;position: absolute;">
         <div class="e9login-form-submit e9login-submit" style="width: 324px; height: 45px;">
           <el-button @click="toLogin()" :loading="loading"  style="width: 323px; height: 25px;background:#1890ff;  font-size: 18px; border-radius: 6px;margin-left: -80px " type="button" >
-            <span style="    font-size: 14px;color: white">登 录</span>
+            <span style="font-size: 14px;color: white">登 录</span>
           </el-button>
         </div>
       </div>

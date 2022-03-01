@@ -246,7 +246,7 @@ export default {
     //批量删除提示框
     const remove = () => {
       ElMessageBox.confirm(
-          '是否确定删除！！！',
+          '确定删除！！！',
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消'
