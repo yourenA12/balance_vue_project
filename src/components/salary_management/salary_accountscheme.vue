@@ -131,6 +131,7 @@
 
 
           <el-table
+              ref="staffsTable"
               :data="deptData"
               @selection-change="staffAll"
               height="250"
@@ -338,6 +339,8 @@ export default {
       compensationStaff: false,
       //
       compensationForm: {
+        // 薪酬组id
+        compensationId:"",
         //薪酬组名称
         compensationName: "",
         //员工名称
@@ -352,7 +355,8 @@ export default {
       },
 
     }
-  }, methods: {
+  },
+  methods: {
 
           addData(){
             this.compensationForm = {};
@@ -410,11 +414,16 @@ export default {
 
     //弹出框重置
     replacement() {
-     this.compensationForm.compensationName=''
+      this.compensationForm.compensationId=''
+      this.compensationForm.compensationName=''
       this.compensationForm.compensationRemark=''
-      this.compensationForm.name='',
+      this.compensationForm.name=''
       this.compensationForm.citysPost = ''
 
+      // 重置员工弹出框选中
+      this.$nextTick(() => {
+        this.$refs.staffsTable.clearSelection()
+      })
     },
 
     //搜索框重置
@@ -619,6 +628,8 @@ export default {
 
       //薪酬组数据
       this.compensationVal = {
+        // 取薪酬组id
+        compensationId: this.compensationForm.compensationId,
         //取薪酬组名称
         compensationName: this.compensationForm.compensationName,
         //备注
@@ -697,7 +708,8 @@ export default {
     //
     // },
 
-  }, created() {
+  },
+  created() {
     this.selectStaffXX()
     // this.selectCompensationNames()
     this.selectCompensation()
