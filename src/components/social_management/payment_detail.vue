@@ -124,9 +124,9 @@
             <el-table-column prop="insDetailFundFirmPay" label="公积金企业缴费"/>
             <el-table-column label="操作">
               <template #default="scope">
-                <router-link :to="{path:this.path,query:{path:this.$route.query.path,staffId:scope.row.staffId}}">
-                  <el-button type="text" size="small">查看</el-button>
-                </router-link>
+<!--                <router-link :to="{path:this.path,query:{path:this.$route.query.path}}">-->
+                  <el-button @click="selectInsuredALL(scope.row.staffId)" type="text" size="small">查看</el-button>
+<!--                </router-link>-->
               </template>
             </el-table-column>
           </el-table>
@@ -251,6 +251,17 @@ export default {
     };
   },
   methods: {
+
+    // 点击查看
+    selectInsuredALL(id){
+      // 将id存入stroe
+      this.$store.state.staffId_Msg=id
+
+      // 跳转页面
+      this.$router.push({path:this.path,query:{path:this.$route.query.path}})
+
+    },
+
     //搜索框重置
     replacement() {
       this.pageInfo.currentPage = 1,
