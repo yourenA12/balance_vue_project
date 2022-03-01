@@ -88,6 +88,7 @@
                     <el-table-column prop="name" label="节假日加班工资" width="110"/>
                   </el-table-column>
                   <el-table-column prop="name" label="工资合计" width="100"/>
+                  <el-table-column prop="name" label="出差" width="100"/>
                   <el-table-column label="考勤扣款">
                     <el-table-column prop="name" label="迟到" width="100"/>
                     <el-table-column prop="name" label="早退" width="100"/>
@@ -102,10 +103,10 @@
                     <el-table-column prop="name" label="个人缴纳社保" width="100"/>
                     <el-table-column prop="name" label="公司缴纳社保" width="100"/>
                   </el-table-column>
-                  <el-table-column label="公积金">
-                    <el-table-column prop="name" label="个人缴纳公积金" width="100"/>
-                    <el-table-column prop="name" label="公司缴纳公积金" width="100"/>
-                  </el-table-column>
+<!--                  <el-table-column label="公积金">-->
+<!--                    <el-table-column prop="name" label="个人缴纳公积金" width="100"/>-->
+<!--                    <el-table-column prop="name" label="公司缴纳公积金" width="100"/>-->
+<!--                  </el-table-column>-->
                   <el-table-column prop="name" label="应发工资" width="100" fixed="right"/>
                   <el-table-column prop="name" label="实发工资" width="100" fixed="right"/>
                 </el-table>
