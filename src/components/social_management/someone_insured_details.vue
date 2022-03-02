@@ -12,15 +12,15 @@
           <el-image class="picture" :src="url"></el-image>
         </div>
         <div style="margin-top: 20px">
-          姓名：121321 <br />
-          部门：2313213 <br />
-          职位：321312321 <br /><br /><br />
-          参保类型： 2312321<br />
-          参保方案：31232131 <br />
-          社保基数：213123213 <br />
-          社保参保月份：1321321 <br />
-          公积金基数：3213213 <br />
-          公积金参保月份： 3213123213<br />
+          姓名：{{InsuredData.staffName}} <br />
+          部门：{{InsuredData.deptName}} <br />
+          职位：{{InsuredData.positionName}} <br /><br /><br />
+          参保方案：{{InsuredData.defInsuredName}} <br />
+          社保个人缴纳：{{InsuredData.insDetailSocialPersonPay}} <br />
+          社保公司缴纳：{{InsuredData.insDetailSocialFirmPay}} <br />
+          基金个人缴纳：{{InsuredData.insDetailFundPersonPay}} <br />
+          基金公司缴纳： {{InsuredData.insDetailFundFirmPay}}<br />
+          参保月份:{{InsuredData.insuredMonth}}
         </div>
         <el-button type="text">调整 </el-button>&nbsp;&nbsp;
         <el-button type="text">微调 </el-button>
@@ -116,7 +116,10 @@ export default {
   },
   data() {
     return {
+      // 查询参保详情明细
       tableData: [],
+      //参保明细
+      InsuredData:[],
     };
   },
   methods:{
@@ -136,9 +139,27 @@ export default {
             });
 
     },
+    //查询参保明细
+    // 查询参保详情明细
+    selectInsured() {
+      // 从trore 中取出员工id进行查询
+
+      this.axios
+          .get("http://localhost:8010/provider/insuredDetail/selectDInsuredId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.InsuredData = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
   },
   created() {
     this.selectAllPage()
+    this.selectInsured()
   }
 };
 </script>
