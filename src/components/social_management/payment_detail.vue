@@ -442,8 +442,14 @@ export default {
               this.firmPay += item.insDetailSocialFirmPay + item.insDetailFundFirmPay
             })
 
-            // 合计缴费
+            // 合计缴费 （保留两位小数）
             this.totalPay = this.personPay + this.firmPay
+
+            this.personPay=this.personPay.toFixed(2)
+            this.firmPay=this.firmPay.toFixed(2)
+
+            this.totalPay=this.totalPay.toFixed(2)
+
           })
           .catch(function (error) {
             console.log(error);
