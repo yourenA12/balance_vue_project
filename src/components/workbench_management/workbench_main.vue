@@ -13,7 +13,7 @@
             </div>
             <!-- 欢迎语句 -->
             <div class="text_left_crld" style="display: inline-block;width: 570px">
-              <h3>欢迎你：XXX，祝你工作顺利<br>
+              <h3>欢迎你：{{ this.$store.state.userMsg.staffName }}，祝你工作顺利<br>
                 <el-popover
                     ref="popover"
                     placement="right"

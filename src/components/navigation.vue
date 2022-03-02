@@ -54,7 +54,7 @@
 
                       <el-dropdown-item>账户信息</el-dropdown-item>
                       <el-dropdown-item>SAAS PC</el-dropdown-item>
-                      <el-dropdown-item>退出</el-dropdown-item>
+                      <el-dropdown-item @click="logOut">退出</el-dropdown-item>
 
                        <el-dropdown-item @click="drawer = true">修改账号密码</el-dropdown-item>
 
@@ -85,18 +85,18 @@
             <br/>
            <div style="margin-left: 27px">
                <el-form-item label="原密码:" prop="service">
-                <el-input v-model="accountFrom.yPass"  style="width:300px;" ></el-input>
+                <el-input type="password" show-password v-model="accountFrom.yPass"  style="width:300px;" ></el-input>
               </el-form-item>
               <el-form-item label="新密码:" prop="service">
-                <el-input v-model="accountFrom.xPass"  style="width:300px;" ></el-input>
+                <el-input type="password" show-password v-model="accountFrom.xPass"  style="width:300px;" ></el-input>
               </el-form-item>
            </div>
             <el-form-item label="确认新密码:" prop="service">
-              <el-input v-model="accountFrom.qrPass"  style="width:300px;" ></el-input>
+              <el-input type="password" show-password v-model="accountFrom.qrPass"  style="width:300px;" ></el-input>
             </el-form-item>
 
             <el-button style="margin-left: 110px" @click="empty(),drawer=false">取消</el-button>
-            <el-button type="primary" @click="selectStaffAccountPass()">确认</el-button>
+            <el-button type="primary" @click="submit()">确认</el-button>
 
           </el-form>
         </el-drawer>
@@ -279,9 +279,35 @@
 
 <script>
 
+import {ElMessage, ElMessageBox} from "element-plus";
+
 export default {
   data() {
+    //批量删除提示框
+    const logOut = () => {
+      ElMessageBox.confirm(
+          '退出登录！！！',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }
+      )
+          .then(() => {
+
+            // 清空stroe中的数据
+            this.$store.state.userMsg={}
+            // 去登录
+            this.$router.push({path:'/'})
+
+          })
+          .catch(() => {
+            ElMessage({
+              message: '取消',
+            })
+          })
+    }
     return {
+      logOut,
       drawer:false,
 
       true: true,
@@ -302,29 +328,98 @@ export default {
     }
   },
   methods: {
+
     //抽屉清空
     empty(){
       this.accountFrom.yPass='';
       this.accountFrom.xPass='';
       this.accountFrom.qrPass='';
 
-
     },
 
-    //根据id查询出差方案信息
+    // 密码验证
+    submit(){
+      if(this.accountFrom.yPass==""){
+        ElMessage({
+          type:'warning',
+          message:'请输入原密码'
+        })
+        return
+      }else if(this.accountFrom.xPass==""){
+        ElMessage({
+          type:'warning',
+          message:'请输入新密码'
+        })
+        return
+      }else if(this.accountFrom.qrPass==""){
+        ElMessage({
+          type:'warning',
+          message:'确认新密码'
+        })
+        return;
+      }else if(this.accountFrom.xPass != this.accountFrom.qrPass){
+        ElMessage({
+          type:'warning',
+          message:'两次密码不一致'
+        })
+        return;
+      }
+      this.selectStaffAccountPass() // 验证原密码
+    },
+
+    //查询原密码是否正确
     selectStaffAccountPass() {
 
-      this.axios
-          .post("http://localhost:8010/provider/staff/selectStaffId/1" + this.accountFrom.yPass)
-          .then((response) => {
-            console.log(response);
-            this.passMsg = response.data.data;
+        this.axios({
+          method:'post',
+          url:"http://localhost:8010/provider/user/toLogin",
+          data: {
+            staffPhone:this.$store.state.userMsg.staffPhone,
+            staffPass:this.accountFrom.yPass
+          },
+          responseType:'json',
+          responseEncoding:'utf-8',
+        }).then(response=>{
+          console.log(response)
+          if(response.data.data !== null){
 
+            this.changePass()// 修改密码
+          }else{
+            ElMessage.error("原密码密码错误！！")
+          }
+        })
+    },
 
+    // 修改密码
+    changePass(){
+
+      this.axios({
+        method:'post',
+        url:"http://localhost:8010/provider/user/changePass",
+        data: {
+          staffId:this.$store.state.userMsg.staffId,
+          staffPass:this.accountFrom.xPass
+        },
+        responseType:'json',
+        responseEncoding:'utf-8',
+      }).then(response=>{
+        console.log(response)
+        if(response.data.data > 0){
+          ElMessage({
+            type:'success',
+            message:'修改密码成功'
           })
-          .catch(function (error) {
-            console.log(error);
-          });
+          console.error(response.data.data)
+          this.drawer=false
+          // 清空store中的数据
+          this.$store.state.userMsg={}
+          // 去登录
+          this.$router.push({path:'/'})
+        }else{
+          ElMessage.error("修改密码失败！！")
+        }
+      })
+
     },
 
     handleClick(tab, event) {

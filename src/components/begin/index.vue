@@ -59,7 +59,7 @@ export default {
   methods:{
     toLogin() {
 
-      if(this.rsFrom.staffPhone=="" || this.rsFrom.staffPass==""){
+      if(this.rsFrom.staffPhone=="" ){
         ElMessage({
           type:'warning',
           message:'请输入手机号'
@@ -72,7 +72,6 @@ export default {
         })
         return
       }
-
 
       this.axios({
         method:'post',
@@ -88,11 +87,10 @@ export default {
             message:'登录成功'
           })
           //this.staffName===response.data.data.staffName
+          // 将员工数据存入vuex
           this.$store.state.userMsg = response.data.data
 
-          console.error(response.data.data)
-          console.error(this.$store.state.userMsg)
-
+          // 去主页
           this.$router.push({path:'/home'})
         }else{
           ElMessage.error("手机号或密码错误！！")
