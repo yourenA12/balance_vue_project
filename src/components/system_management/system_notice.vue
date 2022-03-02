@@ -93,17 +93,23 @@
                 </el-form-item>
                 <!-- 选择部门 -->
                 <h2 class="types">发布部门</h2>
-                <el-form-item class="announcement-type">
-                  <el-select  size="small" multiple v-model="affiche.deptIds" placeholder="公告类型">
-                    <el-option
-
-                        v-for="item in deptIds"
-                        :key="item.deptId"
-                        :label="item.deptName"
-                        :value="item.deptId"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
+                <el-select class="typexl" size="small" v-model="deptId" multiple ref="vueSelect" @change="onchange()" @click="onclicks()">
+                  <el-option hidden></el-option>
+                  <el-option
+                      class="xxx"
+                      v-for="item in dept"
+                      :key="item.deptId"
+                      :label="item.deptName"
+                      :value="item.deptId"
+                  >
+                  </el-option>
+                  <el-tree :data="deptlists"
+                           show-checkbox
+                           :default-expand-all=true
+                           :check-on-click-node=true
+                           node-key="deptId"
+                           :props="defaultProps" ref="tree" @check-change="handleCheckChange()" />
+                </el-select><br/>
 
                 <!-- 公告内容 -->
                 <span class="neirong" >内容</span>
@@ -243,6 +249,12 @@ import { ElNotification } from 'element-plus'
 
 export default {
   data() {
+    // 格式
+    const defaultProps = {
+      children: 'children',
+      label: 'deptName',
+      value:'deptId'
+    }
     //批量删除提示框
     const remove = () => {
       ElMessageBox.confirm(
@@ -267,6 +279,21 @@ export default {
 
     //表格批量删除
     return {
+      res:"",
+      // 选中值1
+      res1:"",
+      // 选中值2
+      res2:"",
+      // 部门  文本框的值
+      dept:[],
+      deptId:[],
+      // 格式
+      defaultProps,
+      //存放部门信息
+      deptlists: [],
+
+
+
       //表格批量删除
       remove,
       // 删除 公告ids
@@ -339,6 +366,107 @@ export default {
     }
   },
   methods:{
+
+
+    // 当文本框值发生变化时调用的方法
+    onchange(){
+
+      // 将值赋值到选择器中
+      this.$refs.tree.setCheckedKeys(this.deptId, false)
+    },
+
+    // 点击文本框时调用的方法
+    onclicks() {
+
+      // 取当前选择器中的复选框选项id
+      this.res1 = this.$refs.tree.getCheckedKeys()
+    },
+
+    //节点选中状态发生变化时调用的方法
+    handleCheckChange(data, checked, indeterminate) {
+
+      //获取所有选中的节点 start
+      this.res = this.$refs.tree.getCheckedNodes()
+
+      // 取当前选择器中的复选框选项id
+      this.res2 = this.$refs.tree.getCheckedKeys()
+      // 清空部门
+      this.dept = []
+      // 清空选中的部门
+      this.deptId = []
+      let x = 0
+      for (let i = 0; i < this.res.length; i++) {
+
+        for (let j = 0; j < this.res.length; j++) {
+          // 如果父id 不等于 id 就加入到数据中
+          if (this.res[i].deptPid != this.res[j].deptId) {
+            //并且是最后一个
+            if (j == this.res.length - 1 && x == 0) {
+              // 加入数据
+              this.dept.push(this.res[i])
+              // 赋值到文本框
+              this.deptId.push(this.res[i].deptId)
+            }
+
+          } else {
+            x = 1
+          }
+        }
+        x = 0
+      }
+    },
+
+    //查询部门名称
+    selectDeptName() {
+      this.axios
+          .get("http://localhost:8010/provider/dept/selectAll")
+          .then((response) => {
+            console.log(response);
+            this.deptlists = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+
+
+
+    insertNotice(){
+      alert(this.affiche.noticeTitle)
+
+      this.axios({
+        url: 'http://localhost:8010/provider/Glory/insertGlory',
+        method: 'post',
+        data:{
+          //公告标题
+          noticeTitle:this.affiche.noticeTitle,
+          //公告类型
+          noticeType:this.affiche.noticeType,
+          //公告状态
+          noticeState:this.affiche.noticeState,
+          //内容
+          noticeMatter:this.affiche.noticeMatter,
+          //部门
+          deptIds:this.res2,
+
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.selectGlory() // 修改完成后调用查询方法
+          this.honorsSave()
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
 
     /*序号*/
     indexMethod(index) {
@@ -537,8 +665,10 @@ export default {
 
     //新增或修改方法判断方法
     judges(){
-      if(this.judge==="新增"){
-        this.new();
+
+      if(this.judge==="添加"){
+
+        this.insertNotice();
       }else{
         this.updateNotice()
       }
@@ -566,6 +696,8 @@ export default {
     this.selectAllPage()
     // 查询所有部门
     this.selectAllDept()
+
+    this.selectDeptName()
   }
 }
 </script>
@@ -771,7 +903,12 @@ export default {
 }
 
 
+.typexl{
+  position: absolute;
+  left: 448px;
+  top:130px
 
+}
 
 
 
