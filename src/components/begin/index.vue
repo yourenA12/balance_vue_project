@@ -53,15 +53,30 @@ export default {
         staffPhone: '',
         staffPass: ''
       },
-
       //staffName:''
     }
   },
   methods:{
     toLogin() {
+
+      if(this.rsFrom.staffPhone=="" || this.rsFrom.staffPass==""){
+        ElMessage({
+          type:'warning',
+          message:'请输入手机号'
+        })
+        return
+      }else if(this.rsFrom.staffPass==""){
+        ElMessage({
+          type:'warning',
+          message:'请输入密码'
+        })
+        return
+      }
+
+
       this.axios({
         method:'post',
-        url:"http://localhost:8007/provider/staffs/login",
+        url:"http://localhost:8010/provider/user/toLogin",
         data:this.rsFrom,
         responseType:'json',
         responseEncoding:'utf-8',
@@ -73,7 +88,10 @@ export default {
             message:'登录成功'
           })
           //this.staffName===response.data.data.staffName
-          this.$store.state.userall = response.data.data
+          this.$store.state.userMsg = response.data.data
+
+          console.error(response.data.data)
+          console.error(this.$store.state.userMsg)
 
           this.$router.push({path:'/home'})
         }else{
