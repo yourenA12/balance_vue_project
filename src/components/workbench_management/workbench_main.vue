@@ -235,21 +235,21 @@
         </template>
       </el-calendar>
     </div>
-    <div class="left_data_right">
+<!--    <div class="left_data_right">
       <div class="top_data_right">
         <h3>今日提醒</h3>
       </div>
-    </div>
+    </div>-->
     <br>
 
 
-    <div class="tong_left" id="main1">
+<!--    <div class="tong_left" id="main1">
 
-    </div>
-
+    </div>-->
+<!--
     <div id="main2" class="tong_left">
 
-    </div>
+    </div>-->
   </div>
 
 
