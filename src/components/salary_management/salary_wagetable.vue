@@ -89,20 +89,20 @@
                   </el-table-column>
                   <!--          <el-table-column prop="name" label="实发固定工资" width="100" />-->
                   <el-table-column label="加班工资">
-                    <el-table-column prop="name" label="工作日加班工资" width="110"/>
-                    <el-table-column prop="name" label="休息日加班工资" width="110"/>
-                    <el-table-column prop="name" label="节假日加班工资" width="110"/>
+                    <el-table-column prop="workdayMoney" label="工作日加班工资" width="110"/>
+                    <el-table-column prop="restMoney" label="休息日加班工资" width="110"/>
+                    <el-table-column prop="holidaysMoney" label="节假日加班工资" width="110"/>
                   </el-table-column>
-                  <el-table-column prop="name" label="出差" width="100"/>
-                  <el-table-column prop="name" label="工资合计" width="100"/>
+                  <el-table-column prop="evection" label="出差" width="100"/>
+                  <el-table-column prop="totalWages" label="工资合计" width="100"/>
                   <el-table-column label="考勤扣款">
-                    <el-table-column prop="name" label="迟到" width="100"/>
-                    <el-table-column prop="name" label="早退" width="100"/>
-                    <el-table-column prop="name" label="未签到" width="100"/>
-                    <el-table-column prop="name" label="未签退" width="100"/>
-                    <el-table-column prop="name" label="旷工" width="100"/>
-                    <el-table-column prop="name" label="事假" width="100"/>
-                    <el-table-column prop="name" label="病假" width="100"/>
+                    <el-table-column prop="tardy" label="迟到" width="100"/>
+                    <el-table-column prop="leave" label="早退" width="100"/>
+<!--                    <el-table-column prop="name" label="未签到" width="100"/>-->
+<!--                    <el-table-column prop="name" label="未签退" width="100"/>-->
+                    <el-table-column prop="absenteeism" label="旷工" width="100"/>
+                    <el-table-column prop="matterLeave" label="事假" width="100"/>
+                    <el-table-column prop="fallLeave" label="病假" width="100"/>
                     <!--          <el-table-column prop="name" label="不在职免发" width="100" />-->
                   </el-table-column>
                   <el-table-column label="社保">
@@ -113,8 +113,8 @@
                     <el-table-column prop="insDetailFundPersonPay" label="个人缴纳公积金" width="110"/>
                     <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳公积金" width="110"/>
                   </el-table-column>
-                  <el-table-column prop="name" label="应发工资" width="100" fixed="right"/>
-                  <el-table-column prop="name" label="实发工资" width="100" fixed="right"/>
+                  <el-table-column prop="wagesShould" label="应发工资" width="100" fixed="right"/>
+                  <el-table-column prop="payroll" label="实发工资" width="100" fixed="right"/>
                 </el-table>
               </div>
 
