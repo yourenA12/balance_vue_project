@@ -82,7 +82,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="through1()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
               >
                 <template #reference>
                   <el-button type="text">通过 </el-button>
@@ -94,7 +94,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="through2()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
               >
                 <template #reference>
                   <el-button type="text">驳回 </el-button>
@@ -266,6 +266,7 @@
 
 <script>
 import {defineComponent, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   setup() {
@@ -317,6 +318,30 @@ export default {
     };
   },
   methods: {
+
+    updateAuditflowdetai(id,mxid,state) {
+      this.axios({
+        url: 'http://localhost:8010/provider/auditflowdetail/updateOvertimeask',
+        method: 'put',
+        data:{
+          auditflowId:id,
+          auditflowdetailId:mxid,
+          auditflowdetaiState:state,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectAuditflow(1) // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
     selectAuditflow(val) {
       // 待办
       if(val==1){
