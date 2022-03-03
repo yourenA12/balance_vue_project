@@ -40,8 +40,8 @@
                 <el-table :data="tableData"  style="width: 100%"
                           :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                           :cell-style="{textAlign: 'center'}">
-                  <el-table-column prop="name" label="薪酬组"  />
-                  <el-table-column prop="date" label="计薪人数"/>
+                  <el-table-column prop="compensationName" label="薪酬组"  />
+                  <el-table-column prop="compensationNumber" label="计薪人数"/>
                   <el-table-column prop="name" label="应发工资" />
                   <el-table-column prop="name" label="实发工资"  />
                   <el-table-column prop="name" label="公司缴纳"  />
@@ -69,7 +69,7 @@
               <div class="sub-Content__primary">
 
                 <el-table :data="tableData" stripe style="width: 100%">
-                  <el-table-column prop="name" label="部门" width="160" />
+                  <el-table-column prop="" label="薪酬组" width="160" />
                   <el-table-column prop="date" label="计薪人数" width="160" />
                   <el-table-column prop="name" label="应发工资" width="160" />
                   <el-table-column prop="name" label="实发工资" width="160" />
@@ -113,18 +113,9 @@ export default {
       //工资表
       // wagesheet:'/salary/wagesheet',
       wagesheet:'/salary/selectwagetable',
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-      ],
+
+      //存未归档数据
+      tableData: [],
       months:'',
       seek:'',
       pageInfo: {
@@ -135,9 +126,30 @@ export default {
       },
 
 
+
+
     }
 
   },
+  methods:{
+    //查询未归档数据
+    selectWagenotfiledVo(){
+
+      this.axios
+          .get("http://localhost:8010/provider/wagenotfiled/selectwagenotfiledVo/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectWagenotfiledVo()
+  }
 
 }
 
