@@ -96,11 +96,18 @@
                   <el-table-column prop="evection" label="出差" width="100"/>
                   <el-table-column prop="totalWages" label="工资合计" width="100"/>
                   <el-table-column label="考勤扣款">
-                    <el-table-column prop="tardy" label="迟到" width="100"/>
+                    <el-table-column label="迟到" width="100">
+                      <template #default="scope">
+                        -{{ scope.row.tardy }}
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="leave" label="早退" width="100"/>
-<!--                    <el-table-column prop="name" label="未签到" width="100"/>-->
-<!--                    <el-table-column prop="name" label="未签退" width="100"/>-->
-                    <el-table-column prop="absenteeism" label="旷工" width="100"/>
+
+                    <el-table-column label="旷工" width="100">
+                      <template #default="scope">
+                        -{{ scope.row.absenteeism.toFixed(2) }}
+                      </template>
+                    </el-table-column>
                     <el-table-column prop="matterLeave" label="事假" width="100"/>
                     <el-table-column prop="fallLeave" label="病假" width="100"/>
                     <!--          <el-table-column prop="name" label="不在职免发" width="100" />-->
