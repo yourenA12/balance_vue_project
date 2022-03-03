@@ -89,11 +89,32 @@
                   </el-table-column>
                   <!--          <el-table-column prop="name" label="实发固定工资" width="100" />-->
                   <el-table-column label="加班工资">
-                    <el-table-column prop="workdayMoney" label="工作日加班工资" width="110"/>
-                    <el-table-column prop="restMoney" label="休息日加班工资" width="110"/>
-                    <el-table-column prop="holidaysMoney" label="节假日加班工资" width="110"/>
+                    <el-table-column  label="工作日加班工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.workdayMoney=='0'" >-</span>
+                      <span v-if="scope.row.workdayMoney!='0'" >{{ scope.row.absenteeism.toFixed(2) }}</span>
+                    </template>
                   </el-table-column>
-                  <el-table-column prop="evection" label="出差" width="100"/>
+                    <el-table-column  label="休息日加班工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.restMoney=='0'" >-</span>
+                      <span v-if="scope.row.restMoney!='0'" >{{ scope.row.restMoney.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                    <el-table-column label="节假日加班工资" width="110">
+                  <template #default="scope">
+                    <span v-if="scope.row.holidaysMoney=='0'" >-</span>
+                    <span v-if="scope.row.holidaysMoney!='0'" >{{ scope.row.holidaysMoney.toFixed(2) }}</span>
+                  </template>
+                  </el-table-column>
+                  </el-table-column>
+
+                  <el-table-column  label="出差" width="100">
+                  <template #default="scope">
+                    <span v-if="scope.row.evection=='0'" >-</span>
+                    <span v-if="scope.row.evection!='0'" >{{ scope.row.evection.toFixed(2) }}</span>
+                  </template>
+                  </el-table-column>
                   <el-table-column prop="totalWages" label="工资合计" width="100"/>
                   <el-table-column label="考勤扣款">
                     <el-table-column label="迟到" width="100">
@@ -101,25 +122,63 @@
                         -{{ scope.row.tardy }}
                       </template>
                     </el-table-column>
-                    <el-table-column prop="leave" label="早退" width="100"/>
-<!--                    <el-table-column prop="name" label="未签到" width="100"/>-->
-<!--                    <el-table-column prop="name" label="未签退" width="100"/>-->
+                    <el-table-column label="早退" width="100">
+                    <template #default="scope">
+                      -{{ scope.row.leave.toFixed(2) }}
+                    </template>
+                  </el-table-column>
+
                     <el-table-column label="旷工" width="100">
                       <template #default="scope">
-                        -{{ scope.row.absenteeism.toFixed(2) }}
+                        <span v-if="scope.row.absenteeism=='0'" >-</span>
+                        <span v-if="scope.row.absenteeism!='0'" >-{{ scope.row.absenteeism.toFixed(2) }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="matterLeave" label="事假" width="100"/>
-                    <el-table-column prop="fallLeave" label="病假" width="100"/>
-                    <!--          <el-table-column prop="name" label="不在职免发" width="100" />-->
+                    <el-table-column  label="事假" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.matterLeave=='0'" >-</span>
+                      <span v-if="scope.row.matterLeave!='0'" >-{{ scope.row.matterLeave.toFixed(2) }}</span>
+                    </template>
                   </el-table-column>
+
+                    <el-table-column  label="病假" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.fallLeave=='0'" >-</span>
+                      <span v-if="scope.row.fallLeave!='0'" >-{{ scope.row.fallLeave.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                  </el-table-column>
+
                   <el-table-column label="社保">
-                    <el-table-column prop="insDetailSocialPersonPay" label="个人缴纳社保" width="100"/>
-                    <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳社保" width="100"/>
+                    <el-table-column label="个人缴纳社保" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialPersonPay=='0'" >-</span>
+                      <span v-if="scope.row.insDetailSocialPersonPay!='0'" >-{{ scope.row.insDetailSocialPersonPay.toFixed(2) }}</span>
+                    </template>
                   </el-table-column>
+
+                    <el-table-column  label="公司缴纳社保" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialFirmPay=='0'" >-</span>
+                      <span v-if="scope.row.insDetailSocialFirmPay!='0'" >-{{ scope.row.insDetailSocialFirmPay.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                  </el-table-column>
+
                   <el-table-column label="公积金">
-                    <el-table-column prop="insDetailFundPersonPay" label="个人缴纳公积金" width="110"/>
-                    <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳公积金" width="110"/>
+                    <el-table-column  label="个人缴纳公积金" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailFundPersonPay=='0'" >-</span>
+                      <span v-if="scope.row.insDetailFundPersonPay!='0'" >-{{ scope.row.insDetailFundPersonPay.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+
+                    <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳公积金" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialFirmPay=='0'" >-</span>
+                      <span v-if="scope.row.insDetailSocialFirmPay!='0'" >-{{ scope.row.insDetailSocialFirmPay.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
                   </el-table-column>
                   <el-table-column prop="wagesShould" label="应发工资" width="100" fixed="right"/>
                   <el-table-column prop="payroll" label="实发工资" width="100" fixed="right"/>
