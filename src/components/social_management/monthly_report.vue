@@ -9,7 +9,7 @@
             <span class="social_accumulation">
               <span>{{item.insuredMonth}}</span> 社保公积金</span
             >
-            <span style="font-size: 12px"> &nbsp;已归档</span>
+            <span v-show="index!=0" style="font-size: 12px"> &nbsp;已归档</span>
             <br />
             <el-button type="text">导出参保明细</el-button>
             <el-button type="text">删除 </el-button>
@@ -32,9 +32,7 @@
             </div>
 
             <div style="display: inline-block; margin-left: 20px">
-              <router-link to="sb3_2">
-                <el-button type="text">详情></el-button></router-link
-              >
+                <el-button @click="toDetail(item.insuredMonth)" type="text">详情></el-button>
             </div>
           </div>
           <br />
@@ -79,6 +77,16 @@ export default {
       multipleSelection: [],
     };
   },methods:{
+
+    // 详情
+    toDetail(date){
+
+      this.$store.state.insuredMsg.date=date
+
+      // 跳转页面
+      this.$router.push({path:"/social/social_payment/payment_detail",query:{path:this.$route.query.path}})
+
+    },
 
     //查询月度报表
     selectinsuredMonthVo() {

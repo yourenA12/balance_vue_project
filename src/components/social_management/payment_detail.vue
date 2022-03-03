@@ -5,11 +5,15 @@
       <div class="j-card-body">
         <!-- 计薪月份 -->
         <div class="month-div">
-          <span class="month_span">{{ currentDate }}</span><br/><br/>
+          <span class="month_span">{{ this.$store.state.insuredMsg.date }}</span><br/><br/>
           计薪月份<br/><br/>
-          <el-button type="primary" size="small">重新核算</el-button>
-          <el-button type="primary" size="small" style="width: 80px"
+          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small">重新核算</el-button>
+          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small" style="width: 80px"
           >归档
+          </el-button
+          >
+          <el-button v-show="this.$store.state.insuredMsg.date!=this.$store.state.ymDate" @click="homeMonth()" type="primary" size="small" style="width: 80px"
+          >回到当月
           </el-button
           >
         </div>
@@ -49,7 +53,7 @@
 <!--          ><i class="iconfont">&#xe639;</i>批量导入-->
 <!--          </el-button-->
 <!--          >-->
-          <el-button :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
+          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
             <i class="iconfont">&#xe608;</i>批量删除
           </el-button>
 
@@ -215,8 +219,6 @@ export default {
 
       //批量删除按钮
       deleteAllButton: true,
-      // 当前年月
-      currentDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
 
       res: "",
       // 选中值1
@@ -273,14 +275,28 @@ export default {
   },
   methods: {
 
+    // 回到当月
+    homeMonth(){
+
+      let date= new Date()
+      let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      this.$store.state.insuredMsg.date=date1
+
+      this.selectAllPage()
+      this.selectDeptName()
+      this.selectAll()
+      this.selectAllPages()
+
+    },
+
     // 点击查看
     selectInsuredALL(id){
       // 将id存入stroe
       this.$store.state.insuredMsg.staffId=id
 
-      let date= new Date()
-      let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
-      this.$store.state.insuredMsg.date=date1
+      // let date= new Date()
+      // let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      // this.$store.state.insuredMsg.date=date1
 
       // 跳转页面
       this.$router.push({path:this.path,query:{path:this.$route.query.path}})
@@ -394,6 +410,7 @@ export default {
 
     // 查询所有参保方缴费明细
     selectAllPage() {
+
       let params = {
 
         currenPage: this.pageInfo.currenPage,
