@@ -22,8 +22,12 @@
           基金公司缴纳： {{InsuredData.insDetailFundFirmPay}}<br />
           参保月份:{{InsuredData.insuredMonth}}
         </div>
-        <el-button type="text">调整 </el-button>&nbsp;&nbsp;
-        <el-button type="text">微调 </el-button>
+        <el-popconfirm title="确定删除？" @confirm="deleteInsured()">
+          <template #reference>
+            <el-button type="text"> <span style="color:red" >删除</span>并调整 </el-button>&nbsp;&nbsp;
+          </template>
+        </el-popconfirm>
+
       </div>
 
       <!-- 右 -->
@@ -34,28 +38,35 @@
           <el-table-column prop="insuredPaymentNumber" label="基数" />
 
           <el-table-column label="个人缴纳">
-            <el-table-column prop="insArchivePersonProp" label="比例" />
+            <el-table-column label="比例" >
+              <template #default="scope">
+                {{ scope.row.insArchivePersonProp }}%
+              </template>
+            </el-table-column>
             <el-table-column prop="insArchivePersonMoney" label="金额" />
           </el-table-column>
 
           <el-table-column prop="insArchivePersonSum" label="个人固定金额" />
 
           <el-table-column label="公司缴纳">
-            <el-table-column prop="insArchiveFirmProp" label="比例" />
+              <el-table-column label="比例" >
+                <template #default="scope">
+                  {{ scope.row.insArchiveFirmProp }}%
+                </template>
+              </el-table-column>
             <el-table-column prop="insArchiveFirmMoney" label="金额" />
           </el-table-column>
 
           <el-table-column prop="insArchiveFirmSum" label="公司固定金额" />
 
-          <el-table-column prop="date" label="小计" />
         </el-table>
       </div>
     </div>
-    <!-- 标题 -->
+<!--    &lt;!&ndash; 标题 &ndash;&gt;
     <div class="big-title">&nbsp;&nbsp;&nbsp;参保日志</div>
 
     <div class="outer-div">
-      <!-- 参保日志  时间线 -->
+      &lt;!&ndash; 参保日志  时间线 &ndash;&gt;
       <el-timeline>
         <el-timeline-item
           v-for="(activity, index) in activities"
@@ -70,13 +81,14 @@
           {{ activity.content }}
         </el-timeline-item>
       </el-timeline>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
 /* 时间线 */
 import { defineComponent } from "vue";
+import {ElMessage} from "element-plus";
 // import { MoreFilled } from "@element-plus/icons-vue";
 
 export default {
@@ -123,12 +135,39 @@ export default {
     };
   },
   methods:{
+
+    // 删除参保
+    deleteInsured(){
+
+      let ids = []
+      ids.push(this.$store.state.staffId_Msg)
+
+      this.axios({
+        url: 'http://localhost:8010/provider/insuredDetail/deleteInsuredAll/'+ids,
+        method: 'DELETE',
+
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '删除成功',
+            type: 'success',
+          })
+          // 跳转页面
+          this.$router.push({path: "/social/social_management/insured_management", query: {path: this.$route.query.path}})
+        } else {
+          ElMessage.error('删除失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+
+    },
+
     // 查询参保详情明细
     selectAllPage() {
-      // 从trore 中取出员工id进行查询
-
-        this.axios
-            .get("http://localhost:8010/provider/insuredDetailSon/selectDetailSonId/" + this.$store.state.staffId_Msg)
+      // 从store 中取出员工id进行查询
+      this.axios
+            .get("http://localhost:8010/provider/insuredDetailSon/selectDetailSonId/" + this.$store.state.insuredMsg.staffId+"/" +this.$store.state.insuredMsg.date )
             .then((response) => {
               console.log(response);
               this.tableData = response.data.data;
@@ -145,7 +184,7 @@ export default {
       // 从trore 中取出员工id进行查询
 
       this.axios
-          .get("http://localhost:8010/provider/insuredDetail/selectDInsuredId/" + this.$store.state.staffId_Msg)
+          .get("http://localhost:8010/provider/insuredDetail/selectDInsuredId/" + this.$store.state.insuredMsg.staffId+"/" +this.$store.state.insuredMsg.date )
           .then((response) => {
             console.log(response);
             this.InsuredData = response.data.data;

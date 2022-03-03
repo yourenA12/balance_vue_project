@@ -6,6 +6,11 @@ const store = createStore({
         staffId_Msg:"",
         //员工信息
         userMsg: {},
+        //社保缴费明细员工信息
+        insuredMsg:{
+            staffId:"",
+            date:""
+        },
         //动态菜单
         memuList: [
             {

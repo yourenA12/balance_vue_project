@@ -59,7 +59,6 @@
               size="small"
               clearable
               placeholder="请选择参保方案"
-              @change="sub"
           >
             <el-option
                 v-for="item in insured_scheme"
@@ -277,7 +276,11 @@ export default {
     // 点击查看
     selectInsuredALL(id){
       // 将id存入stroe
-      this.$store.state.staffId_Msg=id
+      this.$store.state.insuredMsg.staffId=id
+
+      let date= new Date()
+      let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      this.$store.state.insuredMsg.date=date1
 
       // 跳转页面
       this.$router.push({path:this.path,query:{path:this.$route.query.path}})
@@ -388,7 +391,7 @@ export default {
 
     },
 
-    // 查询所有参保方案分页
+    // 查询所有参保方缴费明细
     selectAllPage() {
       let params = {
 
@@ -404,6 +407,7 @@ export default {
           .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
+
             // 表格数据
             this.tableData = response.data.data.records
             this.pageInfo.total = response.data.data.total
@@ -434,6 +438,10 @@ export default {
             // 本月参保人数
             this.insuredPeople = response.data.data.total
 
+            // 清空
+            this.personPay=0
+            this.firmPay=0
+            this.totalPay=0
             // 遍历表格数据
             this.tableData.forEach(item => {
               // 本月个人缴费
@@ -470,7 +478,7 @@ export default {
             message: '删除成功',
             type: 'success',
           })
-          // 完成后调用查询方法
+          // // 完成后调用查询方法
           this.selectAllPage()
           this.selectAll()
 

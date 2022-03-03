@@ -50,7 +50,7 @@
           <!-- 操作按钮部分 -->
           <div class="button">
             <!-- 新增按钮 -->
-            <el-button size="small" type="primary" plain @click="outerVisible = true,affiche={}" style="margin-left: 5px">
+            <el-button size="small" type="primary" plain @click="cancel(),outerVisible = true,judge='新增'" style="margin-left: 5px">
               <el-icon><i-plus/></el-icon>
 
                 新增
@@ -431,14 +431,17 @@ export default {
     },
 
 
-
+    // 新增公告方法
     insertNotice(){
-      alert(this.affiche.noticeTitle)
 
       this.axios({
-        url: 'http://localhost:8010/provider/Glory/insertGlory',
+        url: 'http://localhost:8010/provider/notice/insertOneNotice',
         method: 'post',
         data:{
+          // 发布人员工
+          staffId:this.$store.state.userMsg.staffId,
+          // 发布人姓名
+          noticePeople:this.$store.state.userMsg.staffName,
           //公告标题
           noticeTitle:this.affiche.noticeTitle,
           //公告类型
@@ -457,8 +460,8 @@ export default {
             message: '添加成功',
             type: 'success',
           })
-          this.selectGlory() // 修改完成后调用查询方法
-          this.honorsSave()
+          this.outerVisible = false
+          this.selectAllPage() // 修改完成后调用查询方法
         } else {
           ElMessage.error('添加失败')
         }
@@ -526,6 +529,11 @@ export default {
               this.noticeDept.push(response.data.data[i].deptName + "、 " )
             }
 
+            this.$nextTick(() => {
+              // 将值赋值到选择器中
+              this.$refs.tree.setCheckedKeys(this.affiche.deptIds, false)
+            })
+
           })
           .catch(function (error) {
             console.log(error);
@@ -578,6 +586,9 @@ export default {
       // 按公告id查询员工
       this.selectNoticeStaffByNoticeId(row.noticeId,row.staffId)
 
+      alert( row.noticeId );
+      alert( row.staffId )
+
     },
 
     // 查询公告员工表数据
@@ -619,6 +630,11 @@ export default {
 
     // 修改单条部门数据
     updateNotice() {
+
+      console.error( this.affiche.deptIds )
+
+      this.affiche.deptIds=this.res2
+
       this.axios
           .put("http://localhost:8010/provider/notice/updateOneNotice" ,this.affiche)
           .then((response) => {
@@ -665,9 +681,7 @@ export default {
 
     //新增或修改方法判断方法
     judges(){
-
-      if(this.judge==="添加"){
-
+      if(this.judge==="新增"){
         this.insertNotice();
       }else{
         this.updateNotice()
@@ -676,6 +690,10 @@ export default {
     //取消按钮方法
     cancel(){
       this.affiche={}
+      this.$nextTick(() => {
+        // 将值赋值到选择器中
+        this.$refs.tree.setCheckedKeys([], false)
+      })
       this.outerVisible = false
       this.selectAllPage()
     },
@@ -910,7 +928,9 @@ export default {
 
 }
 
-
+.xxx{
+  display: none;
+}
 
 
 .saas-main-content {
