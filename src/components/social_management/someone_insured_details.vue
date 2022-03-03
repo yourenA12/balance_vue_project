@@ -24,7 +24,7 @@
         </div>
         <el-popconfirm title="确定删除？" @confirm="deleteInsured()">
           <template #reference>
-            <el-button type="text"> <span style="color:red" >删除</span>并调整 </el-button>&nbsp;&nbsp;
+            <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="text"> <span style="color:red" >删除</span>并调整 </el-button>&nbsp;&nbsp;
           </template>
         </el-popconfirm>
 
@@ -182,11 +182,10 @@ export default {
     // 查询参保详情明细
     selectInsured() {
       // 从trore 中取出员工id进行查询
-
       this.axios
           .get("http://localhost:8010/provider/insuredDetail/selectDInsuredId/" + this.$store.state.insuredMsg.staffId+"/" +this.$store.state.insuredMsg.date )
           .then((response) => {
-            console.log(response);
+            console.error(response);
             this.InsuredData = response.data.data;
 
           })
@@ -199,6 +198,7 @@ export default {
   created() {
     this.selectAllPage()
     this.selectInsured()
+
   }
 };
 </script>

@@ -102,7 +102,8 @@
                       </template>
                     </el-table-column>
                     <el-table-column prop="leave" label="早退" width="100"/>
-
+<!--                    <el-table-column prop="name" label="未签到" width="100"/>-->
+<!--                    <el-table-column prop="name" label="未签退" width="100"/>-->
                     <el-table-column label="旷工" width="100">
                       <template #default="scope">
                         -{{ scope.row.absenteeism.toFixed(2) }}

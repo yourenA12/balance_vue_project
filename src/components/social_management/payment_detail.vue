@@ -349,6 +349,7 @@ export default {
         x = 0
       }
     },
+
     //查询部门名称
     selectDeptName() {
       this.axios
@@ -401,6 +402,7 @@ export default {
         deptIds: this.res2.length == 0 ? '' : this.res2,
         stateSearch: this.pageInfo.stateSearch,
         scheme_name:this.pageInfo.scheme_name,
+        date:this.$store.state.insuredMsg.date
       }
 
       this.axios
@@ -418,7 +420,7 @@ export default {
           });
     },
 
-    // 查询本月所有参保方案
+    // 查询本月所有参保人员 计算人数 缴纳费用
     selectAll() {
       let params = {
         currenPage: 1,
@@ -426,7 +428,8 @@ export default {
         staffNameSearch: "",
         deptIds: "",
         stateSearch: "",
-        scheme_name:""
+        scheme_name:"",
+        date:this.$store.state.insuredMsg.date
       }
 
       this.axios
@@ -490,6 +493,7 @@ export default {
       });
 
     },
+
     // 查询所有参保方案
     selectAllPages() {
       this.axios

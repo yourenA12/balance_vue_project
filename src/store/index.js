@@ -9,8 +9,9 @@ const store = createStore({
         //社保缴费明细员工信息
         insuredMsg:{
             staffId:"",
-            date:""
+            date:new Date().getFullYear() + '-' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1))
         },
+        ymDate:new Date().getFullYear() + '-' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
         //动态菜单
         memuList: [
             {

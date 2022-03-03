@@ -22,16 +22,14 @@
                 :cell-style="{textAlign: 'center'}"
       >
         <el-table-column prop="insuredMonth" label="计薪月份" />
-<!--        <el-table-column prop="name" label="参保方案" />-->
-        <el-table-column prop="insDetailFundFirmPay" label="积金公司缴费" />
-        <el-table-column prop="insDetailFundPersonPay" label="积金个人缴费" />
-        <el-table-column prop="insDetailSocialFirmPay" label="社保公司缴费" />
         <el-table-column prop="insDetailSocialPersonPay" label="社保个人缴费" />
+        <el-table-column prop="insDetailSocialFirmPay" label="社保公司缴费" />
+        <el-table-column prop="insDetailFundPersonPay" label="积金个人缴费" />
+        <el-table-column prop="insDetailFundFirmPay" label="积金公司缴费" />
+
         <el-table-column prop="cz" label="操作">
-          <template #default>
-            <router-link to="sb3_2new1">
-              <el-button type="text" size="small">查看 </el-button>
-            </router-link>
+          <template #default="scope">
+              <el-button @click="toLook(scope.row.insuredMonth)" type="text" size="small">查看 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -48,8 +46,8 @@
         :total="pageInfo.total"
         :pager-count="5"
         background
-        @size-change="selectUsers"
-        @current-change="selectUsers"
+        @size-change="selectInsuredDetail"
+        @current-change="selectInsuredDetail"
       >
       </el-pagination>
     </div>
@@ -72,7 +70,17 @@ export default {
       },
       tableData: [],
     };
-  },methods:{
+  },
+  methods:{
+
+    toLook(date){
+
+      // 传过来的月份
+      this.$store.state.insuredMsg.date=date
+      // 跳转页面
+      this.$router.push({path:"/social/social_payment/someone_insured_particulars",query:{path:this.$route.query.path}})
+
+    },
 
     //根据id查询参保明细
     selectInsuredDetail() {
