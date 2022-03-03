@@ -69,9 +69,9 @@
                           :cell-style="{textAlign: 'center'}"
                           style="width: 100%;font-size: 12px;color:black;font-weight: normal;">
                   <el-table-column label="基本信息">
-                    <el-table-column prop="name" label="姓名" width="100"/>
-                    <el-table-column prop="name" label="部门" width="100"/>
-                    <el-table-column prop="name" label="职位" width="100"/>
+                    <el-table-column prop="staffName" label="姓名" width="100"/>
+                    <el-table-column prop="deptName" label="部门" width="100"/>
+                    <el-table-column prop="positionName" label="职位" width="100"/>
                     <!--            <el-table-column   prop="name" label="本月变动" width="100" />-->
                   </el-table-column>
                   <!--        <el-table-column label="考勤数据" >
@@ -80,35 +80,41 @@
                             <el-table-column prop="name" label="月计薪天数" width="100" />
                           </el-table-column>-->
 
-                  <el-table-column prop="name" label="基本工资" width="110"/>
+                  <el-table-column prop="name" label="基本工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.staffState==2" >{{scope.row.fixedwagePeriodmoney}}</span>
+                      <span v-if="scope.row.staffState==3" >{{scope.row.fixedwageOfficialmoney}}</span>
+
+                    </template>
+                  </el-table-column>
                   <!--          <el-table-column prop="name" label="实发固定工资" width="100" />-->
                   <el-table-column label="加班工资">
-                    <el-table-column prop="name" label="工作日加班工资" width="110"/>
-                    <el-table-column prop="name" label="休息日加班工资" width="110"/>
-                    <el-table-column prop="name" label="节假日加班工资" width="110"/>
+                    <el-table-column prop="workdayMoney" label="工作日加班工资" width="110"/>
+                    <el-table-column prop="restMoney" label="休息日加班工资" width="110"/>
+                    <el-table-column prop="holidaysMoney" label="节假日加班工资" width="110"/>
                   </el-table-column>
-                  <el-table-column prop="name" label="工资合计" width="100"/>
-                  <el-table-column prop="name" label="出差" width="100"/>
+                  <el-table-column prop="evection" label="出差" width="100"/>
+                  <el-table-column prop="totalWages" label="工资合计" width="100"/>
                   <el-table-column label="考勤扣款">
-                    <el-table-column prop="name" label="迟到" width="100"/>
-                    <el-table-column prop="name" label="早退" width="100"/>
-                    <el-table-column prop="name" label="未签到" width="100"/>
-                    <el-table-column prop="name" label="未签退" width="100"/>
-                    <el-table-column prop="name" label="旷工" width="100"/>
-                    <el-table-column prop="name" label="事假" width="100"/>
-                    <el-table-column prop="name" label="病假" width="100"/>
+                    <el-table-column prop="tardy" label="迟到" width="100"/>
+                    <el-table-column prop="leave" label="早退" width="100"/>
+<!--                    <el-table-column prop="name" label="未签到" width="100"/>-->
+<!--                    <el-table-column prop="name" label="未签退" width="100"/>-->
+                    <el-table-column prop="absenteeism" label="旷工" width="100"/>
+                    <el-table-column prop="matterLeave" label="事假" width="100"/>
+                    <el-table-column prop="fallLeave" label="病假" width="100"/>
                     <!--          <el-table-column prop="name" label="不在职免发" width="100" />-->
                   </el-table-column>
                   <el-table-column label="社保">
-                    <el-table-column prop="name" label="个人缴纳社保" width="100"/>
-                    <el-table-column prop="name" label="公司缴纳社保" width="100"/>
+                    <el-table-column prop="insDetailSocialPersonPay" label="个人缴纳社保" width="100"/>
+                    <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳社保" width="100"/>
                   </el-table-column>
-<!--                  <el-table-column label="公积金">-->
-<!--                    <el-table-column prop="name" label="个人缴纳公积金" width="100"/>-->
-<!--                    <el-table-column prop="name" label="公司缴纳公积金" width="100"/>-->
-<!--                  </el-table-column>-->
-                  <el-table-column prop="name" label="应发工资" width="100" fixed="right"/>
-                  <el-table-column prop="name" label="实发工资" width="100" fixed="right"/>
+                  <el-table-column label="公积金">
+                    <el-table-column prop="insDetailFundPersonPay" label="个人缴纳公积金" width="110"/>
+                    <el-table-column prop="insDetailSocialFirmPay" label="公司缴纳公积金" width="110"/>
+                  </el-table-column>
+                  <el-table-column prop="wagesShould" label="应发工资" width="100" fixed="right"/>
+                  <el-table-column prop="payroll" label="实发工资" width="100" fixed="right"/>
                 </el-table>
               </div>
 
@@ -141,57 +147,8 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-
-      ],
+      //存工资数据
+      tableData: [],
       seek: "",
       pageInfo: {
         // 分页参数
@@ -200,8 +157,28 @@ export default {
         total: 0, // 总页数
       },
 
+
+
     }
-  },
+  },methods:{
+    //查询薪酬组
+    selectWag() {
+
+      this.axios
+          .get("http://localhost:8010/provider/WageVo/selectWageVo/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize+"/"+1)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectWag()
+  }
 }
 </script>
 <style scoped>

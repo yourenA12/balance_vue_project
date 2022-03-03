@@ -872,9 +872,6 @@ export default {
 
       })
 
-
-
-
     },*/
 
     // 按参保方案id查询参保方案
@@ -932,8 +929,11 @@ export default {
             console.log("按参保方案id查询部门id", response);
             if (response.data.data == null) return
 
-            // 将值赋值到选择器中
-            this.$refs.tree.setCheckedKeys(response.data.data, false)
+            this.$nextTick(() => {
+              // 将值赋值到选择器中
+              this.$refs.tree.setCheckedKeys(response.data.data, false)
+            })
+
 
           })
           .catch(function (error) {
@@ -1101,7 +1101,6 @@ export default {
       //存储部门职位名称
       positionAll: [],
 
-
       resy: "",
       // 选中值1
       res1y: "",
@@ -1115,7 +1114,6 @@ export default {
       become: false,
       // 员工数据
       staffData: [],
-
 
       // 社保缴纳项目
       social_options: [
@@ -1145,10 +1143,6 @@ export default {
         {
           value: '公积金',
           label: '公积金',
-        },
-        {
-          value: '补充公积金',
-          label: '补充公积金',
         },
       ],
       // 社保缴纳表数据

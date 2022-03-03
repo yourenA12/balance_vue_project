@@ -1377,34 +1377,7 @@ export default {
           });
 
     },
-    //添加工作经历
-    insertWork(){
-      this.axios({
-        url: 'http://localhost:8010/provider/workExperience/insertWorkExperience',
-        method: 'post',
-        data:{
-          staffId:this.$store.state.staffId_Msg,
-          workStareTime:this.workForm.workStareTime,
-          workEndTime:this.workForm.workEndTime,
-          companyName:this.workForm.companyName,
-          positionName:this.workForm.positionName
-        }
-      }).then(response => {
-        if (response.data.data > 0) {
-          ElMessage({
-            message: '添加成功',
-            type: 'success',
-          })
-          this.selectWorkId() // 修改完成后调用查询方法
-          this.workSave()
-        } else {
-          ElMessage.error('添加失败')
-        }
-      }).catch(function (error) {
-        console.log(error);
-      });
 
-    },
 
     //查询荣誉/奖励信息
     selectGlory(){

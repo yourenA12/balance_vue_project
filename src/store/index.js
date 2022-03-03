@@ -5,7 +5,7 @@ const store = createStore({
         // 员工花名册点击编辑按钮，将当前员工id传入
         staffId_Msg:"",
         //员工信息
-        staffMessage: {},
+        userMsg: {},
         //动态菜单
         memuList: [
             {

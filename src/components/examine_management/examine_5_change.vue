@@ -83,7 +83,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="through1()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
               >
                 <template #reference>
                   <el-button type="text">通过 </el-button>
@@ -95,14 +95,14 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="through2()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
               >
                 <template #reference>
                   <el-button type="text">驳回 </el-button>
                 </template>
               </el-popconfirm>
 
-              <el-button type="text"   @click="">详情 </el-button>
+              <el-button type="text"   @click="findSelectTranseferById(scope.row)">详情 </el-button>
 
             </template>
           </el-table-column>
@@ -112,21 +112,64 @@
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
               v-model:currentPage="pageInfo.currentPage"
-              :page-sizes="[3, 5, 10, 50]"
               v-model:page-size="pageInfo.pagesize"
               :default-page-size="pageInfo.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo.total"
+              :page-sizes="[3, 5, 10, 50]"
               :pager-count="5"
+              :total="pageInfo.total"
               background
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="selectAuditflow(1)"
+              @current-change="selectAuditflow(1)"
           >
             <!--  @size-change="selectUsers" @current-change="selectUsers" -->
           </el-pagination>
         </div>
       </el-tab-pane>
       <!-- 点击详情，弹出抽屉-->
-      <el-drawer v-model="drawer" title="I am the title" :with-header="false">
-        <span>Hi there!</span>
+      <el-drawer v-model="drawer" :with-header="false" title="I am the title">
+        <span>
+
+          <el-form :model="auditflow0" label-width="" >
+            <el-form-item label="员工名称 :">
+              <el-input v-model="auditflow0.staffName1" disabled></el-input>
+            </el-form-item>
+             <el-form-item label="审核人名称 :">
+              <el-input v-model="auditflow0.staffName2" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="调薪前基本工资 :">
+              <el-input v-model="auditflow0.frontSalary" disabled></el-input>
+            </el-form-item>
+                <el-form-item label="调薪后基本工资 :">
+              <el-input v-model="auditflow0.afterSalary" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="员工部门 :">
+              <el-input v-model="auditflow0.deptName" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="生效时间 :">
+              <el-input v-model="auditflow0.salaryCause" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="生效时间 :">
+              <el-input v-model="auditflow0.takeEffectDate" disabled></el-input>
+            </el-form-item>
+
+
+
+          </el-form>
+
+          <!-- process-status="error" -->
+        <el-steps align-center :space="200" :active="active">
+          <el-step :status="statusa" :title="a" ></el-step>
+          <el-step :status="statusb" :title="b" ></el-step>
+          <el-step :status="statusc" :title="c"></el-step>
+        </el-steps>
+
+          <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
+          <!--              -->
+          <!--            <el-input   disabled></el-input>-->
+          <!--          </el-form-item>-->
+
+        </span>
       </el-drawer>
       <!-- 已办申请页面 -->
       <el-tab-pane>
@@ -195,7 +238,7 @@
           <el-table-column prop="updatedTime" label="最近处理" width="140"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button type="text"  @click="selectById(scope.row)">详情</el-button>
+              <el-button type="text"   @click="findSelectTranseferById(scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -203,14 +246,16 @@
         <br>
         <div class="demo-pagination-block" style="float: right;">
           <el-pagination
-              v-model:currentPage="pageInfo.currentPage"
+              v-model:currentPage="pageInfo1.currentPage"
+              v-model:page-size="pageInfo1.pagesize"
+              :default-page-size="pageInfo1.pagesize"
               :page-sizes="[3, 5, 10, 50]"
-              v-model:page-size="pageInfo.pagesize"
-              :default-page-size="pageInfo.pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="pageInfo.total"
               :pager-count="5"
+              :total="pageInfo1.total"
               background
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="selectAuditflow(2)"
+              @current-change="selectAuditflow(2)"
           >
             <!--  @size-change="selectUsers"
 						@current-change="selectUsers" -->
@@ -223,6 +268,7 @@
 
 <script>
 import {defineComponent, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   setup() {
@@ -233,10 +279,28 @@ export default {
   },
   data() {
     return {
+
+
+      a:{},
+      b:{},
+      c:{},
+      statusa:"",
+      statusb:"",
+      statusc:"",
+      active:"",
+      auditflow0:{},
+
       // 待办转正审批列表
       tableData: [],
 
       tableData1: [],
+
+      auditflow:[],
+      //存放数据
+
+
+
+
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -264,6 +328,92 @@ export default {
     };
   },
   methods: {
+    findSelectTranseferById(row) {
+      //打开抽屉
+      this.drawer = true
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectSalaryById/" + row.auditflowId)
+          .then((response) => {
+            console.log(response);
+            this.auditflow0 = response.data.data[0]
+            this.auditflow = response.data.data;
+
+
+
+            this.activeVal(row.staffName2)
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    activeVal(aa){
+
+      console.log("111111111111")
+      console.log(this.auditflow)
+      this.a = this.auditflow[0].staffName2
+      this.b = this.auditflow[1].staffName2
+      this.c = this.auditflow[2].staffName2
+      let q=this.auditflow[0]
+      let w=this.auditflow[1]
+      let e=this.auditflow[2]
+      if(q.auditflowdetaiState==1){
+        this.active=0
+      }
+      if(w.auditflowdetaiState==1){
+        this.active=1
+        this.statusa="success"
+      }
+      if(e.auditflowdetaiState==1){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+      }
+      if(q.auditflowdetaiState==2 && w.auditflowdetaiState==2 && e.auditflowdetaiState==2){
+        this.active=3
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="success"
+      }
+      if(q.auditflowdetaiState==3){
+        this.active=0
+        this.statusa="error"
+      }else if(w.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="success"
+        this.statusb="error"
+      }else if(e.auditflowdetaiState==3){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="error"
+      }
+      this.auditflow0.staffName2=aa
+    },
+    //转正审批 修改状态
+    updateAuditflowdetai(id,mxid,state) {
+      this.axios({
+        url: 'http://localhost:8010/provider/auditflowdetail/updateSalary',
+        method: 'put',
+        data:{
+          auditflowId:id,
+          auditflowdetailId:mxid,
+          auditflowdetaiState:state,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectAuditflow(1) // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
     // 重置日期过滤
     resetDateFilter1() {
       this.$refs.filterTable1.clearFilter("date1");

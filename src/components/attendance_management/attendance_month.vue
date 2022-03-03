@@ -21,7 +21,7 @@
         </el-icon>
       </el-button>
       <!--导出导入-->
-      <el-button type="warning" plain size="small" style="margin-left: 820px">
+      <el-button @click="derive()" type="warning" plain size="small" style="margin-left: 820px">
         <i class="iconfont">&#xe643;</i>
         导出
       </el-button>
@@ -36,7 +36,7 @@
                 :cell-style="{textAlign: 'center'}">
         <el-table-column prop="staffName"  label="名称"/>
         <el-table-column prop="clssName"  label="部门"/>
-        <el-table-column prop="normalFrequency" label="正常"/>
+        <el-table-column prop="normalFrequency" label="正常次数"/>
         <el-table-column prop="lateFrequency" label="迟到次数"/>
         <el-table-column prop="leaveEarlyFrequency" label="早退次数"/>
         <el-table-column prop="absenteeismFrequency" label="旷工次数"/>
@@ -63,6 +63,9 @@
 </template>
 
 <script>
+import {ElMessage} from "element-plus/es";
+import {ElMessageBox} from "element-plus";
+import {export_json_to_excel} from '/src/excal/Export2Excel.js'
 export default {
   data() {
     return {
@@ -127,7 +130,43 @@ export default {
       }
       var currentdate = year + " 年 " + month + " 月 ";
       return currentdate;
-    }
+    },
+    // 点击导出操作
+    derive() {
+      ElMessageBox.confirm(
+          '此操作将导出excel文件, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      ).then(() => {
+        this.deriveExcel();
+      }).catch(() => {
+        ElMessage.success("取消成功")
+      })
+    },
+    // 导出方法
+    deriveExcel() {
+      var _this = this;
+      let tHeader = ["名称", "部门", "正常次数", "迟到次数", "早退次数","旷工次数","是否全勤"]; // 导出的表头名
+      let filterVal = ["staffName", "clssName", "normalFrequency", "lateFrequency", "absenteeismFrequency","leaveEarlyFrequency","present"];//导出其prop属性
+      ElMessageBox.prompt('请输入文件名', '提示', {
+        confirmButtonText: '生成',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        let data = _this.formatJson(filterVal, _this.tableData);
+        export_json_to_excel(tHeader, data, value);
+        ElMessage.success("生成成功")
+      })
+          .catch(() => {
+            ElMessage.success("失败成功")
+          })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
+    },
   },
   //
   created() {

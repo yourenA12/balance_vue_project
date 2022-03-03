@@ -83,7 +83,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="through1()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2,1)"
               >
                 <template #reference>
                   <el-button type="text">通过 </el-button>
@@ -95,7 +95,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="through2()"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2,666)"
               >
                 <template #reference>
                   <el-button type="text">驳回 </el-button>
@@ -149,9 +149,9 @@
 
           <!-- process-status="error" -->
         <el-steps align-center :space="200" :active="active" finish-status="success">
-          <el-step :title="a.staffName2" ></el-step>
-          <el-step :title="b.staffName2" ></el-step>
-          <el-step :title="c.staffName2"></el-step>
+          <el-step :status="statusa" :title="a" ></el-step>
+          <el-step :status="statusb" :title="b" ></el-step>
+          <el-step :status="statusc" :title="c"></el-step>
         </el-steps>
 
           <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
@@ -255,6 +255,7 @@
 
 <script>
 import {defineComponent, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   setup() {
@@ -265,6 +266,7 @@ export default {
   },
   data() {
     return {
+      active:"",
       // 待办转正审批列表
       tableData: [],
       // 已办转正审批列表
@@ -299,10 +301,40 @@ export default {
       //那几个审批人
       a:{},
       b:{},
-      c:{}
+      c:{},
+
+      statusa:"",
+      statusb:"",
+      statusc:"",
     };
   },
   methods: {
+    //修改离职状态
+    updateAuditflowdetai(id,mxid,state,isStaffState) {
+      this.axios({
+        url: 'http://localhost:8010/provider/auditflowdetail/updateAuditflowdetail',
+        method: 'put',
+        data:{
+          auditflowId:id,
+          auditflowdetailId:mxid,
+          auditflowdetaiState:state,
+          isStaffState:isStaffState
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectAuditflow(1) // 修改完成后调用查询方法
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    //查询
     selectAuditflow(val) {
       // 待办
       if(val==1){
@@ -336,28 +368,57 @@ export default {
           .get("http://localhost:8010/provider/findSelectByid/" + row.auditflowId)
           .then((response) => {
             console.log(response);
+            this.auditflow0 = response.data.data[0]
+            // this.auditflow0.staffName2=row.staffName2//绑定当前审批人
             this.auditflow = response.data.data;
-            this.auditflow0 = this.auditflow[0]
-            this.activeVal()
+
+            this.activeVal(row.staffName2)
           })
           .catch(function (error) {
             console.log(error);
           })
     },
-    activeVal(){
-      this.a = this.auditflow[0]
-      this.b = this.auditflow[1]
-      this.c = this.auditflow[2]
-
-      if(this.a.auditflowdetaiState==1)
+    activeVal(aa){
+      console.log("111111111111")
+      console.log(this.auditflow)
+      this.a = this.auditflow[0].staffName2
+      this.b = this.auditflow[1].staffName2
+      this.c = this.auditflow[2].staffName2
+      let q=this.auditflow[0]
+      let w=this.auditflow[1]
+      let e=this.auditflow[2]
+      if(q.auditflowdetaiState==1){
         this.active=0
-      if(this.b.auditflowdetaiState==1)
+      }
+      if(w.auditflowdetaiState==1){
         this.active=1
-      if(this.c.auditflowdetaiState==1)
+        this.statusa="success"
+      }
+      if(e.auditflowdetaiState==1){
         this.active=2
-      if(this.a.auditflowdetaiState==2 && this.b.auditflowdetaiState==2 && this.c.auditflowdetaiState==2)
+        this.statusa="success"
+        this.statusb="success"
+      }
+      if(q.auditflowdetaiState==2 && w.auditflowdetaiState==2 && e.auditflowdetaiState==2){
         this.active=3
-
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="success"
+      }
+      if(q.auditflowdetaiState==3){
+        this.active=0
+        this.statusa="error"
+      }else if(w.auditflowdetaiState==3){
+        this.active=1
+        this.statusa="success"
+        this.statusb="error"
+      }else if(e.auditflowdetaiState==3){
+        this.active=2
+        this.statusa="success"
+        this.statusb="success"
+        this.statusc="error"
+      }
+      this.auditflow0.staffName2=aa
     },
     // 重置日期过滤
     resetDateFilter1() {

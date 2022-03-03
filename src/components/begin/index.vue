@@ -53,15 +53,29 @@ export default {
         staffPhone: '',
         staffPass: ''
       },
-
       //staffName:''
     }
   },
   methods:{
     toLogin() {
+
+      if(this.rsFrom.staffPhone=="" ){
+        ElMessage({
+          type:'warning',
+          message:'请输入手机号'
+        })
+        return
+      }else if(this.rsFrom.staffPass==""){
+        ElMessage({
+          type:'warning',
+          message:'请输入密码'
+        })
+        return
+      }
+
       this.axios({
         method:'post',
-        url:"http://localhost:8007/provider/staffs/login",
+        url:"http://localhost:8010/provider/user/toLogin",
         data:this.rsFrom,
         responseType:'json',
         responseEncoding:'utf-8',
@@ -73,8 +87,10 @@ export default {
             message:'登录成功'
           })
           //this.staffName===response.data.data.staffName
-          this.$store.state.userall = response.data.data
+          // 将员工数据存入vuex
+          this.$store.state.userMsg = response.data.data
 
+          // 去主页
           this.$router.push({path:'/home'})
         }else{
           ElMessage.error("手机号或密码错误！！")

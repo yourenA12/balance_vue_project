@@ -12,15 +12,15 @@
           <el-image class="picture" :src="url"></el-image>
         </div>
         <div style="margin-top: 20px">
-          姓名：121321 <br />
-          部门：2313213 <br />
-          职位：321312321 <br /><br /><br />
-          参保类型： 2312321<br />
-          参保方案：31232131 <br />
-          社保基数：213123213 <br />
-          社保参保月份：1321321 <br />
-          公积金基数：3213213 <br />
-          公积金参保月份： 3213123213<br />
+          姓名：{{InsuredData.staffName}} <br />
+          部门：{{InsuredData.deptName}} <br />
+          职位：{{InsuredData.positionName}} <br /><br /><br />
+          参保方案：{{InsuredData.defInsuredName}} <br />
+          社保个人缴纳：{{InsuredData.insDetailSocialPersonPay}} <br />
+          社保公司缴纳：{{InsuredData.insDetailSocialFirmPay}} <br />
+          基金个人缴纳：{{InsuredData.insDetailFundPersonPay}} <br />
+          基金公司缴纳： {{InsuredData.insDetailFundFirmPay}}<br />
+          参保月份:{{InsuredData.insuredMonth}}
         </div>
         <el-button type="text">调整 </el-button>&nbsp;&nbsp;
         <el-button type="text">微调 </el-button>
@@ -30,22 +30,22 @@
       <div class="payment_project">
         <!-- 缴纳明细表 -->
         <el-table :data="tableData" size="mini">
-          <el-table-column prop="date" label="缴纳项目" />
-          <el-table-column prop="date" label="基数" />
-
-          <el-table-column label="公司缴纳">
-            <el-table-column prop="name" label="比例" />
-            <el-table-column prop="state" label="金额" />
-          </el-table-column>
-
-          <el-table-column prop="date" label="公司固定金额" />
+          <el-table-column prop="insuredPaymentType" label="缴纳项目" />
+          <el-table-column prop="insuredPaymentNumber" label="基数" />
 
           <el-table-column label="个人缴纳">
-            <el-table-column prop="name" label="比例" />
-            <el-table-column prop="state" label="金额" />
+            <el-table-column prop="insArchivePersonProp" label="比例" />
+            <el-table-column prop="insArchivePersonMoney" label="金额" />
           </el-table-column>
 
-          <el-table-column prop="date" label="个人固定金额" />
+          <el-table-column prop="insArchivePersonSum" label="个人固定金额" />
+
+          <el-table-column label="公司缴纳">
+            <el-table-column prop="insArchiveFirmProp" label="比例" />
+            <el-table-column prop="insArchiveFirmMoney" label="金额" />
+          </el-table-column>
+
+          <el-table-column prop="insArchiveFirmSum" label="公司固定金额" />
 
           <el-table-column prop="date" label="小计" />
         </el-table>
@@ -116,61 +116,50 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-        },
-      ],
+      // 查询参保详情明细
+      tableData: [],
+      //参保明细
+      InsuredData:[],
     };
   },
   methods:{
     // 查询参保详情明细
     selectAllPage() {
       // 从trore 中取出员工id进行查询
-      alert(this.$store.state.staffId_Msg)
 
+        this.axios
+            .get("http://localhost:8010/provider/insuredDetailSon/selectDetailSonId/" + this.$store.state.staffId_Msg)
+            .then((response) => {
+              console.log(response);
+              this.tableData = response.data.data;
+
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+    },
+    //查询参保明细
+    // 查询参保详情明细
+    selectInsured() {
+      // 从trore 中取出员工id进行查询
+
+      this.axios
+          .get("http://localhost:8010/provider/insuredDetail/selectDInsuredId/" + this.$store.state.staffId_Msg)
+          .then((response) => {
+            console.log(response);
+            this.InsuredData = response.data.data;
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
     },
   },
   created() {
     this.selectAllPage()
+    this.selectInsured()
   }
 };
 </script>

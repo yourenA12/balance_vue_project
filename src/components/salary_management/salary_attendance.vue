@@ -33,12 +33,10 @@
                     :cell-style="{textAlign: 'center'}"
                     style="width: 97%;margin: auto;">
             <el-table-column prop="attendandceName" label="方案名称" width="260" />
-            <el-table-column prop="name" label="核算规则" width="280" >
+            <el-table-column prop="name" label="核算规则" width="290" >
               <template #default="scope">
                 <span>迟到：扣{{scope.row.attendandceLitemoney}}元 x 迟到次数</span><br/>
                 <span>早退：扣{{scope.row.attendandceLeavemoney}}元 x 早退次数</span><br/>
-                <span>未签到：扣{{scope.row.attendandceDidnotmoney}}元 x 未签到次数</span><br/>
-                <span>未签退：扣{{scope.row.attendandceDidbackmoney}}元 x 未签退次数</span><br/>
                 <span>旷工：小时工资x{{scope.row.attendandceAbscntmoney}}% x 旷工折算的小时数</span><br/>
 
 

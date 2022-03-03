@@ -41,20 +41,37 @@
         <!-- 表格按钮部分 -->
         <div class="mt-20 ml-20 mr-20">
           <!-- 按钮 -->
-          <el-button size="small"
-          ><i class="iconfont">&#xe6a2;</i>批量导出
-          </el-button
-          >
-          <el-button size="small"
-          ><i class="iconfont">&#xe639;</i>批量导入
-          </el-button
-          >
+<!--          <el-button size="small"-->
+<!--          ><i class="iconfont">&#xe6a2;</i>批量导出-->
+<!--          </el-button-->
+<!--          >-->
+<!--          <el-button size="small"-->
+<!--          ><i class="iconfont">&#xe639;</i>批量导入-->
+<!--          </el-button-->
+<!--          >-->
           <el-button :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
             <i class="iconfont">&#xe608;</i>批量删除
           </el-button>
 
+          <el-select
+              v-model="pageInfo.scheme_name"
+              style="width: 200px;margin-left: 130px;"
+              size="small"
+              clearable
+              placeholder="请选择参保方案"
+              @change="sub"
+          >
+            <el-option
+                v-for="item in insured_scheme"
+                :key="item.defInsuredId"
+                :label="item.defInsuredName"
+                :value="item.defInsuredId"
+            >
+            </el-option>
+          </el-select>
 
-          <el-input style="width: 200px;margin-left: 150px;" size="small" v-model="pageInfo.staffNameSearch"
+
+          <el-input style="width: 200px;margin-left: 15px;" size="small" v-model="pageInfo.staffNameSearch"
                     placeholder="请输入用户名称"/>
 
           <!-- 下拉选择器 -->
@@ -192,6 +209,9 @@ export default {
     }
     return {
 
+      // 参保方案
+      scheme_name: null,
+
       removeAll,
 
       //批量删除按钮
@@ -240,6 +260,8 @@ export default {
         deptSearch: '',
         //员工状态
         stateSearch: '',
+        //参保方案
+        scheme_name:'',
       },
       // 表格数据
       tableData: [],
@@ -269,6 +291,7 @@ export default {
           this.pageInfo.deptSearch = '',
           this.res2 = ""
       this.pageInfo.stateSearch = '',
+          this.pageInfo.scheme_name='',
           // 将值赋值到选择器中
           this.$refs.tree.setCheckedKeys([], false)
 
@@ -374,7 +397,7 @@ export default {
         staffNameSearch: this.pageInfo.staffNameSearch,
         deptIds: this.res2.length == 0 ? '' : this.res2,
         stateSearch: this.pageInfo.stateSearch,
-
+        scheme_name:this.pageInfo.scheme_name,
       }
 
       this.axios
@@ -398,13 +421,15 @@ export default {
         pagesize: 999,
         staffNameSearch: "",
         deptIds: "",
-        stateSearch: ""
+        stateSearch: "",
+        scheme_name:""
       }
 
       this.axios
           .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
-            console.error(response);
+
+            console.log(response)
 
             // 本月参保人数
             this.insuredPeople = response.data.data.total
@@ -417,8 +442,14 @@ export default {
               this.firmPay += item.insDetailSocialFirmPay + item.insDetailFundFirmPay
             })
 
-            // 合计缴费
+            // 合计缴费 （保留两位小数）
             this.totalPay = this.personPay + this.firmPay
+
+            this.personPay=this.personPay.toFixed(2)
+            this.firmPay=this.firmPay.toFixed(2)
+
+            this.totalPay=this.totalPay.toFixed(2)
+
           })
           .catch(function (error) {
             console.log(error);
@@ -451,12 +482,31 @@ export default {
       });
 
     },
+    // 查询所有参保方案
+    selectAllPages() {
+      this.axios
+          .get("http://localhost:8010/provider/defInsured/selectAllPage",{params:{
+              // 分页参数
+              currentPage: 1, //当前页
+              pagesize: 999, // 页大小
+              input: "",// 参保方案名称搜索框的值
+              state: 0,// 参保方案状态下拉框的值
+            },})
+          .then((response) => {
+            console.log(response);
+            this.insured_scheme =response.data.data.records
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
 
   },
   created() {
     this.selectAllPage()
     this.selectDeptName()
     this.selectAll()
+    this.selectAllPages()
   }
 };
 </script>
