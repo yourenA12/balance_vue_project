@@ -46,7 +46,13 @@
                   <el-table-column prop="wagenotfiledPayrollsalary" label="实发工资"  />
                   <el-table-column prop="wagenotfiledFirmpayment" label="公司缴纳"  />
 <!--                  <el-table-column prop="name" label="员工成本" width="160" />-->
-                  <el-table-column prop="wagenotfiledState" label="状态" />
+                  <el-table-column prop="wagenotfiledState" label="状态">
+                    <template #default="scope">
+                      <span style="color:#fa8c16;" v-if="scope.row.wagenotfiledState==0">未归档</span>
+                      <span style="color: #13c2c2;" v-if="scope.row.wagenotfiledState==1">已归档</span>
+
+                    </template>
+                  </el-table-column>
                   <el-table-column  label="操作" >
                     <template #default="scope">
                       <router-link :to="{path:this.wagesheet,query:{path: this.$route.query.path,compId:scope.row.compensationId}}"><el-button type="text" size="small" @click="handleClick">查看工资表&nbsp;</el-button></router-link>
