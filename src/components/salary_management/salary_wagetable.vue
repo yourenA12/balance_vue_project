@@ -165,7 +165,7 @@ export default {
     selectWag() {
 
       this.axios
-          .get("http://localhost:8010/provider/WageVo/selectWageVo/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize+"/"+1)
+          .get("http://localhost:8010/provider/WageVo/selectWageVo/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize+"/"+this.$route.query.compId)
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;

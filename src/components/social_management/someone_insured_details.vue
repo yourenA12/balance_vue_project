@@ -140,7 +140,7 @@ export default {
     deleteInsured(){
 
       let ids = []
-      ids.push(this.$store.state.staffId_Msg)
+      ids.push(this.$store.state.insuredMsg.staffId)
 
       this.axios({
         url: 'http://localhost:8010/provider/insuredDetail/deleteInsuredAll/'+ids,

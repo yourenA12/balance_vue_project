@@ -41,15 +41,15 @@
                           :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                           :cell-style="{textAlign: 'center'}">
                   <el-table-column prop="compensationName" label="薪酬组"  />
-                  <el-table-column prop="compensationNumber" label="计薪人数"/>
-                  <el-table-column prop="name" label="应发工资" />
-                  <el-table-column prop="name" label="实发工资"  />
-                  <el-table-column prop="name" label="公司缴纳"  />
+                  <el-table-column prop="wagenotfiledAskperson" label="计薪人数"/>
+                  <el-table-column prop="wagenotfiledSalary" label="应发工资" />
+                  <el-table-column prop="wagenotfiledPayrollsalary" label="实发工资"  />
+                  <el-table-column prop="wagenotfiledFirmpayment" label="公司缴纳"  />
 <!--                  <el-table-column prop="name" label="员工成本" width="160" />-->
-                  <el-table-column prop="date" label="状态" />
+                  <el-table-column prop="wagenotfiledState" label="状态" />
                   <el-table-column  label="操作" >
-                    <template #default>
-                      <router-link :to="{path:this.wagesheet,query:{path: this.$route.query.path}}"><el-button type="text" size="small" @click="handleClick">查看工资表&nbsp;</el-button></router-link>
+                    <template #default="scope">
+                      <router-link :to="{path:this.wagesheet,query:{path: this.$route.query.path,compId:scope.row.compensationId}}"><el-button type="text" size="small" @click="handleClick">查看工资表&nbsp;</el-button></router-link>
 <!--                      <el-button type="text" size="small" @click="handleClick">归档</el-button>-->
                       <el-popconfirm title="归档之后，数据一律不允许修改">
                         <template #reference>
@@ -98,8 +98,8 @@
         :total="pageInfo.total"
         :pager-count="5"
         background
-        @size-change="selectUsers"
-        @current-change="selectUsers"
+        @size-change="selectWagenotfiledVo"
+        @current-change="selectWagenotfiledVo"
     >
     </el-pagination>
   </div>
