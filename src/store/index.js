@@ -567,7 +567,7 @@ const store = createStore({
                         MENU_LEAF: 1,//是否有叶子 0有 1没有
                     }, {
                         MENU_ID: 8,//菜单编号
-                        MENU_NAME: '补打卡审批审批',//菜单名称
+                        MENU_NAME: '补打卡审批',//菜单名称
                         PICTURE_ADDRESS: '&#xe64c;',//图片地址
                         MENU_ROUTE: '/examine/examine_centre/fill_clock_examine',//路由地址
                         MENU_MODULE: 'examine_management/examine_8_punch',//组件地址

@@ -121,8 +121,10 @@
     width: 35%;
     height: 459px;
     margin: 22px;
+    overflow: auto;
     border: 1px solid #ddd;
     border-radius: 4px;
+
 }
 .right_float_gg:hover{
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);

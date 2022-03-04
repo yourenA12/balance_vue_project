@@ -286,10 +286,10 @@ export default {
         // 当前审批状态
         auditflowdetaiState:"待办",
         // 名称搜索框
-        staffName:""
+        staffName:"",
+        staffId:this.$store.state.userMsg.staffId
       },
-      // 参数
-      paramsVal:"",
+
       //已办申请分页插件
       pageInfo1: {
         // 分页参数
@@ -298,8 +298,11 @@ export default {
         total: 0, // 总页数
         auditflowTitle:"转正审批", // 当前审批类型
         auditflowdetaiState:"已办", // 当前审批状态
-        staffName:""// 名称搜索框
+        staffName:"",// 名称搜索框
+        staffId:this.$store.state.userMsg.staffId
       },
+      // 参数
+      paramsVal:"",
       auditflow: [],
       auditflow0: {},
       //那几个审批人

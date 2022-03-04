@@ -277,28 +277,25 @@ export default {
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
-
         // 当前审批类型
-        auditflowTitle:"异动审批",
+        auditflowTitle:"转正审批",
         // 当前审批状态
         auditflowdetaiState:"待办",
         // 名称搜索框
-        staffName:""
-
+        staffName:"",
+        staffId:this.$store.state.userMsg.staffId
       },
+
+      //已办申请分页插件
       pageInfo1: {
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
-
-        // 当前审批类型
-        auditflowTitle:"异动审批",
-        // 当前审批状态
-        auditflowdetaiState:"已办",
-        // 名称搜索框
-        staffName:""
-
+        auditflowTitle:"转正审批", // 当前审批类型
+        auditflowdetaiState:"已办", // 当前审批状态
+        staffName:"",// 名称搜索框
+        staffId:this.$store.state.userMsg.staffId
       },
       a:{},
       b:{},

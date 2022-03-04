@@ -937,7 +937,7 @@ export default ({
         //名称
         name:"",
         //部门
-        dept: "湘北",
+        dept: "",
         //类型
         type_1: "",
         //备注
@@ -948,22 +948,22 @@ export default ({
       //异动表单
       Change_1: {
         //名称
-        name: "将香烟",
+        name: "",
         //类型
-        type_1: "调岗",
+        type_1: "",
         //部门
-        dept: "湘北",
+        dept: "",
         //部门二
         dept_1: "",
       },
       //调薪表单
       salary_1: {
         //名称
-        name: "将香烟",
+        name: "",
         //部门
-        dept: "湘北",
+        dept: "",
         //调薪后基本工资
-        qjbgz: 1111,
+        qjbgz:"" ,
         //调薪前岗位工资
         qgwgz: "",
         //调薪后基本工资
@@ -978,9 +978,9 @@ export default ({
       //离职表单
       quit_1: {
         //名称
-        name: "将香烟",
+        name: "",
         //部门
-        dept: "湘北",
+        dept: "",
         //原因
         type_1: "",
         //备注
@@ -1019,9 +1019,9 @@ export default ({
       //出差表单
       travel_1: {
         //名称
-        name: "儿子6",
+        name: "",
         //部门
-        dept: "湘南",
+        dept: "",
         //出差地点
         remarks_1: "",
         //出差事由
@@ -1036,11 +1036,11 @@ export default ({
       //请假表单
       sick_1: {
         //名称
-        name: "儿子6",
+        name: "",
         //部门
-        dept: "湘北",
+        dept: "",
         //请假类型
-        type_1: "病假",
+        type_1: "",
         //请假事由
         remarks_1: "",
         //开始日期
@@ -1048,7 +1048,7 @@ export default ({
         //结束时间
         date2: "",
         //请假总时长
-        date3: "小时",
+        date3: "",
       },
       // 异动后查部门
     /*  dept: ref([
@@ -1093,6 +1093,8 @@ export default ({
       punchVal:"",
 
       staffVall1:{},
+
+      salary:false,
 
 
     };
@@ -1189,6 +1191,7 @@ export default ({
         ElMessage("日期不能为空");
       } else {
        this.workerVal1()
+       this.become = false
       }
     },
 
@@ -1686,7 +1689,7 @@ export default ({
     selectByIdFix() {
       //根据id查询
       this.axios
-          .get("http://localhost:8010/provider/findSelectByIdFix/" + 6 )
+          .get("http://localhost:8010/provider/findSelectByIdFix/" + this.$store.state.userMsg.staffId)
           .then((response) => {
             this.staffVall1 = response.data.data[0]
 
@@ -1743,6 +1746,7 @@ export default ({
         ElMessage("部门不能为空");
       } else {
         this.transfer();
+
       }
     },
     // 异动取消
@@ -1763,6 +1767,7 @@ export default ({
         ElMessage("请选择日期");
       } else {
         this.Saralytx()
+        this.salary = false
       }
     },
     // 取消调薪
@@ -1771,7 +1776,7 @@ export default ({
           this.salary_1.hgwgz=""
           this.salary_1.date1= ""
           this.salary_1.remarks_1= ""
-      this.salary = false;
+          this.salary = false;
     },
     // 提交离职
     submitForm_4() {
@@ -1783,6 +1788,7 @@ export default ({
         ElMessage("请选择日期");
       } else {
         this.Quitlz()
+        this.quit = false
       }
     },
     // 取消离职
@@ -1805,6 +1811,7 @@ export default ({
         ElMessage("请输入加班事由");
       } else {
         this.overtimeaskjb()
+        this.overtime = false;
       }
     },
     // 取消加班
@@ -1835,6 +1842,7 @@ export default ({
         ElMessage("请输入补打卡备注");
       } else {
         this.punchbdk()
+        this.punch = false;
       }
     },
     // 取消补打卡
@@ -1865,8 +1873,9 @@ export default ({
         ElMessage("请选择结束时间");
       } else {
         this.travel_1.remarks_1=this.addres;
-        alert(this.travel_1.remarks_1);
-       this.tracelcc();
+       /* alert(this.travel_1.remarks_1);*/
+        this.tracelcc();
+        this.travel = false;
       }
     },
     // 取消出差
@@ -1897,6 +1906,7 @@ export default ({
         ElMessage("请选择结束时间");
       } else {
         this.leaveqj();
+        this.sick = false;
       }
     },
     // 取消请假

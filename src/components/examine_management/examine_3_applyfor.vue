@@ -70,21 +70,7 @@
           <el-table-column prop="updatedTime" label="最近处理" width="100"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
-                  :icon="InfoFilled"
-                  icon-color="red"
-                  title="确定撤销吗?"
-                  @confirm="through1()"
-              >
-                <template #reference>
 
-
-                  <el-button  type="text" disabled  >撤销 </el-button>
-
-                </template>
-              </el-popconfirm>
               <el-button type="text"  @click="drawer = true">详情 </el-button>
             </template>
           </el-table-column>
@@ -112,7 +98,33 @@
     </el-tabs>
     <!--   弹出抽屉 -->
     <el-drawer v-model="drawer" title="I am the title" :with-header="false">
-      <span>臭傻逼啊看什么看</span>
+   <span>
+          <el-form :model="auditflow0" label-width="">
+            <el-form-item label="员工名称 :">
+              <el-input v-model="auditflow0.staffName1" disabled></el-input>
+            </el-form-item>
+             <el-form-item label="审核人名称 :">
+              <el-input v-model="auditflow0.staffName2" disabled></el-input>
+            </el-form-item>
+              <el-form-item label="发起时间 :">
+              <el-input v-model="auditflow0.createdTime" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="审批类型 :">
+              <el-input v-model="auditflow0.auditflowTitle" disabled></el-input>
+            </el-form-item>
+
+
+          </el-form>
+
+     <!-- process-status="error" -->
+
+
+
+     <!--            <el-form-item :prop="auditflow[0].staffName" label="员工名称 :">-->
+     <!--              -->
+     <!--            <el-input   disabled></el-input>-->
+     <!--          </el-form-item>-->
+        </span>
     </el-drawer>
   </div>
 </template>
@@ -130,6 +142,9 @@ export default {
   data() {
     return {
       tableData:[],
+      auditflow0:[],
+      active:"",
+      auditflow:"",
       pageInfo: {
         // 分页参数
         currentPage: 1, //当前页
@@ -141,11 +156,12 @@ export default {
   methods: {
     Auditflow(){
       this.axios
-          .get("http://localhost:8010/provider/findByIdUser/6/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
+          .get("http://localhost:8010/provider/findByIdUser/"+this.$store.state.userMsg.staffId+"/"+this.pageInfo.currentPage+ "/" + this.pageInfo.pagesize)
           .then((response) => {
             console.log(response);
             this.tableData = response.data.data.records;
             this.pageInfo.total=response.data.data.total;
+            this.auditflow0 = response.data.data.records[0];
           })
           .catch(function (error) {
             console.log(error);
