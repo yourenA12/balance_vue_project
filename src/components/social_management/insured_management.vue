@@ -353,7 +353,7 @@ export default {
     // 提交，新增参保方案员工中间表
     submitAdd(){
       this.axios({
-        url: 'http://localhost:8010/provider//socialStaffVo/insertsocial',
+        url: 'http://localhost:8010/provider/socialStaffVo/insertsocial',
         method: 'post',
         data:{
           insuredId:this.scheme_name,

@@ -15,7 +15,7 @@
           >
             <el-button
                 type="text"
-                @click="become = true"
+                @click="worker()"
                 style="color: #606c82; font-size: 12px"
             >
               <img class="icon" src="../../assets/process_3.svg"/>
@@ -373,17 +373,11 @@
           <el-form-item label="调薪前基本工资">
             <el-input v-model="salary_1.qjbgz" disabled></el-input>
           </el-form-item>
-          <el-form-item label="调薪前岗位工资">
-            <el-input v-model="salary_1.qgwgz" disabled></el-input>
-          </el-form-item>
           <el-form-item label="调薪后基本工资">
             <el-input-number :precision="2" :step="100" :max="30000" :min="0"
                              v-model="salary_1.hjbgz"
                              oninput="value=value.toString().match(/^\d+(?:\.\d{0,2})?/)"
             ></el-input-number>
-          </el-form-item>
-          <el-form-item label="调薪后岗位工资">
-            <el-input v-model="salary_1.hgwgz" disabled></el-input>
           </el-form-item>
           <el-form-item label="调薪备注">
             <el-input
@@ -910,9 +904,9 @@
 
 <script lang="js">
 import {defineComponent, reactive, ref, toRefs} from "vue";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
 import {regionData, CodeToText} from "element-china-area-data"; //地址选择器导入
-export default defineComponent({
+export default ({
   data() {
     // 格式
     const defaultProps = {
@@ -941,7 +935,7 @@ export default defineComponent({
       //转正表单
       become_1: {
         //名称
-        name: "将香烟",
+        name:"",
         //部门
         dept: "湘北",
         //类型
@@ -1086,9 +1080,20 @@ export default defineComponent({
       SalaryVal:"",
 
       sb:"",
-
+      //离职表
+      quitVal:"",
       //存放异动数据
       transferVal:{},
+
+      staffVal1:{},
+      //加班表数据
+      overtimeaskVal:{},
+      overtimeask:"",
+
+      punchVal:"",
+
+      staffVall1:{},
+
 
     };
   },
@@ -1127,6 +1132,20 @@ export default defineComponent({
 
   },
   methods: {
+
+    worker() {
+      console.error(this.staffVall1.staffState)
+      if (this.staffVall1.staffState === 3) {
+        ElMessage({
+          message: '你已经是正式员工，不能发起转正',
+          type: 'warning',
+        })
+        this.become = false
+      }else {
+        this.become = true
+      }
+    },
+
     onclickso() {
       // 点击文本框时调用的方法
       // 取当前选择器中的复选框选项id
@@ -1160,9 +1179,6 @@ export default defineComponent({
     },
 
     //获取转正表单里的数据
-    getWorker(){
-      become_1
-    },
 
 
     // 提交转正
@@ -1177,15 +1193,84 @@ export default defineComponent({
     },
 
 
+
+    //补打卡取值
+    punchbdk() {
+      // 审批主表数据
+      this.auditflowVal={
+        auditflowTitle:"补打卡审批",
+        auditflowType:"补打卡",
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ]
+      this.punchVal={
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+        cardType:this.punch_1.type_1,//补打卡类型
+        cardDate:this.punch_1.date1,//补打卡时间
+        cardRemarks:this.punch_1.remarks_1,//补打卡备注
+      }
+      this.CardAdd()
+    },
+    //加班取值
+    overtimeaskjb(){
+      // 审批主表数据
+      this.auditflowVal={
+        auditflowTitle:"加班审批",
+        auditflowType:"加班",
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ]
+      this.overtimeaskVal={
+          staffId:this.staffVal1.staffId,
+          staffName:this.staffVal1.staffName,
+          deptId:this.staffVal1.deptId,//发起人部门id
+          overtimeaskType:this.overtime_1.type_1,//加班类型
+          overtimeaskMatter:this.overtime_1.remarks_1,//加班说明
+          overtimeaskSDate:this.overtime_1.date1,//加班开始时间
+          overtimeaskEDate:this.overtime_1.date2,//加班结束时间
+          overtimeaskTotalDate:this.overtime_1.date3,//加班总小时
+      }
+        this.overtimeaskAdd()
+    },
     // 转正取值
     workerVal1(){
-
       // 审批主表数据
       this.auditflowVal={
         auditflowTitle:"转正审批",
         auditflowType:"提前转正",
-        staffId:6,
-        staffName:"将香烟"
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
       }
       // 审批明细表数据
       this.auditflowDetailVal=[
@@ -1204,9 +1289,9 @@ export default defineComponent({
       ]
       // 转正表数据
       this.workerVal={
-        staffId:6,
-        staffName:"将香烟",
-        deptId:1,
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+        deptId:this.staffVal1.deptId,
         workerType:"提前转正",
         workerRemarks:this.become_1.remarks_1,
         workerDate:this.become_1.date1
@@ -1218,8 +1303,8 @@ export default defineComponent({
       this.auditflowVal={
         auditflowTitle:"请假审批",
         auditflowType:this.sick_1.type_1,// 2请假类型
-        staffId:6,
-        staffName:"将香烟"
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
       }
       // 审批明细表数据
       this.auditflowDetailVal=[
@@ -1238,9 +1323,9 @@ export default defineComponent({
       ],
       //请假表数据
       this.leave={
-        staffId:6,
-        staffName:"将香烟",
-        deptId:1,
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+        deptId:this.staffVal1.deptId,
         leaveRemarks:this.sick_1.remarks_1,//请假备注
         leaveType:this.sick_1.type_1,//类型
         leaveMatter:this.sick_1.remarks_1,
@@ -1255,8 +1340,8 @@ export default defineComponent({
       this.auditflowVal={
         auditflowTitle:"出差审批",
         auditflowType:"出差",// 2请假类型
-        staffId:6,
-        staffName:"儿子6"
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
       }
       // 审批明细表数据
       this.auditflowDetailVal=[
@@ -1275,9 +1360,9 @@ export default defineComponent({
       ],
        //存放出差表数据
       this.tracelVal={
-        staffId:6,
-        staffName:"儿子6",
-        deptId:2,//出差人的部门
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+        deptId:this.staffVal1.deptId,//出差人的部门
         addres:this.travel_1.remarks_1,//出差地址
         travelPlace:this.travel_1.remarks_1,//出差地址
         travelMatter:this.travel_1.remarks_2,//出差事由
@@ -1292,8 +1377,8 @@ export default defineComponent({
       this.auditflowVal={
         auditflowTitle:"异动审批",
         auditflowType:"调岗",
-        staffId:6,
-        staffName:"将香烟"
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
       }
       // 审批明细表数据
       this.auditflowDetailVal=[
@@ -1311,11 +1396,12 @@ export default defineComponent({
         }
       ],
       this.transferVal={
-        staffId:6,
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
         //异动类型
         transferType:this.Change_1.type_1,
         //异动钱部门
-        createdDeptId:1,//变动前部门名称
+        createdDeptId:this.staffVal1.deptId,//变动前部门名称
         //异动后部门
         updatedDeptid:this.Change_1.dept_1,//变动后部门名称
         takeEffectDate:new Date(),
@@ -1328,8 +1414,8 @@ export default defineComponent({
       this.auditflowVal={
         auditflowTitle:"调薪审批",
         auditflowType:"调薪",
-        staffId:6,
-        staffName:"将香烟"
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
       }
       // 审批明细表数据
       this.auditflowDetailVal=[
@@ -1348,14 +1434,95 @@ export default defineComponent({
       ],
       //请假数据
       this.SalaryVal={
-        staffId:6,
-        staffName:"将香烟",
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
         salaryCause:this.salary_1.remarks_1,//调薪备注
         frontSalary:this.salary_1.qjbgz,//调薪前基本工资
         afterSalary:this.salary_1.hjbgz,//调薪后基本工资
         takeEffectDate:this.salary_1.date1,//期望时间
       }
       this.SalaryAdd()
+    },
+    //存放离职
+    Quitlz(){
+      this.auditflowVal={
+        auditflowTitle:"离职审批",
+        auditflowType:"离职",
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+      }
+      // 审批明细表数据
+      this.auditflowDetailVal=[
+        {
+          staffId:2,
+          staffName:"周刘奇2"
+        },
+        {
+          staffId:3,
+          staffName:"周刘奇3"
+        },
+        {
+          staffId:4,
+          staffName:"周刘奇4"
+        }
+      ],
+      this.quitVal={
+        staffId:this.staffVal1.staffId,
+        staffName:this.staffVal1.staffName,
+        deptId:this.staffVal1.deptId,
+        quitType:this.quit_1.type_1,//离职类型
+        quitExplain:this.quit_1.remarks_1,//离职备注
+        applyQuitDate:this.quit_1.date1,//申请离职时间
+      }
+      this.QuitAdd()
+    },
+
+    CardAdd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertCard',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          card: this.punchVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
+    //离职添加
+    QuitAdd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertQuit',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          quit: this.quitVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     //调薪添加
     SalaryAdd(){
@@ -1380,7 +1547,6 @@ export default defineComponent({
         console.log(error);
       });
     },
-
 
     //出差添加
     traveladd(){
@@ -1453,6 +1619,31 @@ export default defineComponent({
       });
     },
 
+    //加班添加
+    overtimeaskAdd(){
+      this.axios({
+        url: 'http://localhost:8010/provider/insertOver',
+        method: 'post',
+        data: {
+          Auditflow: this.auditflowVal,
+          AuditflowDetail: this.auditflowDetailVal,
+          overtimeask: this.overtimeaskVal,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+        } else {
+          ElMessage.error('添加失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
     //请假添加
     leaveadd(){
       this.axios({
@@ -1491,19 +1682,63 @@ export default defineComponent({
           });
     },
 
-    // 转正取消
+    //根据id查询员工信息 查询当前登录人的基本信息
+    selectByIdFix() {
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectByIdFix/" + 6 )
+          .then((response) => {
+            this.staffVall1 = response.data.data[0]
+
+           for(let i=0;i<response.data.data.length;i++){
+             this.become_1.name=response.data.data[i].staffName//转正表
+             this.become_1.dept=response.data.data[i].deptName//转正表
+             this.Change_1.name=response.data.data[i].staffName//异动表
+             this.Change_1.dept=response.data.data[i].deptName//异动表
+             this.salary_1.name=response.data.data[i].staffName//调薪表
+             this.salary_1.dept=response.data.data[i].deptName//调薪表
+             this.salary_1.qjbgz=response.data.data[i].fixedwageOfficialmoney//调薪表
+             this.quit_1.name=response.data.data[i].staffName//离职表
+             this.quit_1.dept=response.data.data[i].deptName//离职表
+             this.overtime_1.name=response.data.data[i].staffName//加班表
+             this.overtime_1.dept=response.data.data[i].deptName//加班表
+             this.punch_1.name=response.data.data[i].staffName//补打卡
+             this.punch_1.dept=response.data.data[i].deptName//补打卡
+             this.travel_1.name=response.data.data[i].staffName//出差表
+             this.travel_1.dept=response.data.data[i].deptName//出差表
+             this.sick_1.name=response.data.data[i].staffName//请假表
+             this.sick_1.dept=response.data.data[i].deptName//请假表
+           }
+            console.log(response.data.data);
+            this.staffVal1 = response.data.data[0]
+            console.log(this.staffVal1)
+          })
+          .catch(function (error) {
+            // console.log(error);
+          })
+    },
+
+
+
+
+  // 转正取消
     cancel_1() {
-      this.become_1 = {
-        // name: "",
-        // dept: "",
-        type_1: "",
-        remarks_1: "",
-        date1: "",
-      };
+     this.become_1.remarks_1="",
+       this.become_1.date1="",
       this.become = false;
     },
     // 提交异动
     submitForm_2() {
+   /*   console.error(this.staffVall1.deptId)
+      console.error(this.Change_1.dept_1)*/
+
+      if(this.staffVall1.deptId==this.Change_1.dept_1){
+        ElMessage({
+          message: '不能选择一样的部门哦！！！',
+          type: 'warning',
+        })
+        return
+      }
       if (this.Change_1.dept_1.length === 0) {
         ElMessage("部门不能为空");
       } else {
@@ -1532,16 +1767,10 @@ export default defineComponent({
     },
     // 取消调薪
     cancel_3() {
-      this.salary_1 = {
-        name: "",
-        dept: "",
-        qjbgz: "",
-        qgwgz: "",
-        hjbgz: "",
-        hgwgz: "",
-        date1: "",
-        remarks_1: "",
-      };
+          this.salary_1.hjbgz= ""
+          this.salary_1.hgwgz=""
+          this.salary_1.date1= ""
+          this.salary_1.remarks_1= ""
       this.salary = false;
     },
     // 提交离职
@@ -1553,18 +1782,15 @@ export default defineComponent({
       } else if (this.quit_1.date1.length === 0) {
         ElMessage("请选择日期");
       } else {
-        alert(1);
+        this.Quitlz()
       }
     },
     // 取消离职
     cancel_4() {
-      this.quit_1 = {
-        name: "",
-        dept: "",
-        type_1: "",
-        remarks_1: "",
-        date1: "",
-      };
+      this.quit_1.type_1= "",
+       this.quit_1.remarks_1= "",
+          this.quit_1.date1= "",
+
       this.quit = false;
     },
     // 提交加班
@@ -1578,14 +1804,12 @@ export default defineComponent({
       } else if (this.overtime_1.remarks_1.length === 0) {
         ElMessage("请输入加班事由");
       } else {
-        alert(1);
+        this.overtimeaskjb()
       }
     },
     // 取消加班
     cancel_5() {
       this.overtime_1 = {
-        name: "",
-        dept: "",
         type_1: "",
         date1: "",
         date2: "",
@@ -1610,14 +1834,12 @@ export default defineComponent({
       } else if (this.punch_1.remarks_1.length === 0) {
         ElMessage("请输入补打卡备注");
       } else {
-        alert(1);
+        this.punchbdk()
       }
     },
     // 取消补打卡
     cancel_6() {
       this.punch_1 = {
-        //名称
-        name: "",
         //类型
         type_1: "",
         //打卡时间
@@ -1650,8 +1872,6 @@ export default defineComponent({
     // 取消出差
     cancel_7() {
       this.travel_1 = {
-        name: "",
-        dept: "",
         remarks_1: "",
         remarks_2: "",
         date1: "",
@@ -1682,7 +1902,6 @@ export default defineComponent({
     // 取消请假
     cancel_8() {
       this.sick_1.remarks_1="",
-
         //请假事由
           this.sick_1.remarks_1="",
         //开始日期
@@ -1792,7 +2011,7 @@ export default defineComponent({
             });
             this.cancel_date();
           } else {
-            this.overtime_1.date3 = hours + "小时";
+            this.overtime_1.date3 = hours;
           }
         } else if (jbtype === "休息日加班") {
           if (hours > 8) {
@@ -1802,7 +2021,7 @@ export default defineComponent({
             });
             this.cancel_date();
           } else {
-            this.overtime_1.date3 = hours + "小时";
+            this.overtime_1.date3 = hours;
           }
         } else if (jbtype === "节假日加班") {
           if (hours > 8) {
@@ -1812,7 +2031,7 @@ export default defineComponent({
             });
             this.cancel_date();
           } else {
-            this.overtime_1.date3 = hours + "小时";
+            this.overtime_1.date3 = hours;
           }
         }
       }
@@ -1960,6 +2179,7 @@ export default defineComponent({
     },
   },created() {
   this.selectDeptName();
+  this.selectByIdFix();
 }
 })
 </script>

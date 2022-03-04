@@ -270,7 +270,7 @@ export default {
       // 选中值1
       res1y: "",
       // 选中值2
-      res2y: "",
+      res2y: [],
       // 部门  文本框的值
       depty: [],
       deptIdy: [],
@@ -308,7 +308,7 @@ export default {
       citysDept: [],
 
       // 员工多选时的值
-      tableVal: "",
+      tableVal: [],
 
       staffBecome: false,
 
@@ -387,6 +387,7 @@ export default {
       this.compensationForm.compensationId = row.compensationId
       this.compensationForm.compensationName = row.compensationName
       this.compensationForm.compensationRemark = row.compensationRemark
+
       this.selectDeptId();
       this.selectPostId();
       this.selectStaffId();
@@ -394,8 +395,6 @@ export default {
 
     //根据id删除薪酬组
     deleteCompensationId(index) {
-      alert(index.compensationId)
-
       this.axios
           .delete("http://localhost:8010/provider/compensation/deleteCompensationId/" + index.compensationId)
           .then((response) => {
@@ -688,6 +687,7 @@ export default {
           })
           this.become = false
           this.replacement() // 添加完情况文本框
+          this.selectCompensation() // 查询薪酬组
 
         } else if (response.data.data == "添加失败") {
           ElMessage.error('添加失败')

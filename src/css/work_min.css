@@ -119,7 +119,7 @@
 .right_float_gg{
     float: right;
     width: 35%;
-    height: 813px;
+    height: 459px;
     margin: 22px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -130,7 +130,7 @@
 }
 /* 日历 */
 .left_data{
-    width: 39%;
+    width: 60%;
     height: 366.5px;
     background-color: #ddd;
     float: left;

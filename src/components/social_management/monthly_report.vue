@@ -4,12 +4,12 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
         <!-- 单个 -->
-        <div class="main_div">
+        <div class="main_div" v-for="(item,index) in tableData">
           <div class="interior_left_div">
             <span class="social_accumulation">
-              <span>2022-06</span> 社保公积金</span
+              <span>{{item.insuredMonth}}</span> 社保公积金</span
             >
-            <span style="font-size: 12px"> &nbsp;已归档</span>
+            <span v-show="index!=0" style="font-size: 12px"> &nbsp;已归档</span>
             <br />
             <el-button type="text">导出参保明细</el-button>
             <el-button type="text">删除 </el-button>
@@ -18,23 +18,21 @@
           <div class="interior_right_div">
             <div style="display: inline-block">
               <span style="margin: 35px">参保人数</span><br />
-              <span style="margin: 35px">1</span>
+              <span style="margin: 35px">{{item.insuredNumber}}</span>
             </div>
 
             <div style="display: inline-block">
               <span style="margin: 35px">个人缴费</span><br />
-              <span style="margin: 35px">2</span>
+              <span style="margin: 35px">{{item.individual}}</span>
             </div>
 
             <div style="display: inline-block">
               <span style="margin: 35px">企业缴费</span><br />
-              <span style="margin: 35px">3</span>
+              <span style="margin: 35px">{{item.companies}}</span>
             </div>
 
             <div style="display: inline-block; margin-left: 20px">
-              <router-link to="sb3_2">
-                <el-button type="text">详情></el-button></router-link
-              >
+                <el-button @click="toDetail(item.insuredMonth)" type="text">详情></el-button>
             </div>
           </div>
           <br />
@@ -42,42 +40,6 @@
           <div class="cut_off"></div>
         </div>
 
-        <!-- 单个 -->
-        <div class="main_div">
-          <div class="interior_left_div">
-            <span class="social_accumulation">
-              <span>2022-06</span> 社保公积金</span
-            >
-            <span style="font-size: 12px"> &nbsp;已归档</span>
-            <br />
-            <el-button type="text">导出参保明细</el-button>
-            <el-button type="text">删除 </el-button>
-          </div>
-
-          <div class="interior_right_div">
-            <div style="display: inline-block">
-              <span style="margin: 35px">参保人数</span><br />
-              <span style="margin: 35px">1</span>
-            </div>
-
-            <div style="display: inline-block">
-              <span style="margin: 35px">个人缴费</span><br />
-              <span style="margin: 35px">2</span>
-            </div>
-
-            <div style="display: inline-block">
-              <span style="margin: 35px">企业缴费</span><br />
-              <span style="margin: 35px">3</span>
-            </div>
-
-            <div style="display: inline-block; margin-left: 20px">
-              <el-button type="text">详情></el-button>
-            </div>
-          </div>
-          <br />
-          <!-- 分割线 -->
-          <div class="cut_off"></div>
-        </div>
 
         <!-- 分页插件 -->
         <div class="demo-pagination-block">
@@ -111,46 +73,39 @@ export default {
         pagesize: 3, // 页大小
         total: 0, // 总页数
       },
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-08",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-06",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-07",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-      ],
+      tableData: [],
       multipleSelection: [],
     };
-  },
+  },methods:{
+
+    // 详情
+    toDetail(date){
+
+      this.$store.state.insuredMsg.date=date
+
+      // 跳转页面
+      this.$router.push({path:"/social/social_payment/payment_detail",query:{path:this.$route.query.path}})
+
+    },
+
+    //查询月度报表
+    selectinsuredMonthVo() {
+
+      this.axios
+          .get("http://localhost:8010/provider/insuredMonthVo/selectinsuredMonthVo")
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  },created() {
+    this.selectinsuredMonthVo()
+  }
 };
 </script>
 

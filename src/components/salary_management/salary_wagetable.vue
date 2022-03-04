@@ -4,135 +4,226 @@
     <div class="j-card j-card-bordered mainContent">
       <div class="j-card-body">
 
-            <!--搜索输入框-->
-          <div style="width:95%;height:50px;margin: auto;">
-            <el-row style="width:200px;float: right;margin-top: 30px;">
-              <el-input v-model="seek" placeholder="搜索">
-                <template #suffix>
-                  <el-icon class="el-input__icon">
-                    <i-search/>
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-row>
-          </div>
-          <div style="width:100%;margin-top: 50px;" class="icon-p">
-            <div style="width:95%;margin: auto;">
+        <!--搜索输入框-->
+        <div style="width:95%;height:50px;margin: auto;">
+          <el-row style="width:200px;float: right;margin-top: 30px;">
+            <el-input v-model="seek" placeholder="搜索">
+              <template #suffix>
+                <el-icon class="el-input__icon">
+                  <i-search/>
+                </el-icon>
+              </template>
+            </el-input>
+          </el-row>
+        </div>
+        <div style="width:100%;margin-top: 50px;" class="icon-p">
+          <div style="width:95%;margin: auto;">
 
-              <div class="staff_div_5">
+            <div class="staff_div_5">
 
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe614;</i>
-                <div class="staff_div_5_text">
-                  <span>全部</span><br/><span>2</span>
-                </div>
-              </div>
-
-              <div class="staff_div_5 div_5_margin">
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60b;</i>
-                <div class="staff_div_5_text">
-                  <span>正式员工</span><br/><span>2</span>
-                </div>
-              </div>
-
-              <div class="staff_div_5 div_5_margin">
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60c;</i>
-                <div class="staff_div_5_text">
-                  <span>实习员工</span><br/><span>2</span>
-                </div>
-              </div>
-
-              <div class="staff_div_5 div_5_margin">
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>
-                <div class="staff_div_5_text">
-                  <span>本月新入职</span><br/><span>2</span>
-                </div>
-              </div>
-
-              <div class="staff_div_5 div_5_margin">
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
-                <div class="staff_div_5_text">
-                  <span>本月离职</span><br/><span>2</span>
-                </div>
-              </div>
-              <div class="staff_div_5 div_5_margin">
-                <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
-                <div class="staff_div_5_text">
-                  <span>本月转正</span><br/><span>2</span>
-                </div>
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe614;</i>
+              <div class="staff_div_5_text">
+                <span>全部</span><br/><span>2</span>
               </div>
             </div>
 
-            <div style="width:95%;height:100px;margin: auto;background: #42b983;">
-              <div style="text-align: center;">
-                <el-table :data="tableData"
-                          :header-cell-style="{textAlign: 'center',background:'#f8f8f9'}"
-                          :cell-style="{textAlign: 'center'}"
-                          style="width: 100%;font-size: 12px;color:black;font-weight: normal;">
-                  <el-table-column label="基本信息">
-                    <el-table-column prop="name" label="姓名" width="100"/>
-                    <el-table-column prop="name" label="部门" width="100"/>
-                    <el-table-column prop="name" label="职位" width="100"/>
-                    <!--            <el-table-column   prop="name" label="本月变动" width="100" />-->
-                  </el-table-column>
-                  <!--        <el-table-column label="考勤数据" >
-                            <el-table-column prop="name" label="应出勤天数" width="100" />
-                            <el-table-column prop="name" label="实际出勤天数" width="100" />
-                            <el-table-column prop="name" label="月计薪天数" width="100" />
-                          </el-table-column>-->
-
-                  <el-table-column prop="name" label="基本工资" width="110"/>
-                  <!--          <el-table-column prop="name" label="实发固定工资" width="100" />-->
-                  <el-table-column label="加班工资">
-                    <el-table-column prop="name" label="工作日加班工资" width="110"/>
-                    <el-table-column prop="name" label="休息日加班工资" width="110"/>
-                    <el-table-column prop="name" label="节假日加班工资" width="110"/>
-                  </el-table-column>
-                  <el-table-column prop="name" label="工资合计" width="100"/>
-                  <el-table-column prop="name" label="出差" width="100"/>
-                  <el-table-column label="考勤扣款">
-                    <el-table-column prop="name" label="迟到" width="100"/>
-                    <el-table-column prop="name" label="早退" width="100"/>
-                    <el-table-column prop="name" label="未签到" width="100"/>
-                    <el-table-column prop="name" label="未签退" width="100"/>
-                    <el-table-column prop="name" label="旷工" width="100"/>
-                    <el-table-column prop="name" label="事假" width="100"/>
-                    <el-table-column prop="name" label="病假" width="100"/>
-                    <!--          <el-table-column prop="name" label="不在职免发" width="100" />-->
-                  </el-table-column>
-                  <el-table-column label="社保">
-                    <el-table-column prop="name" label="个人缴纳社保" width="100"/>
-                    <el-table-column prop="name" label="公司缴纳社保" width="100"/>
-                  </el-table-column>
-<!--                  <el-table-column label="公积金">-->
-<!--                    <el-table-column prop="name" label="个人缴纳公积金" width="100"/>-->
-<!--                    <el-table-column prop="name" label="公司缴纳公积金" width="100"/>-->
-<!--                  </el-table-column>-->
-                  <el-table-column prop="name" label="应发工资" width="100" fixed="right"/>
-                  <el-table-column prop="name" label="实发工资" width="100" fixed="right"/>
-                </el-table>
+            <div class="staff_div_5 div_5_margin">
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60b;</i>
+              <div class="staff_div_5_text">
+                <span>正式员工</span><br/><span>2</span>
               </div>
+            </div>
 
-              <!-- 分页插件 -->
-              <div class="demo-pagination-block">
-                <el-pagination
-                    v-model:currentPage="pageInfo.currentPage"
-                    :page-sizes="[3, 5, 10, 50]"
-                    v-model:page-size="pageInfo.pagesize"
-                    :default-page-size="pageInfo.pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="pageInfo.total"
-                    :pager-count="5"
-                    background
-                    @size-change="selectUsers"
-                    @current-change="selectUsers"
-                >
-                </el-pagination>
+            <div class="staff_div_5 div_5_margin">
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe60c;</i>
+              <div class="staff_div_5_text">
+                <span>实习员工</span><br/><span>2</span>
               </div>
+            </div>
+
+            <div class="staff_div_5 div_5_margin">
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe61f;</i>
+              <div class="staff_div_5_text">
+                <span>本月新入职</span><br/><span>2</span>
+              </div>
+            </div>
+
+            <div class="staff_div_5 div_5_margin">
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
+              <div class="staff_div_5_text">
+                <span>本月离职</span><br/><span>2</span>
+              </div>
+            </div>
+            <div class="staff_div_5 div_5_margin">
+              <i class="iconfont" style="position: absolute;left:20px;top:10px;">&#xe616;</i>
+              <div class="staff_div_5_text">
+                <span>本月转正</span><br/><span>2</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="width:95%;height:100px;margin: auto;background: #42b983;">
+            <div style="text-align: center;">
+              <el-table :data="tableData"
+                        :header-cell-style="{textAlign: 'center',background:'#f8f8f9'}"
+                        :cell-style="{textAlign: 'center'}"
+                        style="width: 100%;font-size: 12px;color:black;font-weight: normal;">
+                <el-table-column label="基本信息">
+                  <el-table-column prop="staffName" label="姓名" width="100"/>
+                  <el-table-column prop="deptName" label="部门" width="100"/>
+                  <el-table-column prop="positionName" label="职位" width="100"/>
+                  <!--            <el-table-column   prop="name" label="本月变动" width="100" />-->
+                </el-table-column>
+                <!--        <el-table-column label="考勤数据" >
+                          <el-table-column prop="name" label="应出勤天数" width="100" />
+                          <el-table-column prop="name" label="实际出勤天数" width="100" />
+                          <el-table-column prop="name" label="月计薪天数" width="100" />
+                        </el-table-column>-->
+
+                <el-table-column prop="name" label="基本工资" width="110">
+                  <template #default="scope">
+                    <span v-if="scope.row.staffState==2">{{ scope.row.fixedwagePeriodmoney }}</span>
+                    <span v-if="scope.row.staffState==3">{{ scope.row.fixedwageOfficialmoney }}</span>
+
+                  </template>
+                </el-table-column>
+                <!--          <el-table-column prop="name" label="实发固定工资" width="100" />-->
+                <el-table-column label="加班工资">
+                  <el-table-column label="工作日加班工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.workdayMoney=='0'">-</span>
+                      <span v-if="scope.row.workdayMoney!='0'">{{ scope.row.absenteeism.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="休息日加班工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.restMoney=='0'">-</span>
+                      <span v-if="scope.row.restMoney!='0'">{{ scope.row.restMoney.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="节假日加班工资" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.holidaysMoney=='0'">-</span>
+                      <span v-if="scope.row.holidaysMoney!='0'">{{ scope.row.holidaysMoney.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+
+                <el-table-column label="出差" width="100">
+                  <template #default="scope">
+                    <span v-if="scope.row.evection=='0'">-</span>
+                    <span v-if="scope.row.evection!='0'">{{ scope.row.evection.toFixed(2) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="totalWages" label="工资合计" width="100"/>
+                <el-table-column label="考勤扣款">
+                  <el-table-column label="迟到" width="100">
+                    <template #default="scope">
+                      -{{ scope.row.tardy }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="早退" width="100">
+                    <template #default="scope">
+                      -{{ scope.row.leave.toFixed(2) }}
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column label="旷工" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.absenteeism=='0'">-</span>
+                      <span v-if="scope.row.absenteeism!='0'">-{{ scope.row.absenteeism.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="事假" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.matterLeave=='0'">-</span>
+                      <span v-if="scope.row.matterLeave!='0'">-{{ scope.row.matterLeave.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column label="病假" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.fallLeave=='0'">-</span>
+                      <span v-if="scope.row.fallLeave!='0'">-{{ scope.row.fallLeave.toFixed(2) }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+
+                <el-table-column label="社保">
+                  <el-table-column label="个人缴纳社保" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialPersonPay=='0'">-</span>
+                      <span v-if="scope.row.insDetailSocialPersonPay!='0'">-{{
+                          scope.row.insDetailSocialPersonPay.toFixed(2)
+                        }}</span>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column label="公司缴纳社保" width="100">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialFirmPay=='0'">-</span>
+                      <span v-if="scope.row.insDetailSocialFirmPay!='0'">-{{
+                          scope.row.insDetailSocialFirmPay.toFixed(2)
+                        }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+
+                <el-table-column label="公积金">
+                  <el-table-column label="个人缴纳公积金" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailFundPersonPay=='0'">-</span>
+                      <span v-if="scope.row.insDetailFundPersonPay!='0'">-{{
+                          scope.row.insDetailFundPersonPay.toFixed(2)
+                        }}</span>
+                    </template>
+                  </el-table-column>
+
+                  <el-table-column label="公司缴纳公积金" width="110">
+                    <template #default="scope">
+                      <span v-if="scope.row.insDetailSocialFirmPay=='0'">-</span>
+                      <span v-if="scope.row.insDetailSocialFirmPay!='0'">-{{
+                          scope.row.insDetailSocialFirmPay.toFixed(2)
+                        }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column prop="wagesShould" label="应发工资" width="100" fixed="right">
+                  <template #default="scope">
+                    <span v-if="scope.row.wagesShould=='0'">-</span>
+                    <span v-if="scope.row.wagesShould!='0'">{{ scope.row.wagesShould.toFixed(2) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="payroll" label="实发工资" width="100" fixed="right">
+                  <template #default="scope">
+                    <span v-if="scope.row.payroll=='0'">-</span>
+                    <span v-if="scope.row.payroll!='0'">{{ scope.row.payroll.toFixed(2) }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+            <!-- 分页插件 -->
+            <div class="demo-pagination-block">
+              <el-pagination
+                  v-model:currentPage="pageInfo.currentPage"
+                  :page-sizes="[3, 5, 10, 50]"
+                  v-model:page-size="pageInfo.pagesize"
+                  :default-page-size="pageInfo.pagesize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="pageInfo.total"
+                  :pager-count="5"
+                  background
+                  @size-change="selectUsers"
+                  @current-change="selectUsers"
+              >
+              </el-pagination>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
   &nbsp;
 </template>
 
@@ -141,57 +232,8 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-
-      ],
+      //存工资数据
+      tableData: [],
       seek: "",
       pageInfo: {
         // 分页参数
@@ -200,8 +242,27 @@ export default {
         total: 0, // 总页数
       },
 
+
     }
-  },
+  }, methods: {
+    //查询薪酬组
+    selectWag() {
+
+      this.axios
+          .get("http://localhost:8010/provider/WageVo/selectWageVo/" + this.pageInfo.currentPage + "/" + this.pageInfo.pagesize + "/" + this.$route.query.compId)
+          .then((response) => {
+            console.log(response);
+            this.tableData = response.data.data.records;
+            console.log(response.data.data.records)
+            this.pageInfo.total = response.data.data.total;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+  }, created() {
+    this.selectWag()
+  }
 }
 </script>
 <style scoped>
