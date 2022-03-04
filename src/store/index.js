@@ -71,120 +71,123 @@ const store = createStore({
                         MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
                         MENU_LEAF: 1,//是否有叶子 0有 1没有
                     }]
-                }, {
-                    MENU_ID: 2.2,//菜单编号
-                    MENU_NAME: '编制管理',//菜单名称
-                    PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                    MENU_ROUTE: '/2-2-1',//路由地址
-                    MENU_MODULE: '',//组件地址
-                    MENU_STATE: 0,//是否启用 0启用 1禁用
-                    MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                    MENU_LEAF: 0,//是否有叶子 0有 1没有
-                    son: [{
-                        MENU_ID: 2.21,//菜单编号
-                        MENU_NAME: '职位管理',//菜单名称
-                        PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                        MENU_ROUTE: '/organization/message/zz_edit',//路由地址
-                        MENU_MODULE: 'components/organization_management/zz_edit',//组件地址
-                        MENU_STATE: 0,//是否启用 0启用 1禁用
-                        MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                        MENU_LEAF: 0,//是否有叶子 0有 1没有
-                        son: [
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '新增',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '导入',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '导出',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '删除',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            }
-
-                        ]
-                    }, {
-                        MENU_ID: 2.22,//菜单编号
-                        MENU_NAME: '部门管理',//菜单名称
-                        PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                        MENU_ROUTE: '/organization/message/zz_depts',//路由地址
-                        MENU_MODULE: 'components/organization_management/zz_depts',//组件地址
-                        MENU_STATE: 0,//是否启用 0启用 1禁用
-                        MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
-                        MENU_LEAF: 0,//是否有叶子 0有 1没有
-                        son: [
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '新增',//菜单名称
-                                PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '导入',//菜单名称
-                                PICTURE_ADDRESS: '&#xe64c;',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '导出',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            },
-                            {
-                                MENU_ID: 2.21,//菜单编号
-                                MENU_NAME: '删除',//菜单名称
-                                PICTURE_ADDRESS: '',//图片地址
-                                MENU_ROUTE: '',//路由地址
-                                MENU_MODULE: '',//组件地址
-                                MENU_STATE: 0,//是否启用 0启用 1禁用
-                                MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
-                                MENU_LEAF: 0,//是否有叶子 0有 1没有
-                            }
-                        ]
-                    }]
-                }]
+                }
+                // ,
+                //     {
+                //     MENU_ID: 2.2,//菜单编号
+                //     MENU_NAME: '编制管理',//菜单名称
+                //     PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                //     MENU_ROUTE: '/2-2-1',//路由地址
+                //     MENU_MODULE: '',//组件地址
+                //     MENU_STATE: 0,//是否启用 0启用 1禁用
+                //     MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                //     MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //     son: [{
+                //         MENU_ID: 2.21,//菜单编号
+                //         MENU_NAME: '职位管理',//菜单名称
+                //         PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                //         MENU_ROUTE: '/organization/message/zz_edit',//路由地址
+                //         MENU_MODULE: 'components/organization_management/zz_edit',//组件地址
+                //         MENU_STATE: 0,//是否启用 0启用 1禁用
+                //         MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                //         MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //         son: [
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '新增',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '导入',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '导出',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '删除',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             }
+                //
+                //         ]
+                //     }, {
+                //         MENU_ID: 2.22,//菜单编号
+                //         MENU_NAME: '部门管理',//菜单名称
+                //         PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                //         MENU_ROUTE: '/organization/message/zz_depts',//路由地址
+                //         MENU_MODULE: 'components/organization_management/zz_depts',//组件地址
+                //         MENU_STATE: 0,//是否启用 0启用 1禁用
+                //         MENU_TYPE: 0,//菜单类型 0:菜单 1:按钮
+                //         MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //         son: [
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '新增',//菜单名称
+                //                 PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '导入',//菜单名称
+                //                 PICTURE_ADDRESS: '&#xe64c;',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '导出',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             },
+                //             {
+                //                 MENU_ID: 2.21,//菜单编号
+                //                 MENU_NAME: '删除',//菜单名称
+                //                 PICTURE_ADDRESS: '',//图片地址
+                //                 MENU_ROUTE: '',//路由地址
+                //                 MENU_MODULE: '',//组件地址
+                //                 MENU_STATE: 0,//是否启用 0启用 1禁用
+                //                 MENU_TYPE: 1,//菜单类型 0:菜单 1:按钮
+                //                 MENU_LEAF: 0,//是否有叶子 0有 1没有
+                //             }
+                //         ]
+                //     }]
+                // }
+                ]
             },
             {
                 MENU_ID: 3,//菜单编号
