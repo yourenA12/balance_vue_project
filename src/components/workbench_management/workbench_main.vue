@@ -127,7 +127,7 @@
               <el-icon>
                 <i-avatar class="i_icon_svg"/>
               </el-icon>
-              <span class="right_font">用户</span>
+              <span class="right_font">薪酬管理</span>
             </el-card>
           </el-col>
           <el-col :span="8">
@@ -135,7 +135,7 @@
               <el-icon>
                 <i-avatar class="i_icon_svg"/>
               </el-icon>
-              <span class="right_font">用户</span>
+              <span class="right_font">员工管理</span>
             </el-card>
           </el-col>
           <el-col :span="8">
@@ -143,7 +143,7 @@
               <el-icon>
                 <i-avatar class="i_icon_svg"/>
               </el-icon>
-              <span class="right_font">用户</span>
+              <span class="right_font">招聘管理</span>
             </el-card>
           </el-col>
           <el-col :span="8">
@@ -151,61 +151,105 @@
               <el-icon>
                 <i-avatar class="i_icon_svg"/>
               </el-icon>
-              <span class="right_font">用户</span>
+              <span class="right_font">组织管理</span>
             </el-card>
           </el-col>
 
 
+
           <div class="right_float_gg">
-            <div class="noticeV">
-              <h3>公司公告:</h3>
 
-            </div>
-            <div style="border-bottom: 1px solid #dddddd;"></div>
+            <el-tabs type="border-card">
+              <el-tab-pane label="公司公告" >
 
 
-            <div v-for="(item,index) in tableData1" class="noticeV">
+                <div style="border-bottom: 1px solid #dddddd;"></div>
 
-              {{ item.noticeTitle }}
+                <div v-if="tableData1.length==0" style="color: #ddd">
+                  暂无未读公告
+                </div>
 
-              <el-button class="button_left_xq" type="text" @click="drawer = true">详情</el-button>
+                <div v-if="tableData1.length!=0" v-for="(item,index) in tableData1" class="noticeV" style="border-bottom: 1px solid #dddddd;">
 
-            </div>
+                {{ item.noticeTitle }}
+
+                 <el-button  class="button_left_xq" type="text" @click="drawer = true,tableItem=index,noticeId=item.noticeId">详情</el-button>
+
+                </div>
 
 
-            <div style="border-bottom: 1px solid #dddddd;"></div>
 
-
-            <el-drawer v-model="drawer" :with-header="false" title="I am the title" v-for="item in tableData1">
-              <div>
-                <h1>公告内容：</h1>
-              </div>
-              <br>
-              <div style="margin: 30px">
-                {{ item.noticeMatter }}
-              </div>
-              <el-form :model="item" label-width="">
-                <el-form-item label="公告发起人 :">
-                  <el-input v-model="item.noticePeople" disabled></el-input>
-                </el-form-item>
+              </el-tab-pane>
+              <el-drawer v-model="drawer" :with-header="false" title="I am the title">
+                <div>
+                  <h1>公告内容：</h1>
+                </div>
                 <br>
-                <el-form-item label="公告类型 :">
-                  <el-input v-model="item.noticeTitle" disabled></el-input>
-                </el-form-item>
-              </el-form>
-              <br>
-              <br>
-              <el-button type="primary" @click="">&nbsp;&nbsp; 确定收到&nbsp;&nbsp;</el-button>
-              <el-button style="display: none" type="primary" @click="" disabled>&nbsp;&nbsp; 已确认 &nbsp;&nbsp;
-              </el-button>
-            </el-drawer>
+                <div style="margin: 30px;color: red;">
+                  {{ tableData1[tableItem].noticeMatter }}
+                </div>
+                <el-form :model="item" label-width="">
+                  <el-form-item label="公告发起人 :">
+                    <el-input v-model="tableData1[tableItem].staffName" disabled></el-input>
+                  </el-form-item>
+                  <br>
+                  <el-form-item label="公告类型 :">
+                    <el-input v-model="tableData1[tableItem].noticeTitle" disabled></el-input>
+                  </el-form-item>
+                </el-form>
+                <br>
+                <br>
+                <el-button type="primary" @click="updateAuditflowdetai()" :disabled = "tableData1[tableItem].noticeState==0?false:true">&nbsp;&nbsp; 确定收到&nbsp;&nbsp;</el-button>
+              </el-drawer>
 
+<!--             已读公告 -->
+              <el-tab-pane label="Config">
+                <div style="border-bottom: 1px solid #dddddd;"></div>
+
+                <div v-if="tableData2.length==0">
+                  暂无未读公告
+                </div>
+
+                <div v-if="tableData2.length!=0" v-for="(item,index) in tableData2" class="noticeV" style="border-bottom: 1px solid #dddddd;">
+
+               {{ item.noticeTitle }}
+
+
+                <el-button class="button_left_xq" type="text" @click="drawer2 = true,tableItem2=index,noticeId=item.noticeId">详情</el-button>
+
+              </div>
+
+
+              </el-tab-pane>
+
+            </el-tabs>
           </div>
+
+          <el-drawer v-model="drawer2" :with-header="false" title="I am the title">
+            <div>
+              <h1>公告内容：</h1>
+            </div>
+            <br>
+            <div style="margin: 30px;color: red;" >
+              {{ tableData2[tableItem2].noticeMatter }}
+            </div>
+            <el-form :model="item" label-width="">
+              <el-form-item label="公告发起人 :">
+                <el-input v-model="tableData2[tableItem2].staffName" disabled></el-input>
+              </el-form-item>
+              <br>
+              <el-form-item label="公告类型 :">
+                <el-input v-model="tableData2[tableItem2].noticeTitle" disabled></el-input>
+              </el-form-item>
+            </el-form>
+            <br>
+            <br>
+            <el-button type="primary" disabled>&nbsp;&nbsp; 已收到&nbsp;&nbsp;</el-button>
+          </el-drawer>
+
 
 
         </div>
-
-
       </div>
     </div>
     <div class="left_data">
@@ -284,7 +328,7 @@
 }
 
 .body_col_5 {
-  background: #F56C6C;
+  background: #0e8f61;
   color: #fff;
 }
 
@@ -324,6 +368,11 @@ export default {
     }
 
     return {
+
+      tableItem:0,
+      tableItem2:0,
+      //
+      displa1:true,
       calendar,
       selectDate,
       // staffClock:{},
@@ -335,9 +384,12 @@ export default {
     return {
       activeName: 'first',
       tableData1: [],
+      tableData2: [],
       drawer: false,
-
+      drawer2:false,
+      id1:"",
       id: 1,
+      noticeId:"",
 
       staffClock: {
         clockRecordId:'',
@@ -357,13 +409,54 @@ export default {
   },
   //根据员工id查询员工公告
   methods: {
+
+    updateAuditflowdetai() {
+      this.axios({
+        url: 'http://localhost:8010/provider/noticeStaff/findNoticeStaffById',
+        method: 'put',
+        data:{
+          staffId:this.$store.state.userMsg.staffId,
+          noticeId:this.noticeId,
+        }
+      }).then(response => {
+        if (response.data.data > 0) {
+          ElMessage({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.selectById() // 修改完成后调用查询方法
+          this.drawer=false
+        } else {
+          ElMessage.error('操作失败')
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+
+
+
     selectById() {
+
       //根据id查询
       this.axios
-          .get("http://localhost:8010/provider/findNoticeVo/1/3/1")
+          .get("http://localhost:8010/provider/findSelectNoticeById/"+this.$store.state.userMsg.staffId)
           .then((response) => {
             console.log(response);
-            this.tableData1 = response.data.data.records;
+            this.tableData1 = response.data.data;
+           /* console.error(this.tableData1)*/
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    selectById1() {
+      //根据id查询
+      this.axios
+          .get("http://localhost:8010/provider/findSelectNoticeById1/"+this.$store.state.userMsg.staffId)
+          .then((response) => {
+            console.log(response);
+            this.tableData2 = response.data.data;
           })
           .catch(function (error) {
             console.log(error);
@@ -462,8 +555,8 @@ export default {
     }
   },
   created() {
-    this.selectById(1);
-
+    this.selectById();
+    this.selectById1();
     // 分页查询
     this.card();
 

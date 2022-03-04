@@ -281,6 +281,7 @@ export default {
       tableData1: [],
 
       pageInfo: {
+        staffId:this.$store.state.userMsg.staffId,
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
@@ -295,6 +296,7 @@ export default {
 
       },
       pageInfo1: {
+        staffId:this.$store.state.userMsg.staffId,
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小

@@ -299,6 +299,7 @@ export default {
 
       pageInfo: {
         // 分页参数
+        staffId:this.$store.state.userMsg.staffId,
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
         total: 0, // 总页数
@@ -312,6 +313,7 @@ export default {
 
       },
       pageInfo1: {
+        staffId:this.$store.state.userMsg.staffId,
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小

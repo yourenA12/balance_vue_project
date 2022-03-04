@@ -286,6 +286,7 @@ export default {
       auditflow: [],
       //待办申请的分页插件
       pageInfo: {
+        staffId:this.$store.state.userMsg.staffId,
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
@@ -301,6 +302,7 @@ export default {
       paramsVal:"",
       //已办申请分页插件
       pageInfo1: {
+        staffId:this.$store.state.userMsg.staffId,
         // 分页参数
         currentPage: 1, //当前页
         pagesize: 3, // 页大小
