@@ -5,11 +5,15 @@
       <div class="j-card-body">
         <!-- 计薪月份 -->
         <div class="month-div">
-          <span class="month_span">{{ currentDate }}</span><br/><br/>
+          <span class="month_span">{{ this.$store.state.insuredMsg.date }}</span><br/><br/>
           计薪月份<br/><br/>
-          <el-button type="primary" size="small">重新核算</el-button>
-          <el-button type="primary" size="small" style="width: 80px"
-          >归档
+<!--          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small">重新核算</el-button>-->
+<!--          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small" style="width: 80px"-->
+<!--          >归档-->
+<!--          </el-button-->
+<!--          >-->
+          <el-button v-show="this.$store.state.insuredMsg.date!=this.$store.state.ymDate" @click="homeMonth()" type="primary" size="small" style="width: 80px"
+          >回到当月
           </el-button
           >
         </div>
@@ -49,7 +53,7 @@
 <!--          ><i class="iconfont">&#xe639;</i>批量导入-->
 <!--          </el-button-->
 <!--          >-->
-          <el-button :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
+          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" :disabled="deleteAllButton" @click="removeAll" size="small" type="danger" plain>
             <i class="iconfont">&#xe608;</i>批量删除
           </el-button>
 
@@ -59,7 +63,6 @@
               size="small"
               clearable
               placeholder="请选择参保方案"
-              @change="sub"
           >
             <el-option
                 v-for="item in insured_scheme"
@@ -216,8 +219,6 @@ export default {
 
       //批量删除按钮
       deleteAllButton: true,
-      // 当前年月
-      currentDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)),
 
       res: "",
       // 选中值1
@@ -274,10 +275,28 @@ export default {
   },
   methods: {
 
+    // 回到当月
+    homeMonth(){
+
+      let date= new Date()
+      let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      this.$store.state.insuredMsg.date=date1
+
+      this.selectAllPage()
+      this.selectDeptName()
+      this.selectAll()
+      this.selectAllPages()
+
+    },
+
     // 点击查看
     selectInsuredALL(id){
       // 将id存入stroe
-      this.$store.state.staffId_Msg=id
+      this.$store.state.insuredMsg.staffId=id
+
+      // let date= new Date()
+      // let date1 = date.getFullYear() + '-' + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      // this.$store.state.insuredMsg.date=date1
 
       // 跳转页面
       this.$router.push({path:this.path,query:{path:this.$route.query.path}})
@@ -346,6 +365,7 @@ export default {
         x = 0
       }
     },
+
     //查询部门名称
     selectDeptName() {
       this.axios
@@ -388,8 +408,9 @@ export default {
 
     },
 
-    // 查询所有参保方案分页
+    // 查询所有参保方缴费明细
     selectAllPage() {
+
       let params = {
 
         currenPage: this.pageInfo.currenPage,
@@ -398,12 +419,14 @@ export default {
         deptIds: this.res2.length == 0 ? '' : this.res2,
         stateSearch: this.pageInfo.stateSearch,
         scheme_name:this.pageInfo.scheme_name,
+        date:this.$store.state.insuredMsg.date
       }
 
       this.axios
           .get("http://localhost:8010/provider/insuredDetail/selectInsuredDetail?" + qs.stringify(params, {arrayFormat: 'repeat'}))
           .then((response) => {
             console.log(response);
+
             // 表格数据
             this.tableData = response.data.data.records
             this.pageInfo.total = response.data.data.total
@@ -414,7 +437,7 @@ export default {
           });
     },
 
-    // 查询本月所有参保方案
+    // 查询本月所有参保人员 计算人数 缴纳费用
     selectAll() {
       let params = {
         currenPage: 1,
@@ -422,7 +445,8 @@ export default {
         staffNameSearch: "",
         deptIds: "",
         stateSearch: "",
-        scheme_name:""
+        scheme_name:"",
+        date:this.$store.state.insuredMsg.date
       }
 
       this.axios
@@ -434,6 +458,10 @@ export default {
             // 本月参保人数
             this.insuredPeople = response.data.data.total
 
+            // 清空
+            this.personPay=0
+            this.firmPay=0
+            this.totalPay=0
             // 遍历表格数据
             this.tableData.forEach(item => {
               // 本月个人缴费
@@ -470,7 +498,7 @@ export default {
             message: '删除成功',
             type: 'success',
           })
-          // 完成后调用查询方法
+          // // 完成后调用查询方法
           this.selectAllPage()
           this.selectAll()
 
@@ -482,6 +510,7 @@ export default {
       });
 
     },
+
     // 查询所有参保方案
     selectAllPages() {
       this.axios

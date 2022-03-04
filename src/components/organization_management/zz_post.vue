@@ -7,7 +7,7 @@
     <el-input size="small" v-model="input" placeholder="请输入职位名称：" style="width:200px; margin-left: 10px">
     </el-input>
     <!--查询按钮-->
-    <el-button style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
+    <el-button @click="post()" style="background-color: #ffffff;border-radius: 30%; margin-left: 20px" size="small">
       <el-icon><i-search />
 
       </el-icon>
@@ -15,7 +15,7 @@
 
     <!--新增按钮-->
     <div class="head-surface">
-      <el-button size="small" type="primary" plain @click="drawer = true">
+      <el-button size="small" type="primary" plain @click="drawer = true,resetForm()">
         <el-icon><i-plus/></el-icon>
         新增
       </el-button>
@@ -28,7 +28,7 @@
                :rules="rules">
 
 
-        <el-form-item prop="name">
+        <el-form-item prop="positionName">
           <template #label><b style="font-size:18px;">职位名称：</b></template>
           <el-input v-model="fo.positionName" placeholder="请输入职位名称：" style="width:200px;">
           </el-input>
@@ -76,7 +76,7 @@
             <span>提交</span>
           </el-button>
 
-          <el-button @click="resetForm('ruleForm')"  >
+          <el-button @click="drawer = false"  >
             <el-icon><i-close-bold /></el-icon>
             <span>取消</span>
           </el-button>
@@ -162,6 +162,8 @@ export default {
     }
     return {
 
+      //文本框
+      input:"",
       res:"",
       // 选中值1
       res1:"",
@@ -177,6 +179,7 @@ export default {
 
 
       fo:{
+        positionId:"",
         positionName:"",
         positionDescription:"",
 
@@ -197,7 +200,7 @@ export default {
       value2: ref(''),
       //验证
       rules:{
-        name: [
+        positionName: [
           {
             required: true,
             message: "请填写班次名字",
@@ -215,9 +218,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.insertPost()
-          this.fo.positionName=""
-          this.fo.positionDescription=""
-          this.deptId=""
+
         } else {
           console.log("error submit!!");
           return false;
@@ -225,12 +226,15 @@ export default {
       });
     },
     //取消
-    resetForm(formName) {
-      this.drawer = false
-      this.$refs[formName].resetFields()
+    resetForm() {
+
+      this.fo.positionId=""
       this.fo.positionName=""
       this.fo.positionDescription=""
-      this.deptId=""
+      // 清空部门选中
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys([], false)
+      })
 
     },
     //分页查询
@@ -315,8 +319,9 @@ export default {
         method: 'post',
         data: {
           Post: {
-            positionName:this.fo.name,
-            positionDescription:this.fo.explain
+            positionId:this.fo.positionId,
+            positionName:this.fo.positionName,
+            positionDescription:this.fo.positionDescription
           },
           DeptIds: this.res2,
 
@@ -324,6 +329,7 @@ export default {
       }).then(response => {
         if (response.data.data =="成功") {
           ElMessage.success("添加成功")
+          this.resetForm()
           this.post() //添加成功后，在查询一次
           this.drawer=false
         } else {
@@ -335,7 +341,15 @@ export default {
     },
     //修改 提取当前行
     updateRow(row){
-      this.fo=row
+      this.fo.positionId=row.positionId
+      this.fo.positionName=row.positionName
+      this.fo.positionDescription=row.positionDescription
+
+      // 清空部门选中
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys(row.deptIds, false)
+      })
+
     },
 
   },
