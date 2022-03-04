@@ -49,7 +49,9 @@
 
           <div style="width:100%;height:50px;border:#D1DBE5 solid 1px;background: #e8edf2">
               <h3 style="margin-left: 20px;display: inline-block;margin-top: 10px;">固定工资</h3>
-              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案  <router-link :to="{path:this.regular,query:{path: this.$route.query.path}}">去设置</router-link> </span>
+<!--              <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案  <router-link :to="{path:this.regular,query:{path: this.$route.query.path}}">去设置</router-link> </span>-->
+            <span class="span_1_zhe" >【加项】针对员工定薪、调薪等，可设置固定工资方案   </span><span @click="toSet()">&nbsp;去设置</span>
+
           </div>
           <br />
 
@@ -193,6 +195,22 @@ export default defineComponent({
 
     }
   },methods:{
+
+    toSet(){
+
+      if( this.ruleForm.compensationName!=null && this.ruleForm.compensationName!='' ){
+
+        this.$router.push({path:this.regular,query:{path:this.$route.query.path,compId:this.ruleForm.compensationName}})
+
+      }else{
+        ElMessage({
+          message: '请先选择薪酬组',
+          type: 'warning',
+        })
+      }
+
+    },
+
     //修改薪酬组数据
     updateCompensation(){
 

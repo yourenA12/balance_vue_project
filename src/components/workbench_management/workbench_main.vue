@@ -60,7 +60,7 @@
                     <el-button style="width: 100px; float:right" type="primary" plain>打卡</el-button>
                   </template>
                 </el-popover>
-                <span class="font_xu">公司的 | 超级大 | boss</span></h3>
+                <span class="font_xu">  {{ this.$store.state.userMsg.deptName }} | {{ this.$store.state.userMsg.postName }} </span></h3>
 
             </div>
           </div>
@@ -298,10 +298,6 @@
 
 
 </template>
-
-<script>
-
-</script>
 
 <style scoped>
 /*导入主界面外部样式*/

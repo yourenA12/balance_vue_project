@@ -83,7 +83,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定通过吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2,1)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2)"
               >
                 <template #reference>
                   <el-button type="text">通过 </el-button>
@@ -95,7 +95,7 @@
                   :icon="InfoFilled"
                   icon-color="red"
                   title="确定驳回吗?"
-                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,2,666)"
+                  @confirm="updateAuditflowdetai(scope.row.auditflowId,scope.row.auditflowdetailId,3)"
               >
                 <template #reference>
                   <el-button type="text">驳回 </el-button>
@@ -314,8 +314,13 @@ export default {
   },
   methods: {
     updateAuditflowdetai(id,mxid,state) {
+
+      console.error(id)
+      console.error(mxid)
+      console.error(state)
+
       this.axios({
-        url: 'http://localhost:8010/provider/auditflowdetail/updateTransfer',
+        url: 'http://localhost:8010/provider/auditflowdetail/updateCard',
         method: 'put',
         data:{
           auditflowId:id,
