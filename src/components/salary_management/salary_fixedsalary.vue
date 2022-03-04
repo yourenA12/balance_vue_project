@@ -397,7 +397,7 @@ export default {
     selectFixedsalary() {
 
       let params= {
-
+        compId:this.$route.query.compId,
         currentPage:this.pageInfo.currentPage,
         pagesize:this.pageInfo.pagesize,
         staffNameSearch: this.pageInfo.staffNameSearch,
