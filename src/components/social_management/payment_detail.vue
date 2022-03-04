@@ -7,11 +7,11 @@
         <div class="month-div">
           <span class="month_span">{{ this.$store.state.insuredMsg.date }}</span><br/><br/>
           计薪月份<br/><br/>
-          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small">重新核算</el-button>
-          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small" style="width: 80px"
-          >归档
-          </el-button
-          >
+<!--          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small">重新核算</el-button>-->
+<!--          <el-button v-show="this.$store.state.insuredMsg.date==this.$store.state.ymDate" type="primary" size="small" style="width: 80px"-->
+<!--          >归档-->
+<!--          </el-button-->
+<!--          >-->
           <el-button v-show="this.$store.state.insuredMsg.date!=this.$store.state.ymDate" @click="homeMonth()" type="primary" size="small" style="width: 80px"
           >回到当月
           </el-button

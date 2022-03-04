@@ -270,7 +270,7 @@ export default {
       // 选中值1
       res1y: "",
       // 选中值2
-      res2y: "",
+      res2y: [],
       // 部门  文本框的值
       depty: [],
       deptIdy: [],
@@ -308,7 +308,7 @@ export default {
       citysDept: [],
 
       // 员工多选时的值
-      tableVal: "",
+      tableVal: [],
 
       staffBecome: false,
 
