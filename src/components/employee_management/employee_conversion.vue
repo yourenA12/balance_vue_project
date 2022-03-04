@@ -121,11 +121,11 @@
           <el-table :data="tableData"
                     :header-cell-style="{textAlign: 'center',background:'#f8f8f9',color:'#6C6C6C'}"
                     :cell-style="{textAlign: 'center'}">
-            <el-table-column prop="staffName" label="姓名" width="180"/>
-            <el-table-column prop="staffIdentity" label="证件号码" width="180"/>
-            <el-table-column prop="deptName" label="部门" width="180"/>
-            <el-table-column prop="positionName" label="职位" width="180"/>
-            <el-table-column prop="staffHiredate" label="入职日期" width="180"/>
+            <el-table-column prop="staffName" label="姓名"/>
+<!--            <el-table-column prop="staffIdentity" label="证件号码" width="180"/>-->
+            <el-table-column prop="deptName" label="部门" />
+            <el-table-column prop="positionName" label="职位" />
+            <el-table-column prop="staffHiredate" label="入职日期" />
             <el-table-column label="试用期限" width="180">
               <template #default>
                 3个月
