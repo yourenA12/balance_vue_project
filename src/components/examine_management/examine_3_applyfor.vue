@@ -3,8 +3,8 @@
   <div class="body_1">
     <el-tabs type="border-card">
       <el-tab-pane label="我的申请">
-        <el-button @click="resetDateFilter">重置日期过滤</el-button>
-        &nbsp;
+<!--        <el-button @click="resetDateFilter">重置日期过滤</el-button>
+        &nbsp;-->
         <el-input
             v-model="input"
             placeholder="输入名称搜索"

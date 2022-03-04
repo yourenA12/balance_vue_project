@@ -7,8 +7,8 @@
         <template #label>
           <span @click="selectAuditflow(1)">待办申请</span>
         </template>
-        <el-button @click="resetDateFilter1">重置日期过滤</el-button>
-        &nbsp;
+<!--        <el-button @click="resetDateFilter1">重置日期过滤</el-button>
+        &nbsp;-->
         <el-input
             placeholder="输入名称搜索"
             v-model="pageInfo.staffName"
@@ -165,7 +165,9 @@
         <template #label>
           <span @click="selectAuditflow(2)">已办申请</span>
         </template>
+<!--
         <el-button @click="resetDateFilter">重置日期过滤</el-button>
+-->
         &nbsp;
         <el-input
             v-model="pageInfo1.staffName"
